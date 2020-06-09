@@ -34,25 +34,50 @@ namespace BuilderEssentials.UI
         public void CleanAcessoriesList()
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
+            //TODO: Mod config where the player can choose if he wishes to have "2nd" vanity slots too
             if (modPlayer.IsNormalAccessories)
+            {
                 modPlayer.NormalAccessories.Clear();
+                modPlayer.NormalVanityAccessories.Clear();
+                modPlayer.NormalVanityClothes.Clear();
+            }
             else
+            {
                 modPlayer.BuildingAccessories.Clear();
+                modPlayer.BuildingVanityAccessories.Clear();
+                modPlayer.BuildingVanityClothes.Clear();
+            }
         }
 
-        //Vanity Accessories start on index 13
         public void SaveCurrentAccessories()
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             int maxAccessoryIndex = 5 + Main.LocalPlayer.extraAccessorySlots;
+            //Normal and Vanity Accessories
             for (int i = 3; i < 3 + maxAccessoryIndex; i++)
             {
                 Item accessory = modPlayer.player.armor[i];
+                Item vanityAccessory = modPlayer.player.armor[i+10];
                 if (modPlayer.IsNormalAccessories)
+                {
                     modPlayer.NormalAccessories.Add(accessory);
+                    modPlayer.NormalVanityAccessories.Add(vanityAccessory);
+                }
                 else
+                {
                     modPlayer.BuildingAccessories.Add(accessory);
+                    modPlayer.BuildingVanityAccessories.Add(vanityAccessory);
+                }
+            }
+
+            //Vanity Sets (&& armor set, in the future?)
+            for (int i = 10; i < 13; i++)
+            {
+                Item vanityCloth = modPlayer.player.armor[i];
+                if (modPlayer.IsNormalAccessories)
+                    modPlayer.NormalVanityClothes.Add(vanityCloth);
+                else
+                    modPlayer.BuildingVanityClothes.Add(vanityCloth);
             }
         }
 
@@ -61,19 +86,29 @@ namespace BuilderEssentials.UI
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
             if (modPlayer.IsNormalAccessories)
+            {
                 for (int i = 0; i < modPlayer.NormalAccessories.Count; i++)
                 {
                     modPlayer.player.armor[i + 3] = modPlayer.NormalAccessories[i];
-                    //var myItem = modPlayer.NormalAccessories[i];
-                    //Main.LocalPlayer.armor[i + 3] = myItem;
+                    modPlayer.player.armor[i + 13] = modPlayer.NormalVanityAccessories[i];
                 }
+
+                for (int i = 0; i < 3; i++)
+                {
+                    modPlayer.player.armor[i + 10] = modPlayer.NormalVanityClothes[i];
+                }
+            }
             else
             {
                 for (int i = 0; i < modPlayer.BuildingAccessories.Count; i++)
                 {
                     modPlayer.player.armor[i + 3] = modPlayer.BuildingAccessories[i];
-                    //var myItem = modPlayer.BuildingAccessories[i];
-                    //Main.LocalPlayer.armor[i + 3] = myItem;
+                    modPlayer.player.armor[i + 13] = modPlayer.BuildingVanityAccessories[i];
+                }
+
+                for (int i = 0; i < 3; i++)
+                {
+                    modPlayer.player.armor[i + 10] = modPlayer.BuildingVanityClothes[i];
                 }
             }
         }
