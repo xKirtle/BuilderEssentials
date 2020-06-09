@@ -5,6 +5,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 
 namespace BuilderEssentials
 {
@@ -24,16 +25,14 @@ namespace BuilderEssentials
 
         public override void Load()
         {
-            LoadTextures();
-
-            if (!Main.dedServ)
+            if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
+                LoadTextures();
+
                 UserInterface = new UserInterface();
 
                 BasePanel = new BasePanel();
                 BasePanel.Activate();
-
-                //ShowMyUI();
             }
         }
 
