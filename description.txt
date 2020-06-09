@@ -1,0 +1,6 @@
+Builder Essentials is a mod designed to help and improve building in survival.
+
+It features a toggleable secondary accessories system so you can always have your building accessories ready to be used, without filling your inventory!
+
+In the future, I hope to implement more helpful features to complement this mod.
+Happy Building! Kirtle
