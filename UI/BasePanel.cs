@@ -26,8 +26,6 @@ namespace BuilderEssentials.UI
         {
             if (button.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
-            else
-                Main.LocalPlayer.mouseInterface = false;
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
