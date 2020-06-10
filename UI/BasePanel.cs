@@ -2,6 +2,7 @@
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace BuilderEssentials.UI
 {
@@ -20,6 +21,8 @@ namespace BuilderEssentials.UI
             button.OnClick += ChangeAccessories_OnClick;
             Append(button);
         }
+
+        //TODO: PREVENT ITEM SWINGS WHEN CLICKING ON THE UIIMAGEBUTTON
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
