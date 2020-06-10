@@ -22,7 +22,13 @@ namespace BuilderEssentials.UI
             Append(button);
         }
 
-        //TODO: PREVENT ITEM SWINGS WHEN CLICKING ON THE UIIMAGEBUTTON
+        public override void Update(GameTime gameTime)
+        {
+            if (button.IsMouseHovering)
+                Main.LocalPlayer.mouseInterface = true;
+            else
+                Main.LocalPlayer.mouseInterface = false;
+        }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
