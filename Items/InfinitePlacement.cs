@@ -19,8 +19,8 @@ namespace BuilderEssentials.Items
         {
             item.accessory = true;
             item.vanity = false;
-            item.width = 46;
-            item.height = 46;
+            item.width = 24;
+            item.height = 24;
             item.value = Item.sellPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
         }
@@ -79,7 +79,8 @@ namespace BuilderEssentials.Items
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 1);
+            player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 90);
+            player.GetModPlayer<BuilderPlayer>().IsNormalAccessories = false;
         }
 
         public override void AddRecipes()
@@ -101,9 +102,9 @@ namespace BuilderEssentials.Items
     {
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            if (Main.LocalPlayer.HasBuff(mod.BuffType("InfinitePlacementBuff"))) {
-                item.stack += 1;
-                base.PlaceInWorld(i, j, item);
+            if (Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement) 
+            {
+                item.stack = item.maxStack + 1;   
             }
         }
     }
@@ -112,10 +113,9 @@ namespace BuilderEssentials.Items
     {
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
-            if (Main.LocalPlayer.HasBuff(mod.BuffType("InfinitePlacementBuff")))
+            if (Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement)
             {
-                item.stack += 1;
-                base.PlaceInWorld(i, j, type, item);
+                item.stack = item.maxStack + 1;
             }
         }
     }

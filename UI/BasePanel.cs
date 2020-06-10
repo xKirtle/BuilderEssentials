@@ -12,7 +12,6 @@ namespace BuilderEssentials.UI
     {
         public static UIImageButton button;
         public static Texture2D buttonTexture;
-        public BuilderPlayer modPlayer;
         public override void OnInitialize()
         {
             buttonTexture = BuilderEssentials.BuildingModeOff;
@@ -26,16 +25,8 @@ namespace BuilderEssentials.UI
 
         public override void Update(GameTime gameTime)
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
             if (button.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
-
-            if (modPlayer.BuildingModeHotkeyPressed)
-            {
-                BuildingModeAccessoriesToggle();
-                modPlayer.BuildingModeHotkeyPressed = false;
-            }
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
@@ -43,9 +34,9 @@ namespace BuilderEssentials.UI
             BuildingModeAccessoriesToggle();
         }
 
-        public void BuildingModeAccessoriesToggle()
+        public static void BuildingModeAccessoriesToggle()
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             CleanAcessoriesList();
             SaveCurrentAccessories();
             modPlayer.IsNormalAccessories = !modPlayer.IsNormalAccessories;
@@ -53,9 +44,9 @@ namespace BuilderEssentials.UI
             UpdateButtonImage();
         }
 
-        public void CleanAcessoriesList()
+        public static void CleanAcessoriesList()
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             //TODO: Mod config where the player can choose if he wishes to have "2nd" vanity slots too
             if (modPlayer.IsNormalAccessories)
             {
@@ -71,9 +62,9 @@ namespace BuilderEssentials.UI
             }
         }
 
-        public void SaveCurrentAccessories()
+        public static void SaveCurrentAccessories()
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             int maxAccessoryIndex = 5 + Main.LocalPlayer.extraAccessorySlots;
             //Normal and Vanity Accessories
             for (int i = 3; i < 3 + maxAccessoryIndex; i++)
@@ -103,9 +94,9 @@ namespace BuilderEssentials.UI
             }
         }
 
-        public void LoadAccessories()
+        public static void LoadAccessories()
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
             if (modPlayer.IsNormalAccessories)
             {
@@ -134,9 +125,9 @@ namespace BuilderEssentials.UI
                 }
             }
         }
-        public void UpdateButtonImage()
+        public static void UpdateButtonImage()
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             if (modPlayer.IsNormalAccessories)
                 button.SetImage(BuilderEssentials.BuildingModeOff);
             else

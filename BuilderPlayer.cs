@@ -16,7 +16,7 @@ namespace BuilderEssentials
         public List<Item> NormalVanityClothes;
         public List<Item> BuildingVanityClothes;
         public bool IsNormalAccessories;
-        public bool BuildingModeHotkeyPressed;
+        public bool InfinitePlacement;
 
         public override void Initialize()
         {
@@ -27,17 +27,18 @@ namespace BuilderEssentials
             NormalVanityClothes = new List<Item>(3);
             BuildingVanityClothes = new List<Item>(3);
             IsNormalAccessories = true;
-            BuildingModeHotkeyPressed = false;
+            InfinitePlacement = false;
+        }
+
+        public override void ResetEffects()
+        {
+            InfinitePlacement = false;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
-            {
-                BuildingModeHotkeyPressed = true;
-
-                BasePanel.button.OnClick();
-            }
+                BasePanel.BuildingModeAccessoriesToggle();
         }
 
         public override TagCompound Save()

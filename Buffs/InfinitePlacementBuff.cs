@@ -12,8 +12,12 @@ namespace BuilderEssentials.Buffs
             Main.debuff[Type] = true;
             Main.buffNoSave[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
-            Main.buffAlpha[Type] = 0;
             canBeCleared = false;
+        }
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+            player.GetModPlayer<BuilderPlayer>().InfinitePlacement = true;
         }
     }
 }
