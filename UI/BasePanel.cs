@@ -1,8 +1,10 @@
 ﻿using Terraria;
 using Terraria.UI;
+using Terraria.GameInput;
 using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace BuilderEssentials.UI
 {
@@ -24,11 +26,24 @@ namespace BuilderEssentials.UI
 
         public override void Update(GameTime gameTime)
         {
+            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+
             if (button.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
+
+            if (modPlayer.BuildingModeHotkeyPressed)
+            {
+                BuildingModeAccessoriesToggle();
+                modPlayer.BuildingModeHotkeyPressed = false;
+            }
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            BuildingModeAccessoriesToggle();
+        }
+
+        public void BuildingModeAccessoriesToggle()
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             CleanAcessoriesList();

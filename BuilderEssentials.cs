@@ -16,6 +16,7 @@ namespace BuilderEssentials
         public static bool UIOpen;
         internal static BasePanel BasePanel;
         internal static UserInterface UserInterface;
+        internal static ModHotKey ToggleBuildingMode;
 
         public void LoadTextures()
         {
@@ -25,6 +26,8 @@ namespace BuilderEssentials
 
         public override void Load()
         {
+            ToggleBuildingMode = RegisterHotKey("Toggle Building Mode", "N");
+
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
                 LoadTextures();
@@ -39,6 +42,7 @@ namespace BuilderEssentials
         public override void Unload()
         {
             BasePanel = null;
+            ToggleBuildingMode = null;
         }
 
         private GameTime _lastUpdateUiGameTime;

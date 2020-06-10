@@ -1,6 +1,7 @@
 ﻿using BuilderEssentials.UI;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -15,6 +16,7 @@ namespace BuilderEssentials
         public List<Item> NormalVanityClothes;
         public List<Item> BuildingVanityClothes;
         public bool IsNormalAccessories;
+        public bool BuildingModeHotkeyPressed;
 
         public override void Initialize()
         {
@@ -25,6 +27,17 @@ namespace BuilderEssentials
             NormalVanityClothes = new List<Item>(3);
             BuildingVanityClothes = new List<Item>(3);
             IsNormalAccessories = true;
+            BuildingModeHotkeyPressed = false;
+        }
+
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            if (BuilderEssentials.ToggleBuildingMode.JustPressed)
+            {
+                BuildingModeHotkeyPressed = true;
+
+                BasePanel.button.OnClick();
+            }
         }
 
         public override TagCompound Save()
