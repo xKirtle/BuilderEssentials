@@ -1,18 +1,19 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials.Items
 {
-    class InfinitePlacement : ModItem
+    class InfiniteUpgrade : ModItem
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Allows infinite range and fast placement");
+            Tooltip.SetDefault("Allows infinite placement");
         }
 
         public override void SetDefaults()
@@ -80,44 +81,20 @@ namespace BuilderEssentials.Items
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 90);
-            player.blockRange += 55;
-            player.wallSpeed += 10;
-            player.tileSpeed += 50;
-            Player.tileRangeX = 65;
-            Player.tileRangeY = 55;
         }
 
         public override void AddRecipes()
         {
             //Not really worried about balancing at this point
             ModRecipe modRecipe = new ModRecipe(mod);
-            modRecipe.AddIngredient(mod.GetItem("InfiniteUpgrade"), 1);
-            modRecipe.AddIngredient(mod.GetItem("PlacementWrench"), 1);
-            modRecipe.AddTile(TileID.TinkerersWorkbench);
+            modRecipe.AddIngredient(ItemID.LunarBar, 40);
+            modRecipe.AddIngredient(ItemID.FragmentNebula, 20);
+            modRecipe.AddIngredient(ItemID.FragmentSolar, 20);
+            modRecipe.AddIngredient(ItemID.FragmentStardust, 20);
+            modRecipe.AddIngredient(ItemID.FragmentVortex, 20);
+            modRecipe.AddTile(TileID.LunarCraftingStation);
             modRecipe.SetResult(this);
             modRecipe.AddRecipe();
-        }
-    }
-
-    public partial class InfinitePlacementTile : GlobalTile
-    {
-        public override void PlaceInWorld(int i, int j, Item item)
-        {
-            if (Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement)
-            {
-                item.stack = item.maxStack + 1;
-            }
-        }
-    }
-
-    public partial class InfinitePlacementWall : GlobalWall
-    {
-        public override void PlaceInWorld(int i, int j, int type, Item item)
-        {
-            if (Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement)
-            {
-                item.stack = item.maxStack + 1;
-            }
         }
     }
 }

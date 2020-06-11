@@ -33,6 +33,8 @@ namespace BuilderEssentials
         public override void ResetEffects()
         {
             InfinitePlacement = false;
+            Player.tileRangeX = 5;
+            Player.tileRangeY = 4;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)

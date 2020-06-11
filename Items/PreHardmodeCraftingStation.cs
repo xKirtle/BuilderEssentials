@@ -8,7 +8,7 @@ namespace BuilderEssentials.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("PreHardmode Crafting Stations");
+            Tooltip.SetDefault("Pre Hardmode Crafting Stations");
         }
 
         public override void SetDefaults()
