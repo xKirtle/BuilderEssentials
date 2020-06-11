@@ -39,7 +39,7 @@ namespace BuilderEssentials.UI
                 Tile mouseTile = Main.tile[posX, posY];
                 //Impossible to convert Tile -> Item but possible to do Item -> Tile...
                 Main.LocalPlayer.PickTile(posX, posY, 9999);
-                Main.NewText("click");
+                //Main.NewText("click");
 
                 //Middle click saves Tile
                 //Other key makes left click use middle click saved tile?

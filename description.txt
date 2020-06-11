@@ -1,13 +1,15 @@
-Builder Essentials is a mod designed to help and improve building in survival.
+Builder Essentials is a mod designed to help and improve building in survival (and post moonlord / creative).
 
-It features a toggleable secondary accessories system so you can always have your building accessories ready to be used (requires you to add your own accessories), without filling your inventory, an accessory that lets you place infinite blocks and a Crafting Station that supports every Recipe!
+The main feature is a toggleable seconday accessory system allowing for 5-7 building accessories while being able to go back to your normal accessories, with a press of a key.
+On top of that, the mod also adds:
 
-In the future, I hope to implement more helpful features to complement this mod.
+	- A MultiCraftingStation that can be used to craft all the recipes in the game. (Divided in 4 crafting stations: Pre hardmode, Hardmode, Themed furniture and Specialized items)
+	- An accessory that allows infinite reach and fast placement. (Divided in 2 accessories, for each functionality alone as well)
+
+Default KeyBind to toggle Building Mode is N, be sure to set it up on the configs.
 
 Happy Building! Kirtle
 
 Latest Changelog:
-	- Added a hotkey to toggle Building Mode (You need to manually set the bind, default is N)
-	- Added a Crafting Station that supports every Recipe
-	- Added 4 Items (Materials) to craft the MultiCraftingStation (Soon will become placeable crafting stations as well on their own)
-	- Fixed a bug where the Infinite Placement Accessory would not work
+	- Introduced 2 new accessories that make up the 2 functionalities present in the Infinite Placement accessory
+	- Added Infinite Reach to the Infinite Placement accessory
