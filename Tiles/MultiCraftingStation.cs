@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.DataStructures;
+﻿using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -19,12 +16,12 @@ namespace BuilderEssentials.Tiles
             Main.tileNoAttach[Type] = true;
             Main.tileTable[Type] = true;
             Main.tileLavaDeath[Type] = false;
-            animationFrameHeight = 36;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16};
-            TileObjectData.newTile.Height = 2;
+            animationFrameHeight = 54;
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style6x3);
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16};
+            TileObjectData.newTile.Height = 3;
             TileObjectData.newTile.CoordinateWidth = 16;
-            TileObjectData.newTile.Width = 4;
+            TileObjectData.newTile.Width = 6;
             TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
             TileObjectData.newTile.StyleWrapLimit = 2;
             TileObjectData.newTile.StyleMultiplier = 2;
@@ -44,7 +41,7 @@ namespace BuilderEssentials.Tiles
                 TileID.Kegs, TileID.Blendomatic, TileID.MeatGrinder, TileID.BoneWelder, TileID.GlassKiln, TileID.HoneyDispenser,
                 TileID.IceMachine, TileID.LivingLoom, TileID.SkyMill, TileID.Solidifier, TileID.FleshCloningVat, TileID.SteampunkBoiler,
                 TileID.LihzahrdFurnace, TileID.WaterDrip, TileID.Waterfall, TileID.LavaDrip, TileID.Lavafall,
-                TileID.HoneyDrip, TileID.Honeyfall, TileID.Campfire, TileID.Extractinator};
+                TileID.HoneyDrip, TileID.Honeyfall, TileID.Campfire, TileID.Extractinator, TileID.SnowCloud, TileID.Tombstones };
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)

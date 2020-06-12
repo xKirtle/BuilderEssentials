@@ -13,13 +13,13 @@ namespace BuilderEssentials.Items.Placeable
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("This is a modded workbench.");
+			Tooltip.SetDefault("Used to craft all recipes in the game");
 		}
 
 		public override void SetDefaults()
 		{
-			item.width = 48;
-			item.height = 48;
+			item.width = 102;
+			item.height = 40;
 			item.maxStack = 99;
 			item.useTurn = true;
 			item.autoReuse = true;
@@ -29,6 +29,7 @@ namespace BuilderEssentials.Items.Placeable
 			item.consumable = true;
 			item.value = 150;
 			item.createTile = TileType<Tiles.MultiCraftingStation>();
+			item.rare = ItemRarityID.Red;
 		}
 
 		//TODO: Separate recipe into Pre-Hardmode, Hardmode + Specialized and Themed Furniture

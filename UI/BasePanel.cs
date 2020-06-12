@@ -17,9 +17,10 @@ namespace BuilderEssentials.UI
         {
             buttonTexture = BuilderEssentials.BuildingModeOff;
             button = new UIImageButton(buttonTexture);
-            //Bad positionning on screens != 1080p?
-            button.VAlign = 0.03f;
-            button.HAlign = 0.272f;
+            button.VAlign = 0f; //0.03f
+            button.HAlign = 0f; //0.272f
+            button.Top.Set(40f, 0);
+            button.Left.Set(510f, 0);
             button.OnClick += ChangeAccessories_OnClick;
             Append(button);
         }

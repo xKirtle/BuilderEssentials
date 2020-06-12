@@ -332,7 +332,7 @@ namespace BuilderEssentials
             });
             RecipeGroup.RegisterGroup("BuilderEssentials:HardmodeAnvils", hardmodeAnvils);
 
-            RecipeGroup campfires = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "Campfire", new int[]
+            RecipeGroup campfires = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Campfire", new int[]
             {
                 ItemID.Campfire,
                 ItemID.BoneCampfire,
