@@ -34,7 +34,7 @@ namespace BuilderEssentials.Items
                 Item otherAccessory = Main.LocalPlayer.armor[i];
                 if (!otherAccessory.IsAir &&
                     !item.IsTheSameAs(otherAccessory) &&
-                    otherAccessory.modItem is InfinitePlacement)
+                    otherAccessory.modItem is PlacementWrench)
                 {
                     return (i, otherAccessory);
                 }

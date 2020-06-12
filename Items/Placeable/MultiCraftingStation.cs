@@ -9,8 +9,8 @@ using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.Items.Placeable
 {
-    class MultiCraftingStation : ModItem
-    {
+	class MultiCraftingStation : ModItem
+	{
 		public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault("This is a modded workbench.");
@@ -31,16 +31,16 @@ namespace BuilderEssentials.Items.Placeable
 			item.createTile = TileType<Tiles.MultiCraftingStation>();
 		}
 
-			//TODO: Separate recipe into Pre-Hardmode, Hardmode + Specialized and Themed Furniture
-			//Max 14 ingredients for each recipe
-	public override void AddRecipes()
+		//TODO: Separate recipe into Pre-Hardmode, Hardmode + Specialized and Themed Furniture
+		//Max 14 ingredients for each recipe
+		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(mod.GetItem("PreHardmodeCraftingStation"), 1);
 			recipe.AddIngredient(mod.GetItem("HardmodeCraftingStation"), 1);
 			recipe.AddIngredient(mod.GetItem("SpecializedCraftingStation"), 1);
 			recipe.AddIngredient(mod.GetItem("ThemedFurnitureCraftingStation"), 1);
-			recipe.AddTile(TileID.DemonAltar);
+			recipe.AddTile(TileID.TinkerersWorkbench);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}

@@ -33,7 +33,7 @@ namespace BuilderEssentials.Items
             recipe.AddIngredient(ItemID.FleshCloningVaat, 1);
             recipe.AddIngredient(ItemID.SteampunkBoiler, 1);
             recipe.AddIngredient(ItemID.LihzahrdFurnace, 1);
-            recipe.AddTile(TileID.DemonAltar);
+            recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

@@ -1,4 +1,5 @@
 displayName = Builder Essentials
 author = Kirtle
-version = 0.1.5
+version = 0.1.6
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
+homepage = https://forums.terraria.org/index.php?threads/builder-essentials.94175/

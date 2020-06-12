@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace BuilderEssentials.Items
 {
-    class InfinitePlacement : ModItem
+    class InfiniteWrench : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -33,7 +33,7 @@ namespace BuilderEssentials.Items
                 Item otherAccessory = Main.LocalPlayer.armor[i];
                 if (!otherAccessory.IsAir &&
                     !item.IsTheSameAs(otherAccessory) &&
-                    otherAccessory.modItem is InfinitePlacement)
+                    otherAccessory.modItem is InfiniteWrench)
                 {
                     return (i, otherAccessory);
                 }
@@ -91,7 +91,7 @@ namespace BuilderEssentials.Items
         {
             //Not really worried about balancing at this point
             ModRecipe modRecipe = new ModRecipe(mod);
-            modRecipe.AddIngredient(mod.GetItem("InfiniteUpgrade"), 1);
+            modRecipe.AddIngredient(mod.GetItem("InfinityUpgrade"), 1);
             modRecipe.AddIngredient(mod.GetItem("PlacementWrench"), 1);
             modRecipe.AddTile(TileID.TinkerersWorkbench);
             modRecipe.SetResult(this);

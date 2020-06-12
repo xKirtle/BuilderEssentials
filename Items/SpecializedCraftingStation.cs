@@ -28,7 +28,7 @@ namespace BuilderEssentials.Items
             recipe.AddIngredient(ItemID.MeatGrinder, 1);
             recipe.AddRecipeGroup("BuilderEssentials:Campfires", 1);
 
-            recipe.AddTile(TileID.DemonAltar);
+            recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
