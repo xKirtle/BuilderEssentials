@@ -32,9 +32,16 @@ namespace BuilderEssentials
 
         public override void ResetEffects()
         {
-            InfinitePlacement = false;
+            if (!player.HasBuff(mod.GetBuff("InfinitePlacementBuff").Type))
+                InfinitePlacement = false;
+
             Player.tileRangeX = 5;
             Player.tileRangeY = 4;
+        }
+
+        public override void PostUpdate()
+        {
+            base.PostUpdate();
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)

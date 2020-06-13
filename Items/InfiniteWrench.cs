@@ -77,6 +77,8 @@ namespace BuilderEssentials.Items
             }
         }
 
+        private int oldPosX;
+        private int oldPosY;
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 90);
@@ -85,6 +87,96 @@ namespace BuilderEssentials.Items
             player.tileSpeed += 50;
             Player.tileRangeX = 65;
             Player.tileRangeY = 55;
+
+            if (Main.mouseMiddle)
+            {
+                int posX = Player.tileTargetX;
+                int posY = Player.tileTargetY;
+                int brokenTile = -1;
+
+                //Not ready for multiplayer yet
+                if (oldPosX != posX || oldPosY != posY && Main.netMode != NetmodeID.Server)
+                {
+                    //Main.NewText("PosX: " + posX + " / PosY: " + posY);
+
+                    //SAVE A LIST OF ALL ITEM DROPS BEFORE AND AFTER AND COMPARE WHICH ITEM IS THE NEW?
+                    //Removes all item drops
+                    for (int i = 0; i < Main.maxItems; i++)
+                    {
+                        Main.item[i].active = false;
+                    }
+
+                    brokenTile = Main.tile[posX, posY].type;
+                    Main.LocalPlayer.PickTile(posX, posY, 999);
+
+                    //Sends network event that the tile was broken
+                    if (Main.netMode == NetmodeID.Server)
+                        NetMessage.SendData(MessageID.TileChange, -1, -1, null, 14, posX, posY);
+
+                    Item lastItem = new Item();
+                    bool foundNewLastItem = false;
+                    for (int i = 0; i < Main.maxItems; i++)
+                    {
+                        if (!Main.item[i].IsAir)
+                        {
+                            lastItem = Main.item[i];
+                            Main.item[i].active = false;
+                            foundNewLastItem = true;
+                            break;
+                        }
+                    }
+
+                    if (foundNewLastItem)
+                    {
+
+                        //IF ITEM DROPPED EXISTS IN INVENTORY, SWITCH IT WITH THE SELECTEDITEM
+                        //ELSE ITEM DOES NOT EXIST IN INVENTORY, FIND FIRST AIR SPACE IN INVENTORY, PUT THE SELECTEDITEM THERE AND
+                        //FILL THE SELECTEDITEM INDEX WITH THE ITEM DROPPED
+
+                        bool step1AbleToFinish = false;
+                        for (int i = 0; i < 50; i++)
+                        {
+                            if (Main.LocalPlayer.inventory[i].IsTheSameAs(lastItem))
+                            {
+                                Item tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem]; //Item selected saved on a temp variable
+                                Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastItem; //selected item is now the dropped item
+                                Main.LocalPlayer.inventory[i] = tempItem; //Space where the dropped item was contains now the previous selected item
+                                step1AbleToFinish = true;
+                                break;
+                            }
+                        }
+
+                        if (!step1AbleToFinish) //Item does not exist in the inventory
+                        {
+                            for (int i = 0; i < 50; i++)
+                            {
+                                if (Main.LocalPlayer.inventory[i].IsAir)
+                                {
+                                    Item tempItem = new Item();
+                                    tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
+                                    Main.LocalPlayer.inventory[i] = tempItem;
+                                    Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastItem;
+
+                                    break;
+                                }
+                            }
+                        }
+                        if (brokenTile != -1)
+                        {
+                            WorldGen.PlaceTile(posX, posY, brokenTile);
+
+                            //Neds to send a network even that a new tile was placed
+                            if (Main.netMode == NetmodeID.Server) 
+                            {
+                                //NetMessage.SendData(MessageID.TileChange, -1, -1, null, 14, posX, posY);
+                            }
+                        }
+
+                        oldPosX = posX;
+                        oldPosY = posY;
+                    }
+                }
+            }
         }
 
         public override void AddRecipes()

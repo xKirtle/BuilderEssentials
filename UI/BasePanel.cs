@@ -1,11 +1,8 @@
 ﻿using Terraria;
 using Terraria.UI;
-using Terraria.GameInput;
 using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Terraria.ModLoader.IO;
 
 namespace BuilderEssentials.UI
 {
@@ -29,22 +26,6 @@ namespace BuilderEssentials.UI
         {
             if (button.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
-
-            if (Main.mouseMiddle)
-            {
-                int posX = Main.mouseX;
-                int posY = Main.mouseY;
-
-                //Main.NewText("PosX: " + posX + " / PosY: " + posY);
-
-                Tile mouseTile = Main.tile[posX, posY];
-                //Impossible to convert Tile -> Item but possible to do Item -> Tile...
-                Main.LocalPlayer.PickTile(posX, posY, 9999);
-                //Main.NewText("click");
-
-                //Middle click saves Tile
-                //Other key makes left click use middle click saved tile?
-            }
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
@@ -88,7 +69,7 @@ namespace BuilderEssentials.UI
             for (int i = 3; i < 3 + maxAccessoryIndex; i++)
             {
                 Item accessory = modPlayer.player.armor[i];
-                Item vanityAccessory = modPlayer.player.armor[i+10];
+                Item vanityAccessory = modPlayer.player.armor[i + 10];
                 if (modPlayer.IsNormalAccessories)
                 {
                     modPlayer.NormalAccessories.Add(accessory);

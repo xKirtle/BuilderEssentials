@@ -1,13 +1,12 @@
 Builder Essentials is a mod designed to help and improve building in survival (and post Moon Lord / creative).
 
 The main feature is a toggleable secondary accessory system allowing for 5-7 building accessories while being able to go back to your normal accessories, with a press of a key.
-On top of that, this mod adds more useful tools! Check its Homepage!
+On top of that, this mod adds more useful tools! Check the mod's Homepage!
 
 Default KeyBind to toggle Building Mode is N, be sure to set it up on the configs.
 
 Happy Building! Kirtle
 
 Latest Changelog:
-	- Updated some accessories names
-	- Resprited the Multi Crafting Station
-	- Added a homepage, the thread on Terraria Forums!
+	- Fixed a bug where the Building Mode UI Button would not display correctly
+	- Added the remaining 4 crafting stations that make up the Multi Crafting Station
