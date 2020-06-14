@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Terraria;
 using Terraria.ID;
@@ -90,49 +91,50 @@ namespace BuilderEssentials.Items
 
             if (Main.mouseMiddle)
             {
+                //CODE BELOW NEEDS REFACTORING!!
+                //HUGE FUNCTIONAL MESS
+
                 int posX = Player.tileTargetX;
                 int posY = Player.tileTargetY;
                 int brokenTile = -1;
+                Item lastItem;
 
                 //Not ready for multiplayer yet
+                //This should be all local??
                 if (oldPosX != posX || oldPosY != posY && Main.netMode != NetmodeID.Server)
                 {
                     //Main.NewText("PosX: " + posX + " / PosY: " + posY);
 
-                    //SAVE A LIST OF ALL ITEM DROPS BEFORE AND AFTER AND COMPARE WHICH ITEM IS THE NEW?
-                    //Removes all item drops
+                    List<Item> blockTempList = new List<Item>();
+                    //Maybe check when Main.item[i] == empty item and stop the iteration?
                     for (int i = 0; i < Main.maxItems; i++)
                     {
-                        Main.item[i].active = false;
+                        blockTempList.Add(Main.item[i]);
                     }
 
                     brokenTile = Main.tile[posX, posY].type;
                     Main.LocalPlayer.PickTile(posX, posY, 999);
 
-                    //Sends network event that the tile was broken
-                    if (Main.netMode == NetmodeID.Server)
-                        NetMessage.SendData(MessageID.TileChange, -1, -1, null, 14, posX, posY);
-
-                    Item lastItem = new Item();
-                    bool foundNewLastItem = false;
+                    List<Item> blockTempList2 = new List<Item>();
                     for (int i = 0; i < Main.maxItems; i++)
                     {
-                        if (!Main.item[i].IsAir)
-                        {
-                            lastItem = Main.item[i];
-                            Main.item[i].active = false;
-                            foundNewLastItem = true;
-                            break;
-                        }
+                        blockTempList2.Add(Main.item[i]);
+                        Main.item[i].active = false;
                     }
 
-                    if (foundNewLastItem)
+                    List<Item> blockDroppedItem = blockTempList2.Except(blockTempList).ToList();
+                    //No need to send network events since the tile will remain the same after all code runs?
+                    //Sends network event that the tile was broken
+                    //if (Main.netMode == NetmodeID.Server)
+                    //NetMessage.SendData(MessageID.TileChange, -1, -1, null, 14, posX, posY);
+
+
+                    //IF DROPPEDITEM.COUNT == 0, WorldGen.KillWall and try to grab newest dropped item again
+
+                    //If PickTile is successful, there should be 1 droppedItem. If there's none, it means the tile is a wall
+                    if (blockDroppedItem.Count == 1)
                     {
-
-                        //IF ITEM DROPPED EXISTS IN INVENTORY, SWITCH IT WITH THE SELECTEDITEM
-                        //ELSE ITEM DOES NOT EXIST IN INVENTORY, FIND FIRST AIR SPACE IN INVENTORY, PUT THE SELECTEDITEM THERE AND
-                        //FILL THE SELECTEDITEM INDEX WITH THE ITEM DROPPED
-
+                        lastItem = blockDroppedItem.FirstOrDefault();
                         bool step1AbleToFinish = false;
                         for (int i = 0; i < 50; i++)
                         {
@@ -162,15 +164,71 @@ namespace BuilderEssentials.Items
                             }
                         }
                         if (brokenTile != -1)
-                        {
                             WorldGen.PlaceTile(posX, posY, brokenTile);
 
-                            //Neds to send a network even that a new tile was placed
-                            if (Main.netMode == NetmodeID.Server) 
+                        //No need?
+                        //Neds to send a network even that a new tile was placed
+                        //if (Main.netMode == NetmodeID.Server) 
+                        //NetMessage.SendData(MessageID.TileChange, -1, -1, null, 14, posX, posY);
+
+                        oldPosX = posX;
+                        oldPosY = posY;
+                    }
+                    else if (blockDroppedItem.Count == 0)
+                    {
+                        List<Item> wallTempList = new List<Item>();
+                        for (int i = 0; i < Main.maxItems; i++)
+                        {
+                            wallTempList.Add(Main.item[i]);
+                        }
+
+                        brokenTile = Main.tile[posX, posY].type;
+                        WorldGen.KillWall(posX, posY);
+
+                        List<Item> wallTempList2 = new List<Item>();
+                        for (int i = 0; i < Main.maxItems; i++)
+                        {
+                            wallTempList2.Add(Main.item[i]);
+                            Main.item[i].active = false;
+                        }
+
+                        List<Item> wallDroppedItem = wallTempList2.Except(wallTempList).ToList();
+
+                        lastItem = wallDroppedItem.FirstOrDefault();
+                        bool step1AbleToFinish = false;
+                        for (int i = 0; i < 50; i++)
+                        {
+                            if (Main.LocalPlayer.inventory[i].IsTheSameAs(lastItem))
                             {
-                                //NetMessage.SendData(MessageID.TileChange, -1, -1, null, 14, posX, posY);
+                                Item tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem]; //Item selected saved on a temp variable
+                                Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastItem; //selected item is now the dropped item
+                                Main.LocalPlayer.inventory[i] = tempItem; //Space where the dropped item was contains now the previous selected item
+                                step1AbleToFinish = true;
+                                break;
                             }
                         }
+
+                        if (!step1AbleToFinish) //Item does not exist in the inventory
+                        {
+                            for (int i = 0; i < 50; i++)
+                            {
+                                if (Main.LocalPlayer.inventory[i].IsAir)
+                                {
+                                    Item tempItem = new Item();
+                                    tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
+                                    Main.LocalPlayer.inventory[i] = tempItem;
+                                    Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastItem;
+
+                                    break;
+                                }
+                            }
+                        }
+                        WorldGen.PlaceWall(posX, posY, lastItem.createWall);
+
+                        //No need?
+                        //Neds to send a network even that a new tile was placed
+                        //if (Main.netMode == NetmodeID.Server) 
+                        //NetMessage.SendData(MessageID.TileChange, -1, -1, null, 14, posX, posY);
 
                         oldPosX = posX;
                         oldPosY = posY;
@@ -191,25 +249,19 @@ namespace BuilderEssentials.Items
         }
     }
 
-    public partial class InfinitePlacementTile : GlobalTile
+    public class InfinitePlacementTile : GlobalTile
     {
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            if (Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement)
-            {
-                item.stack = item.maxStack + 1;
-            }
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
         }
     }
 
-    public partial class InfinitePlacementWall : GlobalWall
+    public class InfinitePlacementWall : GlobalWall
     {
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
-            if (Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement)
-            {
-                item.stack = item.maxStack + 1;
-            }
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
         }
     }
 }

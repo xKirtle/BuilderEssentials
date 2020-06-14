@@ -47,7 +47,6 @@ namespace BuilderEssentials
         }
 
         private GameTime _lastUpdateUiGameTime;
-
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUiGameTime = gameTime;
