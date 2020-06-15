@@ -16,7 +16,10 @@ namespace BuilderEssentials
         public List<Item> NormalVanityClothes;
         public List<Item> BuildingVanityClothes;
         public bool IsNormalAccessories;
-        public bool InfinitePlacement;
+        
+
+        public bool colorPickerSelected;
+        public bool InfinitePlacementSelected;
 
         public override void Initialize()
         {
@@ -27,27 +30,20 @@ namespace BuilderEssentials
             NormalVanityClothes = new List<Item>(3);
             BuildingVanityClothes = new List<Item>(3);
             IsNormalAccessories = true;
-            InfinitePlacement = false;
+            colorPickerSelected = false;
+            InfinitePlacementSelected = false;
         }
 
         public override void ResetEffects()
         {
-            if (!player.HasBuff(mod.GetBuff("InfinitePlacementBuff").Type))
-                InfinitePlacement = false;
-
             Player.tileRangeX = 5;
             Player.tileRangeY = 4;
-        }
-
-        public override void PostUpdate()
-        {
-            base.PostUpdate();
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
-                BasePanel.BuildingModeAccessoriesToggle();
+                BuildingMode.BuildingModeAccessoriesToggle();
         }
 
         public override TagCompound Save()
@@ -60,7 +56,9 @@ namespace BuilderEssentials
                 {"NormalVanityAccessories", NormalVanityAccessories },
                 {"BuildingVanityAccessories", BuildingVanityAccessories },
                 {"NormalVanityClothes", NormalVanityClothes },
-                {"BuildingVanityClothes", BuildingVanityClothes }
+                {"BuildingVanityClothes", BuildingVanityClothes },
+                {"colorPickerSelected", colorPickerSelected },
+                {"InfinitePlacementSelected", InfinitePlacementSelected }
             };
         }
 
@@ -86,15 +84,21 @@ namespace BuilderEssentials
 
             if (tag.ContainsKey("BuildingVanityClothes"))
                 BuildingVanityClothes = tag.Get<List<Item>>("BuildingVanityClothes");
+
+            //Creative Wheel
+            if (tag.ContainsKey("colorPickerSelected"))
+                colorPickerSelected = tag.GetBool("colorPickerSelected");
+
+            if (tag.ContainsKey("InfinitePlacementSelected"))
+                InfinitePlacementSelected = tag.GetBool("InfinitePlacementSelected");
         }
 
         public override void OnEnterWorld(Player player)
         {
-            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (!modPlayer.IsNormalAccessories)
-                BasePanel.button.SetImage(BuilderEssentials.BuildingModeOn);
+            if (!IsNormalAccessories)
+                BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOn);
             else
-                BasePanel.button.SetImage(BuilderEssentials.BuildingModeOff);
+                BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOff);
         }
     }
 }

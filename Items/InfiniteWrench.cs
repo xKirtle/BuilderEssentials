@@ -11,6 +11,7 @@ namespace BuilderEssentials.Items
 {
     class InfiniteWrench : ModItem
     {
+        //Made this item sort of obsolete with CreativeWrench/CreativeWheel?
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Allows infinite range and fast placement");
@@ -103,7 +104,7 @@ namespace BuilderEssentials.Items
     {
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacementSelected == true ? false : true;
         }
     }
 
@@ -111,7 +112,7 @@ namespace BuilderEssentials.Items
     {
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
-            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacementSelected == true ? false : true;
         }
     }
 }

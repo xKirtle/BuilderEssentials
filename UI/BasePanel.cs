@@ -8,129 +8,59 @@ namespace BuilderEssentials.UI
 {
     public class BasePanel : UIState
     {
-        public static UIImageButton button;
+        public static UIImageButton buildingModeButton;
         public static Texture2D buttonTexture;
+        public static UIPanel creativeWheelPanel;
+        public static bool isBuildingModeButtonVisible;
+        public static bool isCreativeWheelVisible;
+        public static bool creativeWheelUIOpen;
         public override void OnInitialize()
         {
             buttonTexture = BuilderEssentials.BuildingModeOff;
-            button = new UIImageButton(buttonTexture);
-            button.VAlign = 0f; //0.03f
-            button.HAlign = 0f; //0.272f
-            button.Top.Set(40f, 0);
-            button.Left.Set(510f, 0);
-            button.OnClick += ChangeAccessories_OnClick;
-            Append(button);
+            buildingModeButton = new UIImageButton(buttonTexture);
+            buildingModeButton.VAlign = 0f; //0.03f
+            buildingModeButton.HAlign = 0f; //0.272f
+            buildingModeButton.Top.Set(40f, 0);
+            buildingModeButton.Left.Set(510f, 0);
+            buildingModeButton.OnClick += ChangeAccessories_OnClick;
+            buildingModeButton.SetVisibility(0f, 0f);
+            Append(buildingModeButton);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (button.IsMouseHovering)
+            if (Main.playerInventory == true && !isBuildingModeButtonVisible)
+            {
+                buildingModeButton.SetVisibility(1f, .4f);
+                isBuildingModeButtonVisible = true;
+            }
+            else if (Main.playerInventory == false && isBuildingModeButtonVisible)
+            {
+                buildingModeButton.SetVisibility(0f, 0f);
+                isBuildingModeButtonVisible = false;
+            }
+
+            if (buildingModeButton.IsMouseHovering && isBuildingModeButtonVisible)
                 Main.LocalPlayer.mouseInterface = true;
+
+            if (creativeWheelUIOpen && !isCreativeWheelVisible)
+            {
+                //Main.NewText("Open");
+                creativeWheelPanel = CreativeWheel.CreateCreativeWheelPanel(Main.mouseX, Main.mouseY,this);
+                isCreativeWheelVisible = true;
+            }
+            else if (!creativeWheelUIOpen && isCreativeWheelVisible)
+            {
+                //Main.NewText("Closed");
+                creativeWheelPanel.Remove();
+                isCreativeWheelVisible = false;
+            }
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            BuildingModeAccessoriesToggle();
-        }
-
-        public static void BuildingModeAccessoriesToggle()
-        {
-            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            CleanAcessoriesList();
-            SaveCurrentAccessories();
-            modPlayer.IsNormalAccessories = !modPlayer.IsNormalAccessories;
-            LoadAccessories();
-            UpdateButtonImage();
-        }
-
-        public static void CleanAcessoriesList()
-        {
-            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            //TODO: Mod config where the player can choose if he wishes to have "2nd" vanity slots too
-            if (modPlayer.IsNormalAccessories)
-            {
-                modPlayer.NormalAccessories.Clear();
-                modPlayer.NormalVanityAccessories.Clear();
-                modPlayer.NormalVanityClothes.Clear();
-            }
-            else
-            {
-                modPlayer.BuildingAccessories.Clear();
-                modPlayer.BuildingVanityAccessories.Clear();
-                modPlayer.BuildingVanityClothes.Clear();
-            }
-        }
-
-        public static void SaveCurrentAccessories()
-        {
-            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            int maxAccessoryIndex = 5 + Main.LocalPlayer.extraAccessorySlots;
-            //Normal and Vanity Accessories
-            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
-            {
-                Item accessory = modPlayer.player.armor[i];
-                Item vanityAccessory = modPlayer.player.armor[i + 10];
-                if (modPlayer.IsNormalAccessories)
-                {
-                    modPlayer.NormalAccessories.Add(accessory);
-                    modPlayer.NormalVanityAccessories.Add(vanityAccessory);
-                }
-                else
-                {
-                    modPlayer.BuildingAccessories.Add(accessory);
-                    modPlayer.BuildingVanityAccessories.Add(vanityAccessory);
-                }
-            }
-
-            //Vanity Sets (&& armor set, in the future?)
-            for (int i = 10; i < 13; i++)
-            {
-                Item vanityCloth = modPlayer.player.armor[i];
-                if (modPlayer.IsNormalAccessories)
-                    modPlayer.NormalVanityClothes.Add(vanityCloth);
-                else
-                    modPlayer.BuildingVanityClothes.Add(vanityCloth);
-            }
-        }
-
-        public static void LoadAccessories()
-        {
-            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
-            if (modPlayer.IsNormalAccessories)
-            {
-                for (int i = 0; i < modPlayer.NormalAccessories.Count; i++)
-                {
-                    modPlayer.player.armor[i + 3] = modPlayer.NormalAccessories[i];
-                    modPlayer.player.armor[i + 13] = modPlayer.NormalVanityAccessories[i];
-                }
-
-                for (int i = 0; i < 3; i++)
-                {
-                    modPlayer.player.armor[i + 10] = modPlayer.NormalVanityClothes[i];
-                }
-            }
-            else
-            {
-                for (int i = 0; i < modPlayer.BuildingAccessories.Count; i++)
-                {
-                    modPlayer.player.armor[i + 3] = modPlayer.BuildingAccessories[i];
-                    modPlayer.player.armor[i + 13] = modPlayer.BuildingVanityAccessories[i];
-                }
-
-                for (int i = 0; i < 3; i++)
-                {
-                    modPlayer.player.armor[i + 10] = modPlayer.BuildingVanityClothes[i];
-                }
-            }
-        }
-        public static void UpdateButtonImage()
-        {
-            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (modPlayer.IsNormalAccessories)
-                button.SetImage(BuilderEssentials.BuildingModeOff);
-            else
-                button.SetImage(BuilderEssentials.BuildingModeOn);
+            if (isBuildingModeButtonVisible)
+                BuildingMode.BuildingModeAccessoriesToggle();
         }
     }
 }

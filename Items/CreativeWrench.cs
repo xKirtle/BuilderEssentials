@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BuilderEssentials.UI;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,10 +30,21 @@ namespace BuilderEssentials.Items
 
         private int oldPosX;
         private int oldPosY;
-
+        int mouseRightTimer = 0;
+        BuilderPlayer modPlayer;
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            if (Main.mouseMiddle)
+            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            if (Main.mouseRight)
+            {
+                if (++mouseRightTimer == 2)
+                    BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
+            }
+
+            if (Main.mouseRightRelease)
+                mouseRightTimer = 0;
+
+            if (Main.mouseMiddle && modPlayer.colorPickerSelected)
             {
                 //CODE BELOW NEEDS REFACTORING!!
                 //HUGE FUNCTIONAL MESS

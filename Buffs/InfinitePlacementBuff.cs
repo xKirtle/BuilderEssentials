@@ -17,7 +17,7 @@ namespace BuilderEssentials.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetModPlayer<BuilderPlayer>().InfinitePlacement = true;
+            //player.GetModPlayer<BuilderPlayer>().InfinitePlacementSelected = true;
         }
     }
 }

@@ -14,7 +14,8 @@ namespace BuilderEssentials
     {
         public static Texture2D BuildingModeOff;
         public static Texture2D BuildingModeOn;
-        public static bool UIOpen;
+        public static Texture2D CWColorPicker;
+        public static Texture2D CWInfinitePlacement;
         internal static BasePanel BasePanel;
         internal static UserInterface UserInterface;
         internal static ModHotKey ToggleBuildingMode;
@@ -23,6 +24,8 @@ namespace BuilderEssentials
         {
             BuildingModeOff = this.GetTexture("UI/Elements/BuildingModeOff");
             BuildingModeOn = this.GetTexture("UI/Elements/BuildingModeOn");
+            CWColorPicker = this.GetTexture("UI/Elements/CWColorPicker");
+            CWInfinitePlacement = this.GetTexture("UI/Elements/CWInfinitePlacement");
         }
 
         public override void Load()
@@ -37,6 +40,7 @@ namespace BuilderEssentials
 
                 BasePanel = new BasePanel();
                 BasePanel.Activate();
+                ShowMyUI();
             }
         }
 
@@ -52,11 +56,6 @@ namespace BuilderEssentials
             _lastUpdateUiGameTime = gameTime;
             if (UserInterface?.CurrentState != null)
                 UserInterface.Update(gameTime);
-
-            if (Main.playerInventory == true && !UIOpen)
-                ShowMyUI();
-            else if (Main.playerInventory == false && UIOpen)
-                HideMyUI();
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -81,13 +80,11 @@ namespace BuilderEssentials
         public static void ShowMyUI()
         {
             UserInterface?.SetState(BasePanel);
-            UIOpen = true;
         }
 
         public static void HideMyUI()
         {
             UserInterface?.SetState(null);
-            UIOpen = false;
         }
 
         public override void AddRecipeGroups()
