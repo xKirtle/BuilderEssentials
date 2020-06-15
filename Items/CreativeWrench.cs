@@ -35,6 +35,16 @@ namespace BuilderEssentials.Items
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+
+            if (modPlayer.InfinitePlacementSelected)
+                player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
+
+            player.blockRange += 55;
+            player.wallSpeed += 10;
+            player.tileSpeed += 50;
+            Player.tileRangeX = 65;
+            Player.tileRangeY = 55;
+
             if (Main.mouseRight)
             {
                 if (++mouseRightTimer == 2)
@@ -200,6 +210,22 @@ namespace BuilderEssentials.Items
                     }
                 }
             }
+        }
+    }
+
+    public class InfinitePlacementTile : GlobalTile
+    {
+        public override void PlaceInWorld(int i, int j, Item item)
+        {
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacementSelected == true ? false : true;
+        }
+    }
+
+    public class InfinitePlacementWall : GlobalWall
+    {
+        public override void PlaceInWorld(int i, int j, int type, Item item)
+        {
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacementSelected == true ? false : true;
         }
     }
 }

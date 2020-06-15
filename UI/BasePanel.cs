@@ -26,15 +26,14 @@ namespace BuilderEssentials.UI
             buildingModeButton.SetVisibility(0f, 0f);
             Append(buildingModeButton);
         }
-
         public override void Update(GameTime gameTime)
         {
-            if (Main.playerInventory == true && !isBuildingModeButtonVisible)
+            if (Main.playerInventory && !isBuildingModeButtonVisible)
             {
                 buildingModeButton.SetVisibility(1f, .4f);
                 isBuildingModeButtonVisible = true;
             }
-            else if (Main.playerInventory == false && isBuildingModeButtonVisible)
+            else if (!Main.playerInventory && isBuildingModeButtonVisible)
             {
                 buildingModeButton.SetVisibility(0f, 0f);
                 isBuildingModeButtonVisible = false;
@@ -46,7 +45,7 @@ namespace BuilderEssentials.UI
             if (creativeWheelUIOpen && !isCreativeWheelVisible)
             {
                 //Main.NewText("Open");
-                creativeWheelPanel = CreativeWheel.CreateCreativeWheelPanel(Main.mouseX, Main.mouseY,this);
+                creativeWheelPanel = CreativeWheel.CreateCreativeWheelPanel(Main.mouseX, Main.mouseY, this);
                 isCreativeWheelVisible = true;
             }
             else if (!creativeWheelUIOpen && isCreativeWheelVisible)
@@ -55,6 +54,16 @@ namespace BuilderEssentials.UI
                 creativeWheelPanel.Remove();
                 isCreativeWheelVisible = false;
             }
+
+            if (Main.playerInventory && isCreativeWheelVisible)
+            {
+                creativeWheelPanel.Remove();
+                creativeWheelUIOpen = false;
+                isCreativeWheelVisible = false;
+            }
+
+            if (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible)
+                Main.LocalPlayer.mouseInterface = true;
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)

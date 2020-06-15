@@ -17,6 +17,9 @@ namespace BuilderEssentials.UI
         private static BuilderPlayer modPlayer;
         private static UIImageButton colorPicker;
         private static UIImageButton infinitePlacement;
+
+        //TODO: ADD TOOLTIPS WHEN HOVERING ON CW ELEMENTS TO DISPLAY WHAT THEY DO / HOW THEY'RE USED
+
         public static UIPanel CreateCreativeWheelPanel(int mouseX, int mouseY, BasePanel basePanel)
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
@@ -28,7 +31,7 @@ namespace BuilderEssentials.UI
             creativeWheel.Height.Set(200f, 0);
             creativeWheel.Left.Set(mouseX - 200 / 2, 0); //mouseX - this.width/2
             creativeWheel.Top.Set(mouseY - 200 / 2, 0); //mouseY - this.height/2
-            creativeWheel.BorderColor = Color.Red;
+            creativeWheel.BorderColor = Color.Transparent; //Color.Red;
             creativeWheel.BackgroundColor = Color.Transparent;
 
             basePanel.Append(creativeWheel);
@@ -48,7 +51,7 @@ namespace BuilderEssentials.UI
         {
             colorPicker = new UIImageButton(BuilderEssentials.CWColorPicker);
             colorPicker.Left.Set(0, 0);
-            colorPicker.Top.Set(135f, 0);
+            colorPicker.Top.Set(67.5f, 0);
             colorPicker.SetVisibility(.75f, .4f);
             colorPicker.OnClick += ColorPicker_OnClick;
 
@@ -59,7 +62,7 @@ namespace BuilderEssentials.UI
         {
             infinitePlacement = new UIImageButton(BuilderEssentials.CWInfinitePlacement);
             infinitePlacement.Left.Set(135f, 0f);
-            infinitePlacement.Top.Set(135f, 0f);
+            infinitePlacement.Top.Set(67.5f, 0f);
             infinitePlacement.SetVisibility(.75f, .4f);
             infinitePlacement.OnClick += InfinitePlacement_OnClick;
 

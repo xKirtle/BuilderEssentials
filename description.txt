@@ -1,12 +1,15 @@
 Builder Essentials is a mod designed to help and improve building in survival (and post Moon Lord / creative).
 
 The main feature is a toggleable secondary accessory system allowing for 5-7 building accessories while being able to go back to your normal accessories, with a press of a key.
-On top of that, this mod adds more useful tools! Check the mod's Homepage!
+On top of that, this mod adds more useful tools like the Creative Wrench!
 
 Default KeyBind to toggle Building Mode is N, be sure to set it up on the configs.
+
+For more info/previews check the mod's Homepage!
 
 Happy Building! Kirtle
 
 Latest Changelog:
-	- Fixed a bug where the Building Mode UI Button would not display correctly
-	- Added the remaining 4 crafting stations that make up the Multi Crafting Station
+	- Added a Creative Wrench (Right click when equipped to open the Tool Selection UI)
+	- Creative Wrench now has an "Item Picker" (Grabs tiles and walls to your inventory) and an "Infinite Placement" mode
+	- Fixed a few silent exceptions being thrown

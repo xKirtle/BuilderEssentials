@@ -16,6 +16,7 @@ namespace BuilderEssentials
         public List<Item> NormalVanityClothes;
         public List<Item> BuildingVanityClothes;
         public bool IsNormalAccessories;
+        public bool InfinitePlacement;
         
 
         public bool colorPickerSelected;
@@ -30,12 +31,16 @@ namespace BuilderEssentials
             NormalVanityClothes = new List<Item>(3);
             BuildingVanityClothes = new List<Item>(3);
             IsNormalAccessories = true;
+            InfinitePlacement = false;
+
+
             colorPickerSelected = false;
             InfinitePlacementSelected = false;
         }
 
         public override void ResetEffects()
         {
+            InfinitePlacement = false;
             Player.tileRangeX = 5;
             Player.tileRangeY = 4;
         }
