@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace BuilderEssentials.Items
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Allows Block Picking");
+            Tooltip.SetDefault("Useful for Building!");
         }
 
         public override void SetDefaults()
@@ -60,164 +61,77 @@ namespace BuilderEssentials.Items
 
                 if (Main.mouseMiddle && modPlayer.colorPickerSelected)
                 {
-                    //CODE BELOW NEEDS REFACTORING!!
-                    //HUGE FUNCTIONAL MESS
-
                     int posX = Player.tileTargetX;
                     int posY = Player.tileTargetY;
-                    int brokenTileType = -1;
-                    Item lastDroppedItem;
+                    Tile tile = Main.tile[posX, posY];
+                    Item item = new Item();
+                    bool foundItem = false;
 
-                    //Not ready for multiplayer yet
-                    //This should be all local??
                     if (oldPosX != posX || oldPosY != posY)
                     {
-                        List<Item> blockTempList = new List<Item>();
-                        //Maybe check when Main.item[i] == empty item and stop the iteration?
-                        for (int i = 0; i < Main.maxItems; i++)
+                        if (tile.type >= 0 && tile.active())
                         {
-                            if (!Main.item[i].IsAir)
+                            for (int i = 0; i < ItemLoader.ItemCount; i++)
                             {
-                                blockTempList.Add(Main.item[i]);
-                                if (Main.item[i + 1].IsAir)
+                                item.SetDefaults(i);
+                                if (item.createTile == tile.type)
+                                {
+                                    foundItem = true;
                                     break;
+                                }
                             }
                         }
-
-                        brokenTileType = Main.tile[posX, posY].type;
-                        Main.LocalPlayer.PickTile(posX, posY, 999);
-
-                        List<Item> blockTempList2 = new List<Item>();
-                        for (int i = 0; i < Main.maxItems; i++)
+                        else if (tile.type >= 0 && tile.wall >= 0)
                         {
-                            if (!Main.item[i].IsAir)
+                            for (int i = 0; i < ItemLoader.ItemCount; i++)
                             {
-                                blockTempList2.Add(Main.item[i]);
-                                if (Main.item[i + 1].IsAir)
+                                item.SetDefaults(i);
+                                if (item.createWall == tile.wall)
                                 {
-                                    Main.item[i].active = false;
+                                    foundItem = true;
                                     break;
                                 }
                             }
                         }
 
-                        List<Item> blockDroppedItem = blockTempList2.Except(blockTempList).ToList();
-
-                        //If PickTile is successful, there should be 1 droppedItem. If there's none, it means the tile is a wall
-                        if (blockDroppedItem.Count == 1)
+                        //organize inventory
+                        if (foundItem)
                         {
-                            lastDroppedItem = blockDroppedItem.FirstOrDefault();
-                            bool step1AbleToFinish = false;
+                            bool isItemInInventory = false;
                             for (int i = 0; i < 50; i++)
                             {
-                                if (Main.LocalPlayer.inventory[i].IsTheSameAs(lastDroppedItem))
+                                if (player.inventory[i].IsTheSameAs(item))
                                 {
-                                    Item tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem]; //Item selected saved on a temp variable
-                                    Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastDroppedItem; //selected item is now the dropped item
-                                    Main.LocalPlayer.inventory[i] = tempItem; //Space where the dropped item was now contains the previous selected item
-                                    step1AbleToFinish = true;
+                                    //Finds item in inventory and switch with selected item
+                                    Item selectedItem = player.inventory[player.selectedItem];
+                                    player.inventory[player.selectedItem] = player.inventory[i];
+                                    player.inventory[i] = selectedItem;
+                                    isItemInInventory = true;
                                     break;
                                 }
                             }
 
-                            if (!step1AbleToFinish) //Item does not exist in the inventory
+                            if (!isItemInInventory)
                             {
-                                bool availableAirSlots = false;
                                 for (int i = 0; i < 50; i++)
                                 {
-                                    if (Main.LocalPlayer.inventory[i].IsAir)
+                                    if (player.inventory[i].IsAir)
                                     {
-                                        Item tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
-                                        Main.LocalPlayer.inventory[i] = tempItem;
-                                        Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastDroppedItem;
-                                        availableAirSlots = true;
+                                        //Find first air space in inventory and switches selected item to there
+                                        Item selectedItem = player.inventory[player.selectedItem];
+                                        player.inventory[i] = selectedItem;
+                                        player.inventory[player.selectedItem] = item;
                                         break;
                                     }
                                 }
-
-                                if (!availableAirSlots)
-                                    Main.NewText("Inventory is full!");
                             }
-                            if (brokenTileType != -1)
-                                WorldGen.PlaceTile(posX, posY, brokenTileType);
 
                             oldPosX = posX;
                             oldPosY = posY;
                         }
-                        else if (blockDroppedItem.Count == 0)
-                        {
-                            List<Item> wallTempList = new List<Item>();
-                            for (int i = 0; i < Main.maxItems; i++)
-                            {
-                                if (!Main.item[i].IsAir)
-                                {
-                                    wallTempList.Add(Main.item[i]);
-                                    if (Main.item[i + 1].IsAir)
-                                        break;
-                                }
-                            }
-
-                            brokenTileType = Main.tile[posX, posY].type;
-                            WorldGen.KillWall(posX, posY);
-
-                            List<Item> wallTempList2 = new List<Item>();
-                            for (int i = 0; i < Main.maxItems; i++)
-                            {
-                                if (!Main.item[i].IsAir)
-                                {
-                                    wallTempList2.Add(Main.item[i]);
-                                    if (Main.item[i + 1].IsAir)
-                                    {
-                                        Main.item[i].active = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            List<Item> wallDroppedItem = wallTempList2.Except(wallTempList).ToList();
-
-                            if (wallDroppedItem.Count == 1)
-                            {
-                                lastDroppedItem = wallDroppedItem.FirstOrDefault();
-                                bool step1AbleToFinish = false;
-                                for (int i = 0; i < 50; i++)
-                                {
-                                    if (Main.LocalPlayer.inventory[i].IsTheSameAs(lastDroppedItem))
-                                    {
-                                        Item tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem]; //Item selected saved on a temp variable
-                                        Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastDroppedItem; //selected item is now the dropped item
-                                        Main.LocalPlayer.inventory[i] = tempItem; //Space where the dropped item was contains now the previous selected item
-                                        step1AbleToFinish = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!step1AbleToFinish) //Item does not exist in the inventory
-                                {
-                                    for (int i = 0; i < 50; i++)
-                                    {
-                                        if (Main.LocalPlayer.inventory[i].IsAir)
-                                        {
-                                            Item tempItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
-                                            Main.LocalPlayer.inventory[i] = tempItem;
-                                            Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem] = lastDroppedItem;
-                                            break;
-                                        }
-                                    }
-                                }
-                                WorldGen.PlaceWall(posX, posY, lastDroppedItem.createWall);
-
-
-                                if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    NetMessage.SendData(MessageID.TileChange, -1, -1, null, 1, (float)posX, (float)posY, (float)brokenTileType, 0);
-
-                                oldPosX = posX;
-                                oldPosY = posY;
-                            }
-                            //else, tile is Air
-                        }
                     }
                 }
+
                 if (Main.mouseLeft && modPlayer.autoHammerSelected && Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].IsAir
                     && CreativeWheel.creativeWheel != null)
                 {

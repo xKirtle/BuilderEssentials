@@ -12,4 +12,5 @@ Happy Building! Kirtle
 Latest Changelog:
 	- Added a Creative Wrench (Right click when equipped to open the Tool Selection UI)
 	- Creative Wrench now has an "Item Picker" (Grabs tiles and walls to your inventory), an "Infinite Placement" mode and an "Auto Hammer" (Select the slope type and press Left click to use!)
-	- Fixed a few silent exceptions being thrown
+	- Fixed a few silent exceptions being thrown and added multiplayer compatibility
+	- Overall code clean up and performance improvement
