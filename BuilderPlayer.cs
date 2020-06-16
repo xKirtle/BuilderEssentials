@@ -21,6 +21,8 @@ namespace BuilderEssentials
 
         public bool colorPickerSelected;
         public bool InfinitePlacementSelected;
+        public bool autoHammerSelected;
+        public int autoHammerSelectedIndex; //needs saving/loading
 
         public override void Initialize()
         {
@@ -36,6 +38,8 @@ namespace BuilderEssentials
 
             colorPickerSelected = false;
             InfinitePlacementSelected = false;
+            autoHammerSelected = false;
+            autoHammerSelectedIndex = 5; //full tile
         }
 
         public override void ResetEffects()
@@ -63,7 +67,9 @@ namespace BuilderEssentials
                 {"NormalVanityClothes", NormalVanityClothes },
                 {"BuildingVanityClothes", BuildingVanityClothes },
                 {"colorPickerSelected", colorPickerSelected },
-                {"InfinitePlacementSelected", InfinitePlacementSelected }
+                {"InfinitePlacementSelected", InfinitePlacementSelected },
+                {"autoHammerSelected", autoHammerSelected },
+                {"autoHammerSelectedIndex", autoHammerSelectedIndex }
             };
         }
 
@@ -96,6 +102,12 @@ namespace BuilderEssentials
 
             if (tag.ContainsKey("InfinitePlacementSelected"))
                 InfinitePlacementSelected = tag.GetBool("InfinitePlacementSelected");
+
+            if (tag.ContainsKey("autoHammerSelected"))
+                autoHammerSelected = tag.GetBool("autoHammerSelected");
+
+            if (tag.ContainsKey("autoHammerSelectedIndex"))
+                autoHammerSelectedIndex = tag.GetInt("autoHammerSelectedIndex");
         }
 
         public override void OnEnterWorld(Player player)
