@@ -101,7 +101,8 @@ namespace BuilderEssentials.Items
                         //Furniture Check
                         if (foundItem)
                         {
-                            //ID: 15 Chairs
+                            Main.NewText(tile.type);
+
                             if (tile.type == TileID.Chairs)
                                 ItemPickerFurnitureFinder.FindFurniture(TileID.Chairs, tile.frameY / 40, ref item);
 
@@ -110,6 +111,16 @@ namespace BuilderEssentials.Items
 
                             if (tile.type == TileID.Platforms)
                                 ItemPickerFurnitureFinder.FindFurniture(TileID.Platforms, tile.frameY / 18, ref item);
+
+                            //No TileID.Chests?
+                            if (tile.type == 21)
+                                ItemPickerFurnitureFinder.FindFurniture(21, tile.frameX / 36, ref item);
+
+                            if (tile.type == TileID.DemonAltar)
+                                ItemPickerFurnitureFinder.FindFurniture(TileID.DemonAltar, tile.frameX / 56, ref item);
+
+                            if (tile.type == TileID.Torches)
+                                ItemPickerFurnitureFinder.FindFurniture(TileID.Candles, tile.frameY / 22, ref item);
                         }
 
                         //organize inventory

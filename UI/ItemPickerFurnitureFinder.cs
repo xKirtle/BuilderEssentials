@@ -12,6 +12,7 @@ namespace BuilderEssentials.UI
     {
         public static void FindFurniture(int tileType, int frame, ref Item item)
         {
+            //This is gonna take me ages, WIP
             if (tileType == TileID.Chairs)
             {
                 switch (frame)
@@ -244,13 +245,13 @@ namespace BuilderEssentials.UI
                         item.SetDefaults(ItemID.ShadewoodPlatform);
                         break;
                     case 6:
-                        Main.NewText("Blue Dungeon Platform?");
+                        item.SetDefaults(ItemID.BlueBrickPlatform);
                         break;
                     case 7:
-                        Main.NewText("Ping Dungeon Platform?");
+                        item.SetDefaults(ItemID.PinkBrickPlatform);
                         break;
                     case 8:
-                        Main.NewText("Green Dungeon Platform?");
+                        item.SetDefaults(ItemID.GreenBrickPlatform);
                         break;
                     case 9:
                         item.SetDefaults(ItemID.MetalShelf);
@@ -258,8 +259,352 @@ namespace BuilderEssentials.UI
                     case 10:
                         item.SetDefaults(ItemID.BrassShelf);
                         break;
-
-                        //extracted 1.4 textures?
+                    case 11:
+                        item.SetDefaults(ItemID.WoodShelf);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.DungeonShelf);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.ObsidianPlatform);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.GlassPlatform);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.PumpkinPlatform);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.SpookyPlatform);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.PalmWoodPlatform);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.MushroomPlatform);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.BorealWoodPlatform);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.SlimePlatform);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.SteampunkPlatform);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.SkywarePlatform);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.LivingWoodPlatform);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.HoneyPlatform);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.CactusPlatform);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.MartianPlatform);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MeteoritePlatform);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.GranitePlatform);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.MarblePlatform);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.CrystalPlatform);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.GoldenPlatform);
+                        break;
+                    case 32:
+                        item.SetDefaults(ItemID.DynastyPlatform);
+                        break;
+                    case 33:
+                        item.SetDefaults(ItemID.LihzahrdPlatform);
+                        break;
+                    case 34:
+                        item.SetDefaults(ItemID.FleshPlatform);
+                        break;
+                    case 35:
+                        item.SetDefaults(ItemID.FrozenPlatform);
+                        break;
+                }
+            }
+            //Chests. Fake chests are 441
+            if (tileType == 21)
+            {
+                Main.NewText(frame);
+                switch (frame)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Chest);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.GoldChest);
+                        break;
+                    case 2:
+                        //Locked GoldChest?
+                        goto case 1;
+                    case 3:
+                        item.SetDefaults(ItemID.ShadowChest);
+                        break;
+                    case 4:
+                        //Locked Shadow Chest?
+                        goto case 3;
+                    case 5:
+                        item.SetDefaults(ItemID.Barrel);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.TrashCan);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.EbonwoodChest);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.RichMahoganyChest);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.PearlwoodChest);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.IvyChest);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.IceChest);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.LivingWoodChest);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.SkywareChest);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.ShadewoodChest);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.WebCoveredChest);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.LihzahrdChest);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.WaterChest);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.JungleChest);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.CorruptionChest);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.CrimsonChest);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.HallowedChest);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.FrozenChest);
+                        break;
+                    //case 23-27 are locked biome chests
+                    case 23:
+                        goto case 18;
+                    case 24:
+                        goto case 19;
+                    case 25:
+                        goto case 20;
+                    case 26:
+                        goto case 21;
+                    case 27:
+                        goto case 22;
+                    case 28:
+                        item.SetDefaults(ItemID.DynastyChest);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.HoneyChest);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.SteampunkChest);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.PalmWoodChest);
+                        break;
+                    case 32:
+                        item.SetDefaults(ItemID.MushroomChest);
+                        break;
+                    case 33:
+                        item.SetDefaults(ItemID.BorealWoodChest);
+                        break;
+                    case 34:
+                        item.SetDefaults(ItemID.SlimeChest);
+                        break;
+                    case 35:
+                        item.SetDefaults(ItemID.GreenDungeonChest);
+                        break;
+                    case 36:
+                        //Locked Green Dungeon variation
+                        goto case 35;
+                    case 37:
+                        item.SetDefaults(ItemID.PinkDungeonChest);
+                        break;
+                    case 38:
+                        //Locked Pink Dungeon variation
+                        goto case 36;
+                    case 39:
+                        item.SetDefaults(ItemID.BlueDungeonChest);
+                        break;
+                    case 40:
+                        //Locked Blue Dungeon variation
+                        goto case 39;
+                    case 41:
+                        item.SetDefaults(ItemID.BoneChest);
+                        break;
+                    case 42:
+                        item.SetDefaults(ItemID.CactusChest);
+                        break;
+                    case 43:
+                        item.SetDefaults(ItemID.FleshChest);
+                        break;
+                    case 44:
+                        item.SetDefaults(ItemID.ObsidianChest);
+                        break;
+                    case 45:
+                        item.SetDefaults(ItemID.PumpkinChest);
+                        break;
+                    case 46:
+                        item.SetDefaults(ItemID.SpookyChest);
+                        break;
+                    case 47:
+                        item.SetDefaults(ItemID.GlassChest);
+                        break;
+                    case 48:
+                        item.SetDefaults(ItemID.MartianChest);
+                        break;
+                    case 49:
+                        item.SetDefaults(ItemID.MeteoriteChest);
+                        break;
+                    case 50:
+                        item.SetDefaults(ItemID.MarbleChest);
+                        break;
+                    case 51:
+                        item.SetDefaults(ItemID.CrystalChest);
+                        break;
+                    case 52:
+                        item.SetDefaults(ItemID.GoldenChest);
+                        break;
+                }
+            }
+            if (tileType == TileID.DemonAltar)
+            {
+                //Maybe add my own item to allow for it to be picked up?
+                switch (frame)
+                {
+                    default:
+                        break;
+                }
+            }
+            if (tileType == TileID.Candles)
+            {
+                switch (frame)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Candle);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.BlueDungeonCandle);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.GreenDungeonCandle);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.PinkDungeonCandle);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.CactusCandle);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.EbonwoodCandle);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.FleshCandle);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.GlassCandle);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.FrozenCandle);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.RichMahoganyCandle);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.PearlwoodCandle);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.LihzahrdCandle);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.SkywareCandle);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.PumpkinCandle);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.LivingWoodCandle);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.ShadewoodCandle);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.GoldenCandle);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.DynastyCandle);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.PalmWoodCandle);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.MushroomCandle);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.BorealWoodCandle);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.SlimeCandle);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.HoneyCandle);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.SteampunkCandle);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.SpookyCandle);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.ObsidianCandle);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.MartianHoverCandle);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MeteoriteCandle);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.GraniteCandle);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.MarbleCandle);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.CrystalCandle);
+                        break;
 
 
                 }
