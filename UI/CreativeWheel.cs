@@ -104,8 +104,8 @@ namespace BuilderEssentials.UI
             autoHammerSlopes.Add(slope0);
 
             UIImageButton slope1 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[1]);
-            slope1.Left.Set(autoHammerLeftValue - 10f, 0);
-            slope1.Top.Set(autoHammerTopValue + 40f, 0);
+            slope1.Left.Set(autoHammerLeftValue + 46f, 0);
+            slope1.Top.Set(autoHammerTopValue + 10f, 0);
             slope1.SetVisibility(.75f, .4f);
             slope1.OnClick += Slope_OnClick;
             autoHammerSlopes.Add(slope1);
@@ -118,8 +118,8 @@ namespace BuilderEssentials.UI
             autoHammerSlopes.Add(slope2);
 
             UIImageButton slope3 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[3]);
-            slope3.Left.Set(autoHammerLeftValue + 46f, 0);
-            slope3.Top.Set(autoHammerTopValue + 10f, 0);
+            slope3.Left.Set(autoHammerLeftValue - 10f, 0);
+            slope3.Top.Set(autoHammerTopValue + 40f, 0);
             slope3.SetVisibility(.75f, .4f);
             slope3.OnClick += Slope_OnClick;
             autoHammerSlopes.Add(slope3);

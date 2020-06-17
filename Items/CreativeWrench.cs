@@ -50,7 +50,10 @@ namespace BuilderEssentials.Items
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
 
-                if (Main.mouseRight)
+                //Thanks direwolf420 for the monstrosity checks
+                if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
+                    && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
+                    && (!player.mouseInterface || CreativeWheel.creativeWheel.IsMouseHovering))
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
@@ -61,6 +64,7 @@ namespace BuilderEssentials.Items
 
                 if (Main.mouseMiddle && modPlayer.colorPickerSelected)
                 {
+                    //Thanks Oli. B for the concept
                     int posX = Player.tileTargetX;
                     int posY = Player.tileTargetY;
                     Tile tile = Main.tile[posX, posY];
@@ -94,6 +98,20 @@ namespace BuilderEssentials.Items
                             }
                         }
 
+                        //Furniture Check
+                        if (foundItem)
+                        {
+                            //ID: 15 Chairs
+                            if (tile.type == TileID.Chairs)
+                                ItemPickerFurnitureFinder.FindFurniture(TileID.Chairs, tile.frameY / 40, ref item);
+
+                            if (tile.type == TileID.WorkBenches)
+                                ItemPickerFurnitureFinder.FindFurniture(TileID.WorkBenches, tile.frameX / 36, ref item);
+
+                            if (tile.type == TileID.Platforms)
+                                ItemPickerFurnitureFinder.FindFurniture(TileID.Platforms, tile.frameY / 18, ref item);
+                        }
+
                         //organize inventory
                         if (foundItem)
                         {
@@ -120,6 +138,7 @@ namespace BuilderEssentials.Items
                                         //Find first air space in inventory and switches selected item to there
                                         Item selectedItem = player.inventory[player.selectedItem];
                                         player.inventory[i] = selectedItem;
+
                                         player.inventory[player.selectedItem] = item;
                                         break;
                                     }
