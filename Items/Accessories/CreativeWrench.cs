@@ -1,16 +1,10 @@
 ﻿using BuilderEssentials.UI;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace BuilderEssentials.Items
+namespace BuilderEssentials.Items.Accessories
 {
     class CreativeWrench : ModItem
     {
@@ -53,7 +47,8 @@ namespace BuilderEssentials.Items
                 //Thanks direwolf420 for the monstrosity checks
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                     && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
-                    && (!player.mouseInterface || CreativeWheel.creativeWheel.IsMouseHovering))
+                    && (!player.mouseInterface || (BasePanel.creativeWheelUIOpen && CreativeWheel.creativeWheel.IsMouseHovering))
+                    && player.inventory[player.selectedItem].IsAir)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
@@ -104,23 +99,23 @@ namespace BuilderEssentials.Items
                             Main.NewText(tile.type);
 
                             if (tile.type == TileID.Chairs)
-                                ItemPickerFurnitureFinder.FindFurniture(TileID.Chairs, tile.frameY / 40, ref item);
+                                FurnitureFinder.FindFurniture(TileID.Chairs, tile.frameY / 40, ref item);
 
                             if (tile.type == TileID.WorkBenches)
-                                ItemPickerFurnitureFinder.FindFurniture(TileID.WorkBenches, tile.frameX / 36, ref item);
+                                FurnitureFinder.FindFurniture(TileID.WorkBenches, tile.frameX / 36, ref item);
 
                             if (tile.type == TileID.Platforms)
-                                ItemPickerFurnitureFinder.FindFurniture(TileID.Platforms, tile.frameY / 18, ref item);
+                                FurnitureFinder.FindFurniture(TileID.Platforms, tile.frameY / 18, ref item);
 
                             //No TileID.Chests?
                             if (tile.type == 21)
-                                ItemPickerFurnitureFinder.FindFurniture(21, tile.frameX / 36, ref item);
+                                FurnitureFinder.FindFurniture(21, tile.frameX / 36, ref item);
 
                             if (tile.type == TileID.DemonAltar)
-                                ItemPickerFurnitureFinder.FindFurniture(TileID.DemonAltar, tile.frameX / 56, ref item);
+                                FurnitureFinder.FindFurniture(TileID.DemonAltar, tile.frameX / 56, ref item);
 
                             if (tile.type == TileID.Torches)
-                                ItemPickerFurnitureFinder.FindFurniture(TileID.Candles, tile.frameY / 22, ref item);
+                                FurnitureFinder.FindFurniture(TileID.Candles, tile.frameY / 22, ref item);
                         }
 
                         //organize inventory
@@ -162,7 +157,7 @@ namespace BuilderEssentials.Items
                     }
                 }
 
-                if (Main.mouseLeft && modPlayer.autoHammerSelected && Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].IsAir
+                if (Main.mouseLeft && modPlayer.autoHammerSelected && player.inventory[player.selectedItem].IsAir
                     && CreativeWheel.creativeWheel != null)
                 {
                     if (!CreativeWheel.creativeWheel.IsMouseHovering)
@@ -220,7 +215,7 @@ namespace BuilderEssentials.Items
                         }
                     }
                 }
-                else if (Main.mouseLeft && modPlayer.autoHammerSelected && !Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem].IsAir
+                else if (Main.mouseLeft && modPlayer.autoHammerSelected && !player.inventory[player.selectedItem].IsAir
                     && player.whoAmI == Main.myPlayer)
                 {
                     if (!autoHammerAlert)

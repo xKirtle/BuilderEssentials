@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.UI;
+using BuilderEssentials.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameInput;
@@ -17,12 +18,17 @@ namespace BuilderEssentials
         public List<Item> BuildingVanityClothes;
         public bool IsNormalAccessories;
         public bool InfinitePlacement;
-        
 
+
+        //Creative Wheel Stuff
         public bool colorPickerSelected;
         public bool InfinitePlacementSelected;
         public bool autoHammerSelected;
-        public int autoHammerSelectedIndex; //needs saving/loading
+        public int autoHammerSelectedIndex;
+
+
+        //Paint Stuff
+
 
         public override void Initialize()
         {
@@ -36,6 +42,7 @@ namespace BuilderEssentials
             InfinitePlacement = false;
 
 
+            //Creative Wheel Stuff
             colorPickerSelected = false;
             InfinitePlacementSelected = false;
             autoHammerSelected = false;

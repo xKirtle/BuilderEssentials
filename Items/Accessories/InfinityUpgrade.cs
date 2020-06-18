@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace BuilderEssentials.Items
+namespace BuilderEssentials.Items.Accessories
 {
     class InfinityUpgrade : ModItem
     {

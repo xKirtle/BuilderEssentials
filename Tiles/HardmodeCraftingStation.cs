@@ -33,7 +33,7 @@ namespace BuilderEssentials.Tiles
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
             disableSmartCursor = true;
-            adjTiles = new int[] { TileID.MythrilAnvil, TileID.AdamantiteForge, TileID.Bookcases, 
+            adjTiles = new int[] { TileID.MythrilAnvil, TileID.AdamantiteForge, TileID.Bookcases,
                 TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation };
         }
 

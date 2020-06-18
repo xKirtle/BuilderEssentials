@@ -18,6 +18,7 @@ namespace BuilderEssentials
         public static Texture2D CWInfinitePlacement;
         public static Texture2D CWAutoHammer;
         public static List<Texture2D> CWAutoHammerIndex;
+        public static List<Texture2D> PaintColors;
         internal static BasePanel BasePanel;
         internal static UserInterface UserInterface;
         internal static ModHotKey ToggleBuildingMode;
@@ -34,6 +35,12 @@ namespace BuilderEssentials
             {
                 Texture2D autoHammerSlope = this.GetTexture("UI/Elements/CWAutoHammer" + i);
                 CWAutoHammerIndex.Add(autoHammerSlope);
+            }
+            PaintColors = new List<Texture2D>();
+            for (int i = 0; i < 30; i++)
+            {
+                Texture2D tempColor = this.GetTexture("UI/Elements/Paint/Paint" + i);
+                PaintColors.Add(tempColor);
             }
         }
 

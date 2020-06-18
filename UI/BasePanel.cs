@@ -3,6 +3,7 @@ using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials.UI
 {
@@ -11,9 +12,12 @@ namespace BuilderEssentials.UI
         public static UIImageButton buildingModeButton;
         public static Texture2D buttonTexture;
         public static UIPanel creativeWheelPanel;
+        public static UIPanel paintingPanel;
         public static bool isBuildingModeButtonVisible;
         public static bool isCreativeWheelVisible;
         public static bool creativeWheelUIOpen;
+        public static bool isPaintingUIVisible;
+        public static bool paintingUIOpen;
         public override void OnInitialize()
         {
             buttonTexture = BuilderEssentials.BuildingModeOff;
@@ -64,6 +68,17 @@ namespace BuilderEssentials.UI
 
             if (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible)
                 Main.LocalPlayer.mouseInterface = true;
+
+            if (paintingUIOpen && !isPaintingUIVisible)
+            {
+                paintingPanel = PaintWheel.CreatePaintWheel(Main.mouseX, Main.mouseY, this); //Method to create it
+                isPaintingUIVisible = true;
+            }
+            else if (!paintingUIOpen && isPaintingUIVisible)
+            {
+                paintingPanel.Remove();
+                isPaintingUIVisible = false;
+            }
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)

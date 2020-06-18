@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace BuilderEssentials.Items
+namespace BuilderEssentials.Items.Accessories
 {
     class InfiniteWrench : ModItem
     {

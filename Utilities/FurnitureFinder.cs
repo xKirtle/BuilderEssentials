@@ -1,14 +1,9 @@
 ﻿using Terraria;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ID;
 
-namespace BuilderEssentials.UI
+namespace BuilderEssentials.Utilities
 {
-    public class ItemPickerFurnitureFinder
+    public class FurnitureFinder
     {
         public static void FindFurniture(int tileType, int frame, ref Item item)
         {

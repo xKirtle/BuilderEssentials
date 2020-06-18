@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BuilderEssentials.UI;
 using Terraria;
 
-namespace BuilderEssentials.UI
+namespace BuilderEssentials.Utilities
 {
     public static class BuildingMode
     {
