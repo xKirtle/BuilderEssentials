@@ -19,6 +19,7 @@ namespace BuilderEssentials
         public static Texture2D CWAutoHammer;
         public static List<Texture2D> CWAutoHammerIndex;
         public static List<Texture2D> PaintColors;
+        public static List<Texture2D> PaintTools;
         internal static BasePanel BasePanel;
         internal static UserInterface UserInterface;
         internal static ModHotKey ToggleBuildingMode;
@@ -27,21 +28,28 @@ namespace BuilderEssentials
         {
             BuildingModeOff = this.GetTexture("UI/Elements/BuildingModeOff");
             BuildingModeOn = this.GetTexture("UI/Elements/BuildingModeOn");
-            CWColorPicker = this.GetTexture("UI/Elements/CWColorPicker");
-            CWInfinitePlacement = this.GetTexture("UI/Elements/CWInfinitePlacement");
-            CWAutoHammer = this.GetTexture("UI/Elements/CWAutoHammer");
+            CWColorPicker = this.GetTexture("UI/Elements/CreativeWheel/CWColorPicker");
+            CWInfinitePlacement = this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement");
+            CWAutoHammer = this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer");
             CWAutoHammerIndex = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
             {
-                Texture2D autoHammerSlope = this.GetTexture("UI/Elements/CWAutoHammer" + i);
+                Texture2D autoHammerSlope = this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer" + i);
                 CWAutoHammerIndex.Add(autoHammerSlope);
             }
             PaintColors = new List<Texture2D>();
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 31; i++)
             {
                 Texture2D tempColor = this.GetTexture("UI/Elements/Paint/Paint" + i);
                 PaintColors.Add(tempColor);
             }
+            PaintTools = new List<Texture2D>();
+            for (int i = 0; i < 3; i++)
+            {
+                Texture2D tempTool = this.GetTexture("UI/Elements/Paint/PaintTool" + i);
+                PaintTools.Add(tempTool);
+            }
+
         }
 
         public override void Load()

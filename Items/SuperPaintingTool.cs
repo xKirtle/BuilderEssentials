@@ -12,10 +12,10 @@ namespace BuilderEssentials.Items
         public override void SetDefaults()
         {
             paints = new List<int>();
-            for (int i = 0; i < 27; i++)
+            for (int i = 0; i < 27; i++) //Basic && Deep colors
                 paints.Add(1073 + i);
             for (int i = 0; i < 3; i++)
-                paints.Add(1966 + i);
+                paints.Add(1966 + i);   //Extra Effects
 
             item.height = 20;
             item.width = 18;

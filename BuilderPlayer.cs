@@ -28,6 +28,8 @@ namespace BuilderEssentials
 
 
         //Paint Stuff
+        public int paintingColorSelectedIndex;
+        public int paintingToolSelected;
 
 
         public override void Initialize()
@@ -47,6 +49,11 @@ namespace BuilderEssentials
             InfinitePlacementSelected = false;
             autoHammerSelected = false;
             autoHammerSelectedIndex = 5; //full tile
+
+
+            //Paint
+            paintingColorSelectedIndex = 30; //No color
+            paintingToolSelected = 0;
         }
 
         public override void ResetEffects()
@@ -76,7 +83,9 @@ namespace BuilderEssentials
                 {"colorPickerSelected", colorPickerSelected },
                 {"InfinitePlacementSelected", InfinitePlacementSelected },
                 {"autoHammerSelected", autoHammerSelected },
-                {"autoHammerSelectedIndex", autoHammerSelectedIndex }
+                {"autoHammerSelectedIndex", autoHammerSelectedIndex },
+                {"paintingColorSelectedIndex", paintingColorSelectedIndex},
+                {"paintingToolSelected", paintingToolSelected}
             };
         }
 
@@ -115,6 +124,13 @@ namespace BuilderEssentials
 
             if (tag.ContainsKey("autoHammerSelectedIndex"))
                 autoHammerSelectedIndex = tag.GetInt("autoHammerSelectedIndex");
+
+            //Paint
+            if (tag.ContainsKey("paintingColorSelectedIndex"))
+                paintingColorSelectedIndex = tag.GetInt("paintingColorSelectedIndex");
+
+            if (tag.ContainsKey("paintingToolSelected"))
+                paintingToolSelected = tag.GetInt("paintingToolSelected");
         }
 
         public override void OnEnterWorld(Player player)
