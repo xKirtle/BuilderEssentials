@@ -51,12 +51,12 @@ namespace BuilderEssentials.Items
 
     public class PaintGlobalItem : GlobalItem
     {
-        public override bool UseItem(Item item, Player player)
-        {
+        // public override bool UseItem(Item item, Player player)
+        // {
 
-            //if item id is a paint tool and there is paint in the inventory, reduce the stack by 1?
-            //if infinitepaintbucket is on the inventory, allow any color
-            return true;
-        }
+        //     //if item id is a paint tool and there is paint in the inventory, reduce the stack by 1?
+        //     //if infinitepaintbucket is on the inventory, allow any color
+        //     return true;
+        // }
     }
 }

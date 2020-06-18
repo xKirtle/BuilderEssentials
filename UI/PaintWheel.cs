@@ -19,7 +19,9 @@ namespace BuilderEssentials.UI
         private static float paintWheelHeight;
         private static List<UIImageButton> colorsList;
         private static List<UIImageButton> paintToolsList;
-        private static bool AnyPaintToolSelected;
+        private static bool ToolBlockPainter = false;
+        private static bool ToolWallPainter = false;
+        private static bool ToolPaintRemover = false;
         public static UIPanel CreatePaintWheel(int mouseX, int mouseY, BasePanel basePanel)
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
@@ -33,22 +35,20 @@ namespace BuilderEssentials.UI
             paintWheel.Height.Set(paintWheelHeight, 0);
             paintWheel.Left.Set(mouseX - paintWheelWidth / 2, 0); //mouseX - this.width/2
             paintWheel.Top.Set(mouseY - paintWheelHeight / 2, 0); //mouseY - this.height/2
-            paintWheel.BorderColor = Color.Red; //Color.Red;
+            paintWheel.BorderColor = Color.Transparent; //Color.Red;
             paintWheel.BackgroundColor = Color.Transparent;
 
             CreateColorsDisplay();
             for (int i = 0; i < colorsList.Count; i++)
                 paintWheel.Append(colorsList[i]);
 
-            ColorSelected(modPlayer.paintingColorSelectedIndex);
+            ColorSelected(modPlayer.paintingColorSelectedIndex, true);
 
             for (int i = 0; i < paintToolsList.Count; i++)
                 paintWheel.Append(paintToolsList[i]);
 
             ToolSelected(modPlayer.paintingToolSelected);
 
-
-            Main.NewText("ColorsList: " + colorsList.Count);
             basePanel.Append(paintWheel);
             return paintWheel;
         }
@@ -145,7 +145,7 @@ namespace BuilderEssentials.UI
             for (int i = 0; i < colorsList.Count; i++)
             {
                 int index = i;
-                colorsList[i].OnClick += (__, _) => ColorSelected(index);
+                colorsList[i].OnClick += (__, _) => ColorSelected(index, false);
             }
 
             for (int i = 0; i < paintToolsList.Count; i++)
@@ -155,11 +155,10 @@ namespace BuilderEssentials.UI
             }
         }
 
-        private static void ColorSelected(int index)
+        private static void ColorSelected(int index, bool loading)
         {
-            Main.NewText("Color: " + index);
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (index != modPlayer.paintingColorSelectedIndex)
+            if (index != modPlayer.paintingColorSelectedIndex || loading)
             {
                 modPlayer.paintingColorSelectedIndex = index;
 
@@ -172,26 +171,32 @@ namespace BuilderEssentials.UI
 
         private static void ToolSelected(int index)
         {
-            Main.NewText("Tool: " + index);
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            //modPlayer.paintingToolSelected is initialized with a negative value
-            if (index >= 0)
+            ResetToolVariables();
+            modPlayer.paintingToolSelected = index;
+
+            switch (index)
             {
-                if (index != modPlayer.paintingToolSelected || !AnyPaintToolSelected)
-                {
-                    modPlayer.paintingToolSelected = index;
-                    AnyPaintToolSelected = true;
+                case 0:
+                    ToolBlockPainter = true;
+                    break;
+                case 1:
+                    ToolWallPainter = true;
+                    break;
+                case 3:
+                    ToolPaintRemover = true;
+                    break;
+            }
+            paintToolsList[index].SetVisibility(1f, 1f);
 
-                    for (int i = 0; i < paintToolsList.Count; i++)
-                        paintToolsList[i].SetVisibility(.75f, .4f);
+            void ResetToolVariables()
+            {
+                ToolBlockPainter = false;
+                ToolWallPainter = false;
+                ToolPaintRemover = false;
 
-                    paintToolsList[index].SetVisibility(1f, 1f);
-                }
-                else
-                {
-                    paintToolsList[index].SetVisibility(.75f, .4f);
-                    AnyPaintToolSelected = false;
-                }
+                for (int i = 0; i < paintToolsList.Count; i++)
+                    paintToolsList[i].SetVisibility(.75f, .4f);
             }
         }
     }
