@@ -39,7 +39,7 @@ namespace BuilderEssentials.Items
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                         && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
                         && (!player.mouseInterface || (BasePanel.paintingUIOpen && BasePanel.paintingPanel.IsMouseHovering))
-                        && player.inventory[player.selectedItem].IsTheSameAs(this.item))
+                        && player.inventory[player.selectedItem].IsTheSameAs(this.item) && !BasePanel.creativeWheelUIOpen)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.paintingUIOpen = !BasePanel.paintingUIOpen;
@@ -112,6 +112,17 @@ namespace BuilderEssentials.Items
                 }
             }
             return false;
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.SpectrePaintbrush);
+            recipe.AddIngredient(ItemID.SpectrePaintRoller);
+            recipe.AddIngredient(ItemID.SpectrePaintScraper);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 

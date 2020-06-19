@@ -12,9 +12,6 @@ namespace BuilderEssentials.UI
     {
         private static BuilderPlayer modPlayer;
         public static UIPanel paintWheel;
-
-        //TODO: ADD TOOLTIPS WHEN HOVERING ON CW ELEMENTS TO DISPLAY WHAT THEY DO / HOW THEY'RE USED
-
         private static float paintWheelWidth;
         private static float paintWheelHeight;
         private static List<UIImageButton> colorsList;

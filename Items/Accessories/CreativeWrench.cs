@@ -48,7 +48,7 @@ namespace BuilderEssentials.Items.Accessories
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                     && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
                     && (!player.mouseInterface || (BasePanel.creativeWheelUIOpen && CreativeWheel.creativeWheel.IsMouseHovering))
-                    && player.inventory[player.selectedItem].IsAir)
+                    && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
@@ -57,7 +57,7 @@ namespace BuilderEssentials.Items.Accessories
                 if (Main.mouseRightRelease)
                     mouseRightTimer = 0;
 
-                if (Main.mouseMiddle && modPlayer.colorPickerSelected)
+                if (Main.mouseMiddle && modPlayer.colorPickerSelected && !player.mouseInterface)
                 {
                     //Thanks Oli. B for the concept
                     int posX = Player.tileTargetX;
@@ -93,46 +93,13 @@ namespace BuilderEssentials.Items.Accessories
                             }
                         }
 
-                        //Furniture Check
-                        if (foundItem)
-                        {
-                            Main.NewText(tile.type);
-
-                            if (tile.type == TileID.Chairs)
-                                FurnitureFinder.FindFurniture(TileID.Chairs, tile, ref item);
-
-                            if (tile.type == TileID.WorkBenches)
-                                FurnitureFinder.FindFurniture(TileID.WorkBenches, tile, ref item);
-
-                            if (tile.type == TileID.Platforms)
-                                FurnitureFinder.FindFurniture(TileID.Platforms, tile, ref item);
-
-                            //No TileID.Chests?
-                            if (tile.type == 21)
-                                FurnitureFinder.FindFurniture(21, tile, ref item);
-
-                            if (tile.type == TileID.DemonAltar)
-                                FurnitureFinder.FindFurniture(TileID.DemonAltar, tile, ref item);
-
-                            if (tile.type == TileID.Torches)
-                                FurnitureFinder.FindFurniture(TileID.Candles, tile, ref item);
-
-                            if (tile.type == TileID.Chandeliers)
-                                FurnitureFinder.FindFurniture(TileID.Chandeliers, tile, ref item);
-
-                            if (tile.type == TileID.HangingLanterns)
-                                FurnitureFinder.FindFurniture(TileID.HangingLanterns, tile, ref item);
-
-                            if (tile.type == TileID.Pianos)
-                                FurnitureFinder.FindFurniture(TileID.Pianos, tile, ref item);
-
-                            if (tile.type == TileID.Dressers)
-                                FurnitureFinder.FindFurniture(TileID.Dressers, tile, ref item);
-                        }
-
                         //organize inventory
                         if (foundItem)
                         {
+                            //Furniture Check
+                            //If it is a furniture and has a different frame, item will be changed to the correct frame item
+                            FurnitureFinder.FindFurniture(tile.type, tile, ref item);
+
                             bool isItemInInventory = false;
                             for (int i = 0; i < 50; i++)
                             {
@@ -170,7 +137,7 @@ namespace BuilderEssentials.Items.Accessories
                 }
 
                 if (Main.mouseLeft && modPlayer.autoHammerSelected && player.inventory[player.selectedItem].IsAir
-                    && CreativeWheel.creativeWheel != null)
+                    && CreativeWheel.creativeWheel != null && !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!CreativeWheel.creativeWheel.IsMouseHovering)
                     {
@@ -228,7 +195,7 @@ namespace BuilderEssentials.Items.Accessories
                     }
                 }
                 else if (Main.mouseLeft && modPlayer.autoHammerSelected && !player.inventory[player.selectedItem].IsAir
-                    && player.whoAmI == Main.myPlayer)
+                    && player.whoAmI == Main.myPlayer && !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!autoHammerAlert)
                     {

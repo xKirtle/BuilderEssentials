@@ -21,5 +21,17 @@ namespace BuilderEssentials.Items
             item.noMelee = true;
             item.noUseGraphic = true;
         }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.DeepRedPaint, 50);
+            recipe.AddIngredient(ItemID.DeepGreenPaint, 50);
+            recipe.AddIngredient(ItemID.DeepBluePaint, 50);
+            recipe.AddIngredient(ItemID.NegativePaint, 1);
+            recipe.AddTile(TileID.DyeVat);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 }

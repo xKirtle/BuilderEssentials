@@ -11,6 +11,7 @@ namespace BuilderEssentials.UI
 {
     public class CreativeWheel
     {
+        //TODO: REDESIGN THE WHOLE UI, IT'S MESSY AND I DON'T LIKE IT, TOO MANY METHODS!!!
         private static BuilderPlayer modPlayer;
         public static UIPanel creativeWheel;
         private static UIImageButton colorPicker;
@@ -19,6 +20,8 @@ namespace BuilderEssentials.UI
         private static List<UIImageButton> autoHammerSlopes;
         private static float autoHammerLeftValue;
         private static float autoHammerTopValue;
+        private static float creativeWheelHeight;
+        private static float creativeWheelWidth;
 
         //TODO: ADD TOOLTIPS WHEN HOVERING ON CW ELEMENTS TO DISPLAY WHAT THEY DO / HOW THEY'RE USED
 
@@ -26,14 +29,17 @@ namespace BuilderEssentials.UI
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
+            creativeWheelWidth = 200f;
+            creativeWheelHeight = 230f;
+
             creativeWheel = new UIPanel();
             creativeWheel.VAlign = 0f;
             creativeWheel.HAlign = 0f;
-            creativeWheel.Width.Set(200f, 0);
-            creativeWheel.Height.Set(230f, 0);
+            creativeWheel.Width.Set(creativeWheelWidth, 0);
+            creativeWheel.Height.Set(creativeWheelHeight, 0);
             creativeWheel.Left.Set(mouseX - 200 / 2, 0); //mouseX - this.width/2
             creativeWheel.Top.Set(mouseY - 200 / 2, 0); //mouseY - this.height/2
-            creativeWheel.BorderColor = Color.Transparent; //Color.Red;
+            creativeWheel.BorderColor = Color.Red; //Color.Red;
             creativeWheel.BackgroundColor = Color.Transparent;
 
             basePanel.Append(creativeWheel);
@@ -50,7 +56,7 @@ namespace BuilderEssentials.UI
             ResetVisibilityValuesForAllOptions();
             return creativeWheel;
         }
-
+        //Make all 3 current buttons positions be defined by a circumference?
         private static UIImageButton CreateColorPicker()
         {
             colorPicker = new UIImageButton(BuilderEssentials.CWColorPicker);
@@ -90,69 +96,37 @@ namespace BuilderEssentials.UI
         private static void CreateAutoHammerSlopes()
         {
             autoHammerSlopes = new List<UIImageButton>();
+            for (int i = 0; i < 6; i++)
+                autoHammerSlopes.Add(new UIImageButton(BuilderEssentials.CWAutoHammerIndex[i]));
 
-            UIImageButton slope0 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[0]);
-            slope0.Left.Set(autoHammerLeftValue - 25f, 0);
-            slope0.Top.Set(autoHammerTopValue + 10f, 0);
-            slope0.SetVisibility(.75f, .4f);
-            slope0.OnClick += Slope_OnClick;
-            autoHammerSlopes.Add(slope0);
 
-            UIImageButton slope1 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[1]);
-            slope1.Left.Set(autoHammerLeftValue + 46f, 0);
-            slope1.Top.Set(autoHammerTopValue + 10f, 0);
-            slope1.SetVisibility(.75f, .4f);
-            slope1.OnClick += Slope_OnClick;
-            autoHammerSlopes.Add(slope1);
-
-            UIImageButton slope2 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[2]);
-            slope2.Left.Set(autoHammerLeftValue + 32f, 0);
-            slope2.Top.Set(autoHammerTopValue + 40f, 0);
-            slope2.SetVisibility(.75f, .4f);
-            slope2.OnClick += Slope_OnClick;
-            autoHammerSlopes.Add(slope2);
-
-            UIImageButton slope3 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[3]);
-            slope3.Left.Set(autoHammerLeftValue - 10f, 0);
-            slope3.Top.Set(autoHammerTopValue + 40f, 0);
-            slope3.SetVisibility(.75f, .4f);
-            slope3.OnClick += Slope_OnClick;
-            autoHammerSlopes.Add(slope3);
-
-            UIImageButton slope4 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[4]);
-            slope4.Left.Set(autoHammerLeftValue + 32f, 0);
-            slope4.Top.Set(autoHammerTopValue - 18f, 0);
-            slope4.SetVisibility(.75f, .4f);
-            slope4.OnClick += Slope_OnClick;
-            autoHammerSlopes.Add(slope4);
-
-            UIImageButton slope5 = new UIImageButton(BuilderEssentials.CWAutoHammerIndex[5]);
-            slope5.Left.Set(autoHammerLeftValue - 10f, 0);
-            slope5.Top.Set(autoHammerTopValue - 18f, 0);
-            slope5.SetVisibility(.75f, .4f);
-            slope5.OnClick += Slope_OnClick;
-            autoHammerSlopes.Add(slope5);
+            double radius = 36;
+            double angle = Math.PI / 3;
+            for (int i = 0; i < autoHammerSlopes.Count; i++)
+            {
+                //I add +3 in both x and y to rotate the whole "wheel" so the starting icon starts where I want it at
+                double x = ((creativeWheelWidth / 2) - 22f) + (radius * Math.Cos(angle * (i + 3)));
+                double y = ((creativeWheelHeight / 2) + 6) - (radius * Math.Sin(angle * (i + 3)));
+                autoHammerSlopes[i].VAlign = 0f;
+                autoHammerSlopes[i].HAlign = 0f;
+                autoHammerSlopes[i].Left.Set((float)x, 0f);
+                autoHammerSlopes[i].Top.Set((float)y, 0f);
+                autoHammerSlopes[i].SetVisibility(.75f, .4f);
+            }
 
             for (int i = 0; i < 6; i++)
+            {
+                int index = i;
+                autoHammerSlopes[i].OnClick += (__, _) => SlopeClicked(index);
                 creativeWheel.Append(autoHammerSlopes[i]);
+            }
         }
 
-        private static void Slope_OnClick(UIMouseEvent evt, UIElement listeningElement)
-        {
-            var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (listeningElement == autoHammerSlopes[0])
-                modPlayer.autoHammerSelectedIndex = 0;
-            else if (listeningElement == autoHammerSlopes[1])
-                modPlayer.autoHammerSelectedIndex = 1;
-            else if (listeningElement == autoHammerSlopes[2])
-                modPlayer.autoHammerSelectedIndex = 2;
-            else if (listeningElement == autoHammerSlopes[3])
-                modPlayer.autoHammerSelectedIndex = 3;
-            else if (listeningElement == autoHammerSlopes[4])
-                modPlayer.autoHammerSelectedIndex = 4;
-            else if (listeningElement == autoHammerSlopes[5])
-                modPlayer.autoHammerSelectedIndex = 5;
 
+        private static void SlopeClicked(int index)
+        {
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            modPlayer.autoHammerSelectedIndex = index;
             ResetSlopeVisibility();
         }
 
@@ -203,8 +177,6 @@ namespace BuilderEssentials.UI
             }
 
             ResetVisibilityValuesForAllOptions();
-
-            //When clicking here open another UIState to select which slope to use?
         }
 
         public static void ResetVisibilityValuesForAllOptions()
