@@ -58,9 +58,11 @@ namespace BuilderEssentials
 
         public override void ResetEffects()
         {
+            //TODO: Fix Creative Wrench features still working after you remove the accessory
             InfinitePlacement = false;
             Player.tileRangeX = 5;
             Player.tileRangeY = 4;
+            player.showItemIcon = false;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)

@@ -3,6 +3,7 @@ using BuilderEssentials.UI;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.Items
 {
@@ -25,7 +26,7 @@ namespace BuilderEssentials.Items
             item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item1;
-            item.autoReuse = false;
+            item.autoReuse = true;
             item.noMelee = true;
             item.noUseGraphic = true;
         }
@@ -37,7 +38,8 @@ namespace BuilderEssentials.Items
             {
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                         && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
-                        && !player.mouseInterface && player.inventory[player.selectedItem].IsTheSameAs(this.item))
+                        && (!player.mouseInterface || (BasePanel.paintingUIOpen && BasePanel.paintingPanel.IsMouseHovering))
+                        && player.inventory[player.selectedItem].IsTheSameAs(this.item))
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.paintingUIOpen = !BasePanel.paintingUIOpen;
@@ -46,6 +48,70 @@ namespace BuilderEssentials.Items
                 if (Main.mouseRightRelease)
                     mouseRightTimer = 0;
             }
+        }
+
+        public override void HoldItem(Player player)
+        {
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            if (modPlayer.paintingColorSelectedIndex != 30)
+            {
+                player.showItemIcon = true;
+                switch (modPlayer.paintingToolSelected)
+                {
+                    case 0:
+                        player.showItemIcon2 = ItemID.SpectrePaintbrush;
+                        break;
+                    case 1:
+                        player.showItemIcon2 = ItemID.SpectrePaintRoller;
+                        break;
+                    case 2:
+                        player.showItemIcon2 = ItemID.SpectrePaintScraper;
+                        break;
+                }
+            }
+            else if (modPlayer.paintingColorSelectedIndex == 30 && modPlayer.paintingToolSelected == 2)
+            {
+                player.showItemIcon = true;
+                player.showItemIcon2 = ItemID.SpectrePaintScraper;
+            }
+        }
+
+        public override bool CanUseItem(Player player)
+        {
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+            bool foundModdedPaint = false;
+            for (int i = 0; i < player.inventory.Length; i++)
+            {
+                if (player.inventory[i].type == mod.ItemType("InfinitePaintBucket"))
+                {
+                    foundModdedPaint = true;
+                    break;
+                }
+            }
+
+            Tile pointedTile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            if (foundModdedPaint && !BasePanel.paintingPanel.IsMouseHovering)
+            {
+                //selectedindex + 1 because bytes don't start at 0
+                switch (modPlayer.paintingToolSelected)
+                {
+                    case 0:
+                        if (pointedTile.color() != (modPlayer.paintingColorSelectedIndex + 1))
+                            pointedTile.color((byte)(modPlayer.paintingColorSelectedIndex + 1));
+                        break;
+                    case 1:
+                        if (pointedTile.wallColor() != (modPlayer.paintingColorSelectedIndex + 1))
+                            pointedTile.wallColor((byte)(modPlayer.paintingColorSelectedIndex + 1));
+                        break;
+                    case 2:
+                        if (pointedTile.color() != 0)
+                            pointedTile.color(0);
+                        if (pointedTile.wallColor() != 0)
+                            pointedTile.wallColor(0);
+                        break;
+                }
+            }
+            return false;
         }
     }
 

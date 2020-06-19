@@ -139,7 +139,7 @@ namespace BuilderEssentials.UI
                 paintToolsList[i].HAlign = 0f;
                 paintToolsList[i].Left.Set((float)x, 0f);
                 paintToolsList[i].Top.Set((float)y, 0f);
-                paintToolsList[i].SetVisibility(.75f, .4f);
+                paintToolsList[i].SetVisibility(.75f, .6f);
             }
 
             for (int i = 0; i < colorsList.Count; i++)
