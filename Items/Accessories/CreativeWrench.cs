@@ -44,6 +44,9 @@ namespace BuilderEssentials.Items.Accessories
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
 
+                if (modPlayer.InfinitePlacementSelected)
+                    modPlayer.InfinitePlacement = true;
+
                 //Thanks direwolf420 for the monstrosity checks
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                     && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
@@ -211,7 +214,7 @@ namespace BuilderEssentials.Items.Accessories
     {
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacementSelected == true ? false : true;
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
         }
     }
 
@@ -219,7 +222,7 @@ namespace BuilderEssentials.Items.Accessories
     {
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
-            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacementSelected == true ? false : true;
+            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
         }
     }
 }

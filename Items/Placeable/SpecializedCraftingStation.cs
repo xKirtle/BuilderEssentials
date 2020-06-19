@@ -31,10 +31,10 @@ namespace BuilderEssentials.Items.Placeable
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.Keg, 1);
-            recipe.AddIngredient(ItemID.BlendOMatic, 1);
-            recipe.AddIngredient(ItemID.MeatGrinder, 1);
-            recipe.AddRecipeGroup("BuilderEssentials:Campfires", 1);
+            recipe.AddIngredient(ItemID.Keg);
+            recipe.AddIngredient(ItemID.BlendOMatic);
+            recipe.AddIngredient(ItemID.MeatGrinder);
+            recipe.AddRecipeGroup("BuilderEssentials:Campfires");
 
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);

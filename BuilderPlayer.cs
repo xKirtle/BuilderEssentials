@@ -3,6 +3,7 @@ using BuilderEssentials.Utilities;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameInput;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -30,6 +31,7 @@ namespace BuilderEssentials
         //Paint Stuff
         public int paintingColorSelectedIndex;
         public int paintingToolSelected;
+        public bool holdingPaintingTool;
 
 
         public override void Initialize()
@@ -58,11 +60,11 @@ namespace BuilderEssentials
 
         public override void ResetEffects()
         {
-            //TODO: Fix Creative Wrench features still working after you remove the accessory
             InfinitePlacement = false;
             Player.tileRangeX = 5;
             Player.tileRangeY = 4;
             player.showItemIcon = false;
+            holdingPaintingTool = false;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)

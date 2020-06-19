@@ -11,3 +11,4 @@ Happy Building! Kirtle
 
 Latest Changelog:
 	- Introduced the Super Painting Tool. A convenient tool that merges all your painting needs. (Requires Infinite Paint Bucket in the inventory)
+	- Code cleanup and fixed a few minor bugs

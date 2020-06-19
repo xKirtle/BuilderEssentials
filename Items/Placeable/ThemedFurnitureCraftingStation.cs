@@ -31,16 +31,16 @@ namespace BuilderEssentials.Items.Placeable
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.BoneWelder, 1);
-            recipe.AddIngredient(ItemID.GlassKiln, 1);
-            recipe.AddIngredient(ItemID.HoneyDispenser, 1);
-            recipe.AddIngredient(ItemID.IceMachine, 1);
-            recipe.AddIngredient(ItemID.LivingLoom, 1);
-            recipe.AddIngredient(ItemID.SkyMill, 1);
-            recipe.AddIngredient(ItemID.Solidifier, 1);
-            recipe.AddIngredient(ItemID.FleshCloningVaat, 1);
-            recipe.AddIngredient(ItemID.SteampunkBoiler, 1);
-            recipe.AddIngredient(ItemID.LihzahrdFurnace, 1);
+            recipe.AddIngredient(ItemID.BoneWelder);
+            recipe.AddIngredient(ItemID.GlassKiln);
+            recipe.AddIngredient(ItemID.HoneyDispenser);
+            recipe.AddIngredient(ItemID.IceMachine);
+            recipe.AddIngredient(ItemID.LivingLoom);
+            recipe.AddIngredient(ItemID.SkyMill);
+            recipe.AddIngredient(ItemID.Solidifier);
+            recipe.AddIngredient(ItemID.FleshCloningVaat);
+            recipe.AddIngredient(ItemID.SteampunkBoiler);
+            recipe.AddIngredient(ItemID.LihzahrdFurnace);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

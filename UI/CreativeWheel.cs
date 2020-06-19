@@ -39,7 +39,7 @@ namespace BuilderEssentials.UI
             creativeWheel.Height.Set(creativeWheelHeight, 0);
             creativeWheel.Left.Set(mouseX - 200 / 2, 0); //mouseX - this.width/2
             creativeWheel.Top.Set(mouseY - 200 / 2, 0); //mouseY - this.height/2
-            creativeWheel.BorderColor = Color.Red; //Color.Red;
+            creativeWheel.BorderColor = Color.Red; //Color.Transparent;
             creativeWheel.BackgroundColor = Color.Transparent;
 
             basePanel.Append(creativeWheel);

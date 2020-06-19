@@ -34,12 +34,22 @@ namespace BuilderEssentials.Items
         int mouseRightTimer = 0;
         public override void UpdateInventory(Player player)
         {
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
             if (player.whoAmI == Main.myPlayer)
             {
+                if (player.inventory[player.selectedItem].IsTheSameAs(item))
+                    modPlayer.holdingPaintingTool = true;
+
+                if (PaintWheel.paintWheel != null && !modPlayer.holdingPaintingTool)
+                {
+                    PaintWheel.paintWheel.Remove();
+                    BasePanel.paintingUIOpen = false;
+                }
+
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                         && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
                         && (!player.mouseInterface || (BasePanel.paintingUIOpen && BasePanel.paintingPanel.IsMouseHovering))
-                        && player.inventory[player.selectedItem].IsTheSameAs(this.item) && !BasePanel.creativeWheelUIOpen)
+                        && player.inventory[player.selectedItem].IsTheSameAs(item) && !BasePanel.creativeWheelUIOpen)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.paintingUIOpen = !BasePanel.paintingUIOpen;
@@ -96,11 +106,11 @@ namespace BuilderEssentials.Items
                 switch (modPlayer.paintingToolSelected)
                 {
                     case 0:
-                        if (pointedTile.color() != (modPlayer.paintingColorSelectedIndex + 1))
+                        if (pointedTile.color() != (modPlayer.paintingColorSelectedIndex + 1) && modPlayer.paintingColorSelectedIndex != 30)
                             pointedTile.color((byte)(modPlayer.paintingColorSelectedIndex + 1));
                         break;
                     case 1:
-                        if (pointedTile.wallColor() != (modPlayer.paintingColorSelectedIndex + 1))
+                        if (pointedTile.wallColor() != (modPlayer.paintingColorSelectedIndex + 1) && modPlayer.paintingColorSelectedIndex != 30)
                             pointedTile.wallColor((byte)(modPlayer.paintingColorSelectedIndex + 1));
                         break;
                     case 2:
@@ -111,6 +121,7 @@ namespace BuilderEssentials.Items
                         break;
                 }
             }
+            //While the sprite isn't done, don't display it with item animation
             return false;
         }
 
@@ -124,16 +135,5 @@ namespace BuilderEssentials.Items
             recipe.SetResult(this);
             recipe.AddRecipe();
         }
-    }
-
-    public class PaintGlobalItem : GlobalItem
-    {
-        // public override bool UseItem(Item item, Player player)
-        // {
-
-        //     //if item id is a paint tool and there is paint in the inventory, reduce the stack by 1?
-        //     //if infinitepaintbucket is on the inventory, allow any color
-        //     return true;
-        // }
     }
 }

@@ -22,8 +22,8 @@ namespace BuilderEssentials.UI
         {
             buttonTexture = BuilderEssentials.BuildingModeOff;
             buildingModeButton = new UIImageButton(buttonTexture);
-            buildingModeButton.VAlign = 0f; //0.03f
-            buildingModeButton.HAlign = 0f; //0.272f
+            buildingModeButton.VAlign = 0f;
+            buildingModeButton.HAlign = 0f;
             buildingModeButton.Top.Set(40f, 0);
             buildingModeButton.Left.Set(510f, 0);
             buildingModeButton.OnClick += ChangeAccessories_OnClick;
@@ -32,43 +32,55 @@ namespace BuilderEssentials.UI
         }
         public override void Update(GameTime gameTime)
         {
-            if (Main.playerInventory && !isBuildingModeButtonVisible)
+            if (Main.playerInventory)
             {
-                buildingModeButton.SetVisibility(1f, .4f);
-                isBuildingModeButtonVisible = true;
+                if (!isBuildingModeButtonVisible)
+                {
+                    buildingModeButton.SetVisibility(1f, .4f);
+                    isBuildingModeButtonVisible = true;
+                }
+
+                if (isCreativeWheelVisible)
+                {
+                    creativeWheelPanel.Remove();
+                    creativeWheelUIOpen = false;
+                    isCreativeWheelVisible = false;
+                }
+
+                if (isPaintingUIVisible)
+                {
+                    paintingPanel.Remove();
+                    paintingUIOpen = false;
+                    isPaintingUIVisible = false;
+                }
             }
-            else if (!Main.playerInventory && isBuildingModeButtonVisible)
+            else //!Main.playerInventory
             {
-                buildingModeButton.SetVisibility(0f, 0f);
-                isBuildingModeButtonVisible = false;
+                if (isBuildingModeButtonVisible)
+                {
+                    buildingModeButton.SetVisibility(0f, 0f);
+                    isBuildingModeButtonVisible = false;
+                }
             }
 
-            if (buildingModeButton.IsMouseHovering && isBuildingModeButtonVisible)
+            //Blocks mouse from interacting with the world when hovering on UI interfaces
+            if ((buildingModeButton.IsMouseHovering && isBuildingModeButtonVisible) ||
+            (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible))
                 Main.LocalPlayer.mouseInterface = true;
 
+            //CreativeWrench Wheel UI
             if (creativeWheelUIOpen && !isCreativeWheelVisible)
             {
-                //Main.NewText("Open");
                 creativeWheelPanel = CreativeWheel.CreateCreativeWheelPanel(Main.mouseX, Main.mouseY, this);
                 isCreativeWheelVisible = true;
             }
             else if (!creativeWheelUIOpen && isCreativeWheelVisible)
             {
-                //Main.NewText("Closed");
                 creativeWheelPanel.Remove();
                 isCreativeWheelVisible = false;
             }
 
-            if (Main.playerInventory && isCreativeWheelVisible)
-            {
-                creativeWheelPanel.Remove();
-                creativeWheelUIOpen = false;
-                isCreativeWheelVisible = false;
-            }
-
-            if (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible)
-                Main.LocalPlayer.mouseInterface = true;
-
+            //SuperPaintingTool Paint UI
             if (paintingUIOpen && !isPaintingUIVisible)
             {
                 paintingPanel = PaintWheel.CreatePaintWheel(Main.mouseX, Main.mouseY, this); //Method to create it

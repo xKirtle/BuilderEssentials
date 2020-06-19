@@ -31,12 +31,12 @@ namespace BuilderEssentials.Items.Placeable
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddRecipeGroup("BuilderEssentials:HardmodeAnvils", 1);
-            recipe.AddRecipeGroup("BuilderEssentials:Forge", 1);
-            recipe.AddRecipeGroup("BuilderEssentials:Bookcase", 1);
-            recipe.AddIngredient(ItemID.CrystalBall, 1);
-            recipe.AddIngredient(ItemID.Autohammer, 1);
-            recipe.AddIngredient(ItemID.LunarCraftingStation, 1);
+            recipe.AddRecipeGroup("BuilderEssentials:HardmodeAnvils");
+            recipe.AddRecipeGroup("BuilderEssentials:Forge");
+            recipe.AddRecipeGroup("BuilderEssentials:Bookcase");
+            recipe.AddIngredient(ItemID.CrystalBall);
+            recipe.AddIngredient(ItemID.Autohammer);
+            recipe.AddIngredient(ItemID.LunarCraftingStation);
             recipe.AddTile(TileID.DemonAltar);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -245,7 +245,7 @@ namespace BuilderEssentials
             });
             RecipeGroup.RegisterGroup("BuilderEssentials:Anvils", anvils);
 
-            RecipeGroup alchemy = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Bottle/Cup", new int[]
+            RecipeGroup alchemy = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Bottle/Alchemy item", new int[]
             {
                 ItemID.Bottle,
                 ItemID.PinkVase,
@@ -253,12 +253,14 @@ namespace BuilderEssentials
                 ItemID.Mug,
                 ItemID.DynastyCup,
                 ItemID.HoneyCup,
-                ItemID.SteampunkCup
-            });
+                ItemID.SteampunkCup,
+                ItemID.AlchemyTable
+        });
             RecipeGroup.RegisterGroup("BuilderEssentials:AlchemyStations", alchemy);
 
             RecipeGroup sinks = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Sink", new int[]
             {
+                ItemID.MetalSink,
                 ItemID.BlueDungeonSink,
                 ItemID.BoneSink,
                 ItemID.BorealWoodSink,
