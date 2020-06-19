@@ -99,23 +99,35 @@ namespace BuilderEssentials.Items.Accessories
                             Main.NewText(tile.type);
 
                             if (tile.type == TileID.Chairs)
-                                FurnitureFinder.FindFurniture(TileID.Chairs, tile.frameY / 40, ref item);
+                                FurnitureFinder.FindFurniture(TileID.Chairs, tile, ref item);
 
                             if (tile.type == TileID.WorkBenches)
-                                FurnitureFinder.FindFurniture(TileID.WorkBenches, tile.frameX / 36, ref item);
+                                FurnitureFinder.FindFurniture(TileID.WorkBenches, tile, ref item);
 
                             if (tile.type == TileID.Platforms)
-                                FurnitureFinder.FindFurniture(TileID.Platforms, tile.frameY / 18, ref item);
+                                FurnitureFinder.FindFurniture(TileID.Platforms, tile, ref item);
 
                             //No TileID.Chests?
                             if (tile.type == 21)
-                                FurnitureFinder.FindFurniture(21, tile.frameX / 36, ref item);
+                                FurnitureFinder.FindFurniture(21, tile, ref item);
 
                             if (tile.type == TileID.DemonAltar)
-                                FurnitureFinder.FindFurniture(TileID.DemonAltar, tile.frameX / 56, ref item);
+                                FurnitureFinder.FindFurniture(TileID.DemonAltar, tile, ref item);
 
                             if (tile.type == TileID.Torches)
-                                FurnitureFinder.FindFurniture(TileID.Candles, tile.frameY / 22, ref item);
+                                FurnitureFinder.FindFurniture(TileID.Candles, tile, ref item);
+
+                            if (tile.type == TileID.Chandeliers)
+                                FurnitureFinder.FindFurniture(TileID.Chandeliers, tile, ref item);
+
+                            if (tile.type == TileID.HangingLanterns)
+                                FurnitureFinder.FindFurniture(TileID.HangingLanterns, tile, ref item);
+
+                            if (tile.type == TileID.Pianos)
+                                FurnitureFinder.FindFurniture(TileID.Pianos, tile, ref item);
+
+                            if (tile.type == TileID.Dressers)
+                                FurnitureFinder.FindFurniture(TileID.Dressers, tile, ref item);
                         }
 
                         //organize inventory

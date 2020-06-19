@@ -5,12 +5,12 @@ namespace BuilderEssentials.Utilities
 {
     public class FurnitureFinder
     {
-        public static void FindFurniture(int tileType, int frame, ref Item item)
+        public static void FindFurniture(int tileType, Tile tile, ref Item item)
         {
             //This is gonna take me ages, WIP
             if (tileType == TileID.Chairs)
             {
-                switch (frame)
+                switch (tile.frameY / 40)
                 {
                     case 0:
                         item.SetDefaults(ItemID.WoodenChair);
@@ -112,7 +112,7 @@ namespace BuilderEssentials.Utilities
             }
             if (tileType == TileID.WorkBenches)
             {
-                switch (frame)
+                switch (tile.frameX / 36)
                 {
                     case 0:
                         item.SetDefaults(ItemID.WorkBench);
@@ -219,7 +219,7 @@ namespace BuilderEssentials.Utilities
             }
             if (tileType == TileID.Platforms)
             {
-                switch (frame)
+                switch (tile.frameY / 18)
                 {
                     case 0:
                         item.SetDefaults(ItemID.WoodPlatform);
@@ -334,8 +334,7 @@ namespace BuilderEssentials.Utilities
             //Chests. Fake chests are 441
             if (tileType == 21)
             {
-                Main.NewText(frame);
-                switch (frame)
+                switch (tile.frameX / 36)
                 {
                     case 0:
                         item.SetDefaults(ItemID.Chest);
@@ -497,7 +496,7 @@ namespace BuilderEssentials.Utilities
             if (tileType == TileID.DemonAltar)
             {
                 //Maybe add my own item to allow for it to be picked up?
-                switch (frame)
+                switch (tile.frameX / 56)
                 {
                     default:
                         break;
@@ -505,7 +504,7 @@ namespace BuilderEssentials.Utilities
             }
             if (tileType == TileID.Candles)
             {
-                switch (frame)
+                switch (tile.frameY / 22)
                 {
                     case 0:
                         item.SetDefaults(ItemID.Candle);
@@ -604,6 +603,558 @@ namespace BuilderEssentials.Utilities
 
                 }
             }
+            if (tileType == TileID.Chandeliers)
+            {
+                switch (tile.frameY / 54)
+                {
+                    case 0:
+                        if (tile.frameX / 54 == 0)
+                            item.SetDefaults(ItemID.CopperChandelier);
+                        if (tile.frameX / 54 == 1)
+                            item.SetDefaults(ItemID.CrystalChandelier);
+                        //1.4 adds more chandeliers here
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.SilverChandelier);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.GoldChandelier);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.TinChandelier);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.TungstenChandelier);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.PlatinumChandelier);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.Jackelier);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.CactusChandelier);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.EbonwoodChandelier);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.FleshChandelier);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.HoneyChandelier);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.FrozenChandelier);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.RichMahoganyChandelier);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.PearlwoodChandelier);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.LihzahrdChandelier);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.SkywareChandelier);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.SpookyChandelier);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.GlassChandelier);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.LivingWoodChandelier);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.ShadewoodChandelier);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.GoldenChandelier);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.BoneChandelier);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.DynastyChandelier);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.PalmWoodChandelier);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.MushroomChandelier);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.BorealWoodChandelier);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.SlimeChandelier);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.BlueDungeonChandelier);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.GreenDungeonChandelier);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.PinkDungeonChandelier);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.SteampunkChandelier);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.PumpkinChandelier);
+                        break;
+                    case 32:
+                        item.SetDefaults(ItemID.ObsidianChandelier);
+                        break;
+                    case 33:
+                        item.SetDefaults(ItemID.MartianChandelier);
+                        break;
+                    case 34:
+                        item.SetDefaults(ItemID.MeteoriteChandelier);
+                        break;
+                    case 35:
+                        item.SetDefaults(ItemID.GraniteChandelier);
+                        break;
+                    case 36:
+                        item.SetDefaults(ItemID.MarbleChandelier);
+                        break;
+                    case 37:
+                        item.SetDefaults(ItemID.CrystalChandelier);
+                        break;
+                        //More in 1.4
+
+
+                }
+            }
+            if (tileType == TileID.HangingLanterns)
+            {
+                switch (tile.frameY / 36)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.ChainLantern);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.BrassLantern);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.CagedLantern);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.CarriageLantern);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.AlchemyLantern);
+                        break;
+                    case 5:
+                        //Diabolist Lamp?? No ItemID??
+                        item.SetDefaults(1394);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.OilRagSconse);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.StarinaBottle);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.HangingJackOLantern);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.HeartLantern);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.CactusLantern);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.EbonwoodLantern);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.FleshLantern);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.HoneyLantern);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.SteampunkLantern);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.GlassLantern);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.RichMahoganyLantern);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.PearlwoodLantern);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.FrozenLantern);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.LihzahrdLantern);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.SkywareLantern);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.SpookyLantern);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.LivingWoodLantern);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.ShadewoodLantern);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.GoldenLantern);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.BoneLantern);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.DynastyLantern);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.PalmWoodLantern);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.MushroomLantern);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.BorealWoodLantern);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.SlimeLantern);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.PumpkinLantern);
+                        break;
+                    case 32:
+                        item.SetDefaults(ItemID.ObsidianLantern);
+                        break;
+                    case 33:
+                        item.SetDefaults(ItemID.MartianLantern);
+                        break;
+                    case 34:
+                        item.SetDefaults(ItemID.MeteoriteLantern);
+                        break;
+                    case 35:
+                        item.SetDefaults(ItemID.GraniteLantern);
+                        break;
+                    case 36:
+                        item.SetDefaults(ItemID.MarbleLantern);
+                        break;
+                    case 37:
+                        item.SetDefaults(ItemID.CrystalLantern);
+                        break;
+                }
+            }
+            if (tileType == TileID.Beds)
+            {
+                switch (tile.frameY / 38)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Bed);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.EbonwoodBed);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.RichMahoganyBed);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.PearlwoodBed);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.ShadewoodBed);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.BlueDungeonBed);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.GreenDungeonBed);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.PinkDungeonBed);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.ObsidianBed);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.GlassBed);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.HoneyBed);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.SteampunkBed);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.CactusBed);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.FleshBed);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.FrozenBed);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.LihzahrdBed);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.SkywareBed);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.SpookyBed);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.LivingWoodBed);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.BoneBed);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.DynastyBed);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.PalmWoodBed);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.MushroomBed);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.BorealWoodBed);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.SlimeBed);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.PumpkinBed);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.MartianBed);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MeteoriteBed);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.GraniteBed);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.MarbleBed);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.CrystalBed);
+                        break;
+                }
+            }
+            if (tileType == TileID.Pianos)
+            {
+                switch (tile.frameX / 54)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Piano);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.EbonwoodPiano);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.RichMahoganyPiano);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.PearlwoodPiano);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.ShadewoodPiano);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.LivingWoodPiano);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.FleshPiano);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.FrozenPiano);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.GlassPiano);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.HoneyPiano);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.SteampunkPiano);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.BlueDungeonPiano);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.GreenDungeonPiano);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.PinkDungeonPiano);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.GoldenPiano);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.ObsidianPiano);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.BonePiano);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.CactusPiano);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.SpookyPiano);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.SkywarePiano);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.LihzahrdPiano);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.PalmWoodPiano);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.MushroomPiano);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.BorealWoodPiano);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.SlimePiano);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.PumpkinPiano);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.MartianPiano);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MeteoritePiano);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.MarblePiano);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.GranitePiano);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.CrystalPiano);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.DynastyPiano);
+                        break;
+                }
+            }
+            if (tileType == TileID.Dressers)
+            {
+                switch (tile.frameX / 54)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Dresser);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.EbonwoodDresser);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.RichMahoganyDresser);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.PearlwoodDresser);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.ShadewoodDresser);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.BlueDungeonDresser);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.GreenDungeonDresser);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.PinkDungeonDresser);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.GoldenDresser);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.ObsidianDresser);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.BoneDresser);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.CactusDresser);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.SpookyDresser);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.SkywareDresser);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.HoneyDresser);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.LihzahrdDresser);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.PalmWoodDresser);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.MushroomDresser);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.BorealWoodDresser);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.SlimeDresser);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.PumpkinDresser);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.SteampunkDresser);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.GlassDresser);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.FleshDresser);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.MartianDresser);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.MeteoriteDresser);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.GraniteDresser);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MarbleDresser);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.CrystalDresser);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.DynastyDresser);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.FrozenDresser);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.LivingWoodDresser);
+                        break;
+                }
+            }
+
         }
     }
 }
