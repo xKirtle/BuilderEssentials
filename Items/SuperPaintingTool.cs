@@ -100,26 +100,50 @@ namespace BuilderEssentials.Items
                 }
             }
 
-            Tile pointedTile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            int posX = Player.tileTargetX;
+            int posY = Player.tileTargetY;
+            Tile pointedTile = Main.tile[posX, posY];
             if (foundModdedPaint && !BasePanel.paintingPanel.IsMouseHovering)
             {
+
+                bool anyOperationDone = false;
                 //selectedindex + 1 because bytes don't start at 0
                 switch (modPlayer.paintingToolSelected)
                 {
                     case 0:
                         if (pointedTile.color() != (modPlayer.paintingColorSelectedIndex + 1) && modPlayer.paintingColorSelectedIndex != 30)
+                        {
                             pointedTile.color((byte)(modPlayer.paintingColorSelectedIndex + 1));
+                            anyOperationDone = true;
+                        }
                         break;
                     case 1:
                         if (pointedTile.wallColor() != (modPlayer.paintingColorSelectedIndex + 1) && modPlayer.paintingColorSelectedIndex != 30)
+                        {
                             pointedTile.wallColor((byte)(modPlayer.paintingColorSelectedIndex + 1));
+                            anyOperationDone = true;
+                        }
                         break;
                     case 2:
                         if (pointedTile.color() != 0)
-                            pointedTile.color(0);
+                        {
+                            pointedTile.color((byte)0);
+                            anyOperationDone = true;
+                        }
                         if (pointedTile.wallColor() != 0)
-                            pointedTile.wallColor(0);
+                        {
+                            pointedTile.wallColor((byte)0);
+                            anyOperationDone = true;
+                        }
                         break;
+                }
+
+                if (anyOperationDone)
+                {
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        NetMessage.SendTileSquare(-1, posX, posY, 1); //syncs painting tiles and walls, not the scraper
+                    }
                 }
             }
             return false;

@@ -32,6 +32,7 @@ namespace BuilderEssentials.Items.Accessories
         Tile previousClickedTile;
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            //TODO: SEPARATE FUNCTIONALITY INTO SEPARATE FILES
             if (player.whoAmI == Main.myPlayer)
             {
                 modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
@@ -46,6 +47,8 @@ namespace BuilderEssentials.Items.Accessories
                 Player.tileRangeY = 55;
 
                 //Thanks direwolf420 for the monstrosity checks
+
+                //Right click timer
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                     && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
                     && (!player.mouseInterface || (BasePanel.creativeWheelUIOpen && CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering))
@@ -58,6 +61,7 @@ namespace BuilderEssentials.Items.Accessories
                 if (Main.mouseRightRelease)
                     mouseRightTimer = 0;
 
+                //ItemPicker
                 if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker)
                 && !player.mouseInterface)
                 {
@@ -138,6 +142,7 @@ namespace BuilderEssentials.Items.Accessories
                     }
                 }
 
+                //AutoHammer
                 if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
                 && player.inventory[player.selectedItem].IsAir && CreativeWheelRework.CreativeWheelReworkPanel != null && !player.mouseInterface
                 && !Main.playerInventory)
