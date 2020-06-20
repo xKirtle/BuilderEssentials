@@ -3,6 +3,7 @@ using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Items.Accessories
 {
@@ -35,7 +36,7 @@ namespace BuilderEssentials.Items.Accessories
             {
                 modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
-                if (modPlayer.InfinitePlacementSelected)
+                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
                     player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
 
                 player.blockRange += 55;
@@ -43,9 +44,6 @@ namespace BuilderEssentials.Items.Accessories
                 player.tileSpeed += 50;
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
-
-                if (modPlayer.InfinitePlacementSelected)
-                    modPlayer.InfinitePlacement = true;
 
                 //Thanks direwolf420 for the monstrosity checks
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
@@ -60,7 +58,8 @@ namespace BuilderEssentials.Items.Accessories
                 if (Main.mouseRightRelease)
                     mouseRightTimer = 0;
 
-                if (Main.mouseMiddle && modPlayer.colorPickerSelected && !player.mouseInterface)
+                if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker)
+                && !player.mouseInterface)
                 {
                     //Thanks Oli. B for the concept
                     int posX = Player.tileTargetX;
@@ -139,10 +138,11 @@ namespace BuilderEssentials.Items.Accessories
                     }
                 }
 
-                if (Main.mouseLeft && modPlayer.autoHammerSelected && player.inventory[player.selectedItem].IsAir
-                    && CreativeWheel.creativeWheel != null && !player.mouseInterface && !Main.playerInventory)
+                if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
+                && player.inventory[player.selectedItem].IsAir && CreativeWheelRework.CreativeWheelReworkPanel != null && !player.mouseInterface
+                && !Main.playerInventory)
                 {
-                    if (!CreativeWheel.creativeWheel.IsMouseHovering)
+                    if (!CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
                     {
                         //DISABLE USE ON GAME INTERFACES WHEN USER CLICKS ON SETTINGS FOR EXAMPLE
                         int posX = Player.tileTargetX;
@@ -197,8 +197,8 @@ namespace BuilderEssentials.Items.Accessories
                         }
                     }
                 }
-                else if (Main.mouseLeft && modPlayer.autoHammerSelected && !player.inventory[player.selectedItem].IsAir
-                    && player.whoAmI == Main.myPlayer && !player.mouseInterface && !Main.playerInventory)
+                else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
+                && !player.inventory[player.selectedItem].IsAir && !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!autoHammerAlert)
                     {
@@ -214,7 +214,8 @@ namespace BuilderEssentials.Items.Accessories
     {
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            item.consumable = modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ? false : true;
         }
     }
 
@@ -222,7 +223,8 @@ namespace BuilderEssentials.Items.Accessories
     {
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
-            item.consumable = Main.LocalPlayer.GetModPlayer<BuilderPlayer>().InfinitePlacement == true ? false : true;
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            item.consumable = modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ? false : true;
         }
     }
 }

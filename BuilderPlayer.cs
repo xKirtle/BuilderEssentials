@@ -11,6 +11,7 @@ namespace BuilderEssentials
 {
     public class BuilderPlayer : ModPlayer
     {
+        //Accessory System
         public List<Item> NormalAccessories;
         public List<Item> BuildingAccessories;
         public List<Item> NormalVanityAccessories;
@@ -18,22 +19,24 @@ namespace BuilderEssentials
         public List<Item> NormalVanityClothes;
         public List<Item> BuildingVanityClothes;
         public bool IsNormalAccessories;
-        public bool InfinitePlacement;
 
 
         //Creative Wheel Stuff
-        public bool colorPickerSelected;
-        public bool InfinitePlacementSelected;
-        public bool autoHammerSelected;
+        public List<int> creativeWheelSelectedIndex;
         public int autoHammerSelectedIndex;
+        public enum CreativeWheelItem : int
+        {
+            ItemPicker,
+            InfinitePlacement,
+            AutoHammer,
+            PlacementAnywhere
+        }
 
 
         //Paint Stuff
         public int paintingColorSelectedIndex;
         public int paintingToolSelected;
         public bool holdingPaintingTool;
-
-
         public override void Initialize()
         {
             NormalAccessories = new List<Item>(7);
@@ -43,13 +46,10 @@ namespace BuilderEssentials
             NormalVanityClothes = new List<Item>(3);
             BuildingVanityClothes = new List<Item>(3);
             IsNormalAccessories = true;
-            InfinitePlacement = false;
 
 
             //Creative Wheel Stuff
-            colorPickerSelected = false;
-            InfinitePlacementSelected = false;
-            autoHammerSelected = false;
+            creativeWheelSelectedIndex = new List<int>();
             autoHammerSelectedIndex = 5; //full tile
 
 
@@ -60,7 +60,6 @@ namespace BuilderEssentials
 
         public override void ResetEffects()
         {
-            InfinitePlacement = false;
             Player.tileRangeX = 5;
             Player.tileRangeY = 4;
             player.showItemIcon = false;
@@ -84,9 +83,7 @@ namespace BuilderEssentials
                 {"BuildingVanityAccessories", BuildingVanityAccessories },
                 {"NormalVanityClothes", NormalVanityClothes },
                 {"BuildingVanityClothes", BuildingVanityClothes },
-                {"colorPickerSelected", colorPickerSelected },
-                {"InfinitePlacementSelected", InfinitePlacementSelected },
-                {"autoHammerSelected", autoHammerSelected },
+                {"creativeWheelSelectedIndex", creativeWheelSelectedIndex},
                 {"autoHammerSelectedIndex", autoHammerSelectedIndex },
                 {"paintingColorSelectedIndex", paintingColorSelectedIndex},
                 {"paintingToolSelected", paintingToolSelected}
@@ -95,6 +92,7 @@ namespace BuilderEssentials
 
         public override void Load(TagCompound tag)
         {
+            //Accessory System
             if (tag.ContainsKey("IsNormalAccessories"))
                 IsNormalAccessories = tag.GetBool("IsNormalAccessories");
 
@@ -117,14 +115,8 @@ namespace BuilderEssentials
                 BuildingVanityClothes = tag.Get<List<Item>>("BuildingVanityClothes");
 
             //Creative Wheel
-            if (tag.ContainsKey("colorPickerSelected"))
-                colorPickerSelected = tag.GetBool("colorPickerSelected");
-
-            if (tag.ContainsKey("InfinitePlacementSelected"))
-                InfinitePlacementSelected = tag.GetBool("InfinitePlacementSelected");
-
-            if (tag.ContainsKey("autoHammerSelected"))
-                autoHammerSelected = tag.GetBool("autoHammerSelected");
+            if (tag.ContainsKey("creativeWheelSelectedIndex"))
+                creativeWheelSelectedIndex = tag.Get<List<int>>("creativeWheelSelectedIndex");
 
             if (tag.ContainsKey("autoHammerSelectedIndex"))
                 autoHammerSelectedIndex = tag.GetInt("autoHammerSelectedIndex");

@@ -9,6 +9,7 @@ namespace BuilderEssentials.Items
 {
     class SuperPaintingTool : ModItem
     {
+        //TODO: ENSURE MULTIPLAYER COMPATIBILITY
         public List<int> paints;
         public override void SetDefaults()
         {
@@ -18,9 +19,9 @@ namespace BuilderEssentials.Items
             for (int i = 0; i < 3; i++)
                 paints.Add(1966 + i);   //Extra Effects
 
-            item.height = 20;
-            item.width = 18;
-            item.useTime = 1;
+            item.height = 44;
+            item.width = 44;
+            item.useTime = 10;
             item.useAnimation = 10;
             item.useStyle = ItemUseStyleID.SwingThrow;
             item.value = Item.buyPrice(0, 10, 0, 0);
@@ -121,7 +122,6 @@ namespace BuilderEssentials.Items
                         break;
                 }
             }
-            //While the sprite isn't done, don't display it with item animation
             return false;
         }
 

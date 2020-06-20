@@ -16,6 +16,7 @@ namespace BuilderEssentials.UI
         public static float CreativeWheelReworkWidth;
         public static float CreativeWheelReworkHeight;
         private static List<UIImageButton> CreativeWheelElements;
+        private static List<UIImageButton> CreativeWheelHammerElements;
 
         public static UIPanel CreateCreativeWheelReworkPanel(int mouseX, int mouseY, BasePanel basePanel)
         {
@@ -42,26 +43,120 @@ namespace BuilderEssentials.UI
 
         private static void CreateLayout()
         {
+            //Initialize the list that contains the CreativeWheel Elements, also intialized below
             CreativeWheelElements = new List<UIImageButton>();
             for (int i = 0; i < BuilderEssentials.CreativeWheelElements.Count; i++)
                 CreativeWheelElements.Add(new UIImageButton(BuilderEssentials.CreativeWheelElements[i]));
 
-            double radius = 100;
-            double angle = Math.PI / 3; //6 Button
+            //Define them in a circle
+            double radius = 60;
+            double angle = Math.PI / (CreativeWheelElements.Count / 2); //4 Buttons
             for (int i = 0; i < CreativeWheelElements.Count; i++)
             {
-                //I add +3 in both x and y to rotate the whole "wheel" so the starting icon starts where I want it at
-                double x = ((CreativeWheelReworkWidth / 2) - 22f) + (radius * Math.Cos(angle * (i + 4)));
-                double y = ((CreativeWheelReworkHeight / 2) + 6) - (radius * Math.Sin(angle * (i + 4)));
+                int index = i;
+                double x = (CreativeWheelReworkWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 2)));
+                double y = (CreativeWheelReworkHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 2)));
                 CreativeWheelElements[i].VAlign = 0f;
                 CreativeWheelElements[i].HAlign = 0f;
                 CreativeWheelElements[i].Left.Set((float)x, 0f);
                 CreativeWheelElements[i].Top.Set((float)y, 0f);
                 CreativeWheelElements[i].SetVisibility(.75f, .4f);
+                CreativeWheelElements[i].OnClick += (__, _) => MainElementClick(index);
             }
 
+            //Correct display of previously toggled settings
+            foreach (int selectedItem in modPlayer.creativeWheelSelectedIndex)
+            {
+                CreativeWheelElements[selectedItem].SetVisibility(1f, 1f);
+                if (selectedItem == 2) //AutoHammer
+                    CreateHammerLayout(modPlayer.autoHammerSelectedIndex);
+            }
+
+            //Append them to the Main Panel
             for (int i = 0; i < CreativeWheelElements.Count; i++)
                 CreativeWheelReworkPanel.Append(CreativeWheelElements[i]);
+        }
+
+        private static void MainElementClick(int index)
+        {
+            if (!modPlayer.creativeWheelSelectedIndex.Contains(index))
+                modPlayer.creativeWheelSelectedIndex.Add(index);
+            else
+                modPlayer.creativeWheelSelectedIndex.Remove(index);
+            ResetVisibility();
+
+            //Unnecessary Switch?
+            switch (index)
+            {
+                case 0: //Item Picker
+                    break;
+                case 1: //InfinitePlacement
+                    break;
+                case 2: //AutoHammer
+                    if (modPlayer.creativeWheelSelectedIndex.Contains(2))
+                        CreateHammerLayout(modPlayer.autoHammerSelectedIndex);
+                    else
+                        RemoveHammerLayout();
+                    break;
+                case 3: //PlacementAnywhere
+                    break;
+            }
+
+            void ResetVisibility()
+            {
+                for (int i = 0; i < CreativeWheelElements.Count; i++)
+                    CreativeWheelElements[i].SetVisibility(.75f, .4f);
+
+                foreach (int activeElement in modPlayer.creativeWheelSelectedIndex)
+                    CreativeWheelElements[activeElement].SetVisibility(1f, 1f);
+            }
+        }
+
+        private static void CreateHammerLayout(int selectedIndex)
+        {
+            CreativeWheelHammerElements = new List<UIImageButton>();
+            for (int i = 0; i < BuilderEssentials.CWAutoHammerElements.Count; i++)
+                CreativeWheelHammerElements.Add(new UIImageButton(BuilderEssentials.CWAutoHammerElements[i]));
+
+            double radius = 36;
+            double angle = Math.PI / (CreativeWheelHammerElements.Count / 2);
+            for (int i = 0; i < CreativeWheelHammerElements.Count; i++)
+            {
+                int index = i;
+                //We add 11 to both x and y axis since that's half of the width/height on the small icons around the AutoHammer
+                double x = (CreativeWheelElements[2].Left.Pixels + 11) + (radius * Math.Cos(angle * (i + 3)));
+                double y = (CreativeWheelElements[2].Top.Pixels + 11) - (radius * Math.Sin(angle * (i + 3)));
+                CreativeWheelHammerElements[i].VAlign = 0f;
+                CreativeWheelHammerElements[i].HAlign = 0f;
+                CreativeWheelHammerElements[i].Left.Set((float)x, 0f);
+                CreativeWheelHammerElements[i].Top.Set((float)y, 0f);
+                CreativeWheelHammerElements[i].SetVisibility(.75f, .4f);
+                CreativeWheelHammerElements[i].OnClick += (__, _) => AutoHammerElementClick(index);
+            }
+
+            CreativeWheelHammerElements[selectedIndex].SetVisibility(1f, 1f);
+
+            for (int i = 0; i < CreativeWheelHammerElements.Count; i++)
+                CreativeWheelReworkPanel.Append(CreativeWheelHammerElements[i]);
+        }
+
+        private static void RemoveHammerLayout()
+        {
+            if (CreativeWheelHammerElements != null)
+                for (int i = 0; i < CreativeWheelHammerElements.Count; i++)
+                    CreativeWheelHammerElements[i].Remove();
+        }
+        private static void AutoHammerElementClick(int index)
+        {
+            modPlayer.autoHammerSelectedIndex = index;
+            ResetVisibility();
+            CreativeWheelHammerElements[index].SetVisibility(1f, 1f);
+
+            void ResetVisibility()
+            {
+                for (int i = 0; i < CreativeWheelHammerElements.Count; i++)
+                    CreativeWheelHammerElements[i].SetVisibility(.75f, .4f);
+            }
         }
     }
 }

@@ -14,13 +14,8 @@ namespace BuilderEssentials
     {
         public static Texture2D BuildingModeOff;
         public static Texture2D BuildingModeOn;
-        //-------------------------------------------------
-        public static Texture2D CWColorPicker;
-        public static Texture2D CWInfinitePlacement;
-        public static Texture2D CWAutoHammer;
-        //--------------------------------------------------
         public static List<Texture2D> CreativeWheelElements;
-        public static List<Texture2D> CWAutoHammerIndex;
+        public static List<Texture2D> CWAutoHammerElements;
         public static List<Texture2D> PaintColors;
         public static List<Texture2D> PaintTools;
         internal static BasePanel BasePanel;
@@ -36,13 +31,12 @@ namespace BuilderEssentials
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWColorPicker"));
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement"));
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer"));
+            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWPlacementAnywhere"));
 
-            CWAutoHammerIndex = new List<Texture2D>(6);
+            CWAutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
-            {
-                Texture2D autoHammerSlope = this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer" + i);
-                CWAutoHammerIndex.Add(autoHammerSlope);
-            }
+                CWAutoHammerElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer" + i));
+
             PaintColors = new List<Texture2D>();
             for (int i = 0; i < 31; i++)
                 PaintColors.Add(this.GetTexture("UI/Elements/Paint/Paint" + i));
