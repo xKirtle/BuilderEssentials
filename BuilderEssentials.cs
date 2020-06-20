@@ -14,9 +14,12 @@ namespace BuilderEssentials
     {
         public static Texture2D BuildingModeOff;
         public static Texture2D BuildingModeOn;
+        //-------------------------------------------------
         public static Texture2D CWColorPicker;
         public static Texture2D CWInfinitePlacement;
         public static Texture2D CWAutoHammer;
+        //--------------------------------------------------
+        public static List<Texture2D> CreativeWheelElements;
         public static List<Texture2D> CWAutoHammerIndex;
         public static List<Texture2D> PaintColors;
         public static List<Texture2D> PaintTools;
@@ -26,11 +29,14 @@ namespace BuilderEssentials
 
         public void LoadTextures()
         {
-            BuildingModeOff = this.GetTexture("UI/Elements/BuildingModeOff");
             BuildingModeOn = this.GetTexture("UI/Elements/BuildingModeOn");
-            CWColorPicker = this.GetTexture("UI/Elements/CreativeWheel/CWColorPicker");
-            CWInfinitePlacement = this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement");
-            CWAutoHammer = this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer");
+            BuildingModeOff = this.GetTexture("UI/Elements/BuildingModeOff");
+
+            CreativeWheelElements = new List<Texture2D>();
+            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWColorPicker"));
+            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement"));
+            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer"));
+
             CWAutoHammerIndex = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
             {
@@ -39,17 +45,11 @@ namespace BuilderEssentials
             }
             PaintColors = new List<Texture2D>();
             for (int i = 0; i < 31; i++)
-            {
-                Texture2D tempColor = this.GetTexture("UI/Elements/Paint/Paint" + i);
-                PaintColors.Add(tempColor);
-            }
+                PaintColors.Add(this.GetTexture("UI/Elements/Paint/Paint" + i));
+
             PaintTools = new List<Texture2D>();
             for (int i = 0; i < 3; i++)
-            {
-                Texture2D tempTool = this.GetTexture("UI/Elements/Paint/PaintTool" + i);
-                PaintTools.Add(tempTool);
-            }
-
+                PaintTools.Add(this.GetTexture("UI/Elements/Paint/PaintTool" + i));
         }
 
         public override void Load()

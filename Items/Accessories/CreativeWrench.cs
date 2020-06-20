@@ -50,7 +50,7 @@ namespace BuilderEssentials.Items.Accessories
                 //Thanks direwolf420 for the monstrosity checks
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                     && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
-                    && (!player.mouseInterface || (BasePanel.creativeWheelUIOpen && CreativeWheel.creativeWheel.IsMouseHovering))
+                    && (!player.mouseInterface || (BasePanel.creativeWheelUIOpen && CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering))
                     && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir)
                 {
                     if (++mouseRightTimer == 2)
@@ -101,7 +101,7 @@ namespace BuilderEssentials.Items.Accessories
                         {
                             //Furniture Check
                             //If it is a furniture and has a different frame, item will be changed to the correct frame item
-                            FurnitureFinder.FindFurniture(tile.type, tile, ref item);
+                            FurnitureFinder.FindFurniture(tile, ref item);
 
                             bool isItemInInventory = false;
                             for (int i = 0; i < 50; i++)

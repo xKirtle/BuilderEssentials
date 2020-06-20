@@ -71,7 +71,8 @@ namespace BuilderEssentials.UI
             //CreativeWrench Wheel UI
             if (creativeWheelUIOpen && !isCreativeWheelVisible)
             {
-                creativeWheelPanel = CreativeWheel.CreateCreativeWheelPanel(Main.mouseX, Main.mouseY, this);
+                //creativeWheelPanel = CreativeWheel.CreateCreativeWheelPanel(Main.mouseX, Main.mouseY, this);
+                creativeWheelPanel = CreativeWheelRework.CreateCreativeWheelReworkPanel(Main.mouseX, Main.mouseY, this);
                 isCreativeWheelVisible = true;
             }
             else if (!creativeWheelUIOpen && isCreativeWheelVisible)

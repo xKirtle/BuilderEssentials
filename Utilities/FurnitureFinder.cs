@@ -5,10 +5,10 @@ namespace BuilderEssentials.Utilities
 {
     public class FurnitureFinder
     {
-        public static void FindFurniture(int tileType, Tile tile, ref Item item)
+        public static void FindFurniture(Tile tile, ref Item item)
         {
             //This is gonna take me ages, WIP
-            if (tileType == TileID.Chairs)
+            if (tile.type == TileID.Chairs)
             {
                 switch (tile.frameY / 40)
                 {
@@ -110,7 +110,7 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-            if (tileType == TileID.WorkBenches)
+            if (tile.type == TileID.WorkBenches)
             {
                 switch (tile.frameX / 36)
                 {
@@ -217,7 +217,7 @@ namespace BuilderEssentials.Utilities
 
                 }
             }
-            if (tileType == TileID.Platforms)
+            if (tile.type == TileID.Platforms)
             {
                 switch (tile.frameY / 18)
                 {
@@ -331,8 +331,7 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-            //Chests. Fake chests are 441
-            if (tileType == 21)
+            if (tile.type == 21) //Chests. Fake chests are 441
             {
                 switch (tile.frameX / 36)
                 {
@@ -493,7 +492,7 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-            if (tileType == TileID.DemonAltar)
+            if (tile.type == TileID.DemonAltar)
             {
                 //Maybe add my own item to allow for it to be picked up?
                 switch (tile.frameX / 56)
@@ -502,7 +501,7 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-            if (tileType == TileID.Candles)
+            if (tile.type == TileID.Candles)
             {
                 switch (tile.frameY / 22)
                 {
@@ -603,7 +602,7 @@ namespace BuilderEssentials.Utilities
 
                 }
             }
-            if (tileType == TileID.Chandeliers)
+            if (tile.type == TileID.Chandeliers)
             {
                 switch (tile.frameY / 54)
                 {
@@ -730,7 +729,7 @@ namespace BuilderEssentials.Utilities
 
                 }
             }
-            if (tileType == TileID.HangingLanterns)
+            if (tile.type == TileID.HangingLanterns)
             {
                 switch (tile.frameY / 36)
                 {
@@ -851,7 +850,7 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-            if (tileType == TileID.Beds)
+            if (tile.type == TileID.Beds)
             {
                 switch (tile.frameY / 38)
                 {
@@ -950,7 +949,7 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-            if (tileType == TileID.Pianos)
+            if (tile.type == TileID.Pianos)
             {
                 switch (tile.frameX / 54)
                 {
@@ -1052,7 +1051,7 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-            if (tileType == TileID.Dressers)
+            if (tile.type == TileID.Dressers)
             {
                 switch (tile.frameX / 54)
                 {
@@ -1154,7 +1153,6 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
-
         }
     }
 }
