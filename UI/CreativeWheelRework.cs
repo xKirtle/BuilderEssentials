@@ -100,7 +100,7 @@ namespace BuilderEssentials.UI
                         RemoveHammerLayout();
                     break;
                 case 3: //PlacementAnywhere
-                    Main.NewText("Placement Anywhere: Still in development, currently does nothing!");
+                    //Main.NewText("Placement Anywhere: Still in development, currently does nothing!");
                     break;
             }
 

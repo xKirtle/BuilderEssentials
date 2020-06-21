@@ -64,83 +64,7 @@ namespace BuilderEssentials.Items.Accessories
                 //ItemPicker
                 if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker)
                 && !player.mouseInterface && !Main.playerInventory)
-                {
-                    //Thanks Oli. B for the concept
-                    int posX = Player.tileTargetX;
-                    int posY = Player.tileTargetY;
-                    Tile tile = Main.tile[posX, posY];
-                    Item item = new Item();
-                    bool foundItem = false;
-
-                    if (oldPosX != posX || oldPosY != posY)
-                    {
-                        if (tile.type >= 0 && tile.active())
-                        {
-                            for (int i = 0; i < ItemLoader.ItemCount; i++)
-                            {
-                                item.SetDefaults(i);
-                                if (item.createTile == tile.type)
-                                {
-                                    foundItem = true;
-                                    break;
-                                }
-                            }
-                        }
-                        else if (tile.type >= 0 && tile.wall >= 0)
-                        {
-                            for (int i = 0; i < ItemLoader.ItemCount; i++)
-                            {
-                                item.SetDefaults(i);
-                                if (item.createWall == tile.wall)
-                                {
-                                    foundItem = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        //organize inventory
-                        if (foundItem)
-                        {
-                            //Furniture Check
-                            //If it is a furniture and has a different frame, item will be changed to the correct frame item
-                            FurnitureFinder.FindFurniture(tile, ref item);
-
-                            bool isItemInInventory = false;
-                            for (int i = 0; i < 50; i++)
-                            {
-                                if (player.inventory[i].IsTheSameAs(item))
-                                {
-                                    //Finds item in inventory and switch with selected item
-                                    Item selectedItem = player.inventory[player.selectedItem];
-                                    player.inventory[player.selectedItem] = player.inventory[i];
-                                    player.inventory[i] = selectedItem;
-                                    isItemInInventory = true;
-                                    break;
-                                }
-                            }
-
-                            if (!isItemInInventory)
-                            {
-                                for (int i = 0; i < 50; i++)
-                                {
-                                    if (player.inventory[i].IsAir)
-                                    {
-                                        //Find first air space in inventory and switches selected item to there
-                                        Item selectedItem = player.inventory[player.selectedItem];
-                                        player.inventory[i] = selectedItem;
-
-                                        player.inventory[player.selectedItem] = item;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            oldPosX = posX;
-                            oldPosY = posY;
-                        }
-                    }
-                }
+                    ItemPicker.PickItem(ref oldPosX, ref oldPosY);
 
                 //AutoHammer
                 if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
@@ -148,59 +72,7 @@ namespace BuilderEssentials.Items.Accessories
                 && !Main.playerInventory)
                 {
                     if (!CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
-                    {
-                        //DISABLE USE ON GAME INTERFACES WHEN USER CLICKS ON SETTINGS FOR EXAMPLE
-                        int posX = Player.tileTargetX;
-                        int posY = Player.tileTargetY;
-                        Tile tile = Main.tile[posX, posY];
-
-                        if (tile.type >= 0 && tile.active())
-                        {
-                            switch (modPlayer.autoHammerSelectedIndex)
-                            {
-                                case 0:
-                                    tile.halfBrick(false);
-                                    tile.slope(1);
-                                    break;
-                                case 1:
-                                    tile.halfBrick(false);
-                                    tile.slope(2);
-                                    break;
-                                case 2:
-                                    tile.halfBrick(false);
-                                    tile.slope(3);
-                                    break;
-                                case 3:
-                                    tile.halfBrick(false);
-                                    tile.slope(4);
-                                    break;
-                                case 4:
-                                    tile.slope(0);
-                                    tile.halfBrick(true);
-                                    break;
-                                case 5:
-                                    tile.halfBrick(false);
-                                    tile.slope(0);
-                                    break;
-                            }
-
-                            WorldGen.SquareTileFrame(posX, posY, true);
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                NetMessage.SendTileSquare(-1, posX, posY, 1);
-
-                            if (previousClickedTile != null)
-                            {
-                                if (!previousClickedTile.HasSameSlope(tile) || (oldPosX != posX || oldPosY != posY))
-                                    Main.PlaySound(SoundID.Dig);
-                            }
-                            else
-                                Main.PlaySound(SoundID.Dig);
-
-                            previousClickedTile = tile;
-                            oldPosX = posX;
-                            oldPosY = posY;
-                        }
-                    }
+                        AutoHammer.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile);
                 }
                 else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
                 && !player.inventory[player.selectedItem].IsAir && !player.mouseInterface && !Main.playerInventory)
@@ -211,12 +83,46 @@ namespace BuilderEssentials.Items.Accessories
                         autoHammerAlert = true;
                     }
                 }
+
+                //PlacementAnywhere
+                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere))
+                {
+
+                }
             }
         }
     }
 
+
+    //Infinite Placement Stuff
     public class InfinitePlacementTile : GlobalTile
     {
+        public override bool CanPlace(int i, int j, int type)
+        {
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active())
+            {
+                Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
+                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile);
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
+
+                return true;
+            }
+
+            //Doesn't work for walls?
+            // if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere))// && tile.wall >= 0)
+            // {
+            //     Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
+            //     WorldGen.PlaceWall(Player.tileTargetX, Player.tileTargetY, selectedItem.createWall);
+            //     return true;
+            // }
+
+            return base.CanPlace(i, j, type);
+        }
+
         public override void PlaceInWorld(int i, int j, Item item)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
