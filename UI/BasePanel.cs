@@ -4,6 +4,8 @@ using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BuilderEssentials.Utilities;
+using static BuilderEssentials.BuilderPlayer;
+using System.Collections.Generic;
 
 namespace BuilderEssentials.UI
 {

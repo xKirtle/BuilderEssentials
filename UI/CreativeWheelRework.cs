@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
+using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.UI
 {
@@ -15,7 +16,7 @@ namespace BuilderEssentials.UI
         public static UIPanel CreativeWheelReworkPanel;
         public static float CreativeWheelReworkWidth;
         public static float CreativeWheelReworkHeight;
-        private static List<UIImageButton> CreativeWheelElements;
+        public static List<UIImageButton> CreativeWheelElements;
         private static List<UIImageButton> CreativeWheelHammerElements;
 
         public static UIPanel CreateCreativeWheelReworkPanel(int mouseX, int mouseY, BasePanel basePanel)
@@ -93,7 +94,7 @@ namespace BuilderEssentials.UI
                 case 1: //InfinitePlacement
                     break;
                 case 2: //AutoHammer
-                    if (modPlayer.creativeWheelSelectedIndex.Contains(2))
+                    if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer))
                         CreateHammerLayout(modPlayer.autoHammerSelectedIndex);
                     else
                         RemoveHammerLayout();

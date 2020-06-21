@@ -107,7 +107,7 @@ namespace BuilderEssentials.Items
             {
 
                 bool anyOperationDone = false;
-                //selectedindex + 1 because bytes don't start at 0
+                //selectedindex + 1 because paint bytes don't start at 0
                 switch (modPlayer.paintingToolSelected)
                 {
                     case 0:
@@ -127,12 +127,12 @@ namespace BuilderEssentials.Items
                     case 2:
                         if (pointedTile.color() != 0)
                         {
-                            pointedTile.color((byte)0);
+                            pointedTile.color(0);
                             anyOperationDone = true;
                         }
                         if (pointedTile.wallColor() != 0)
                         {
-                            pointedTile.wallColor((byte)0);
+                            pointedTile.wallColor(0);
                             anyOperationDone = true;
                         }
                         break;

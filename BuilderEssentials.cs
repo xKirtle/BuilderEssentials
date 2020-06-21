@@ -65,7 +65,28 @@ namespace BuilderEssentials
         public override void Unload()
         {
             BasePanel = null;
+            UserInterface = null;
             ToggleBuildingMode = null;
+
+            UnloadTextures();
+        }
+
+        private void UnloadTextures()
+        {
+            BuildingModeOn = null;
+            BuildingModeOff = null;
+
+            for (int i = 0; i < CreativeWheelElements.Count; i++)
+                CreativeWheelElements[i] = null;
+
+            for (int i = 0; i < CWAutoHammerElements.Count; i++)
+                CWAutoHammerElements[i] = null;
+
+            for (int i = 0; i < PaintColors.Count; i++)
+                PaintColors[i] = null;
+
+            for (int i = 0; i < PaintTools.Count; i++)
+                PaintTools[i] = null;
         }
 
         private GameTime _lastUpdateUiGameTime;

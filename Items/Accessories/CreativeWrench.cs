@@ -52,7 +52,7 @@ namespace BuilderEssentials.Items.Accessories
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                     && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
                     && (!player.mouseInterface || (BasePanel.creativeWheelUIOpen && CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering))
-                    && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir)
+                    && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir && !Main.playerInventory)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
@@ -63,7 +63,7 @@ namespace BuilderEssentials.Items.Accessories
 
                 //ItemPicker
                 if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker)
-                && !player.mouseInterface)
+                && !player.mouseInterface && !Main.playerInventory)
                 {
                     //Thanks Oli. B for the concept
                     int posX = Player.tileTargetX;
