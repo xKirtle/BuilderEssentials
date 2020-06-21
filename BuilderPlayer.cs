@@ -64,6 +64,7 @@ namespace BuilderEssentials
             Player.tileRangeY = 4;
             player.showItemIcon = false;
             holdingPaintingTool = false;
+
             //Closing the creative wheel if the held item isn't air
             if (player.whoAmI == Main.myPlayer)
                 if (!player.inventory[player.selectedItem].IsAir)

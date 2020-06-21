@@ -1,7 +1,7 @@
 Builder Essentials is a mod designed to help and improve building in survival (and post Moon Lord / creative).
 
 The main feature is a toggleable secondary accessory system allowing for 5-7 building accessories while being able to go back to your normal accessories, with a press of a key.
-On top of that, this mod adds more useful tools like the Creative Wrench and a Multi Painting Tool!
+On top of that, this mod adds more useful tools like the Creative Wrench, a Multi Painting Tool and set of Crafting Stations!
 
 Default KeyBind to toggle Building Mode is N, be sure to set it up on the configs.
 
@@ -10,5 +10,9 @@ For more info/previews check the mod's Homepage!
 Happy Building! Kirtle
 
 Latest Changelog:
-	- Introduced the Super Painting Tool. A convenient tool that merges all your painting needs. (Requires Infinite Paint Bucket in the inventory)
-	- Code cleanup and fixed a few minor bugs
+	- Crafting Stations sprites have been updated as well as the Super Painting Tool sprites
+	- Completely redone some UI's (code wise) and fixed a few more bugs
+	- Super Painting Tool now works in multiplayer (except for the paint scraper, for now)
+
+
+Sprites are being done by Strunter.

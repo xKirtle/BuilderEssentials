@@ -7,6 +7,10 @@ namespace BuilderEssentials.Items
 {
     class InfinitePaintBucket : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault("Necessary to use the Super Painting Tool");
+        }
         public override void SetDefaults()
         {
             item.height = 20;

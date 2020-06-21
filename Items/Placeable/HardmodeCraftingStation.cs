@@ -10,12 +10,13 @@ namespace BuilderEssentials.Items.Placeable
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Used to craft Hardmode Recipes");
+
         }
 
         public override void SetDefaults()
         {
-            item.width = 32;
-            item.height = 32;
+            item.width = 64;
+            item.height = 64;
             item.maxStack = 99;
             item.useTurn = true;
             item.autoReuse = true;

@@ -9,15 +9,16 @@ namespace BuilderEssentials.Items
 {
     class SuperPaintingTool : ModItem
     {
-        //TODO: ENSURE MULTIPLAYER COMPATIBILITY
+        //TODO: ENSURE MULTIPLAYER COMPATIBILITY (66% done)
+        //TODO: ADD VANILLA PAINT COMPATIBILITY
         public List<int> paints;
         public override void SetDefaults()
         {
             paints = new List<int>();
-            for (int i = 0; i < 27; i++) //Basic && Deep colors
+            for (int i = 0; i < 27; i++) //Basic && Deep colors type
                 paints.Add(1073 + i);
             for (int i = 0; i < 3; i++)
-                paints.Add(1966 + i);   //Extra Effects
+                paints.Add(1966 + i);   //Extra Color Effects type
 
             item.height = 44;
             item.width = 44;
@@ -64,26 +65,40 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (modPlayer.paintingColorSelectedIndex != 30)
+            Tile pointedTile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+
+            if (modPlayer.paintingColorSelectedIndex != 30) //Color selected
             {
                 player.showItemIcon = true;
                 switch (modPlayer.paintingToolSelected)
                 {
                     case 0:
-                        player.showItemIcon2 = ItemID.SpectrePaintbrush;
+                        if (pointedTile.type >= 0 && pointedTile.active())
+                            player.showItemIcon2 = ItemID.SpectrePaintbrush;
                         break;
                     case 1:
-                        player.showItemIcon2 = ItemID.SpectrePaintRoller;
+                        if (pointedTile.type >= 0 && pointedTile.wall > 0)
+                            player.showItemIcon2 = ItemID.SpectrePaintRoller;
                         break;
                     case 2:
-                        player.showItemIcon2 = ItemID.SpectrePaintScraper;
+                        if (pointedTile.color() != 0)
+                            player.showItemIcon2 = ItemID.SpectrePaintScraper;
                         break;
                 }
             }
-            else if (modPlayer.paintingColorSelectedIndex == 30 && modPlayer.paintingToolSelected == 2)
+            else
             {
-                player.showItemIcon = true;
-                player.showItemIcon2 = ItemID.SpectrePaintScraper;
+                if (modPlayer.paintingColorSelectedIndex == 30 && modPlayer.paintingToolSelected == 2)
+                {
+                    if (pointedTile.color() != 0)
+                    {
+                        player.showItemIcon = true;
+                        player.showItemIcon2 = ItemID.SpectrePaintScraper;
+                    }
+                }
+
+                player.showItemIcon = false;
+                //player.showItemIcon2 = 0;
             }
         }
 
@@ -103,7 +118,9 @@ namespace BuilderEssentials.Items
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY;
             Tile pointedTile = Main.tile[posX, posY];
-            if (foundModdedPaint && !BasePanel.paintingPanel.IsMouseHovering)
+            //TODO: Fix below
+            //If user tries to use the tool without opening the UI first it won't work since paintingPanel is null and I can't check if mouse is hovering
+            if (foundModdedPaint && BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering)
             {
 
                 bool anyOperationDone = false;

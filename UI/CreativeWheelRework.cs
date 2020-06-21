@@ -33,7 +33,7 @@ namespace BuilderEssentials.UI
             CreativeWheelReworkPanel.Height.Set(CreativeWheelReworkHeight, 0);
             CreativeWheelReworkPanel.Left.Set(mouseX - CreativeWheelReworkWidth / 2, 0); //mouseX - this.width/2
             CreativeWheelReworkPanel.Top.Set(mouseY - CreativeWheelReworkHeight / 2, 0); //mouseY - this.height/2
-            CreativeWheelReworkPanel.BorderColor = Color.Green; //Color.Transparent;
+            CreativeWheelReworkPanel.BorderColor = Color.Transparent; //Color.Transparent;
             CreativeWheelReworkPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
@@ -100,6 +100,7 @@ namespace BuilderEssentials.UI
                         RemoveHammerLayout();
                     break;
                 case 3: //PlacementAnywhere
+                    Main.NewText("Placement Anywhere: Still in development, currently does nothing!");
                     break;
             }
 
