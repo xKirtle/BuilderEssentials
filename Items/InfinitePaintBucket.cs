@@ -28,7 +28,6 @@ namespace BuilderEssentials.Items
 
         public override void AddRecipes()
         {
-            //TODO: FIGURE OUT A RECIPE THAT FITS FOR THE 1ST DOWNED MECHANICAL BOSS
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.DeepRedPaint, 999);
             recipe.AddIngredient(ItemID.DeepGreenPaint, 999);

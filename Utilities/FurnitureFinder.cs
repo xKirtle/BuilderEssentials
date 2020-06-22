@@ -3,7 +3,7 @@ using Terraria.ID;
 
 namespace BuilderEssentials.Utilities
 {
-    public class FurnitureFinder
+    public static class FurnitureFinder
     {
         public static void FindFurniture(Tile tile, ref Item item)
         {
@@ -1165,6 +1165,102 @@ namespace BuilderEssentials.Utilities
                         break;
                     case 2:
                         item.SetDefaults(ItemID.EbonwoodSofa);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.RichMahoganySofa);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.PearlwoodSofa);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.ShadewoodSofa);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.BlueDungeonSofa);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.GreenDungeonSofa);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.PinkDungeonSofa);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.GoldenSofa);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.ObsidianSofa);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.BoneSofa);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.CactusSofa);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.SpookySofa);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.SkywareSofa);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.HoneySofa);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.SteampunkSofa);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.MushroomSofa);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.GlassSofa);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.PumpkinSofa);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.LihzahrdSofa);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.PalmWoodBench);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.PalmWoodSofa);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.MushroomBench);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.BorealWoodSofa);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.SlimeSofa);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.FleshSofa);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.FrozenSofa);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.LivingWoodSofa);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.MartianSofa);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.MeteoriteSofa);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.GraniteSofa);
+                        break;
+                    case 32:
+                        item.SetDefaults(ItemID.MarbleSofa);
+                        break;
+                    case 33:
+                        item.SetDefaults(ItemID.CrystalSofaHowDoesThatEvenWork);
+                        break;
+                    case 34:
+                        item.SetDefaults(ItemID.DynastySofa);
                         break;
                 }
             }

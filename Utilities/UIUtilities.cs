@@ -2,7 +2,7 @@ using Terraria;
 
 namespace BuilderEssentials.Utilities
 {
-    public class UIUtilities
+    public static class UIUtilities
     {
         public static bool IsUIAvailable()
         {

@@ -32,7 +32,6 @@ namespace BuilderEssentials.Items.Accessories
         Tile previousClickedTile;
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            //TODO: SEPARATE FUNCTIONALITY INTO SEPARATE FILES
             if (player.whoAmI == Main.myPlayer)
             {
                 modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
@@ -46,7 +45,6 @@ namespace BuilderEssentials.Items.Accessories
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
 
-                //TODO: Make a static bool in Utilities that evaluates if it is possible to open a UI to improve readability
                 //Thanks direwolf420 for the monstrosity checks
                 //Right click timer
                 if (Main.mouseRight && UIUtilities.IsUIAvailable()

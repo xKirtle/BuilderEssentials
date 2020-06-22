@@ -147,6 +147,10 @@ namespace BuilderEssentials
                 BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOn);
             else
                 BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOff);
+
+            //Loads (or populates) all lists on enter world
+            BuildingMode.BuildingModeAccessoriesToggle();
+            BuildingMode.BuildingModeAccessoriesToggle();
         }
     }
 }
