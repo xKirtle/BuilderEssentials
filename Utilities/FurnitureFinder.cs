@@ -1264,6 +1264,207 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
+            if (tile.type == TileID.Bathtubs)
+            {
+                switch (tile.frameY / 36)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Bathtub);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.CactusBathtub);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.EbonwoodBathtub);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.FleshBathtub);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.GlassBathtub);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.FrozenBathtub);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.RichMahoganyBathtub);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.PearlwoodBathtub);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.LihzahrdBathtub);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.SkywareBathtub);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.SpookyBathtub);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.HoneyBathtub);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.SteampunkBathtub);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.LivingWoodBathtub);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.ShadewoodBathtub);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.BoneBathtub);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.DynastyBathtub);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.PalmWoodBathtub);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.MushroomBathtub);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.BorealWoodBathtub);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.SlimeBathtub);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.BlueDungeonBathtub);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.GreenDungeonBathtub);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.PinkDungeonBathtub);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.PumpkinBathtub);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.ObsidianBathtub);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.GoldenBathtub);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MartianBathtub);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.MeteoriteBathtub);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.GraniteBathtub);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.MarbleBathtub);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.CrystalBathtub);
+                        break;
+                }
+            }
+            if (tile.type == TileID.Lamps)
+            {
+                switch (tile.frameY / 54)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.TikiTorch);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.CactusLamp);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.EbonwoodLamp);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.FleshLamp);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.GlassLamp);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.FrozenLamp);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.RichMahoganyLamp);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.PearlwoodLamp);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.LihzahrdLamp);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.SkywareLamp);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.SpookyLamp);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.HoneyLamp);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.SteampunkLamp);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.LivingWoodLamp);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.ShadewoodLamp);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.GoldenLamp);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.BoneLamp);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.DynastyLamp);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.PalmWoodLamp);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.MushroomLamp);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.BorealWoodLamp);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.SlimeLamp);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.PumpkinLamp);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.ObsidianLamp);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.BlueDungeonLamp);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.GreenDungeonLamp);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.PinkDungeonLamp);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MartianLamppost);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.MeteoriteLamp);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.MarbleLamp);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.CrystalLamp);
+                        break;
+                }
+            }
         }
     }
 }
