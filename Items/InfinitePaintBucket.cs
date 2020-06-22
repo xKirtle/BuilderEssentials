@@ -30,10 +30,10 @@ namespace BuilderEssentials.Items
         {
             //TODO: FIGURE OUT A RECIPE THAT FITS FOR THE 1ST DOWNED MECHANICAL BOSS
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.DeepRedPaint, 50);
-            recipe.AddIngredient(ItemID.DeepGreenPaint, 50);
-            recipe.AddIngredient(ItemID.DeepBluePaint, 50);
-            recipe.AddIngredient(ItemID.NegativePaint, 1);
+            recipe.AddIngredient(ItemID.DeepRedPaint, 999);
+            recipe.AddIngredient(ItemID.DeepGreenPaint, 999);
+            recipe.AddIngredient(ItemID.DeepBluePaint, 999);
+            recipe.AddIngredient(ItemID.NegativePaint, 999);
             recipe.AddTile(TileID.DyeVat);
             recipe.SetResult(this);
             recipe.AddRecipe();

@@ -15,7 +15,7 @@ namespace BuilderEssentials.Utilities
                 !Main.editChest &&
                 !Main.blockInput &&
                 !Main.gamePaused &&
-                !player.mouseInterface &&
+                //!player.mouseInterface && //Causing me issues until I add specific UI's to here
                 !Main.mapFullscreen &&
                 !Main.HoveringOverAnNPC &&
                 !player.showItemIcon &&

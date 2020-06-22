@@ -13,6 +13,8 @@ Latest Changelog:
 	- Crafting Stations sprites have been updated as well as the Super Painting Tool sprites
 	- Completely redone some UI's (code wise) and fixed a few more bugs
 	- Super Painting Tool now works in multiplayer (except for the paint scraper, for now)
+	- Super Painting Tool now supports Vanilla Paints
+	- Added the Placement Anywhere feature to the Creative Wrench
 
 
 Sprites are being done by Strunter.

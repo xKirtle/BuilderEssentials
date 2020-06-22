@@ -50,8 +50,8 @@ namespace BuilderEssentials.Items.Accessories
                 //Thanks direwolf420 for the monstrosity checks
                 //Right click timer
                 if (Main.mouseRight && UIUtilities.IsUIAvailable()
-                    && (!player.mouseInterface || (BasePanel.creativeWheelUIOpen && CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering))
-                    && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir && !Main.playerInventory)
+                    && (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
+                    && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
