@@ -1153,6 +1153,21 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
+            if (tile.type == 89) //Sofas
+            {
+                switch (tile.frameX / 54)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Bench);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.Sofa);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.EbonwoodSofa);
+                        break;
+                }
+            }
         }
     }
 }

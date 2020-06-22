@@ -12,6 +12,7 @@ namespace BuilderEssentials.Items
         //TODO: ENSURE MULTIPLAYER COMPATIBILITY (66% done)
         //TODO: ADD VANILLA PAINT COMPATIBILITY
         public List<int> paints;
+        bool foundModdedPaint;
         public override void SetDefaults()
         {
             paints = new List<int>();
@@ -19,6 +20,7 @@ namespace BuilderEssentials.Items
                 paints.Add(1073 + i);
             for (int i = 0; i < 3; i++)
                 paints.Add(1966 + i);   //Extra Color Effects type
+            foundModdedPaint = false;
 
             item.height = 44;
             item.width = 44;
@@ -105,10 +107,10 @@ namespace BuilderEssentials.Items
         public override bool CanUseItem(Player player)
         {
             BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
-            bool foundModdedPaint = false;
+            foundModdedPaint = false;
             for (int i = 0; i < player.inventory.Length; i++)
             {
-                if (player.inventory[i].type == mod.ItemType("InfinitePaintBucket"))
+                if (player.inventory[i].type == ItemType<InfinitePaintBucket>())
                 {
                     foundModdedPaint = true;
                     break;
@@ -120,25 +122,32 @@ namespace BuilderEssentials.Items
             Tile pointedTile = Main.tile[posX, posY];
             //TODO: Fix below
             //If user tries to use the tool without opening the UI first it won't work since paintingPanel is null and I can't check if mouse is hovering
-            if (foundModdedPaint && BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering)
+            if (BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering)
             {
 
                 bool anyOperationDone = false;
+                byte selectedColor = (byte)(modPlayer.paintingColorSelectedIndex + 1);
                 //selectedindex + 1 because paint bytes don't start at 0
                 switch (modPlayer.paintingToolSelected)
                 {
                     case 0:
-                        if (pointedTile.color() != (modPlayer.paintingColorSelectedIndex + 1) && modPlayer.paintingColorSelectedIndex != 30)
+                        if (pointedTile.color() != selectedColor && selectedColor != 31)
                         {
-                            pointedTile.color((byte)(modPlayer.paintingColorSelectedIndex + 1));
-                            anyOperationDone = true;
+                            if (CheckIfPaintIsInInventoryAndUseIt(selectedColor))
+                            {
+                                pointedTile.color(selectedColor);
+                                anyOperationDone = true;
+                            }
                         }
                         break;
                     case 1:
-                        if (pointedTile.wallColor() != (modPlayer.paintingColorSelectedIndex + 1) && modPlayer.paintingColorSelectedIndex != 30)
+                        if (pointedTile.wallColor() != selectedColor && selectedColor != 31)
                         {
-                            pointedTile.wallColor((byte)(modPlayer.paintingColorSelectedIndex + 1));
-                            anyOperationDone = true;
+                            if (CheckIfPaintIsInInventoryAndUseIt(selectedColor))
+                            {
+                                pointedTile.wallColor(selectedColor);
+                                anyOperationDone = true;
+                            }
                         }
                         break;
                     case 2:
@@ -155,15 +164,49 @@ namespace BuilderEssentials.Items
                         break;
                 }
 
-                if (anyOperationDone)
-                {
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        NetMessage.SendTileSquare(-1, posX, posY, 1); //syncs painting tiles and walls, not the scraper
-                    }
-                }
+                if (anyOperationDone && Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendTileSquare(-1, posX, posY, 1); //syncs painting tiles and walls, not the scraper
             }
             return false;
+        }
+
+        private bool CheckIfPaintIsInInventoryAndUseIt(byte paintColor)
+        {
+            if (!foundModdedPaint)
+            {
+                List<Item> paintInInventory = new List<Item>();
+                //Grabs all paint in the inventory to check if player is trying to use it
+                foreach (Item item in Main.LocalPlayer.inventory)
+                {
+                    if (paints.Contains(item.type))
+                        paintInInventory.Add(item);
+                }
+
+                foreach (Item item in paintInInventory)
+                {
+                    //Check if selected color byte (converted to int item.type) is present in the paintInInventory
+                    if (PaintByteToItemType(paintColor) == item.type)
+                    {
+                        item.stack--;
+                        return true;
+                    }
+                }
+
+                //No result found and InifnitePaintBucket isn't in the inventory
+                return false;
+            }
+            else //InfinitePaintBucket is in the inventory
+                return true;
+
+            int PaintByteToItemType(byte color)
+            {
+                if (color <= 27)
+                    return color + 1072;
+                else if (color >= 28 && color <= 30)
+                    return color + 1938;
+
+                return 31;
+            }
         }
 
         public override void AddRecipes()

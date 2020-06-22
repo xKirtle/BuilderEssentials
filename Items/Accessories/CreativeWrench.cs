@@ -46,8 +46,8 @@ namespace BuilderEssentials.Items.Accessories
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
 
+                //TODO: Make a static bool in Utilities that evaluates if it is possible to open a UI to improve readability
                 //Thanks direwolf420 for the monstrosity checks
-
                 //Right click timer
                 if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
                     && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
@@ -104,7 +104,7 @@ namespace BuilderEssentials.Items.Accessories
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active())
             {
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
-                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile);
+                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, false, -1, selectedItem.placeStyle);
 
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
