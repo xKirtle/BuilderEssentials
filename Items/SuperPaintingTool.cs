@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BuilderEssentials.UI;
+using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,7 +11,6 @@ namespace BuilderEssentials.Items
     class SuperPaintingTool : ModItem
     {
         //TODO: ENSURE MULTIPLAYER COMPATIBILITY (66% done)
-        //TODO: ADD VANILLA PAINT COMPATIBILITY
         public List<int> paints;
         bool foundModdedPaint;
         public override void SetDefaults()
@@ -50,10 +50,10 @@ namespace BuilderEssentials.Items
                     BasePanel.paintingUIOpen = false;
                 }
 
-                if (Main.mouseRight && player.talkNPC == -1 && !Main.HoveringOverAnNPC && !player.showItemIcon && !Main.editSign
-                        && !Main.editChest && !Main.blockInput && !player.dead && !Main.gamePaused && Main.hasFocus && !player.CCed
+                if (Main.mouseRight && UIUtilities.IsUIAvailable()
                         && (!player.mouseInterface || (BasePanel.paintingUIOpen && BasePanel.paintingPanel.IsMouseHovering))
-                        && player.inventory[player.selectedItem].IsTheSameAs(item) && !BasePanel.creativeWheelUIOpen)
+                        && player.inventory[player.selectedItem].IsTheSameAs(item)
+                        && !BasePanel.creativeWheelUIOpen)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.paintingUIOpen = !BasePanel.paintingUIOpen;
@@ -100,7 +100,6 @@ namespace BuilderEssentials.Items
                 }
 
                 player.showItemIcon = false;
-                //player.showItemIcon2 = 0;
             }
         }
 
