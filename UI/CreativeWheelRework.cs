@@ -68,9 +68,13 @@ namespace BuilderEssentials.UI
             //Correct display of previously toggled settings
             foreach (int selectedItem in modPlayer.creativeWheelSelectedIndex)
             {
-                CreativeWheelElements[selectedItem].SetVisibility(1f, 1f);
-                if (selectedItem == 2) //AutoHammer
-                    CreateHammerLayout(modPlayer.autoHammerSelectedIndex);
+                //Required because only the first 4 indexes correspond to actual CW Elements
+                if (selectedItem < 4)
+                {
+                    CreativeWheelElements[selectedItem].SetVisibility(1f, 1f);
+                    if (selectedItem == 2) //AutoHammer
+                        CreateHammerLayout(modPlayer.autoHammerSelectedIndex);
+                }
             }
 
             //Append them to the Main Panel
@@ -100,7 +104,6 @@ namespace BuilderEssentials.UI
                         RemoveHammerLayout();
                     break;
                 case 3: //PlacementAnywhere
-                    //Main.NewText("Placement Anywhere: Still in development, currently does nothing!");
                     break;
             }
 
@@ -110,7 +113,11 @@ namespace BuilderEssentials.UI
                     CreativeWheelElements[i].SetVisibility(.75f, .4f);
 
                 foreach (int activeElement in modPlayer.creativeWheelSelectedIndex)
-                    CreativeWheelElements[activeElement].SetVisibility(1f, 1f);
+                {
+                    //Only indexes smaller than 4 corresponde to actual CW Elements
+                    if (activeElement < 4)
+                        CreativeWheelElements[activeElement].SetVisibility(1f, 1f);
+                }
             }
         }
 

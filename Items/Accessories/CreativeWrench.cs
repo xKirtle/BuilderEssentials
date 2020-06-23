@@ -90,14 +90,14 @@ namespace BuilderEssentials.Items.Accessories
         }
     }
 
-
-    //Infinite Placement Stuff
     public class InfinitePlacementTile : GlobalTile
     {
         public override bool CanPlace(int i, int j, int type)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+
+            //Placement Anywhere
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active())
             {
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
@@ -120,10 +120,15 @@ namespace BuilderEssentials.Items.Accessories
             return base.CanPlace(i, j, type);
         }
 
+        //Infinite Placement Stuff
         public override void PlaceInWorld(int i, int j, Item item)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            item.consumable = modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ? false : true;
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
+            || modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+                item.consumable = false;
+            else
+                item.consumable = true;
         }
     }
 
@@ -132,7 +137,11 @@ namespace BuilderEssentials.Items.Accessories
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            item.consumable = modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ? false : true;
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
+            || modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
+                item.consumable = false;
+            else
+                item.consumable = true;
         }
     }
 }

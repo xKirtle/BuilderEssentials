@@ -29,7 +29,10 @@ namespace BuilderEssentials
             ItemPicker,
             InfinitePlacement,
             AutoHammer,
-            PlacementAnywhere
+            PlacementAnywhere,
+
+            //Non important order (independent items)
+            InfinityUpgrade
         }
 
 
@@ -67,6 +70,7 @@ namespace BuilderEssentials
 
             //Closing the creative wheel if the held item isn't air
             if (player.whoAmI == Main.myPlayer)
+            {
                 if (!player.inventory[player.selectedItem].IsAir)
                 {
                     if (BasePanel.creativeWheelPanel != null)
@@ -76,6 +80,11 @@ namespace BuilderEssentials
                         BasePanel.isCreativeWheelVisible = false;
                     }
                 }
+
+                if (creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
+                && !player.HasBuff(mod.BuffType("InfinitePlacementBuff")))
+                    creativeWheelSelectedIndex.Remove((int)CreativeWheelItem.InfinityUpgrade);
+            }
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)

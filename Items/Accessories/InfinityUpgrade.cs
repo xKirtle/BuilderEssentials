@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Items.Accessories
 {
@@ -13,7 +14,7 @@ namespace BuilderEssentials.Items.Accessories
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Infinity Upgrade (Disabled temporarily)");
+            DisplayName.SetDefault("Infinity Upgrade");
             Tooltip.SetDefault("Allows infinite placement");
         }
 
@@ -29,23 +30,22 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            //player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+            player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
         }
 
         public override void AddRecipes()
         {
             //Not really worried about balancing at this point
-
-
-            //ModRecipe modRecipe = new ModRecipe(mod);
-            //modRecipe.AddIngredient(ItemID.LunarBar, 40);
-            //modRecipe.AddIngredient(ItemID.FragmentNebula, 20);
-            //modRecipe.AddIngredient(ItemID.FragmentSolar, 20);
-            //modRecipe.AddIngredient(ItemID.FragmentStardust, 20);
-            //modRecipe.AddIngredient(ItemID.FragmentVortex, 20);
-            //modRecipe.AddTile(TileID.LunarCraftingStation);
-            //modRecipe.SetResult(this);
-            //modRecipe.AddRecipe();
+            ModRecipe modRecipe = new ModRecipe(mod);
+            modRecipe.AddIngredient(ItemID.LunarBar, 40);
+            modRecipe.AddIngredient(ItemID.FragmentNebula, 20);
+            modRecipe.AddIngredient(ItemID.FragmentSolar, 20);
+            modRecipe.AddIngredient(ItemID.FragmentStardust, 20);
+            modRecipe.AddIngredient(ItemID.FragmentVortex, 20);
+            modRecipe.AddTile(TileID.LunarCraftingStation);
+            modRecipe.SetResult(this);
+            modRecipe.AddRecipe();
         }
     }
 }

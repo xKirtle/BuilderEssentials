@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
+using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Buffs
 {
@@ -17,7 +18,10 @@ namespace BuilderEssentials.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            //player.GetModPlayer<BuilderPlayer>().InfinitePlacement = true;
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+
+            if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+                modPlayer.creativeWheelSelectedIndex.Add((int)CreativeWheelItem.InfinityUpgrade);
         }
     }
 }

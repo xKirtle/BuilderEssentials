@@ -107,7 +107,7 @@ namespace BuilderEssentials.UI
                     hoverText = null;
                 }
 
-                //Don't need to actual list itself, just a reference of it
+                //Don't need the actual list itself, just a reference of it
                 var elementsList = CreativeWheelRework.CreativeWheelElements;
                 string text = "";
                 foreach (var element in hoveredElements)
