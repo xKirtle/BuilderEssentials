@@ -88,6 +88,17 @@ namespace BuilderEssentials.Items.Accessories
                 }
             }
         }
+
+        public override void AddRecipes()
+        {
+            //Should it have a recipe or only be obtainable with cheats?
+            ModRecipe modRecipe = new ModRecipe(mod);
+            modRecipe.AddIngredient(mod.GetItem("InfiniteWrench"));
+            modRecipe.AddIngredient(ItemID.LunarBar, 50);
+            modRecipe.AddTile(TileID.LunarCraftingStation);
+            modRecipe.SetResult(this);
+            modRecipe.AddRecipe();
+        }
     }
 
     public class InfinitePlacementTile : GlobalTile

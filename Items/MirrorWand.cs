@@ -1,4 +1,7 @@
+using System;
 using BuilderEssentials.UI;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -27,17 +30,46 @@ namespace BuilderEssentials.Items
             item.noUseGraphic = true;
         }
 
-        public override bool AltFunctionUse(Player player) //Right click
+        private int oneTimeCheck = 0;
+        // int startTileX;
+        // int startTileY;
+        // int endTileX;
+        // int endTileY;
+
+        public static Vector2 start;
+        public static Vector2 end;
+        public static bool OperationComplete = false;
+        public override bool AltFunctionUse(Player player) //Right click selects are that will mirror stuff
+        {
+            if (++oneTimeCheck == 1 && start.X != Player.tileTargetX && start.Y != Player.tileTargetY)
+            {
+                start.X = Player.tileTargetX;
+                start.Y = Player.tileTargetY;
+            }
+            OperationComplete = false;
+            return false;
+        }
+
+        public override void HoldItem(Player player)
         {
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY;
             Tile tile = Main.tile[posX, posY];
+            //-----------------------------
 
-            //Draw Semi Transparent "Tiles"?
+            if (Main.mouseRight)
+            {
+                end.X = Player.tileTargetX;
+                end.Y = Player.tileTargetY;
+            }
 
-            return true;
+            if (Main.mouseRightRelease && oneTimeCheck > 1)
+            {
+                float some = Vector2.Distance(start, end);
+                oneTimeCheck = 0;
+                Main.NewText("Start Coordinate: " + start.X + ", " + start.Y + " / End Coordinate: " + end.X + ", " + end.Y);
+                OperationComplete = true;
+            }
         }
-
-
     }
 }

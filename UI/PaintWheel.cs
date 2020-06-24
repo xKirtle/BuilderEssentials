@@ -39,11 +39,12 @@ namespace BuilderEssentials.UI
             for (int i = 0; i < colorsList.Count; i++)
                 paintWheel.Append(colorsList[i]);
 
+            //Loading the color that was saved in modPlayer
             ColorSelected(modPlayer.paintingColorSelectedIndex, true);
 
             for (int i = 0; i < paintToolsList.Count; i++)
                 paintWheel.Append(paintToolsList[i]);
-
+            //Loading the selected tool, default is 0
             ToolSelected(modPlayer.paintingToolSelected);
 
             basePanel.Append(paintWheel);
@@ -75,6 +76,8 @@ namespace BuilderEssentials.UI
             //     colorsList[i].Top.Set((float)y, 0f);
             //     colorsList[i].SetVisibility(.75f, .4f);
             // }
+
+            //Could do all of the semi circles code in one loop but this adds readability, in my opinion
 
             float colorSize = 22f;
             //Define a semi-circle programatically for basic colors

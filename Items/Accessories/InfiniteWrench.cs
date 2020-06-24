@@ -11,10 +11,9 @@ namespace BuilderEssentials.Items.Accessories
 {
     class InfiniteWrench : ModItem
     {
-        //Made this item sort of obsolete with CreativeWrench/CreativeWheel?
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Infinite Wrench (Disabled temporarily)");
+            DisplayName.SetDefault("Infinite Wrench");
             Tooltip.SetDefault("Allows infinite range and fast placement");
         }
 
@@ -30,12 +29,12 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            //player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
-            //player.blockRange += 55;
-            //player.wallSpeed += 10;
-            //player.tileSpeed += 50;
-            //Player.tileRangeX = 65;
-            //Player.tileRangeY = 55;
+            player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
+            player.blockRange += 55;
+            player.wallSpeed += 10;
+            player.tileSpeed += 50;
+            Player.tileRangeX = 65;
+            Player.tileRangeY = 55;
         }
 
         public override void AddRecipes()
@@ -43,12 +42,12 @@ namespace BuilderEssentials.Items.Accessories
             //Not really worried about balancing at this point
 
 
-            //ModRecipe modRecipe = new ModRecipe(mod);
-            //modRecipe.AddIngredient(mod.GetItem("InfinityUpgrade"), 1);
-            //modRecipe.AddIngredient(mod.GetItem("PlacementWrench"), 1);
-            //modRecipe.AddTile(TileID.TinkerersWorkbench);
-            //modRecipe.SetResult(this);
-            //modRecipe.AddRecipe();
+            ModRecipe modRecipe = new ModRecipe(mod);
+            modRecipe.AddIngredient(mod.GetItem("InfinityUpgrade"), 1);
+            modRecipe.AddIngredient(mod.GetItem("PlacementWrench"), 1);
+            modRecipe.AddTile(TileID.TinkerersWorkbench);
+            modRecipe.SetResult(this);
+            modRecipe.AddRecipe();
         }
     }
 }

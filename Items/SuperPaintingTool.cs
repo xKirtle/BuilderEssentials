@@ -55,6 +55,7 @@ namespace BuilderEssentials.Items
                         && player.inventory[player.selectedItem].IsTheSameAs(item)
                         && !BasePanel.creativeWheelUIOpen)
                 {
+                    //Maybe use altFunction hook to open the UI?
                     if (++mouseRightTimer == 2)
                         BasePanel.paintingUIOpen = !BasePanel.paintingUIOpen;
                 }

@@ -30,7 +30,6 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
             player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
         }
 
