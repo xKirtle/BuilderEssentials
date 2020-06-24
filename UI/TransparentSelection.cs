@@ -9,68 +9,59 @@ namespace BuilderEssentials.UI
 {
     public class TransparentSelection : UIElement
     {
-        Vector2 areaOfSelection;
-
-        public TransparentSelection()
-        {
-            //this.areaOfSelection = vector;
-        }
+        bool selectionDone = false;
+        float distanceX;
+        float distanceY;
 
         public override void Update(GameTime gameTime)
         {
-            this.RecalculateChildren();
-            this.Recalculate();
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Weird behaviour??
-            //Coordinates can be wrong sometimes, could be what comes from Mirro Wand
-            Vector2 start = MirrorWand.start;
-            Vector2 end = MirrorWand.end;
-            if (start.X != 0 && start.Y != 0 && MirrorWand.OperationComplete)
+            if ((MirrorWand.start.X != 0 || MirrorWand.start.Y != 0))
             {
                 Texture2D texture = Main.extraTexture[2];
                 Rectangle value = new Rectangle(0, 0, 16, 16);
                 Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
-                Vector2 position = new Vector2(start.X, start.Y) * 16 - Main.screenPosition;
-                Vector2 position2 = new Vector2(start.X, start.Y) * 16 - Main.screenPosition;
+                Vector2 position = new Vector2(MirrorWand.start.X, MirrorWand.start.Y) * 16 - Main.screenPosition;
+
+                //TODO: ADD ALL 3 OTHER DIRECTIONS
 
                 //Down Right
-                if (start.X < end.X && start.Y < end.Y)
+                if ((MirrorWand.start.X < MirrorWand.end.X && MirrorWand.start.Y < MirrorWand.end.Y))
                 {
-                    float distanceX = (end.X - start.X) + 1;
-                    float distanceY = (end.Y - start.Y) + 1;
-                    Main.NewText("X: " + distanceX + " " + "y: " + distanceY);
-                    Main.NewText(distanceX * distanceY);
+                    distanceX = (MirrorWand.end.X - MirrorWand.start.X);
+                    distanceY = (MirrorWand.end.Y - MirrorWand.start.Y);
+
+                    Main.NewText(distanceX + " " + distanceY);
 
                     //X Axis
-                    for (int i = 0; i < distanceX; i++)
+                    for (int i = 0; i < distanceX + 1; i++)
                     {
                         //Top X
-                        position.Y = start.Y;
+                        position = new Vector2(MirrorWand.start.X + i, MirrorWand.start.Y) * 16 - Main.screenPosition;
                         spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
                         //Bottom X
-                        position.Y = start.Y + distanceY * 16;
+                        position = new Vector2(MirrorWand.start.X + i, MirrorWand.start.Y + distanceY) * 16 - Main.screenPosition;
                         spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-                        position.X += 16;
                     }
 
                     //Y Axis
-                    for (int i = 0; i < distanceY; i++)
+                    for (int i = 0; i < distanceY + 1; i++)
                     {
                         //Left Y
-                        position2.X = start.X;
-                        spriteBatch.Draw(texture, position2, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        position = new Vector2(MirrorWand.start.X, MirrorWand.start.Y + i) * 16 - Main.screenPosition;
+                        spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
                         //Right Y
-                        position2.X = start.X + distanceX * 16;
-                        spriteBatch.Draw(texture, position2, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-                        position2.Y += 16;
+                        position = new Vector2(MirrorWand.start.X + distanceX, MirrorWand.start.Y + i) * 16 - Main.screenPosition;
+                        spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
+
+                    selectionDone = true;
                 }
             }
         }

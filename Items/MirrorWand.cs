@@ -10,6 +10,10 @@ namespace BuilderEssentials.Items
 {
     class MirrorWand : ModItem
     {
+        private bool firstValue = false;
+        public static bool OperationComplete = false;
+        public static Vector2 start;
+        public static Vector2 end;
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Mirrors everything!");
@@ -30,32 +34,22 @@ namespace BuilderEssentials.Items
             item.noUseGraphic = true;
         }
 
-        private int oneTimeCheck = 0;
-        // int startTileX;
-        // int startTileY;
-        // int endTileX;
-        // int endTileY;
-
-        public static Vector2 start;
-        public static Vector2 end;
-        public static bool OperationComplete = false;
-        public override bool AltFunctionUse(Player player) //Right click selects are that will mirror stuff
+        public override bool AltFunctionUse(Player player) //Right click selects area that will mirror stuff
         {
-            if (++oneTimeCheck == 1 && start.X != Player.tileTargetX && start.Y != Player.tileTargetY)
-            {
-                start.X = Player.tileTargetX;
-                start.Y = Player.tileTargetY;
-            }
-            OperationComplete = false;
+            if (OperationComplete)
+                OperationComplete = false;
+
             return false;
         }
 
         public override void HoldItem(Player player)
         {
-            int posX = Player.tileTargetX;
-            int posY = Player.tileTargetY;
-            Tile tile = Main.tile[posX, posY];
-            //-----------------------------
+            if (!firstValue && (start.X != Player.tileTargetX || start.Y != Player.tileTargetY) && !OperationComplete)
+            {
+                start.X = Player.tileTargetX;
+                start.Y = Player.tileTargetY;
+                firstValue = true;
+            }
 
             if (Main.mouseRight)
             {
@@ -63,11 +57,9 @@ namespace BuilderEssentials.Items
                 end.Y = Player.tileTargetY;
             }
 
-            if (Main.mouseRightRelease && oneTimeCheck > 1)
+            if (Main.mouseRightRelease && firstValue && !OperationComplete)
             {
-                float some = Vector2.Distance(start, end);
-                oneTimeCheck = 0;
-                Main.NewText("Start Coordinate: " + start.X + ", " + start.Y + " / End Coordinate: " + end.X + ", " + end.Y);
+                firstValue = false;
                 OperationComplete = true;
             }
         }
