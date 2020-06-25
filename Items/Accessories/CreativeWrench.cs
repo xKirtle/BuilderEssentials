@@ -135,11 +135,27 @@ namespace BuilderEssentials.Items.Accessories
         public override void PlaceInWorld(int i, int j, Item item)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+
+            if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
+            && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+            {
+                Main.NewText(item.consumable);
+                if (item.consumable == false)
+                    item.consumable = true;
+
+                //Wands will decrease their stack either way, but at least won't be consumed.
+                //Perhaps make my own Multi Wand to compensate for that?
+                if (item.type == ItemID.BoneWand || item.type == ItemID.HiveWand || item.type == ItemID.LeafWand
+                || item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand
+                || item.type == ItemID.LivingWoodWand || item.type == 3361)
+                    item.consumable = false;
+            }
+
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
             || modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
                 item.consumable = false;
             else
-                item.consumable = true;
+                base.PlaceInWorld(i, j, item);
         }
     }
 
