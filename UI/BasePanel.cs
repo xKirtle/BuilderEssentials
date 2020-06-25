@@ -33,10 +33,8 @@ namespace BuilderEssentials.UI
             buildingModeButton.SetVisibility(0f, 0f);
             Append(buildingModeButton);
 
-
-            //Temp
-            UIElement element = new TransparentSelection();
-            Append(element);
+            UIElement transparentSelectionWand = new TransparentSelection();
+            Append(transparentSelectionWand);
         }
         public override void Update(GameTime gameTime)
         {

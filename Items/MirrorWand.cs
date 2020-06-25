@@ -10,7 +10,7 @@ namespace BuilderEssentials.Items
 {
     class MirrorWand : ModItem
     {
-        private bool firstValue = false;
+        public static bool firstValue = false;
         public static bool OperationComplete = false;
         public static Vector2 start;
         public static Vector2 end;
@@ -44,20 +44,20 @@ namespace BuilderEssentials.Items
 
         public override void HoldItem(Player player)
         {
-            if (!firstValue && (start.X != Player.tileTargetX || start.Y != Player.tileTargetY) && !OperationComplete)
+            if (!firstValue && !OperationComplete)
             {
                 start.X = Player.tileTargetX;
                 start.Y = Player.tileTargetY;
                 firstValue = true;
             }
 
-            if (Main.mouseRight)
+            if (Main.mouseRight && !player.mouseInterface)
             {
                 end.X = Player.tileTargetX;
                 end.Y = Player.tileTargetY;
             }
 
-            if (Main.mouseRightRelease && firstValue && !OperationComplete)
+            if (Main.mouseRightRelease && firstValue && !OperationComplete && !player.mouseInterface)
             {
                 firstValue = false;
                 OperationComplete = true;
