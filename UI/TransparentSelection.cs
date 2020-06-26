@@ -21,13 +21,15 @@ namespace BuilderEssentials.UI
 
         }
 
+        //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
         byte selectedQuarter = 4;
+        //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
         byte selectedDirection = 4;
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Values are initialized with 0 and single click will make start == end
             if ((MirrorWand.start.X != MirrorWand.end.X || MirrorWand.start.Y != MirrorWand.end.Y)
-            && (MirrorWand.start != Vector2.Zero || MirrorWand.end != Vector2.Zero))
+            && (MirrorWand.start != Vector2.Zero && MirrorWand.end != Vector2.Zero))
             {
                 //TODO: MAKE THE SPRITEBATCH NOT DRAW OVER UI ELEMENTS
                 //layerDepth doesn't work as spriteBatch uses SpriteSortMode.Deferred which means last draw calls will draw over
@@ -84,7 +86,7 @@ namespace BuilderEssentials.UI
             }
 
             if ((MirrorWand.mouseLeftStart.X != MirrorWand.mouseLeftEnd.X || MirrorWand.mouseLeftStart.Y != MirrorWand.mouseLeftEnd.Y)
-                && (MirrorWand.mouseLeftStart != Vector2.Zero || MirrorWand.mouseLeftEnd != Vector2.Zero))
+                && (MirrorWand.mouseLeftStart != Vector2.Zero && MirrorWand.mouseLeftEnd != Vector2.Zero))
             {
                 Texture2D texture = Main.extraTexture[2];
                 Rectangle value = new Rectangle(0, 0, 16, 16);
@@ -94,18 +96,27 @@ namespace BuilderEssentials.UI
                 //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
                 if (MirrorWand.firstvalueLeft)
                 {
-                    if (MirrorWand.mouseLeftStart.Y < MirrorWand.mouseLeftEnd.Y)
+                    //TODO: Remake this, only allow it if mouse is directly over the X/Y Coord
+                    bool TopBottom = MirrorWand.mouseLeftStart.Y < MirrorWand.mouseLeftEnd.Y;
+                    bool BottomTop = MirrorWand.mouseLeftStart.Y > MirrorWand.mouseLeftEnd.Y;
+                    bool LeftRight = MirrorWand.mouseLeftStart.X < MirrorWand.mouseLeftEnd.X;
+                    bool RightLeft = MirrorWand.mouseLeftStart.X > MirrorWand.mouseLeftEnd.X;
+
+                    if (TopBottom && !BottomTop && LeftRight && !RightLeft)
                         selectedDirection = 0;
-                    else if (MirrorWand.mouseLeftStart.Y > MirrorWand.mouseLeftEnd.Y)
+                    if (!TopBottom && BottomTop && !LeftRight && RightLeft)
                         selectedDirection = 1;
-                    else if (MirrorWand.mouseLeftStart.X < MirrorWand.mouseLeftEnd.X)
+                    if (!TopBottom && BottomTop && LeftRight && !RightLeft)
                         selectedDirection = 2;
-                    else if (MirrorWand.mouseLeftStart.X > MirrorWand.mouseLeftEnd.X)
+                    if (TopBottom && !BottomTop && !LeftRight && RightLeft)
                         selectedDirection = 3;
 
                     distanceXLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.X - MirrorWand.mouseLeftStart.X);
                     distanceYLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.Y - MirrorWand.mouseLeftStart.Y);
                 }
+
+                if (!IsMirrorAxisInsideSelection(selectedQuarter))
+                    color = new Color(1f, 0f, 0f, .75f) * 0.8f;
 
                 if (selectedDirection == 2 || selectedDirection == 3)
                     for (int i = 0; i < distanceXLeftMouse + 1; i++)
@@ -120,6 +131,8 @@ namespace BuilderEssentials.UI
                         spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
             }
+
+            Main.NewText(IsMirrorAxisInsideSelection(selectedQuarter));
         }
 
         private Vector2 GetVectorBasedOnQuarter(byte currentQuarter, bool isAxisX, bool isTopOrLeft, int iteration)
@@ -236,6 +249,59 @@ namespace BuilderEssentials.UI
             }
 
             return position;
+        }
+
+        // //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
+        // byte selectedQuarter = 4;
+        // //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
+        // byte selectedDirection = 4;
+
+        private bool IsMirrorAxisInsideSelection(byte currentQuarter)
+        {
+            if (selectedQuarter == 0)
+            {
+                //if mouseLeft Start and End is within Y
+                if ((MirrorWand.mouseLeftStart.Y < MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y > MirrorWand.end.Y
+                && MirrorWand.mouseLeftEnd.Y < MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y > MirrorWand.end.Y)
+                //if mouseLeft Start and End is within X
+                && (MirrorWand.mouseLeftStart.X < MirrorWand.start.X && MirrorWand.mouseLeftStart.X > MirrorWand.end.X
+                && MirrorWand.mouseLeftEnd.X < MirrorWand.start.X && MirrorWand.mouseLeftEnd.X > MirrorWand.end.X))
+                    return true;
+            }
+
+            if (selectedQuarter == 1)
+            {
+                //if mouseLeft Start and End is within Y
+                if ((MirrorWand.mouseLeftStart.Y < MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y > MirrorWand.end.Y
+                && MirrorWand.mouseLeftEnd.Y < MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y > MirrorWand.end.Y)
+                //if mouseLeft Start and End is within X
+                && (MirrorWand.mouseLeftStart.X > MirrorWand.start.X && MirrorWand.mouseLeftStart.X < MirrorWand.end.X
+                && MirrorWand.mouseLeftEnd.X > MirrorWand.start.X && MirrorWand.mouseLeftEnd.X < MirrorWand.end.X))
+                    return true;
+            }
+
+            if (selectedQuarter == 2)
+            {
+                //if mouseLeft Start and End is within Y
+                if ((MirrorWand.mouseLeftStart.Y > MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y < MirrorWand.end.Y
+                && MirrorWand.mouseLeftEnd.Y > MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y < MirrorWand.end.Y)
+                //if mouseLeft Start and End is within X
+                && (MirrorWand.mouseLeftStart.X < MirrorWand.start.X && MirrorWand.mouseLeftStart.X > MirrorWand.end.X
+                && MirrorWand.mouseLeftEnd.X < MirrorWand.start.X && MirrorWand.mouseLeftEnd.X > MirrorWand.end.X))
+                    return true;
+            }
+
+            if (selectedQuarter == 3)
+            {
+                //if mouseLeft Start and End is within Y
+                if ((MirrorWand.mouseLeftStart.Y > MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y < MirrorWand.end.Y
+                && MirrorWand.mouseLeftEnd.Y > MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y < MirrorWand.end.Y)
+                //if mouseLeft Start and End is within X
+                && (MirrorWand.mouseLeftStart.X > MirrorWand.start.X && MirrorWand.mouseLeftStart.X < MirrorWand.end.X
+                && MirrorWand.mouseLeftEnd.X > MirrorWand.start.X && MirrorWand.mouseLeftEnd.X < MirrorWand.end.X))
+                    return true;
+            }
+            return false;
         }
     }
 }
