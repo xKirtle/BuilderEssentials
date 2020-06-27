@@ -1,6 +1,7 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
 using System.Collections.Generic;
+using System.Text;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -40,6 +41,9 @@ namespace BuilderEssentials
         public int paintingColorSelectedIndex;
         public int paintingToolSelected;
         public bool holdingPaintingTool;
+
+        //Mirror Wand
+        public bool mirrorWandEffects;
         public override void Initialize()
         {
             NormalAccessories = new List<Item>(7);
@@ -59,18 +63,21 @@ namespace BuilderEssentials
             //Paint
             paintingColorSelectedIndex = 30; //No color
             paintingToolSelected = 0;
+
+            //Mirror Wand
+            mirrorWandEffects = false;
         }
 
         public override void ResetEffects()
         {
-            Player.tileRangeX = 5;
-            Player.tileRangeY = 4;
-            player.showItemIcon = false;
-            holdingPaintingTool = false;
-
             //Closing the creative wheel if the held item isn't air
             if (player.whoAmI == Main.myPlayer)
             {
+                Player.tileRangeX = 5;
+                Player.tileRangeY = 4;
+                player.showItemIcon = false;
+                holdingPaintingTool = false;
+
                 if (!player.inventory[player.selectedItem].IsAir)
                 {
                     if (BasePanel.creativeWheelPanel != null)
@@ -84,6 +91,9 @@ namespace BuilderEssentials
                 if (creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
                 && !player.HasBuff(mod.BuffType("InfinitePlacementBuff")))
                     creativeWheelSelectedIndex.Remove((int)CreativeWheelItem.InfinityUpgrade);
+
+                if (mirrorWandEffects)
+                    mirrorWandEffects = false;
             }
         }
 

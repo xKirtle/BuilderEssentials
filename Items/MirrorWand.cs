@@ -100,5 +100,15 @@ namespace BuilderEssentials.Items
                 OperationCompleteLeft = true;
             }
         }
+
+        public override void UpdateInventory(Player player)
+        {
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+            base.UpdateInventory(player);
+            //Main.NewText("Start: " + MirrorWand.mouseLeftStart + " End: " + MirrorWand.mouseLeftEnd);
+
+            if (OperationComplete && OperationCompleteLeft && TransparentSelection.validPlacement)
+                modPlayer.mirrorWandEffects = true;
+        }
     }
 }

@@ -16,15 +16,12 @@ namespace BuilderEssentials.UI
         float distanceXLeftMouse;
         float distanceYLeftMouse;
 
-        public override void Update(GameTime gameTime)
-        {
-
-        }
+        public static bool validPlacement = false;
 
         //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
-        byte selectedQuarter = 4;
+        public static byte selectedQuarter = 4;
         //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
-        byte selectedDirection = 4;
+        public static byte selectedDirection = 4;
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Values are initialized with 0 and single click will make start == end
@@ -97,26 +94,43 @@ namespace BuilderEssentials.UI
                 if (MirrorWand.firstvalueLeft)
                 {
                     //TODO: Remake this, only allow it if mouse is directly over the X/Y Coord
-                    bool TopBottom = MirrorWand.mouseLeftStart.Y < MirrorWand.mouseLeftEnd.Y;
-                    bool BottomTop = MirrorWand.mouseLeftStart.Y > MirrorWand.mouseLeftEnd.Y;
-                    bool LeftRight = MirrorWand.mouseLeftStart.X < MirrorWand.mouseLeftEnd.X;
-                    bool RightLeft = MirrorWand.mouseLeftStart.X > MirrorWand.mouseLeftEnd.X;
+                    bool TopBottom = MirrorWand.mouseLeftStart.Y <= MirrorWand.mouseLeftEnd.Y;
+                    bool BottomTop = MirrorWand.mouseLeftStart.Y >= MirrorWand.mouseLeftEnd.Y;
+                    bool LeftRight = MirrorWand.mouseLeftStart.X <= MirrorWand.mouseLeftEnd.X;
+                    bool RightLeft = MirrorWand.mouseLeftStart.X >= MirrorWand.mouseLeftEnd.X;
 
                     if (TopBottom && !BottomTop && LeftRight && !RightLeft)
+                    {
                         selectedDirection = 0;
+                        MirrorWand.mouseLeftEnd.X = MirrorWand.mouseLeftStart.X;
+                    }
                     if (!TopBottom && BottomTop && !LeftRight && RightLeft)
+                    {
                         selectedDirection = 1;
+                        MirrorWand.mouseLeftEnd.X = MirrorWand.mouseLeftStart.X;
+                    }
                     if (!TopBottom && BottomTop && LeftRight && !RightLeft)
+                    {
                         selectedDirection = 2;
+                        MirrorWand.mouseLeftEnd.Y = MirrorWand.mouseLeftStart.Y;
+                    }
                     if (TopBottom && !BottomTop && !LeftRight && RightLeft)
+                    {
                         selectedDirection = 3;
+                        MirrorWand.mouseLeftEnd.Y = MirrorWand.mouseLeftStart.Y;
+                    }
 
                     distanceXLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.X - MirrorWand.mouseLeftStart.X);
                     distanceYLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.Y - MirrorWand.mouseLeftStart.Y);
                 }
 
                 if (!IsMirrorAxisInsideSelection(selectedQuarter))
+                {
                     color = new Color(1f, 0f, 0f, .75f) * 0.8f;
+                    validPlacement = false;
+                }
+                else
+                    validPlacement = true;
 
                 if (selectedDirection == 2 || selectedDirection == 3)
                     for (int i = 0; i < distanceXLeftMouse + 1; i++)
@@ -131,8 +145,6 @@ namespace BuilderEssentials.UI
                         spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
             }
-
-            Main.NewText(IsMirrorAxisInsideSelection(selectedQuarter));
         }
 
         private Vector2 GetVectorBasedOnQuarter(byte currentQuarter, bool isAxisX, bool isTopOrLeft, int iteration)
@@ -256,7 +268,7 @@ namespace BuilderEssentials.UI
         // //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
         // byte selectedDirection = 4;
 
-        private bool IsMirrorAxisInsideSelection(byte currentQuarter)
+        private bool IsMirrorAxisInsideSelection(byte selectedQuarter)
         {
             if (selectedQuarter == 0)
             {

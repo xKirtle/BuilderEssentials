@@ -1,5 +1,6 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -114,8 +115,24 @@ namespace BuilderEssentials.Items.Accessories
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, false, -1, selectedItem.placeStyle);
 
+                if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
+            && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+                {
+                    if (selectedItem.type == ItemID.BoneWand || selectedItem.type == ItemID.HiveWand ||
+                        selectedItem.type == ItemID.LeafWand || selectedItem.type == ItemID.LivingMahoganyWand ||
+                        selectedItem.type == ItemID.LivingMahoganyLeafWand || selectedItem.type == ItemID.LivingWoodWand)
+                    {
+                        //I'm sorry but it's just easier this way
+                    }
+                    else
+                        selectedItem.stack--;
+                }
+
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
+
+                if (modPlayer.mirrorWandEffects)
+                    UIUtilities.MirrorWandPlacement(Player.tileTargetX, Player.tileTargetY, selectedItem, -1);
 
                 return true;
             }
@@ -145,11 +162,14 @@ namespace BuilderEssentials.Items.Accessories
 
                 //Wands will decrease their stack either way, but at least won't be consumed.
                 //Perhaps make my own Multi Wand to compensate for that?
-                if (item.type == ItemID.BoneWand || item.type == ItemID.HiveWand || item.type == ItemID.LeafWand
-                || item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand
-                || item.type == ItemID.LivingWoodWand || item.type == 3361)
+                if (item.type == ItemID.BoneWand || item.type == ItemID.HiveWand || item.type == ItemID.LeafWand ||
+                    item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand ||
+                    item.type == ItemID.LivingWoodWand)
                     item.consumable = false;
             }
+
+            if (modPlayer.mirrorWandEffects)
+                UIUtilities.MirrorWandPlacement(i, j, item, -1);
 
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
             || modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
@@ -169,6 +189,9 @@ namespace BuilderEssentials.Items.Accessories
                 item.consumable = false;
             else
                 item.consumable = true;
+
+            if (modPlayer.mirrorWandEffects)
+                UIUtilities.MirrorWandPlacement(i, j, item, type);
         }
     }
 }
