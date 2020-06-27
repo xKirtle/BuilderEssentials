@@ -30,18 +30,16 @@ namespace BuilderEssentials.Utilities
         }
 
         //2x2 tiles seem to be placed wrong in an odd numbered mirror, might need to do an offet "hotfix"
-        //War Table seems to crash if attempted to use here?
         public static void MirrorWandPlacement(int i, int j, Item item, int wallType)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
             bool IsWithinRange(float number, float value1, float value2)
             {
                 return ((number >= value1 && number <= value2) || (number <= value1 && number >= value2));
             }
 
             //Mirror Wand
-            if (modPlayer.mirrorWandEffects)
+            if (modPlayer.mirrorWandEffects)//War Table seems to crash if attempted to use here?
             {
                 float posX = i;
                 float posY = j;

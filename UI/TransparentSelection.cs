@@ -93,7 +93,6 @@ namespace BuilderEssentials.UI
                 //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
                 if (MirrorWand.firstvalueLeft)
                 {
-                    //TODO: Remake this, only allow it if mouse is directly over the X/Y Coord
                     bool TopBottom = MirrorWand.mouseLeftStart.Y <= MirrorWand.mouseLeftEnd.Y;
                     bool BottomTop = MirrorWand.mouseLeftStart.Y >= MirrorWand.mouseLeftEnd.Y;
                     bool LeftRight = MirrorWand.mouseLeftStart.X <= MirrorWand.mouseLeftEnd.X;

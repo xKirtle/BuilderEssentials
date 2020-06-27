@@ -1,19 +1,24 @@
 Builder Essentials is a mod designed to help and improve building in survival (and post Moon Lord / creative).
 
-The main feature is a toggleable secondary accessory system allowing for 5-7 building accessories while being able to go back to your normal accessories, with a press of a key.
-On top of that, this mod adds more useful tools like the Creative Wrench, a Multi Painting Tool and set of Crafting Stations!
+-------------------Features-------------------
+  - Toggleable secondary accessory system to store all your building accessories (can use a KeyBind)
+  - Multi Painting Tool that combines all paiting tools into one (works with vanilla paint)
+  - Infinite Paint Bucket (only works with the Multi Paint Tool)
+  - Accessories that aid in building that provide:
+Infinte Range, Fast Placement, Item Picker (like a color picker), Infinite Placement, AutoHammer and Placement Anywhere
+  - A Mirror Wand which allows you to build symmetrically
+-------------------------------------------
 
 Default KeyBind to toggle Building Mode is N, be sure to set it up on the configs.
 
 For more info/previews check the mod's Homepage!
 
-Happy Building! Kirtle
+Happy Building!
 
 Latest Changelog:
-	- Super Painting Tool now supports Vanilla Paints
-	- Added the Placement Anywhere feature to the Creative Wrench
-	- Fixed a bug where the secondary accessory system would duplicate accessories
-	- Added tooltips on hover to the Creative Wrench Elements
+  - Introduced the Mirror Wand
+  - Fixed a few more bugs and edge cases
 
-
-Sprites are being done by Strunter.
+Dev Team
+  - Kirtle (Programmer)
+  - Strunter (Spriter)

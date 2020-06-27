@@ -23,7 +23,11 @@ namespace BuilderEssentials.Items
         //--------------------------------------
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Mirrors everything!");
+            Tooltip.SetDefault("Mirrors everything!" +
+            "\nRight Click to make a selection area" +
+            "\nLeft Click to make a mirror axis" +
+            "\nMight not work for all multi tiles");
+
             //Item.staff[item.type] = true;
         }
         public override void SetDefaults()
