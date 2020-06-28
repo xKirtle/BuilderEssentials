@@ -73,13 +73,13 @@ namespace BuilderEssentials.Items
                 firstValue = true;
             }
 
-            if (Main.mouseRight && !player.mouseInterface)
+            if (Main.mouseRight)
             {
                 end.X = Player.tileTargetX;
                 end.Y = Player.tileTargetY;
             }
 
-            if (Main.mouseRightRelease && firstValue && !OperationComplete && !player.mouseInterface)
+            if (Main.mouseRightRelease && firstValue && !OperationComplete)
             {
                 firstValue = false;
                 OperationComplete = true;

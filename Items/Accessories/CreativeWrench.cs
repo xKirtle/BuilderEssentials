@@ -104,28 +104,37 @@ namespace BuilderEssentials.Items.Accessories
 
     public class InfinitePlacementTile : GlobalTile
     {
+        private int oldPosX;
+        private int oldPosY;
         public override bool CanPlace(int i, int j, int type)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
             //Placement Anywhere
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active())
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active() &&
+                oldPosX != i && oldPosY != j)
             {
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, false, -1, selectedItem.placeStyle);
 
                 if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
-            && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+                && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
                 {
                     if (selectedItem.type == ItemID.BoneWand || selectedItem.type == ItemID.HiveWand ||
                         selectedItem.type == ItemID.LeafWand || selectedItem.type == ItemID.LivingMahoganyWand ||
-                        selectedItem.type == ItemID.LivingMahoganyLeafWand || selectedItem.type == ItemID.LivingWoodWand)
+                        selectedItem.type == ItemID.LivingMahoganyLeafWand || selectedItem.type == ItemID.LivingWoodWand ||
+                        selectedItem.type == ItemID.StaffofRegrowth)
                     {
                         //I'm sorry but it's just easier this way
+                        //Wands are infinite, might need to loop through the inventory and check if they have ammo to decrease their stack?
                     }
-                    else
+                    else //TODO: This is still reducing the stack by 1 when trying to place multi tiles in the air
+                    {
                         selectedItem.stack--;
+                        oldPosX = i;
+                        oldPosY = j;
+                    }
                 }
 
                 if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -134,7 +143,7 @@ namespace BuilderEssentials.Items.Accessories
                 if (modPlayer.mirrorWandEffects)
                     UIUtilities.MirrorWandPlacement(Player.tileTargetX, Player.tileTargetY, selectedItem, -1);
 
-                return true;
+                return base.CanPlace(i, j, type);
             }
 
             //Doesn't work for walls?
@@ -156,7 +165,6 @@ namespace BuilderEssentials.Items.Accessories
             if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
             && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
             {
-                Main.NewText(item.consumable);
                 if (item.consumable == false)
                     item.consumable = true;
 
@@ -164,7 +172,7 @@ namespace BuilderEssentials.Items.Accessories
                 //Perhaps make my own Multi Wand to compensate for that?
                 if (item.type == ItemID.BoneWand || item.type == ItemID.HiveWand || item.type == ItemID.LeafWand ||
                     item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand ||
-                    item.type == ItemID.LivingWoodWand)
+                    item.type == ItemID.LivingWoodWand || item.type == ItemID.StaffofRegrowth)
                     item.consumable = false;
             }
 

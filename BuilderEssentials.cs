@@ -102,7 +102,7 @@ namespace BuilderEssentials
             int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
             if (mouseTextIndex != -1)
             {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                layers.Insert(0, new LegacyGameInterfaceLayer(
                     "MyMod: UserInterface",
                     delegate
                     {

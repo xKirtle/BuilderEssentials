@@ -13,6 +13,13 @@ namespace BuilderEssentials.Items
         //TODO: ENSURE MULTIPLAYER COMPATIBILITY (66% done)
         public List<int> paints;
         bool foundModdedPaint;
+        private bool firstTimeOpeningUI = true;
+
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault("Able to paint and remove paint from tiles and walls");
+        }
+
         public override void SetDefaults()
         {
             paints = new List<int>();
@@ -120,10 +127,11 @@ namespace BuilderEssentials.Items
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY;
             Tile pointedTile = Main.tile[posX, posY];
-            //TODO: Fix below
-            //If user tries to use the tool without opening the UI first it won't work since paintingPanel is null and I can't check if mouse is hovering
-            if (BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering)
+
+            if ((BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering) || firstTimeOpeningUI)
             {
+                if (firstTimeOpeningUI)
+                    firstTimeOpeningUI = false;
 
                 bool anyOperationDone = false;
                 byte selectedColor = (byte)(modPlayer.paintingColorSelectedIndex + 1);
@@ -192,7 +200,7 @@ namespace BuilderEssentials.Items
                     }
                 }
 
-                //No result found and InifnitePaintBucket isn't in the inventory
+                //No result found and InfinitePaintBucket isn't in the inventory
                 return false;
             }
             else //InfinitePaintBucket is in the inventory

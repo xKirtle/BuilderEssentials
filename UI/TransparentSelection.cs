@@ -17,7 +17,6 @@ namespace BuilderEssentials.UI
         float distanceYLeftMouse;
 
         public static bool validPlacement = false;
-
         //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
         public static byte selectedQuarter = 4;
         //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft

@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System.Runtime.InteropServices;
+using Terraria;
 using Terraria.ID;
 
 namespace BuilderEssentials.Utilities
@@ -1462,6 +1463,120 @@ namespace BuilderEssentials.Utilities
                         break;
                     case 30:
                         item.SetDefaults(ItemID.CrystalLamp);
+                        break;
+                }
+            }
+            if (tile.type == TileID.CookingPots)
+            {
+                switch (tile.frameX / 36)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.CookingPot);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.Cauldron);
+                        break;
+                }
+            }
+            if (tile.type == TileID.Candelabras)
+            {
+                switch (tile.frameY / 36)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Candelabra);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.CactusCandelabra);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.EbonwoodCandelabra);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.FleshCandelabra);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.HoneyCandelabra);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.SteampunkCandelabra);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.GlassCandelabra);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.RichMahoganyCandelabra);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.PearlwoodCandelabra);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.FrozenCandelabra);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.LihzahrdCandelabra);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.SkywareCandelabra);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.SpookyCandelabra);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.LivingWoodCandelabra);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.ShadewoodCandelabra);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.GoldenCandelabra);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.BoneCandelabra);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.DynastyCandelabra);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.PalmWoodCandelabra);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.MushroomCandelabra);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.BorealWoodCandelabra);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.SlimeCandelabra);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.BlueDungeonCandelabra);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.GreenDungeonCandelabra);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.PinkDungeonCandelabra);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.ObsidianCandelabra);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.PumpkinCandelabra);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.MartianTableLamp);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.MeteoriteCandelabra);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.GraniteCandelabra);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.MarbleCandelabra);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.CrystalCandelabra);
                         break;
                 }
             }

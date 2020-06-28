@@ -23,6 +23,9 @@ namespace BuilderEssentials.UI
         static UIText hoverText;
         public override void OnInitialize()
         {
+            UIElement transparentSelectionWand = new TransparentSelection();
+            Append(transparentSelectionWand);
+
             buttonTexture = BuilderEssentials.BuildingModeOff;
             buildingModeButton = new UIImageButton(buttonTexture);
             buildingModeButton.VAlign = 0f;
@@ -32,9 +35,6 @@ namespace BuilderEssentials.UI
             buildingModeButton.OnClick += ChangeAccessories_OnClick;
             buildingModeButton.SetVisibility(0f, 0f);
             Append(buildingModeButton);
-
-            UIElement transparentSelectionWand = new TransparentSelection();
-            Append(transparentSelectionWand);
         }
         public override void Update(GameTime gameTime)
         {
