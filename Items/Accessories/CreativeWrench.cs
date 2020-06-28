@@ -106,7 +106,7 @@ namespace BuilderEssentials.Items.Accessories
 
             //Placement Anywhere
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active() &&
-                oldPosX != i && oldPosY != j)
+                oldPosX != i || oldPosY != j)
             {
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, false, -1, selectedItem.placeStyle);

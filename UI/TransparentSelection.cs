@@ -27,10 +27,6 @@ namespace BuilderEssentials.UI
             if ((MirrorWand.start.X != MirrorWand.end.X || MirrorWand.start.Y != MirrorWand.end.Y)
             && (MirrorWand.start != Vector2.Zero && MirrorWand.end != Vector2.Zero))
             {
-                //TODO: MAKE THE SPRITEBATCH NOT DRAW OVER UI ELEMENTS
-                //layerDepth doesn't work as spriteBatch uses SpriteSortMode.Deferred which means last draw calls will draw over
-                //previous draw calls. Need to call this draw method before the UI for the player inventory/accessories is drawn
-
                 Texture2D texture = Main.extraTexture[2];
                 Rectangle value = new Rectangle(0, 0, 16, 16);
                 Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;

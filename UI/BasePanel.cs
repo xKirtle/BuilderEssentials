@@ -118,11 +118,11 @@ namespace BuilderEssentials.UI
                     if (element == elementsList[0])
                         text = "Middle Click to grab a block to your inventory";
                     if (element == elementsList[1])
-                        text = "Allows infinite placements of any block/wall";
+                        text = "Allows infinite placement of any block/wall";
                     if (element == elementsList[2])
                         text = "Select a slope and Left Mouse Click with an empty hand";
                     if (element == elementsList[3])
-                        text = "Allows block placements in the middle of the air";
+                        text = "Allows block placement in the middle of the air";
 
                     hoverText = new UIText(text, 1, false);
                     hoverText.VAlign = 0f;

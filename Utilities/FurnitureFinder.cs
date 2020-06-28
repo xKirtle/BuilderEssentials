@@ -1580,6 +1580,111 @@ namespace BuilderEssentials.Utilities
                         break;
                 }
             }
+            if (tile.type == TileID.Bookcases)
+            {
+                switch (tile.frameX / 70)
+                {
+                    case 0:
+                        item.SetDefaults(ItemID.Bookcase);
+                        break;
+                    case 1:
+                        item.SetDefaults(ItemID.BlueDungeonBookcase);
+                        break;
+                    case 2:
+                        item.SetDefaults(ItemID.GreenDungeonBookcase);
+                        break;
+                    case 3:
+                        item.SetDefaults(ItemID.PinkDungeonBookcase);
+                        break;
+                    case 4:
+                        item.SetDefaults(ItemID.ObsidianBookcase);
+                        break;
+                    case 5:
+                        item.SetDefaults(ItemID.GothicBookcase);
+                        break;
+                    case 6:
+                        item.SetDefaults(ItemID.CactusBookcase);
+                        break;
+                    case 7:
+                        item.SetDefaults(ItemID.EbonwoodBookcase);
+                        break;
+                    case 8:
+                        item.SetDefaults(ItemID.FleshBookcase);
+                        break;
+                    case 9:
+                        item.SetDefaults(ItemID.HoneyBookcase);
+                        break;
+                    case 10:
+                        item.SetDefaults(ItemID.SteampunkBookcase);
+                        break;
+                    case 11:
+                        item.SetDefaults(ItemID.GlassBookcase);
+                        break;
+                    case 12:
+                        item.SetDefaults(ItemID.RichMahoganyBookcase);
+                        break;
+                    case 13:
+                        item.SetDefaults(ItemID.PearlwoodBookcase);
+                        break;
+                    case 14:
+                        item.SetDefaults(ItemID.SpookyBookcase);
+                        break;
+                    case 15:
+                        item.SetDefaults(ItemID.SkywareBookcase);
+                        break;
+                    case 16:
+                        item.SetDefaults(ItemID.LihzahrdBookcase);
+                        break;
+                    case 17:
+                        item.SetDefaults(ItemID.FrozenBookcase);
+                        break;
+                    case 18:
+                        item.SetDefaults(ItemID.LivingWoodBookcase);
+                        break;
+                    case 19:
+                        item.SetDefaults(ItemID.ShadewoodBookcase);
+                        break;
+                    case 20:
+                        item.SetDefaults(ItemID.GoldenBookcase);
+                        break;
+                    case 21:
+                        item.SetDefaults(ItemID.BoneBookcase);
+                        break;
+                    case 22:
+                        item.SetDefaults(ItemID.DynastyBookcase);
+                        break;
+                    case 23:
+                        item.SetDefaults(ItemID.PalmWoodBookcase);
+                        break;
+                    case 24:
+                        item.SetDefaults(ItemID.MushroomBookcase);
+                        break;
+                    case 25:
+                        item.SetDefaults(ItemID.BorealWoodBookcase);
+                        break;
+                    case 26:
+                        item.SetDefaults(ItemID.SlimeBookcase);
+                        break;
+                    case 27:
+                        item.SetDefaults(ItemID.PumpkinBookcase);
+                        break;
+                    case 28:
+                        item.SetDefaults(ItemID.MartianHolobookcase);
+                        break;
+                    case 29:
+                        item.SetDefaults(ItemID.MeteoriteBookcase);
+                        break;
+                    case 30:
+                        item.SetDefaults(ItemID.GraniteBookcase);
+                        break;
+                    case 31:
+                        item.SetDefaults(ItemID.MarbleBookcase);
+                        break;
+                    case 32:
+                        item.SetDefaults(ItemID.CrystalBookCase);
+                        break;
+                }
+            }
         }
     }
 }
