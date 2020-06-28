@@ -46,7 +46,6 @@ namespace BuilderEssentials.Items.Accessories
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
 
-                //Thanks direwolf420 for the monstrosity checks
                 //Right click timer
                 if (Main.mouseRight && UIUtilities.IsUIAvailable()
                     && (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
@@ -80,12 +79,6 @@ namespace BuilderEssentials.Items.Accessories
                         Main.NewText("Please use an empty slot on your quick bar when using the Auto Hammer!");
                         autoHammerAlert = true;
                     }
-                }
-
-                //PlacementAnywhere
-                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere))
-                {
-
                 }
             }
         }
@@ -121,14 +114,15 @@ namespace BuilderEssentials.Items.Accessories
                 if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
                 && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
                 {
-                    if (selectedItem.type == ItemID.BoneWand || selectedItem.type == ItemID.HiveWand ||
-                        selectedItem.type == ItemID.LeafWand || selectedItem.type == ItemID.LivingMahoganyWand ||
-                        selectedItem.type == ItemID.LivingMahoganyLeafWand || selectedItem.type == ItemID.LivingWoodWand ||
-                        selectedItem.type == ItemID.StaffofRegrowth)
-                    {
-                        //I'm sorry but it's just easier this way
-                        //Wands are infinite, might need to loop through the inventory and check if they have ammo to decrease their stack?
-                    }
+                    if (selectedItem.type == ItemID.LivingMahoganyWand || selectedItem.type == ItemID.LivingMahoganyLeafWand)
+                        ReduceItemStack(ItemID.RichMahogany);
+                    else if (selectedItem.type == ItemID.LivingWoodWand || selectedItem.type == ItemID.LeafWand)
+                        ReduceItemStack(ItemID.Wood);
+                    else if (selectedItem.type == ItemID.BoneWand)
+                        ReduceItemStack(ItemID.Bone);
+                    else if (selectedItem.type == ItemID.HiveWand)
+                        ReduceItemStack(ItemID.Hive);
+                    else if (selectedItem.type == ItemID.StaffofRegrowth) { } //Condition to make specific wands not removed
                     else //TODO: This is still reducing the stack by 1 when trying to place multi tiles in the air
                     {
                         selectedItem.stack--;
@@ -157,19 +151,30 @@ namespace BuilderEssentials.Items.Accessories
             return base.CanPlace(i, j, type);
         }
 
+        private void ReduceItemStack(int ammoItemType)
+        {
+            foreach (Item item in Main.LocalPlayer.inventory)
+            {
+                if (item.type == ammoItemType)
+                {
+                    item.stack--;
+                    break;
+                }
+            }
+        }
+
         //Infinite Placement Stuff
         public override void PlaceInWorld(int i, int j, Item item)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
-            if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
-            && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+            if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) &&
+                !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
             {
                 if (item.consumable == false)
                     item.consumable = true;
 
-                //Wands will decrease their stack either way, but at least won't be consumed.
-                //Perhaps make my own Multi Wand to compensate for that?
+                //Wands aren't consumable items
                 if (item.type == ItemID.BoneWand || item.type == ItemID.HiveWand || item.type == ItemID.LeafWand ||
                     item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand ||
                     item.type == ItemID.LivingWoodWand || item.type == ItemID.StaffofRegrowth)
@@ -179,8 +184,8 @@ namespace BuilderEssentials.Items.Accessories
             if (modPlayer.mirrorWandEffects)
                 UIUtilities.MirrorWandPlacement(i, j, item, -1);
 
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
-            || modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
+                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
                 item.consumable = false;
             else
                 base.PlaceInWorld(i, j, item);
@@ -192,8 +197,8 @@ namespace BuilderEssentials.Items.Accessories
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
-            || modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade) ||
+                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
                 item.consumable = false;
             else
                 item.consumable = true;

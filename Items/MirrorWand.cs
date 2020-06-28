@@ -32,8 +32,8 @@ namespace BuilderEssentials.Items
         }
         public override void SetDefaults()
         {
-            item.height = 20;
-            item.width = 18;
+            item.height = 32;
+            item.width = 32;
             item.useTime = 1;
             item.useAnimation = 10;
             item.useStyle = ItemUseStyleID.HoldingOut;
@@ -109,7 +109,6 @@ namespace BuilderEssentials.Items
         {
             BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
             base.UpdateInventory(player);
-            //Main.NewText("Start: " + MirrorWand.mouseLeftStart + " End: " + MirrorWand.mouseLeftEnd);
 
             if (OperationComplete && OperationCompleteLeft && TransparentSelection.validPlacement)
                 modPlayer.mirrorWandEffects = true;
