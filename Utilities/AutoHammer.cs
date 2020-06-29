@@ -4,7 +4,7 @@ using Terraria.ID;
 namespace BuilderEssentials.Utilities
 {
 
-    public static class AutoHammer
+    public static partial class Tools
     {
         public static void ChangeSlope(ref int oldPosX, ref int oldPosY, ref Tile previousClickedTile)
         {

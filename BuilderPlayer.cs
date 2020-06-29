@@ -100,7 +100,7 @@ namespace BuilderEssentials
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
-                BuildingMode.BuildingModeAccessoriesToggle();
+                Tools.BuildingModeAccessoriesToggle();
         }
 
         public override TagCompound Save()
@@ -168,8 +168,8 @@ namespace BuilderEssentials
                 BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOff);
 
             //Loads (or populates) all lists on enter world
-            BuildingMode.BuildingModeAccessoriesToggle();
-            BuildingMode.BuildingModeAccessoriesToggle();
+            Tools.BuildingModeAccessoriesToggle();
+            Tools.BuildingModeAccessoriesToggle();
         }
     }
 }

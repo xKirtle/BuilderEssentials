@@ -6,7 +6,7 @@ using Terraria.ID;
 
 namespace BuilderEssentials.Utilities
 {
-    public static class UIUtilities
+    public static partial class Tools
     {
         public static bool IsUIAvailable()
         {
@@ -125,6 +125,19 @@ namespace BuilderEssentials.Utilities
                     }
                 }
             }
+        }
+
+        public static bool IsTownNpc(NPC npc)
+        {
+            return (npc.type == NPCID.Guide || npc.type == NPCID.Merchant || npc.type == NPCID.Nurse ||
+                    npc.type == NPCID.Demolitionist || npc.type == NPCID.DyeTrader || npc.type == NPCID.Angler ||
+                    npc.type == NPCID.Dryad || npc.type == NPCID.Painter || npc.type == NPCID.ArmsDealer ||
+                    npc.type == NPCID.DD2Bartender || npc.type == NPCID.Stylist || npc.type == NPCID.GoblinTinkerer ||
+                    npc.type == NPCID.WitchDoctor || npc.type == NPCID.Clothier || npc.type == NPCID.Mechanic ||
+                    npc.type == NPCID.PartyGirl || npc.type == NPCID.Wizard || npc.type == NPCID.TaxCollector ||
+                    npc.type == NPCID.Truffle || npc.type == NPCID.Pirate || npc.type == NPCID.Steampunker ||
+                    npc.type == NPCID.Cyborg || npc.type == NPCID.SantaClaus || npc.type == NPCID.TravellingMerchant ||
+                    npc.type == NPCID.OldMan || npc.type == NPCID.SkeletonMerchant);
         }
     }
 }

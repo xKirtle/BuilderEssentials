@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Terraria.ID;
+using System;
 using Terraria;
 using Terraria.ModLoader;
+using BuilderEssentials.Utilities;
 using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Buffs
@@ -16,7 +18,6 @@ namespace BuilderEssentials.Buffs
             Main.buffNoTimeDisplay[Type] = true;
             canBeCleared = false;
         }
-
         public override void Update(Player player, ref int buffIndex)
         {
             BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
@@ -34,19 +35,13 @@ namespace BuilderEssentials.Buffs
             Main.invasionSize = 0;
             Main.time = 27000; //mid day
             Main.fastForwardTime = false;
+
+            foreach (var npc in Main.npc)
+            {
+                //Don't want to remove town NPC's
+                if (!Tools.IsTownNpc(npc))
+                    npc.active = false;
+            }
         }
     }
-
-    public class PeacefulNPCs : GlobalNPC
-    {
-        public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
-        {
-            if (player.HasBuff(mod.BuffType("BuildInPeaceBuff")))
-                spawnRate = 0;
-            else
-                base.EditSpawnRate(player, ref spawnRate, ref maxSpawns);
-        }
-    }
-
-
 }

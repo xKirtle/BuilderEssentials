@@ -47,7 +47,7 @@ namespace BuilderEssentials.Items.Accessories
                 Player.tileRangeY = 55;
 
                 //Right click timer
-                if (Main.mouseRight && UIUtilities.IsUIAvailable()
+                if (Main.mouseRight && Tools.IsUIAvailable()
                     && (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
                     && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir)
                 {
@@ -61,7 +61,7 @@ namespace BuilderEssentials.Items.Accessories
                 //ItemPicker
                 if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker)
                 && !player.mouseInterface && !Main.playerInventory)
-                    ItemPicker.PickItem(ref oldPosX, ref oldPosY);
+                    Tools.PickItem(ref oldPosX, ref oldPosY);
 
                 //AutoHammer
                 if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
@@ -69,7 +69,7 @@ namespace BuilderEssentials.Items.Accessories
                 && !Main.playerInventory)
                 {
                     if (!CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
-                        AutoHammer.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile);
+                        Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile);
                 }
                 else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
                 && !player.inventory[player.selectedItem].IsAir && !player.mouseInterface && !Main.playerInventory)
@@ -135,7 +135,7 @@ namespace BuilderEssentials.Items.Accessories
                     NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
 
                 if (modPlayer.mirrorWandEffects)
-                    UIUtilities.MirrorWandPlacement(Player.tileTargetX, Player.tileTargetY, selectedItem, -1);
+                    Tools.MirrorWandPlacement(Player.tileTargetX, Player.tileTargetY, selectedItem, -1);
 
                 return base.CanPlace(i, j, type);
             }
@@ -182,7 +182,7 @@ namespace BuilderEssentials.Items.Accessories
             }
 
             if (modPlayer.mirrorWandEffects)
-                UIUtilities.MirrorWandPlacement(i, j, item, -1);
+                Tools.MirrorWandPlacement(i, j, item, -1);
 
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
                 modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
@@ -204,7 +204,7 @@ namespace BuilderEssentials.Items.Accessories
                 item.consumable = true;
 
             if (modPlayer.mirrorWandEffects)
-                UIUtilities.MirrorWandPlacement(i, j, item, type);
+                Tools.MirrorWandPlacement(i, j, item, type);
         }
     }
 }

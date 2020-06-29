@@ -17,6 +17,7 @@ Happy Building!
 
 Latest Changelog:
   - Introduced the Mirror Wand
+  - Introduced the BuildInPeace accessory and buff
   - Fixed a few more bugs and edge cases
 
 Dev Team

@@ -57,7 +57,7 @@ namespace BuilderEssentials.Items
                     BasePanel.paintingUIOpen = false;
                 }
 
-                if (Main.mouseRight && UIUtilities.IsUIAvailable()
+                if (Main.mouseRight && Tools.IsUIAvailable()
                         && (!player.mouseInterface || (BasePanel.paintingUIOpen && BasePanel.paintingPanel.IsMouseHovering))
                         && player.inventory[player.selectedItem].IsTheSameAs(item)
                         && !BasePanel.creativeWheelUIOpen)

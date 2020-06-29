@@ -8,7 +8,7 @@ using Terraria;
 
 namespace BuilderEssentials.Utilities
 {
-    public static class BuildingMode
+    public static partial class Tools
     {
         public static void BuildingModeAccessoriesToggle()
         {

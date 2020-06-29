@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 namespace BuilderEssentials.Utilities
 {
 
-    public class ItemPicker
+    public static partial class Tools
     {
         public static void PickItem(ref int oldPosX, ref int oldPosY)
         {
@@ -48,7 +48,7 @@ namespace BuilderEssentials.Utilities
                 {
                     //Furniture Check
                     //If it is a furniture and has a different frame, item will be changed to the correct frame item
-                    FurnitureFinder.FindFurniture(tile, ref item);
+                    FindFurniture(tile, ref item);
 
                     bool isItemInInventory = false;
                     for (int i = 0; i < 50; i++)

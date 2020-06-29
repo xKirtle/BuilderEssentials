@@ -4,7 +4,6 @@ using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BuilderEssentials.Utilities;
-using static BuilderEssentials.BuilderPlayer;
 using System.Collections.Generic;
 
 namespace BuilderEssentials.UI
@@ -137,7 +136,7 @@ namespace BuilderEssentials.UI
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
             if (isBuildingModeButtonVisible)
-                BuildingMode.BuildingModeAccessoriesToggle();
+                Tools.BuildingModeAccessoriesToggle();
         }
     }
 }

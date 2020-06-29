@@ -3,7 +3,7 @@ using Terraria.ID;
 
 namespace BuilderEssentials.Utilities
 {
-    public static class FurnitureFinder
+    public static partial class Tools
     {
         public static void FindFurniture(Tile tile, ref Item item)
         {
