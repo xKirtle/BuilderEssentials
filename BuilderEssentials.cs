@@ -32,6 +32,7 @@ namespace BuilderEssentials
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement"));
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer"));
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWPlacementAnywhere"));
+            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePickupRange"));
 
             CWAutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)

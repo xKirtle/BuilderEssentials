@@ -18,6 +18,7 @@ namespace BuilderEssentials.UI
         public static float CreativeWheelReworkHeight;
         public static List<UIImageButton> CreativeWheelElements;
         private static List<UIImageButton> CreativeWheelHammerElements;
+        private static readonly int numberOfElements = 5;
 
         public static UIPanel CreateCreativeWheelReworkPanel(int mouseX, int mouseY, BasePanel basePanel)
         {
@@ -41,7 +42,6 @@ namespace BuilderEssentials.UI
 
             return CreativeWheelReworkPanel;
         }
-
         private static void CreateLayout()
         {
             //Initialize the list that contains the CreativeWheel Elements, also intialized below
@@ -51,12 +51,12 @@ namespace BuilderEssentials.UI
 
             //Define them in a circle
             double radius = 60;
-            double angle = Math.PI / (CreativeWheelElements.Count / 2); //4 Buttons
+            double angle = 2 * Math.PI / CreativeWheelElements.Count; //5 Buttons
             for (int i = 0; i < CreativeWheelElements.Count; i++)
             {
-                int index = i;
-                double x = (CreativeWheelReworkWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 2)));
-                double y = (CreativeWheelReworkHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 2)));
+                int index = i; //Magic values to keep the rotation aligned the way I want, sorry
+                double x = (CreativeWheelReworkWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 3) - 0.3));
+                double y = (CreativeWheelReworkHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 3) - 0.3));
                 CreativeWheelElements[i].VAlign = 0f;
                 CreativeWheelElements[i].HAlign = 0f;
                 CreativeWheelElements[i].Left.Set((float)x, 0f);
@@ -68,8 +68,8 @@ namespace BuilderEssentials.UI
             //Correct display of previously toggled settings
             foreach (int selectedItem in modPlayer.creativeWheelSelectedIndex)
             {
-                //Required because only the first 4 indexes correspond to actual CW Elements
-                if (selectedItem < 4)
+                //Required because only the first 5 indexes correspond to actual CW Elements
+                if (selectedItem < numberOfElements)
                 {
                     CreativeWheelElements[selectedItem].SetVisibility(1f, 1f);
                     if (selectedItem == 2) //AutoHammer
@@ -105,6 +105,8 @@ namespace BuilderEssentials.UI
                     break;
                 case 3: //PlacementAnywhere
                     break;
+                case 4: //InfinitePickupRange
+                    break;
             }
 
             void ResetVisibility()
@@ -114,8 +116,8 @@ namespace BuilderEssentials.UI
 
                 foreach (int activeElement in modPlayer.creativeWheelSelectedIndex)
                 {
-                    //Only indexes smaller than 4 corresponde to actual CW Elements
-                    if (activeElement < 4)
+                    //Only indexes smaller than 5 correspond to actual CW Elements
+                    if (activeElement < numberOfElements)
                         CreativeWheelElements[activeElement].SetVisibility(1f, 1f);
                 }
             }
@@ -128,7 +130,7 @@ namespace BuilderEssentials.UI
                 CreativeWheelHammerElements.Add(new UIImageButton(BuilderEssentials.CWAutoHammerElements[i]));
 
             double radius = 36;
-            double angle = Math.PI / (CreativeWheelHammerElements.Count / 2);
+            double angle = Math.PI / (CreativeWheelHammerElements.Count / 2); //6 Elements
             for (int i = 0; i < CreativeWheelHammerElements.Count; i++)
             {
                 int index = i;

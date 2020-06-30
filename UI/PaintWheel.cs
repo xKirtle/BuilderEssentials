@@ -16,9 +16,6 @@ namespace BuilderEssentials.UI
         private static float paintWheelHeight;
         private static List<UIImageButton> colorsList;
         private static List<UIImageButton> paintToolsList;
-        private static bool ToolBlockPainter = false;
-        private static bool ToolWallPainter = false;
-        private static bool ToolPaintRemover = false;
         public static UIPanel CreatePaintWheel(int mouseX, int mouseY, BasePanel basePanel)
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
@@ -30,8 +27,8 @@ namespace BuilderEssentials.UI
             paintWheel.HAlign = 0f;
             paintWheel.Width.Set(paintWheelWidth, 0);
             paintWheel.Height.Set(paintWheelHeight, 0);
-            paintWheel.Left.Set(mouseX - paintWheelWidth / 2, 0); //mouseX - this.width/2
-            paintWheel.Top.Set(mouseY - paintWheelHeight / 2, 0); //mouseY - this.height/2
+            paintWheel.Left.Set(mouseX - paintWheelWidth / 2, 0);
+            paintWheel.Top.Set(mouseY - paintWheelHeight / 2, 0);
             paintWheel.BorderColor = Color.Transparent; //Color.Red;
             paintWheel.BackgroundColor = Color.Transparent;
 
@@ -174,27 +171,10 @@ namespace BuilderEssentials.UI
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             ResetToolVariables();
             modPlayer.paintingToolSelected = index;
-
-            switch (index)
-            {
-                case 0:
-                    ToolBlockPainter = true;
-                    break;
-                case 1:
-                    ToolWallPainter = true;
-                    break;
-                case 3:
-                    ToolPaintRemover = true;
-                    break;
-            }
             paintToolsList[index].SetVisibility(1f, 1f);
 
             void ResetToolVariables()
             {
-                ToolBlockPainter = false;
-                ToolWallPainter = false;
-                ToolPaintRemover = false;
-
                 for (int i = 0; i < paintToolsList.Count; i++)
                     paintToolsList[i].SetVisibility(.75f, .4f);
             }

@@ -31,6 +31,7 @@ namespace BuilderEssentials
             InfinitePlacement,
             AutoHammer,
             PlacementAnywhere,
+            InfinitePickupRange,
 
             //Non important order (independent items)
             InfinityUpgrade
@@ -75,6 +76,7 @@ namespace BuilderEssentials
             {
                 Player.tileRangeX = 5;
                 Player.tileRangeY = 4;
+                Player.defaultItemGrabRange = 38;
                 player.showItemIcon = false;
                 holdingPaintingTool = false;
 

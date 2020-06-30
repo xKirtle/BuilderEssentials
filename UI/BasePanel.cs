@@ -122,6 +122,8 @@ namespace BuilderEssentials.UI
                         text = "Select a slope and Left Mouse Click with an empty hand";
                     if (element == elementsList[3])
                         text = "Allows block placement in the middle of the air";
+                    if (element == elementsList[4])
+                        text = "Gives infinite pick up range";
 
                     hoverText = new UIText(text, 1, false);
                     hoverText.VAlign = 0f;

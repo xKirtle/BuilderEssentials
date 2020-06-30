@@ -37,14 +37,20 @@ namespace BuilderEssentials.Items.Accessories
             {
                 modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
-                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
-                    player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
-
+                //Accessory Stats
                 player.blockRange += 55;
                 player.wallSpeed += 10;
                 player.tileSpeed += 50;
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
+
+                //InfinitePickupRange
+                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePickupRange))
+                    Player.defaultItemGrabRange *= 100000; //I have no idea how much it should be so that should suffice??
+
+                //Infinite Placement
+                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
+                    player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
 
                 //Right click timer
                 if (Main.mouseRight && Tools.IsUIAvailable()
