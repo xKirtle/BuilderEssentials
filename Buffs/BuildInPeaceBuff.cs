@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using BuilderEssentials.Utilities;
 using static BuilderEssentials.BuilderPlayer;
+using Microsoft.Xna.Framework;
 
 namespace BuilderEssentials.Buffs
 {
@@ -42,6 +43,33 @@ namespace BuilderEssentials.Buffs
                 if (!Tools.IsTownNpc(npc))
                     npc.active = false;
             }
+        }
+    }
+
+    public class BuildInPeaceSummonItem : GlobalItem
+    {
+        static bool summonedBossWhileBuffIsOn = false;
+        public override bool UseItem(Item item, Player player)
+        {
+            if (player.HasBuff(mod.BuffType("BuildInPeaceBuff")))
+            {
+                if (item.type == ItemID.SuspiciousLookingEye || item.type == ItemID.BloodySpine || item.type == ItemID.WormFood ||
+                    item.type == ItemID.MechanicalWorm || item.type == ItemID.MechanicalSkull || item.type == ItemID.MechanicalEye ||
+                    item.type == ItemID.LihzahrdPowerCell || item.type == ItemID.SnowGlobe || item.type == ItemID.NaughtyPresent ||
+                    item.type == ItemID.SlimeCrown || item.type == ItemID.Abeemination || item.type == ItemID.PumpkinMoonMedallion ||
+                    item.type == ItemID.PirateMap || item.type == ItemID.SolarTablet || item.type == ItemID.CelestialSigil ||
+                    item.type == ItemID.DD2ElderCrystal || item.type == ItemID.GoblinBattleStandard)
+                {
+                    if (!summonedBossWhileBuffIsOn)
+                    {
+                        Main.NewText("You can't summon bosses or invasions while you have the Build In Peace accessory equipped.", Color.Red);
+                        summonedBossWhileBuffIsOn = true;
+                    }
+                    item.stack += 1;
+                    return false;
+                }
+            }
+            return base.UseItem(item, player);
         }
     }
 }
