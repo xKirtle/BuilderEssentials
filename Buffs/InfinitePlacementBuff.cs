@@ -1,6 +1,8 @@
-﻿using Terraria;
+﻿using Terraria.ID;
+using Terraria;
 using Terraria.ModLoader;
 using static BuilderEssentials.BuilderPlayer;
+using BuilderEssentials.Items.Accessories;
 
 namespace BuilderEssentials.Buffs
 {
@@ -22,6 +24,18 @@ namespace BuilderEssentials.Buffs
 
             if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
                 modPlayer.creativeWheelSelectedIndex.Add((int)CreativeWheelItem.InfinityUpgrade);
+        }
+    }
+
+    public class DropItemOnNpcLoot : GlobalNPC
+    {
+        public override void NPCLoot(NPC npc)
+        {
+            if (npc.type == NPCID.MoonLordCore)
+            {
+                //Might only drop one in Multiplayer? Needs testing
+                Item.NewItem(npc.Center, ModContent.ItemType<BuildInPeace>());
+            }
         }
     }
 }

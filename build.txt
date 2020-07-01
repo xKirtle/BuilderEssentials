@@ -1,5 +1,5 @@
 displayName = Builder Essentials
 author = Kirtle
-version = 0.1.12
+version = 0.1.12.1
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
 homepage = https://discord.gg/wQYMbQq
