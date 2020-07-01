@@ -112,7 +112,7 @@ namespace BuilderEssentials.Items.Accessories
 
             //Placement Anywhere
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active() &&
-                oldPosX != i || oldPosY != j)
+                (oldPosX != i || oldPosY != j) && IsCreativeWrenchEquipped())
             {
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, false, -1, selectedItem.placeStyle);
@@ -157,11 +157,23 @@ namespace BuilderEssentials.Items.Accessories
             return base.CanPlace(i, j, type);
         }
 
-        private void ReduceItemStack(int ammoItemType)
+        private bool IsCreativeWrenchEquipped()
+        {
+            Player player = Main.LocalPlayer;
+            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
+            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
+            {
+                if (player.armor[i].type == ModContent.ItemType<CreativeWrench>())
+                    return true;
+            }
+            return false;
+        }
+
+        private void ReduceItemStack(int itemType)
         {
             foreach (Item item in Main.LocalPlayer.inventory)
             {
-                if (item.type == ammoItemType)
+                if (item.type == itemType)
                 {
                     item.stack--;
                     break;

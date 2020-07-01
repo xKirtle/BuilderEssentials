@@ -5,6 +5,8 @@ using Terraria.ModLoader;
 using BuilderEssentials.Utilities;
 using static BuilderEssentials.BuilderPlayer;
 using Microsoft.Xna.Framework;
+using BuilderEssentials.Items.Accessories;
+using Terraria.DataStructures;
 
 namespace BuilderEssentials.Buffs
 {
@@ -70,6 +72,18 @@ namespace BuilderEssentials.Buffs
                 }
             }
             return base.UseItem(item, player);
+        }
+    }
+
+    public class DropItemOnNpcLoot : GlobalNPC
+    {
+        public override void NPCLoot(NPC npc)
+        {
+            if (npc.type == NPCID.MoonLordCore)
+            {
+                //Might only drop one in Multiplayer? Needs testing
+                Item.NewItem(npc.Center, ModContent.ItemType<BuildInPeace>());
+            }
         }
     }
 }

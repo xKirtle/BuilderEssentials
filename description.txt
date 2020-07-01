@@ -19,7 +19,7 @@ Latest Changelog:
   - Introduced the Mirror Wand
   - Introduced the BuildInPeace accessory and buff (drops when Moon Lord is killed)
   - Introduced the Infinite Pickup Range (featured inside the Creative Wrench)
-  - Fixed a few more bugs and edge cases
+  - Super Painting Tool now works 100% in multiplayer
 
 Dev Team
   - Kirtle (Programmer)

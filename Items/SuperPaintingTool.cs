@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
@@ -134,6 +135,7 @@ namespace BuilderEssentials.Items
                     firstTimeOpeningUI = false;
 
                 bool anyOperationDone = false;
+                bool paintScraper = false;
                 byte selectedColor = (byte)(modPlayer.paintingColorSelectedIndex + 1);
                 //selectedindex + 1 because paint bytes don't start at 0
                 switch (modPlayer.paintingToolSelected)
@@ -163,17 +165,27 @@ namespace BuilderEssentials.Items
                         {
                             pointedTile.color(0);
                             anyOperationDone = true;
+                            paintScraper = true;
                         }
                         if (pointedTile.wallColor() != 0)
                         {
                             pointedTile.wallColor(0);
                             anyOperationDone = true;
+                            paintScraper = true;
                         }
                         break;
                 }
 
                 if (anyOperationDone && Main.netMode == NetmodeID.MultiplayerClient)
-                    NetMessage.SendTileSquare(-1, posX, posY, 1); //syncs painting tiles and walls, not the scraper
+                {
+                    NetMessage.SendTileSquare(-1, posX, posY, 1); //syncs painting tiles and walls
+                    if (paintScraper)
+                    {
+                        //WorldGen.SquareTileFrame(posX, posY, true); //Not necessary to sync the scraper?
+                        NetMessage.SendData(MessageID.PaintTile, -1, -1, null, posX, posY, 0, 0f, 0, 0, 0); //Syncs the Paint Scraper
+                        NetMessage.SendData(MessageID.PaintWall, -1, -1, null, posX, posY, 0, 0f, 0, 0, 0); //Syncs the Paint Scraper
+                    }
+                }
             }
             return false;
         }
