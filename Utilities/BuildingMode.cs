@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 using BuilderEssentials.UI;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace BuilderEssentials.Utilities
 {
     public static partial class Tools
     {
-        //Variable updated through ModConfig
-        public static List<bool> miscEquipsList;
-        //public static List<Item> itemsToSave;
+        //Variables updated through ModConfig
+        public static bool accessories;
+        public static bool vanityAccessories;
+        public static bool armor;
+        public static bool vanityArmor;
+        public static bool miscEquips;
 
-        public static void BuildingModeAccessoriesToggle()
+        public static void BuildingModeToggle()
         {
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             CleanAcessoriesList();
@@ -28,20 +32,31 @@ namespace BuilderEssentials.Utilities
         public static void CleanAcessoriesList()
         {
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            //TODO: Mod config where the player can choose if he wishes to have "2nd" vanity slots too
             if (modPlayer.IsNormalAccessories)
             {
-                modPlayer.NormalAccessories.Clear();
-                modPlayer.NormalVanityAccessories.Clear();
-                modPlayer.NormalVanityClothes.Clear();
-                //modPlayer.NormalMiscEquips.Clear();
+                if (accessories)
+                    modPlayer.NormalAccessories.Clear();
+                if (vanityAccessories)
+                    modPlayer.NormalVanityAccessories.Clear();
+                if (armor)
+                    modPlayer.NormalArmor.Clear();
+                if (vanityArmor)
+                    modPlayer.NormalVanityArmor.Clear();
+                if (miscEquips)
+                    modPlayer.NormalMiscEquips.Clear();
             }
             else
             {
-                modPlayer.BuildingAccessories.Clear();
-                modPlayer.BuildingVanityAccessories.Clear();
-                modPlayer.BuildingVanityClothes.Clear();
-                //modPlayer.BuildingMiscEquips.Clear();
+                if (accessories)
+                    modPlayer.BuildingAccessories.Clear();
+                if (vanityAccessories)
+                    modPlayer.BuildingVanityAccessories.Clear();
+                if (armor)
+                    modPlayer.BuildingArmor.Clear();
+                if (vanityArmor)
+                    modPlayer.BuildingVanityArmor.Clear();
+                if (miscEquips)
+                    modPlayer.BuildingMiscEquips.Clear();
             }
         }
 
@@ -53,38 +68,56 @@ namespace BuilderEssentials.Utilities
             //Normal and Vanity Accessories
             for (int i = 3; i < 3 + maxAccessoryIndex; i++)
             {
-                Item accessory = player.armor[i];
-                Item vanityAccessory = player.armor[i + 10];
+                Item accessory = player.armor[i]; //3-9
+                Item vanityAccessory = player.armor[i + 10]; //13-19
                 if (modPlayer.IsNormalAccessories)
                 {
-                    modPlayer.NormalAccessories.Add(accessory);
-                    modPlayer.NormalVanityAccessories.Add(vanityAccessory);
+                    if (accessories)
+                        modPlayer.NormalAccessories.Add(accessory);
+                    if (vanityAccessories)
+                        modPlayer.NormalVanityAccessories.Add(vanityAccessory);
                 }
                 else
                 {
-                    modPlayer.BuildingAccessories.Add(accessory);
-                    modPlayer.BuildingVanityAccessories.Add(vanityAccessory);
+                    if (accessories)
+                        modPlayer.BuildingAccessories.Add(accessory);
+                    if (vanityAccessories)
+                        modPlayer.BuildingVanityAccessories.Add(vanityAccessory);
                 }
             }
 
-            //Vanity Sets (&& armor set, in the future?)
-            for (int i = 10; i < 13; i++)
+            //Armor and Vanity Sets
+            for (int i = 0; i < 3; i++)
             {
-                Item vanityCloth = player.armor[i];
+                Item armorItem = player.armor[i]; //0-2
+                Item vanityArmorItem = player.armor[i + 10]; //10-12
                 if (modPlayer.IsNormalAccessories)
-                    modPlayer.NormalVanityClothes.Add(vanityCloth);
+                {
+                    if (armor)
+                        modPlayer.NormalArmor.Add(armorItem);
+                    if (vanityArmor)
+                        modPlayer.NormalVanityArmor.Add(vanityArmorItem);
+                }
                 else
-                    modPlayer.BuildingVanityClothes.Add(vanityCloth);
+                {
+                    if (armor)
+                        modPlayer.BuildingArmor.Add(armorItem);
+                    if (vanityArmor)
+                        modPlayer.BuildingVanityArmor.Add(vanityArmorItem);
+                }
             }
 
-            //MiscEquips Save
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    if (modPlayer.IsNormalAccessories)
-            //        modPlayer.NormalMiscEquips.Add(player.miscEquips[i]);
-            //    else
-            //        modPlayer.BuildingMiscEquips.Add(player.miscEquips[i]);
-            //}
+            //Misc Equips
+            for (int i = 0; i < 5; i++)
+            {
+                if (miscEquips)
+                {
+                    if (modPlayer.IsNormalAccessories)
+                        modPlayer.NormalMiscEquips.Add(player.miscEquips[i]);
+                    else
+                        modPlayer.BuildingMiscEquips.Add(player.miscEquips[i]);
+                }
+            }
         }
 
         public static void LoadAccessories()
@@ -92,59 +125,56 @@ namespace BuilderEssentials.Utilities
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             var player = Main.LocalPlayer;
 
-
-            //TODO: REFACTOR THIS SHITTY CODE
-            if (modPlayer.IsNormalAccessories)
+            //Accessories
+            for (int i = 3; i < 3 + modPlayer.NormalAccessories.Count; i++)
             {
-                for (int i = 0; i < modPlayer.NormalAccessories.Count; i++)
+                if (modPlayer.IsNormalAccessories)
                 {
-                    player.armor[i + 3] = modPlayer.NormalAccessories[i];
-                    player.armor[i + 13] = modPlayer.NormalVanityAccessories[i];
+                    if (accessories)
+                        player.armor[i] = modPlayer.NormalAccessories[i-3];
+                    if (vanityAccessories)
+                        player.armor[i + 10] = modPlayer.NormalVanityAccessories[i-3];
                 }
-
-                for (int i = 0; i < 3; i++)
+                else
                 {
-                    player.armor[i + 10] = modPlayer.NormalVanityClothes[i];
-                }
-            }
-            else
-            {
-                if (modPlayer.BuildingAccessories.Count > 0)
-                {
-                    for (int i = 0; i < modPlayer.BuildingAccessories.Count; i++)
-                    {
-                        player.armor[i + 3] = modPlayer.BuildingAccessories[i];
-                        player.armor[i + 13] = modPlayer.BuildingVanityAccessories[i];
-                    }
-                }
-
-                if (modPlayer.BuildingVanityAccessories.Count > 0)
-                {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        player.armor[i + 10] = modPlayer.BuildingVanityClothes[i];
-                    }
+                    if (accessories)
+                        player.armor[i] = modPlayer.BuildingAccessories[i-3];
+                    if (vanityAccessories)
+                        player.armor[i + 10] = modPlayer.BuildingVanityAccessories[i-3];
                 }
             }
 
-            //MiscEquips Load
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    if (modPlayer.IsNormalAccessories)
-            //    {
-            //        if (miscEquipsList[i])
-            //            player.miscEquips[i] = modPlayer.NormalMiscEquips[i];
-            //        else
-            //            player.miscEquips[i] = modPlayer.BuildingMiscEquips[i];
-            //    }
-            //    else
-            //    {
-            //        if (miscEquipsList[i])
-            //            player.miscEquips[i] = modPlayer.BuildingMiscEquips[i];
-            //        else
-            //            player.miscEquips[i] = modPlayer.NormalMiscEquips[i];
-            //    }
-            //}
+            //Armor and Vanity Sets
+            for (int i = 0; i < 3; i++)
+            {
+                if (modPlayer.IsNormalAccessories)
+                {
+                    if (armor)
+                        player.armor[i] = modPlayer.NormalArmor[i];
+                    if (vanityArmor)
+                        player.armor[i + 10] = modPlayer.NormalVanityArmor[i];
+                }
+                else
+                {
+                    if (armor)
+                        player.armor[i] = modPlayer.BuildingArmor[i];
+                    if (vanityArmor)
+                        player.armor[i + 10] = modPlayer.BuildingVanityArmor[i];
+                }
+            }
+
+
+            //Misc Equips
+            for (int i = 0; i < 5; i++)
+            {
+                if (miscEquips)
+                {
+                    if (modPlayer.IsNormalAccessories)
+                        player.miscEquips[i] = modPlayer.NormalMiscEquips[i];
+                    else
+                        player.miscEquips[i] = modPlayer.BuildingMiscEquips[i];
+                }
+            }
         }
         public static void UpdateButtonImage()
         {

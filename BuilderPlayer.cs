@@ -14,13 +14,15 @@ namespace BuilderEssentials
 {
     public class BuilderPlayer : ModPlayer
     {
-        //Accessory System
+        //Building Mode
         public List<Item> NormalAccessories;
         public List<Item> BuildingAccessories;
         public List<Item> NormalVanityAccessories;
         public List<Item> BuildingVanityAccessories;
-        public List<Item> NormalVanityClothes;
-        public List<Item> BuildingVanityClothes;
+        public List<Item> NormalArmor;
+        public List<Item> BuildingArmor;
+        public List<Item> NormalVanityArmor;
+        public List<Item> BuildingVanityArmor;
         public List<Item> NormalMiscEquips;
         public List<Item> BuildingMiscEquips;
         public bool IsNormalAccessories;
@@ -56,8 +58,10 @@ namespace BuilderEssentials
             BuildingAccessories = new List<Item>(7);
             NormalVanityAccessories = new List<Item>(7);
             BuildingVanityAccessories = new List<Item>(7);
-            NormalVanityClothes = new List<Item>(3);
-            BuildingVanityClothes = new List<Item>(3);
+            NormalArmor = new List<Item>(3);
+            BuildingArmor = new List<Item>(3);
+            NormalVanityArmor = new List<Item>(3);
+            BuildingVanityArmor = new List<Item>(3);
             NormalMiscEquips = new List<Item>(5);
             BuildingMiscEquips = new List<Item>(5);
             IsNormalAccessories = true;
@@ -110,7 +114,7 @@ namespace BuilderEssentials
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
-                Tools.BuildingModeAccessoriesToggle();
+                Tools.BuildingModeToggle();
         }
 
         public override TagCompound Save()
@@ -122,10 +126,12 @@ namespace BuilderEssentials
                 { "BuildingAccessories", BuildingAccessories },
                 {"NormalVanityAccessories", NormalVanityAccessories },
                 {"BuildingVanityAccessories", BuildingVanityAccessories },
-                {"NormalVanityClothes", NormalVanityClothes },
-                {"BuildingVanityClothes", BuildingVanityClothes },
-                //{"NormalMiscEquips", NormalMiscEquips },
-                //{"BuildingMiscEquips", BuildingMiscEquips },
+                {"NormalArmor", NormalArmor },
+                {"BuildingArmor", BuildingArmor },
+                {"NormalVanityArmor", NormalVanityArmor },
+                {"BuildingVanityArmor", BuildingVanityArmor },
+                {"NormalMiscEquips", NormalMiscEquips },
+                {"BuildingMiscEquips", BuildingMiscEquips },
                 {"creativeWheelSelectedIndex", creativeWheelSelectedIndex},
                 {"autoHammerSelectedIndex", autoHammerSelectedIndex },
                 {"paintingColorSelectedIndex", paintingColorSelectedIndex},
@@ -135,7 +141,7 @@ namespace BuilderEssentials
 
         public override void Load(TagCompound tag)
         {
-            //Accessory System
+            //Building Mode
             if (tag.ContainsKey("IsNormalAccessories"))
                 IsNormalAccessories = tag.GetBool("IsNormalAccessories");
 
@@ -151,17 +157,23 @@ namespace BuilderEssentials
             if (tag.ContainsKey("BuildingVanityAccessories"))
                 BuildingVanityAccessories = tag.Get<List<Item>>("BuildingVanityAccessories");
 
-            if (tag.ContainsKey("NormalVanityClothes"))
-                NormalVanityClothes = tag.Get<List<Item>>("NormalVanityClothes");
+            if (tag.ContainsKey("NormalArmor"))
+                NormalArmor = tag.Get<List<Item>>("NormalArmor");
 
-            if (tag.ContainsKey("BuildingVanityClothes"))
-                BuildingVanityClothes = tag.Get<List<Item>>("BuildingVanityClothes");
+            if (tag.ContainsKey("BuildingArmor"))
+                BuildingArmor = tag.Get<List<Item>>("BuildingArmor");
 
-            //if (tag.ContainsKey("NormalMiscEquips"))
-            //    NormalMiscEquips = tag.Get<List<Item>>("NormalMiscEquips");
+            if (tag.ContainsKey("NormalVanityArmor"))
+                NormalVanityArmor = tag.Get<List<Item>>("NormalVanityArmor");
 
-            //if (tag.ContainsKey("BuildingMiscEquips"))
-            //    BuildingMiscEquips = tag.Get<List<Item>>("BuildingMiscEquips");
+            if (tag.ContainsKey("BuildingVanityArmor"))
+                BuildingVanityArmor = tag.Get<List<Item>>("BuildingVanityArmor");
+
+            if (tag.ContainsKey("NormalMiscEquips"))
+                NormalMiscEquips = tag.Get<List<Item>>("NormalMiscEquips");
+
+            if (tag.ContainsKey("BuildingMiscEquips"))
+                BuildingMiscEquips = tag.Get<List<Item>>("BuildingMiscEquips");
 
             //Creative Wheel
             if (tag.ContainsKey("creativeWheelSelectedIndex"))
@@ -186,8 +198,15 @@ namespace BuilderEssentials
                 BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOff);
 
             //Loads (or populates) all lists on enter world
-            Tools.BuildingModeAccessoriesToggle();
-            Tools.BuildingModeAccessoriesToggle();
+            Tools.BuildingModeToggle();
+            Tools.BuildingModeToggle();
+        }
+
+        public override void PreSavePlayer()
+        {
+            //Forces the player to leave in the non Building Mode "save"
+            if (!IsNormalAccessories)
+                Tools.BuildingModeToggle();
         }
     }
 }

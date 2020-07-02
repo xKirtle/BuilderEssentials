@@ -1,6 +1,7 @@
 ﻿using BuilderEssentials.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,42 +12,40 @@ namespace BuilderEssentials
     public class BuilderEssentialsConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
-
-        [Label("Pet changes with Building Mode")]
-        public bool changePet;
-        [Label("Light Pet changes with Building Mode")]
-        public bool changeLightPet;
-        [Label("Minecart changes with Building Mode")]
-        public bool changeMinecart;
-        [Label("Mount changes with Building Mode")]
-        public bool changeMount;
-        [Label("Hook changes with Building Mode")]
-        public bool changeHook;
-
-        private List<bool> miscEquipsList = new List<bool>(5);
+        [Header("Building Mode Options")]
+        [Label("Different Accessories while on Building Mode")]
+        [ReloadRequired]
+        [DefaultValue(true)]
+        public bool accessories;
+        [Label("Different Vanity Accessories while on Building Mode")]
+        [ReloadRequired]
+        [DefaultValue(true)]
+        public bool vanityAccessories;
+        [Label("Different Armor Set while on Building Mode")]
+        [ReloadRequired]
+        [DefaultValue(true)]
+        public bool armor;
+        [Label("Different Vanity Armor Set while on Building Mode")]
+        [ReloadRequired]
+        [DefaultValue(true)]
+        public bool vanityArmor;
+        [Label("Different Misc Equipements while on Building Mode")]
+        [ReloadRequired]
+        [DefaultValue(true)]
+        public bool miscEquips;
 
         public override void OnChanged()
         {
-            miscEquipsList.Clear();
-            miscEquipsList.Add(changePet);
-            miscEquipsList.Add(changeLightPet);
-            miscEquipsList.Add(changeMinecart);
-            miscEquipsList.Add(changeMount);
-            miscEquipsList.Add(changeHook);
-
-            Tools.miscEquipsList = miscEquipsList;
+            Tools.accessories = accessories;
+            Tools.vanityAccessories = vanityAccessories;
+            Tools.armor = armor;
+            Tools.vanityArmor = vanityArmor;
+            Tools.miscEquips = miscEquips;
         }
 
         public override void OnLoaded()
         {
-            miscEquipsList.Add(changePet);
-            miscEquipsList.Add(changeLightPet);
-            miscEquipsList.Add(changeMinecart);
-            miscEquipsList.Add(changeMount);
-            miscEquipsList.Add(changeHook);
-
-            Tools.miscEquipsList = miscEquipsList;
-
+            Tools.miscEquips = miscEquips;
             //Tools.LoadedConfig();
         }
     }

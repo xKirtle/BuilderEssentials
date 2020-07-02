@@ -138,7 +138,7 @@ namespace BuilderEssentials.UI
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
             if (isBuildingModeButtonVisible)
-                Tools.BuildingModeAccessoriesToggle();
+                Tools.BuildingModeToggle();
         }
     }
 }
