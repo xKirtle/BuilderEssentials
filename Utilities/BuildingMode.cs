@@ -18,6 +18,7 @@ namespace BuilderEssentials.Utilities
         public static bool armor;
         public static bool vanityArmor;
         public static bool miscEquips;
+        public static bool dyes;
 
         public static void BuildingModeToggle()
         {
@@ -44,6 +45,8 @@ namespace BuilderEssentials.Utilities
                     modPlayer.NormalVanityArmor.Clear();
                 if (miscEquips)
                     modPlayer.NormalMiscEquips.Clear();
+                if (dyes)
+                    modPlayer.NormalDyes.Clear();
             }
             else
             {
@@ -57,6 +60,8 @@ namespace BuilderEssentials.Utilities
                     modPlayer.BuildingVanityArmor.Clear();
                 if (miscEquips)
                     modPlayer.BuildingMiscEquips.Clear();
+                if (dyes)
+                    modPlayer.BuildingDyes.Clear();
             }
         }
 
@@ -118,6 +123,29 @@ namespace BuilderEssentials.Utilities
                         modPlayer.BuildingMiscEquips.Add(player.miscEquips[i]);
                 }
             }
+
+
+            //Dyes
+            for (int i = 0; i < 15; i++)
+            {
+                if (dyes)
+                {
+                    if (i < 10) //Armor + Accessories Dyes
+                    {
+                        if (modPlayer.IsNormalAccessories)
+                            modPlayer.NormalDyes.Add(player.dye[i]);
+                        else
+                            modPlayer.BuildingDyes.Add(player.dye[i]);
+                    }
+                    else //Misc Equipement Dyes
+                    {
+                        if (modPlayer.IsNormalAccessories)
+                            modPlayer.NormalDyes.Add(player.miscDyes[i - 10]);
+                        else
+                            modPlayer.BuildingDyes.Add(player.miscDyes[i - 10]);
+                    }
+                }
+            }
         }
 
         public static void LoadAccessories()
@@ -131,16 +159,16 @@ namespace BuilderEssentials.Utilities
                 if (modPlayer.IsNormalAccessories)
                 {
                     if (accessories)
-                        player.armor[i] = modPlayer.NormalAccessories[i-3];
+                        player.armor[i] = modPlayer.NormalAccessories[i - 3];
                     if (vanityAccessories)
-                        player.armor[i + 10] = modPlayer.NormalVanityAccessories[i-3];
+                        player.armor[i + 10] = modPlayer.NormalVanityAccessories[i - 3];
                 }
                 else
                 {
                     if (accessories)
-                        player.armor[i] = modPlayer.BuildingAccessories[i-3];
+                        player.armor[i] = modPlayer.BuildingAccessories[i - 3];
                     if (vanityAccessories)
-                        player.armor[i + 10] = modPlayer.BuildingVanityAccessories[i-3];
+                        player.armor[i + 10] = modPlayer.BuildingVanityAccessories[i - 3];
                 }
             }
 
@@ -173,6 +201,29 @@ namespace BuilderEssentials.Utilities
                         player.miscEquips[i] = modPlayer.NormalMiscEquips[i];
                     else
                         player.miscEquips[i] = modPlayer.BuildingMiscEquips[i];
+                }
+            }
+
+
+            //Dyes
+            for (int i = 0; i < 15; i++)
+            {
+                if (dyes)
+                {
+                    if (i < 10)
+                    {
+                        if (modPlayer.IsNormalAccessories)
+                            player.dye[i] = modPlayer.NormalDyes[i];
+                        else
+                            player.dye[i] = modPlayer.BuildingDyes[i];
+                    }
+                    else
+                    {
+                        if (modPlayer.IsNormalAccessories)
+                            player.miscDyes[i - 10] = modPlayer.NormalDyes[i];
+                        else
+                            player.miscDyes[i - 10] = modPlayer.BuildingDyes[i];
+                    }
                 }
             }
         }

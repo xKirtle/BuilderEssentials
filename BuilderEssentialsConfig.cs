@@ -33,6 +33,10 @@ namespace BuilderEssentials
         [ReloadRequired]
         [DefaultValue(true)]
         public bool miscEquips;
+        [Label("Different Dyes while on Building Mode")]
+        [ReloadRequired]
+        [DefaultValue(true)]
+        public bool dyes;
 
         public override void OnChanged()
         {
@@ -41,12 +45,17 @@ namespace BuilderEssentials
             Tools.armor = armor;
             Tools.vanityArmor = vanityArmor;
             Tools.miscEquips = miscEquips;
+            Tools.dyes = dyes;
         }
 
         public override void OnLoaded()
         {
+            Tools.accessories = accessories;
+            Tools.vanityAccessories = vanityAccessories;
+            Tools.armor = armor;
+            Tools.vanityArmor = vanityArmor;
             Tools.miscEquips = miscEquips;
-            //Tools.LoadedConfig();
+            Tools.dyes = dyes;
         }
     }
 }

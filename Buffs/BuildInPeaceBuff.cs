@@ -36,6 +36,7 @@ namespace BuilderEssentials.Buffs
             Main.invasionType = 0;
             Main.invasionDelay = 0;
             Main.invasionSize = 0;
+            Main.dayTime = true;
             Main.time = 27000; //mid day
             Main.fastForwardTime = false;
 

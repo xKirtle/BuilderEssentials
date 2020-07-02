@@ -15,17 +15,25 @@ namespace BuilderEssentials
     public class BuilderPlayer : ModPlayer
     {
         //Building Mode
+        public bool IsNormalAccessories;
+
         public List<Item> NormalAccessories;
         public List<Item> BuildingAccessories;
+
         public List<Item> NormalVanityAccessories;
         public List<Item> BuildingVanityAccessories;
+
         public List<Item> NormalArmor;
         public List<Item> BuildingArmor;
+
         public List<Item> NormalVanityArmor;
         public List<Item> BuildingVanityArmor;
+
         public List<Item> NormalMiscEquips;
         public List<Item> BuildingMiscEquips;
-        public bool IsNormalAccessories;
+
+        public List<Item> NormalDyes;
+        public List<Item> BuildingDyes;
 
 
         //Creative Wheel Stuff
@@ -54,17 +62,25 @@ namespace BuilderEssentials
         public bool mirrorWandEffects;
         public override void Initialize()
         {
+            IsNormalAccessories = true;
+
             NormalAccessories = new List<Item>(7);
             BuildingAccessories = new List<Item>(7);
+
             NormalVanityAccessories = new List<Item>(7);
             BuildingVanityAccessories = new List<Item>(7);
+
             NormalArmor = new List<Item>(3);
             BuildingArmor = new List<Item>(3);
+
             NormalVanityArmor = new List<Item>(3);
             BuildingVanityArmor = new List<Item>(3);
+
             NormalMiscEquips = new List<Item>(5);
             BuildingMiscEquips = new List<Item>(5);
-            IsNormalAccessories = true;
+
+            NormalDyes = new List<Item>(15);
+            BuildingDyes = new List<Item>(15);
 
 
             //Creative Wheel Stuff
@@ -122,18 +138,28 @@ namespace BuilderEssentials
             return new TagCompound
             {
                 { "IsNormalAccessories", IsNormalAccessories },
+
                 { "NormalAccessories", NormalAccessories },
                 { "BuildingAccessories", BuildingAccessories },
+
                 {"NormalVanityAccessories", NormalVanityAccessories },
                 {"BuildingVanityAccessories", BuildingVanityAccessories },
+
                 {"NormalArmor", NormalArmor },
                 {"BuildingArmor", BuildingArmor },
+
                 {"NormalVanityArmor", NormalVanityArmor },
                 {"BuildingVanityArmor", BuildingVanityArmor },
+
                 {"NormalMiscEquips", NormalMiscEquips },
                 {"BuildingMiscEquips", BuildingMiscEquips },
+
+                {"NormalDyes", NormalDyes },
+                {"BuildingDyes", BuildingDyes },
+
                 {"creativeWheelSelectedIndex", creativeWheelSelectedIndex},
                 {"autoHammerSelectedIndex", autoHammerSelectedIndex },
+
                 {"paintingColorSelectedIndex", paintingColorSelectedIndex},
                 {"paintingToolSelected", paintingToolSelected}
             };
@@ -174,6 +200,12 @@ namespace BuilderEssentials
 
             if (tag.ContainsKey("BuildingMiscEquips"))
                 BuildingMiscEquips = tag.Get<List<Item>>("BuildingMiscEquips");
+
+            if (tag.ContainsKey("NormalDyes"))
+                NormalDyes = tag.Get<List<Item>>("NormalDyes");
+
+            if (tag.ContainsKey("BuildingDyes"))
+                BuildingDyes = tag.Get<List<Item>>("BuildingDyes");
 
             //Creative Wheel
             if (tag.ContainsKey("creativeWheelSelectedIndex"))
