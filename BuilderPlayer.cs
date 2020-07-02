@@ -1,11 +1,13 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 using Terraria.ModLoader.IO;
 
 namespace BuilderEssentials
@@ -19,6 +21,8 @@ namespace BuilderEssentials
         public List<Item> BuildingVanityAccessories;
         public List<Item> NormalVanityClothes;
         public List<Item> BuildingVanityClothes;
+        public List<Item> NormalMiscEquips;
+        public List<Item> BuildingMiscEquips;
         public bool IsNormalAccessories;
 
 
@@ -43,6 +47,7 @@ namespace BuilderEssentials
         public int paintingToolSelected;
         public bool holdingPaintingTool;
 
+
         //Mirror Wand
         public bool mirrorWandEffects;
         public override void Initialize()
@@ -53,6 +58,8 @@ namespace BuilderEssentials
             BuildingVanityAccessories = new List<Item>(7);
             NormalVanityClothes = new List<Item>(3);
             BuildingVanityClothes = new List<Item>(3);
+            NormalMiscEquips = new List<Item>(5);
+            BuildingMiscEquips = new List<Item>(5);
             IsNormalAccessories = true;
 
 
@@ -64,6 +71,7 @@ namespace BuilderEssentials
             //Paint
             paintingColorSelectedIndex = 30; //No color
             paintingToolSelected = 0;
+
 
             //Mirror Wand
             mirrorWandEffects = false;
@@ -116,6 +124,8 @@ namespace BuilderEssentials
                 {"BuildingVanityAccessories", BuildingVanityAccessories },
                 {"NormalVanityClothes", NormalVanityClothes },
                 {"BuildingVanityClothes", BuildingVanityClothes },
+                //{"NormalMiscEquips", NormalMiscEquips },
+                //{"BuildingMiscEquips", BuildingMiscEquips },
                 {"creativeWheelSelectedIndex", creativeWheelSelectedIndex},
                 {"autoHammerSelectedIndex", autoHammerSelectedIndex },
                 {"paintingColorSelectedIndex", paintingColorSelectedIndex},
@@ -146,6 +156,12 @@ namespace BuilderEssentials
 
             if (tag.ContainsKey("BuildingVanityClothes"))
                 BuildingVanityClothes = tag.Get<List<Item>>("BuildingVanityClothes");
+
+            //if (tag.ContainsKey("NormalMiscEquips"))
+            //    NormalMiscEquips = tag.Get<List<Item>>("NormalMiscEquips");
+
+            //if (tag.ContainsKey("BuildingMiscEquips"))
+            //    BuildingMiscEquips = tag.Get<List<Item>>("BuildingMiscEquips");
 
             //Creative Wheel
             if (tag.ContainsKey("creativeWheelSelectedIndex"))

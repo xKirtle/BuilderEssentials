@@ -139,5 +139,16 @@ namespace BuilderEssentials.Utilities
                     npc.type == NPCID.Cyborg || npc.type == NPCID.SantaClaus || npc.type == NPCID.TravellingMerchant ||
                     npc.type == NPCID.OldMan || npc.type == NPCID.SkeletonMerchant);
         }
+
+        public static int FindNextEmptyInventorySlot()
+        {
+            Player player = Main.LocalPlayer;
+            for (int i = 0; i < player.inventory.Length; i++)
+            {
+                if (player.inventory[i].IsAir)
+                    return i;
+            }
+            return -1;
+        }
     }
 }

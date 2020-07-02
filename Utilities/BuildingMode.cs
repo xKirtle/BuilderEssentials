@@ -5,11 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using BuilderEssentials.UI;
 using Terraria;
+using Terraria.ID;
 
 namespace BuilderEssentials.Utilities
 {
     public static partial class Tools
     {
+        //Variable updated through ModConfig
+        public static List<bool> miscEquipsList;
+        //public static List<Item> itemsToSave;
+
         public static void BuildingModeAccessoriesToggle()
         {
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
@@ -29,24 +34,27 @@ namespace BuilderEssentials.Utilities
                 modPlayer.NormalAccessories.Clear();
                 modPlayer.NormalVanityAccessories.Clear();
                 modPlayer.NormalVanityClothes.Clear();
+                //modPlayer.NormalMiscEquips.Clear();
             }
             else
             {
                 modPlayer.BuildingAccessories.Clear();
                 modPlayer.BuildingVanityAccessories.Clear();
                 modPlayer.BuildingVanityClothes.Clear();
+                //modPlayer.BuildingMiscEquips.Clear();
             }
         }
 
         public static void SaveCurrentAccessories()
         {
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            var player = Main.LocalPlayer;
             int maxAccessoryIndex = 5 + Main.LocalPlayer.extraAccessorySlots;
             //Normal and Vanity Accessories
             for (int i = 3; i < 3 + maxAccessoryIndex; i++)
             {
-                Item accessory = modPlayer.player.armor[i];
-                Item vanityAccessory = modPlayer.player.armor[i + 10];
+                Item accessory = player.armor[i];
+                Item vanityAccessory = player.armor[i + 10];
                 if (modPlayer.IsNormalAccessories)
                 {
                     modPlayer.NormalAccessories.Add(accessory);
@@ -62,29 +70,41 @@ namespace BuilderEssentials.Utilities
             //Vanity Sets (&& armor set, in the future?)
             for (int i = 10; i < 13; i++)
             {
-                Item vanityCloth = modPlayer.player.armor[i];
+                Item vanityCloth = player.armor[i];
                 if (modPlayer.IsNormalAccessories)
                     modPlayer.NormalVanityClothes.Add(vanityCloth);
                 else
                     modPlayer.BuildingVanityClothes.Add(vanityCloth);
             }
+
+            //MiscEquips Save
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    if (modPlayer.IsNormalAccessories)
+            //        modPlayer.NormalMiscEquips.Add(player.miscEquips[i]);
+            //    else
+            //        modPlayer.BuildingMiscEquips.Add(player.miscEquips[i]);
+            //}
         }
 
         public static void LoadAccessories()
         {
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            var player = Main.LocalPlayer;
 
+
+            //TODO: REFACTOR THIS SHITTY CODE
             if (modPlayer.IsNormalAccessories)
             {
                 for (int i = 0; i < modPlayer.NormalAccessories.Count; i++)
                 {
-                    modPlayer.player.armor[i + 3] = modPlayer.NormalAccessories[i];
-                    modPlayer.player.armor[i + 13] = modPlayer.NormalVanityAccessories[i];
+                    player.armor[i + 3] = modPlayer.NormalAccessories[i];
+                    player.armor[i + 13] = modPlayer.NormalVanityAccessories[i];
                 }
 
                 for (int i = 0; i < 3; i++)
                 {
-                    modPlayer.player.armor[i + 10] = modPlayer.NormalVanityClothes[i];
+                    player.armor[i + 10] = modPlayer.NormalVanityClothes[i];
                 }
             }
             else
@@ -93,8 +113,8 @@ namespace BuilderEssentials.Utilities
                 {
                     for (int i = 0; i < modPlayer.BuildingAccessories.Count; i++)
                     {
-                        modPlayer.player.armor[i + 3] = modPlayer.BuildingAccessories[i];
-                        modPlayer.player.armor[i + 13] = modPlayer.BuildingVanityAccessories[i];
+                        player.armor[i + 3] = modPlayer.BuildingAccessories[i];
+                        player.armor[i + 13] = modPlayer.BuildingVanityAccessories[i];
                     }
                 }
 
@@ -102,10 +122,29 @@ namespace BuilderEssentials.Utilities
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        modPlayer.player.armor[i + 10] = modPlayer.BuildingVanityClothes[i];
+                        player.armor[i + 10] = modPlayer.BuildingVanityClothes[i];
                     }
                 }
             }
+
+            //MiscEquips Load
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    if (modPlayer.IsNormalAccessories)
+            //    {
+            //        if (miscEquipsList[i])
+            //            player.miscEquips[i] = modPlayer.NormalMiscEquips[i];
+            //        else
+            //            player.miscEquips[i] = modPlayer.BuildingMiscEquips[i];
+            //    }
+            //    else
+            //    {
+            //        if (miscEquipsList[i])
+            //            player.miscEquips[i] = modPlayer.BuildingMiscEquips[i];
+            //        else
+            //            player.miscEquips[i] = modPlayer.NormalMiscEquips[i];
+            //    }
+            //}
         }
         public static void UpdateButtonImage()
         {
