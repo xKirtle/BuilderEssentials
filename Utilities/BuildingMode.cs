@@ -137,7 +137,7 @@ namespace BuilderEssentials.Utilities
                         else
                             modPlayer.BuildingDyes.Add(player.dye[i]);
                     }
-                    else //Misc Equipement Dyes
+                    else //Misc Equipment Dyes
                     {
                         if (modPlayer.IsNormalAccessories)
                             modPlayer.NormalDyes.Add(player.miscDyes[i - 10]);

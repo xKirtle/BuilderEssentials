@@ -1,8 +1,10 @@
 using BuilderEssentials.Items;
+using BuilderEssentials.Items.Accessories;
 using BuilderEssentials.UI;
 using System;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace BuilderEssentials.Utilities
 {
@@ -149,6 +151,30 @@ namespace BuilderEssentials.Utilities
                     return i;
             }
             return -1;
+        }
+
+        public static bool IsCreativeWrenchEquipped()
+        {
+            Player player = Main.LocalPlayer;
+            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
+            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
+            {
+                if (player.armor[i].type == ModContent.ItemType<CreativeWrench>())
+                    return true;
+            }
+            return false;
+        }
+
+        public static void ReduceItemStack(int itemType)
+        {
+            foreach (Item item in Main.LocalPlayer.inventory)
+            {
+                if (item.type == itemType)
+                {
+                    item.stack--;
+                    break;
+                }
+            }
         }
     }
 }

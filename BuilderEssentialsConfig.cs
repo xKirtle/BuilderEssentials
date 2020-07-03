@@ -12,7 +12,7 @@ namespace BuilderEssentials
     public class BuilderEssentialsConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
-        [Header("Building Mode Options")]
+        [Header("Building Mode Options (Require Mod Reload)")]
         [Label("Different Accessories while on Building Mode")]
         [ReloadRequired]
         [DefaultValue(true)]

@@ -100,11 +100,12 @@ namespace BuilderEssentials
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+            //https://github.com/tModLoader/tModLoader/wiki/Vanilla-Interface-layers-values
+            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 1"));
             if (mouseTextIndex != -1)
             {
-                layers.Insert(0, new LegacyGameInterfaceLayer(
-                    "MyMod: UserInterface",
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Builder Essentials: UserInterface",
                     delegate
                     {
                         if (_lastUpdateUiGameTime != null && UserInterface?.CurrentState != null)
