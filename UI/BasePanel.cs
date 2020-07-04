@@ -22,9 +22,6 @@ namespace BuilderEssentials.UI
         static UIText hoverText;
         public override void OnInitialize()
         {
-            UIElement transparentSelectionWand = new TransparentSelection();
-            Append(transparentSelectionWand);
-
             buttonTexture = BuilderEssentials.BuildingModeOff;
             buildingModeButton = new UIImageButton(buttonTexture);
             buildingModeButton.VAlign = 0f;

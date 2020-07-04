@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
+using Steamworks;
 
 namespace BuilderEssentials
 {
@@ -19,7 +20,9 @@ namespace BuilderEssentials
         public static List<Texture2D> PaintColors;
         public static List<Texture2D> PaintTools;
         internal static BasePanel BasePanel;
+        internal static TransparentSelectionUI TransparentSelectionUI;
         internal static UserInterface UserInterface;
+        internal static UserInterface TransparentSelectionInterface;
         internal static ModHotKey ToggleBuildingMode;
 
         public void LoadTextures()
@@ -55,11 +58,15 @@ namespace BuilderEssentials
             {
                 LoadTextures();
 
-                UserInterface = new UserInterface();
+                TransparentSelectionUI = new TransparentSelectionUI();
+                TransparentSelectionUI.Activate();
+                TransparentSelectionInterface = new UserInterface();
+                ShowExperimentalInterface();
 
+                UserInterface = new UserInterface();
                 BasePanel = new BasePanel();
                 BasePanel.Activate();
-                ShowMyUI();
+                ShowUserInterface();
             }
         }
 
@@ -67,6 +74,7 @@ namespace BuilderEssentials
         {
             BasePanel = null;
             UserInterface = null;
+            TransparentSelectionInterface = null;
             ToggleBuildingMode = null;
 
             UnloadTextures();
@@ -96,15 +104,33 @@ namespace BuilderEssentials
             _lastUpdateUiGameTime = gameTime;
             if (UserInterface?.CurrentState != null)
                 UserInterface.Update(gameTime);
+
+            if (TransparentSelectionInterface?.CurrentState != null)
+                TransparentSelectionInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             //https://github.com/tModLoader/tModLoader/wiki/Vanilla-Interface-layers-values
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 1"));
-            if (mouseTextIndex != -1)
+            int interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 1"));
+            if (interfaceLayer != -1)
             {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
+                    "Builder Essentials: TransparentSelection",
+                    delegate
+                    {
+                        if (_lastUpdateUiGameTime != null && UserInterface?.CurrentState != null)
+                        {
+                            TransparentSelectionInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                        }
+                        return true;
+                    },
+                       InterfaceScaleType.Game));
+            }
+
+            if (interfaceLayer != -1)
+            {
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
                     "Builder Essentials: UserInterface",
                     delegate
                     {
@@ -118,14 +144,24 @@ namespace BuilderEssentials
             }
         }
 
-        public static void ShowMyUI()
+        public static void ShowUserInterface()
         {
             UserInterface?.SetState(BasePanel);
         }
 
-        public static void HideMyUI()
+        public static void HideUserInterface()
         {
             UserInterface?.SetState(null);
+        }
+
+        public static void ShowExperimentalInterface()
+        {
+            TransparentSelectionInterface?.SetState(TransparentSelectionUI);
+        }
+
+        public static void HideExperimentalInterface()
+        {
+            TransparentSelectionInterface?.SetState(null);
         }
 
         public override void AddRecipeGroups()

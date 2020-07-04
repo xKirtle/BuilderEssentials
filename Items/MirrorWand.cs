@@ -34,8 +34,8 @@ namespace BuilderEssentials.Items
         }
         public override void SetDefaults()
         {
-            item.height = 32;
-            item.width = 32;
+            item.height = 40;
+            item.width = 40;
             item.useTime = 1;
             item.useAnimation = 10;
             item.useStyle = ItemUseStyleID.HoldingOut;

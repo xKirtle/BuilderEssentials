@@ -5,9 +5,24 @@ using Terraria;
 using Terraria.ModLoader;
 using BuilderEssentials.Items;
 using System;
+using Terraria.GameContent.UI.Elements;
 
 namespace BuilderEssentials.UI
 {
+    public class TransparentSelectionUI : UIState
+    {
+        public override void OnInitialize()
+        {
+            UIElement transparentSelectionWand = new TransparentSelection();
+            Append(transparentSelectionWand);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+    }
+
     public class TransparentSelection : UIElement
     {
         float distanceX;
@@ -144,6 +159,7 @@ namespace BuilderEssentials.UI
         private Vector2 GetVectorBasedOnQuarter(byte currentQuarter, bool isAxisX, bool isTopOrLeft, int iteration)
         {
             Vector2 position = new Vector2();
+
             switch (currentQuarter)
             {
                 case 0:
@@ -159,7 +175,6 @@ namespace BuilderEssentials.UI
                     BottomRight();
                     break;
             }
-
             void BottomRight()
             {
                 if (isAxisX)
