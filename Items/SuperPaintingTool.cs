@@ -52,18 +52,16 @@ namespace BuilderEssentials.Items
                 if (player.inventory[player.selectedItem].IsTheSameAs(item))
                     modPlayer.holdingPaintingTool = true;
 
-                if (PaintWheel.paintWheel != null && !modPlayer.holdingPaintingTool)
+                if (BasePanel.paintingPanel != null && !modPlayer.holdingPaintingTool)
                 {
-                    PaintWheel.paintWheel.Remove();
+                    BasePanel.paintingPanel.Remove();
                     BasePanel.paintingUIOpen = false;
                 }
 
                 if (Main.mouseRight && Tools.IsUIAvailable()
                         && (!player.mouseInterface || (BasePanel.paintingUIOpen && BasePanel.paintingPanel.IsMouseHovering))
-                        && player.inventory[player.selectedItem].IsTheSameAs(item)
-                        && !BasePanel.creativeWheelUIOpen)
+                        && player.inventory[player.selectedItem].IsTheSameAs(item))
                 {
-                    //Maybe use altFunction hook to open the UI?
                     if (++mouseRightTimer == 2)
                         BasePanel.paintingUIOpen = !BasePanel.paintingUIOpen;
                 }

@@ -102,7 +102,7 @@ namespace BuilderEssentials
             
 
             //Multi Wand Wheel Stuff
-            wandWheelSelectedIndex = 0; //NEEDS SAVING
+            wandWheelSelectedIndex = 0;
     }
 
         public override void ResetEffects()
@@ -169,7 +169,9 @@ namespace BuilderEssentials
                 {"autoHammerSelectedIndex", autoHammerSelectedIndex },
 
                 {"paintingColorSelectedIndex", paintingColorSelectedIndex},
-                {"paintingToolSelected", paintingToolSelected}
+                {"paintingToolSelected", paintingToolSelected},
+
+                {"wandWheelSelectedIndex", wandWheelSelectedIndex }
             };
         }
 
@@ -228,6 +230,10 @@ namespace BuilderEssentials
 
             if (tag.ContainsKey("paintingToolSelected"))
                 paintingToolSelected = tag.GetInt("paintingToolSelected");
+
+            //Multi Wand Wheel
+            if (tag.ContainsKey("wandWheelSelectedIndex"))
+                wandWheelSelectedIndex = tag.GetInt("wandWheelSelectedIndex");
         }
 
         public override void OnEnterWorld(Player player)

@@ -14,11 +14,14 @@ namespace BuilderEssentials.UI
         public static Texture2D buttonTexture;
         public static UIPanel creativeWheelPanel;
         public static UIPanel paintingPanel;
+        public static UIPanel wandsWheelPanel;
         public static bool isBuildingModeButtonVisible;
         public static bool isCreativeWheelVisible;
         public static bool creativeWheelUIOpen;
         public static bool isPaintingUIVisible;
         public static bool paintingUIOpen;
+        public static bool isWandsUIVisible;
+        public static bool wandsWheelUIOpen;
         static UIText hoverText;
         public override void OnInitialize()
         {
@@ -55,6 +58,13 @@ namespace BuilderEssentials.UI
                     paintingUIOpen = false;
                     isPaintingUIVisible = false;
                 }
+
+                if (isWandsUIVisible)
+                {
+                    wandsWheelPanel.Remove();
+                    wandsWheelUIOpen = false;
+                    isWandsUIVisible = false;
+                }
             }
             else //!Main.playerInventory
             {
@@ -67,7 +77,9 @@ namespace BuilderEssentials.UI
 
             //Blocks mouse from interacting with the world when hovering on UI interfaces
             if ((buildingModeButton.IsMouseHovering && isBuildingModeButtonVisible) ||
-            (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible))
+            (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible) ||
+            (paintingPanel != null && paintingPanel.IsMouseHovering && isPaintingUIVisible) ||
+            (wandsWheelPanel != null && wandsWheelPanel.IsMouseHovering && isWandsUIVisible))
                 Main.LocalPlayer.mouseInterface = true;
 
             //CreativeWrench Wheel UI
@@ -93,6 +105,18 @@ namespace BuilderEssentials.UI
             {
                 paintingPanel.Remove();
                 isPaintingUIVisible = false;
+            }
+
+            //Wand Wheel UI
+            if (wandsWheelUIOpen && !isWandsUIVisible)
+            {
+                wandsWheelPanel = MultiWandWheel.CreateMultiWandWheelPanel(Main.mouseX, Main.mouseY, this);
+                isWandsUIVisible = true;
+            }
+            else if (!wandsWheelUIOpen && isWandsUIVisible)
+            {
+                wandsWheelPanel.Remove();
+                isWandsUIVisible = false;
             }
 
             //Tooltips while hovering CWElements

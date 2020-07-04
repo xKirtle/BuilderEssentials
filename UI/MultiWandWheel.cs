@@ -16,7 +16,6 @@ namespace BuilderEssentials.UI
         public static float MultiWandWheelWidth;
         public static float MultiWandWheelHeight;
         public static List<UIImageButton> WandWheelElements;
-        private static readonly int numberOfElements = 6;
 
         public static UIPanel CreateMultiWandWheelPanel(int mouseX, int mouseY, BasePanel basePanel)
         {
@@ -30,8 +29,8 @@ namespace BuilderEssentials.UI
             MultiWandWheelPanel.HAlign = 0f;
             MultiWandWheelPanel.Width.Set(MultiWandWheelWidth, 0);
             MultiWandWheelPanel.Height.Set(MultiWandWheelHeight, 0);
-            MultiWandWheelPanel.Left.Set(mouseX - MultiWandWheelWidth / 2, 0); //mouseX - this.width/2
-            MultiWandWheelPanel.Top.Set(mouseY - MultiWandWheelHeight / 2, 0); //mouseY - this.height/2
+            MultiWandWheelPanel.Left.Set(mouseX - MultiWandWheelWidth / 2, 0);
+            MultiWandWheelPanel.Top.Set(mouseY - MultiWandWheelHeight / 2, 0);
             MultiWandWheelPanel.BorderColor = Color.Transparent; //Color.Transparent;
             MultiWandWheelPanel.BackgroundColor = Color.Transparent;
 
@@ -54,8 +53,8 @@ namespace BuilderEssentials.UI
             for (int i = 0; i < WandWheelElements.Count; i++)
             {
                 int index = i; //Magic values to keep the rotation aligned the way I want, sorry
-                double x = (MultiWandWheelWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 3) - 0.3));
-                double y = (MultiWandWheelHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 3) - 0.3));
+                double x = (MultiWandWheelWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 3)));
+                double y = (MultiWandWheelHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 3)));
                 WandWheelElements[i].VAlign = 0f;
                 WandWheelElements[i].HAlign = 0f;
                 WandWheelElements[i].Left.Set((float)x, 0f);
@@ -74,10 +73,14 @@ namespace BuilderEssentials.UI
 
         private static void MainElementClick(int index)
         {
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+
             for (int i = 0; i < WandWheelElements.Count; i++)
                 WandWheelElements[i].SetVisibility(.75f, .4f);
 
             WandWheelElements[index].SetVisibility(1f, 1f);
+            modPlayer.wandWheelSelectedIndex = index;
+
         }
     }
 }

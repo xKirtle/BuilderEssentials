@@ -45,7 +45,7 @@ namespace BuilderEssentials.Items.Accessories
 
                 //InfinitePickupRange
                 if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePickupRange))
-                    Player.defaultItemGrabRange *= 100000; //I have no idea how much it should be so that should suffice??
+                    Player.defaultItemGrabRange = 1000000; //I have no idea how much it should be so that should suffice??
 
                 //Infinite Placement
                 if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
@@ -53,8 +53,8 @@ namespace BuilderEssentials.Items.Accessories
 
                 //Right click timer
                 if (Main.mouseRight && Tools.IsUIAvailable()
-                    && (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
-                    && !BasePanel.paintingUIOpen && player.inventory[player.selectedItem].IsAir)
+                && (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
+                && player.inventory[player.selectedItem].IsAir)
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
