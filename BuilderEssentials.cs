@@ -19,6 +19,7 @@ namespace BuilderEssentials
         public static List<Texture2D> CWAutoHammerElements;
         public static List<Texture2D> PaintColors;
         public static List<Texture2D> PaintTools;
+        public static List<Texture2D> WandWheelElements; //TEXTURES TO BE DONE
         internal static BasePanel BasePanel;
         internal static TransparentSelectionUI TransparentSelectionUI;
         internal static UserInterface UserInterface;
@@ -30,7 +31,7 @@ namespace BuilderEssentials
             BuildingModeOn = this.GetTexture("UI/Elements/BuildingModeOn");
             BuildingModeOff = this.GetTexture("UI/Elements/BuildingModeOff");
 
-            CreativeWheelElements = new List<Texture2D>();
+            CreativeWheelElements = new List<Texture2D>(5);
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWColorPicker"));
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement"));
             CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer"));
@@ -41,13 +42,17 @@ namespace BuilderEssentials
             for (int i = 0; i < 6; i++)
                 CWAutoHammerElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer" + i));
 
-            PaintColors = new List<Texture2D>();
+            PaintColors = new List<Texture2D>(31);
             for (int i = 0; i < 31; i++)
                 PaintColors.Add(this.GetTexture("UI/Elements/Paint/Paint" + i));
 
-            PaintTools = new List<Texture2D>();
+            PaintTools = new List<Texture2D>(3);
             for (int i = 0; i < 3; i++)
                 PaintTools.Add(this.GetTexture("UI/Elements/Paint/PaintTool" + i));
+
+            WandWheelElements = new List<Texture2D>(6);
+            for (int i = 0; i < 6; i++)
+                WandWheelElements.Add(this.GetTexture("UI/Elements/WandWheel/WandWheel" + i));
         }
 
         public override void Load()
@@ -96,6 +101,9 @@ namespace BuilderEssentials
 
             for (int i = 0; i < PaintTools.Count; i++)
                 PaintTools[i] = null;
+
+            for (int i = 0; i < WandWheelElements.Count; i++)
+                WandWheelElements[i] = null;
         }
 
         private GameTime _lastUpdateUiGameTime;

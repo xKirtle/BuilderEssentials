@@ -44,7 +44,7 @@ namespace BuilderEssentials.UI
         }
         private static void CreateLayout()
         {
-            //Initialize the list that contains the CreativeWheel Elements, also intialized below
+            //Initialize the list that contains the CreativeWheel Elements, that are also intialized below
             CreativeWheelElements = new List<UIImageButton>();
             for (int i = 0; i < BuilderEssentials.CreativeWheelElements.Count; i++)
                 CreativeWheelElements.Add(new UIImageButton(BuilderEssentials.CreativeWheelElements[i]));

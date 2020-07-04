@@ -11,8 +11,6 @@ namespace BuilderEssentials.Items
 {
     class MirrorWand : ModItem
     {
-        private bool message = false;
-        //--------------------------------------
         public static bool firstValue = false;
         public static bool OperationComplete = false;
         public static Vector2 start;
@@ -67,15 +65,6 @@ namespace BuilderEssentials.Items
 
         public override void HoldItem(Player player)
         {
-            //TODO: FIX UI/ZOOM SCALE ISSUES
-
-            //Temp until I don't solve scale issues
-            if ((Main.UIScale != 1 || Main.GameZoomTarget != 1) && !message)
-            {
-                message = true;
-                Main.NewText("Please set Zoom and UI Scale levels to 100% for the best experience with the Mirror Wand", Color.Red);
-            }
-
             //----------------Right Click----------------
             if (!firstValue && !OperationComplete)
             {

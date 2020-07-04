@@ -60,6 +60,10 @@ namespace BuilderEssentials
 
         //Mirror Wand
         public bool mirrorWandEffects;
+
+
+        //Multi Wand Wheel Stuff
+        public int wandWheelSelectedIndex;
         public override void Initialize()
         {
             IsNormalAccessories = true;
@@ -95,7 +99,11 @@ namespace BuilderEssentials
 
             //Mirror Wand
             mirrorWandEffects = false;
-        }
+            
+
+            //Multi Wand Wheel Stuff
+            wandWheelSelectedIndex = 0; //NEEDS SAVING
+    }
 
         public override void ResetEffects()
         {
