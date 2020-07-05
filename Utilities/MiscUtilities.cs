@@ -1,6 +1,7 @@
 using BuilderEssentials.Items;
 using BuilderEssentials.Items.Accessories;
 using BuilderEssentials.UI;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -165,16 +166,44 @@ namespace BuilderEssentials.Utilities
             return false;
         }
 
-        public static void ReduceItemStack(int itemType)
+        public static bool ReduceItemStack(int itemType)
         {
             foreach (Item item in Main.LocalPlayer.inventory)
             {
                 if (item.type == itemType)
                 {
                     item.stack--;
-                    break;
+                    return true;
                 }
             }
+            return false;
+        }
+
+        public static bool HasTileAround(int posX, int posY)
+        {
+            //Top
+            if (Main.tile[posX, posY - 1].active())
+                return true;
+            //Right
+            if (Main.tile[posX + 1, posY].active())
+                return true;
+            //Bottom
+            if (Main.tile[posX, posY + 1].active())
+                return true;
+            //Left
+            if (Main.tile[posX - 1, posY].active())
+                return true;
+
+            return false;
+        }
+
+        public static bool ToolHasRange(int range)
+        {
+            Player player = Main.LocalPlayer;
+            Vector2 pointedCoord = new Vector2(Main.mouseX + Main.screenPosition.X, Main.mouseY + Main.screenPosition.Y);
+            bool inRange = Vector2.Distance(player.position, pointedCoord) < range * 16;
+
+            return inRange;
         }
     }
 }

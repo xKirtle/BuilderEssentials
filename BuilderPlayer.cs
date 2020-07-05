@@ -14,6 +14,10 @@ namespace BuilderEssentials
 {
     public class BuilderPlayer : ModPlayer
     {
+        //Player
+        public bool infiniteRange;
+
+
         //Building Mode
         public bool IsNormalAccessories;
 
@@ -66,6 +70,8 @@ namespace BuilderEssentials
         public int wandWheelSelectedIndex;
         public override void Initialize()
         {
+            infiniteRange = false;
+
             IsNormalAccessories = true;
 
             NormalAccessories = new List<Item>(7);
@@ -115,6 +121,7 @@ namespace BuilderEssentials
                 Player.defaultItemGrabRange = 38;
                 player.showItemIcon = false;
                 holdingPaintingTool = false;
+                infiniteRange = false;
 
                 if (!player.inventory[player.selectedItem].IsAir)
                 {

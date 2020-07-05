@@ -42,6 +42,7 @@ namespace BuilderEssentials.Items.Accessories
                 player.tileSpeed += 50;
                 Player.tileRangeX = 65;
                 Player.tileRangeY = 55;
+                modPlayer.infiniteRange = true;
 
                 //InfinitePickupRange
                 if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePickupRange))
@@ -52,9 +53,9 @@ namespace BuilderEssentials.Items.Accessories
                     player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
 
                 //Right click timer
-                if (Main.mouseRight && Tools.IsUIAvailable()
-                && (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
-                && player.inventory[player.selectedItem].IsAir)
+                if (Main.mouseRight && Tools.IsUIAvailable() &&
+                player.inventory[player.selectedItem].IsAir &&
+                (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering))
                 {
                     if (++mouseRightTimer == 2)
                         BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
@@ -64,14 +65,14 @@ namespace BuilderEssentials.Items.Accessories
                     mouseRightTimer = 0;
 
                 //ItemPicker
-                if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker)
-                && !player.mouseInterface && !Main.playerInventory)
+                if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker) &&
+                    !player.mouseInterface && !Main.playerInventory)
                     Tools.PickItem(ref oldPosX, ref oldPosY);
 
                 //AutoHammer
-                if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
-                && player.inventory[player.selectedItem].IsAir && CreativeWheelRework.CreativeWheelReworkPanel != null && !player.mouseInterface
-                && !Main.playerInventory)
+                if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer) &&
+                player.inventory[player.selectedItem].IsAir && CreativeWheelRework.CreativeWheelReworkPanel != null &&
+                !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
                         Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile);

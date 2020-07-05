@@ -18,15 +18,15 @@ namespace BuilderEssentials.Utilities
             Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
             //Placement Anywhere
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && !tile.active() &&
-                (oldPosX != i || oldPosY != j) && Tools.IsCreativeWrenchEquipped())
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && 
+            !tile.active() && (oldPosX != i || oldPosY != j) && Tools.IsCreativeWrenchEquipped())
             {
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, true, -1, selectedItem.placeStyle);
                 tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
-                if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)
-                && !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+                if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) &&
+                !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
                 {
                     if (selectedItem.type == ItemID.LivingMahoganyWand || selectedItem.type == ItemID.LivingMahoganyLeafWand)
                         Tools.ReduceItemStack(ItemID.RichMahogany);
@@ -74,7 +74,7 @@ namespace BuilderEssentials.Utilities
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
             if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) &&
-                !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+            !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
             {
                 if (item.consumable == false && modifiedItemsConsumable.Contains(item))
                 {
@@ -84,8 +84,8 @@ namespace BuilderEssentials.Utilities
 
                 //Wands aren't consumable items
                 if (item.type == ItemID.BoneWand || item.type == ItemID.HiveWand || item.type == ItemID.LeafWand ||
-                    item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand ||
-                    item.type == ItemID.LivingWoodWand || item.type == ItemID.StaffofRegrowth)
+                item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand ||
+                item.type == ItemID.LivingWoodWand || item.type == ItemID.StaffofRegrowth)
                     item.consumable = false;
             }
 
@@ -93,7 +93,7 @@ namespace BuilderEssentials.Utilities
                 Tools.MirrorWandPlacement(i, j, item, -1);
 
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
-                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+            modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
             {
                 item.consumable = false;
                 //Could be problematic checking for their names?
@@ -111,7 +111,7 @@ namespace BuilderEssentials.Utilities
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade) ||
-                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
+            modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
                 item.consumable = false;
             else
                 item.consumable = true;

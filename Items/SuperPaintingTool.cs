@@ -11,10 +11,10 @@ namespace BuilderEssentials.Items
 {
     class SuperPaintingTool : ModItem
     {
-        //TODO: ENSURE MULTIPLAYER COMPATIBILITY (66% done)
         public List<int> paints;
         bool foundModdedPaint;
         private bool firstTimeOpeningUI = true;
+        int toolRange;
 
         public override void SetStaticDefaults()
         {
@@ -41,6 +41,7 @@ namespace BuilderEssentials.Items
             item.autoReuse = true;
             item.noMelee = true;
             item.noUseGraphic = true;
+            toolRange = 8;
         }
 
         int mouseRightTimer = 0;
@@ -76,7 +77,8 @@ namespace BuilderEssentials.Items
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             Tile pointedTile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
-            if (modPlayer.paintingColorSelectedIndex != 30) //Color selected
+            if (modPlayer.infiniteRange || Tools.ToolHasRange(toolRange) &&
+                modPlayer.paintingColorSelectedIndex != 30) //Color selected
             {
                 player.showItemIcon = true;
                 switch (modPlayer.paintingToolSelected)
@@ -127,7 +129,8 @@ namespace BuilderEssentials.Items
             int posY = Player.tileTargetY;
             Tile pointedTile = Main.tile[posX, posY];
 
-            if ((BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering) || firstTimeOpeningUI)
+            if ((modPlayer.infiniteRange || Tools.ToolHasRange(toolRange)) &&
+                (BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering) || firstTimeOpeningUI)
             {
                 if (firstTimeOpeningUI)
                     firstTimeOpeningUI = false;

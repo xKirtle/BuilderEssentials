@@ -28,11 +28,14 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+
             player.blockRange += 55;
             player.wallSpeed += 10;
             player.tileSpeed += 50;
             Player.tileRangeX = 65;
             Player.tileRangeY = 55;
+            modPlayer.infiniteRange = true;
         }
 
         public override void AddRecipes()
