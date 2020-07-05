@@ -66,6 +66,8 @@ namespace BuilderEssentials.UI
 
                 if (selectedQuarter != 4) //Doesn't allow it to run once without clicking right click
                 {
+                    //X Axis goes full lenght from start to end and then I remove two iterations from the Y axis to adjust it in the middle of both X Axis
+
                     //X Axis
                     for (int i = 0; i < distanceX + 1; i++)
                     {
@@ -79,7 +81,7 @@ namespace BuilderEssentials.UI
                     }
 
                     //Y Axis
-                    for (int i = 0; i < distanceY + 1; i++)
+                    for (int i = 1; i < distanceY; i++)
                     {
                         //Left:Right Y
                         position = GetVectorBasedOnQuarter(selectedQuarter, false, true, i);

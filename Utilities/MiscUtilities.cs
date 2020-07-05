@@ -3,6 +3,7 @@ using BuilderEssentials.Items.Accessories;
 using BuilderEssentials.UI;
 using Microsoft.Xna.Framework;
 using System;
+using System.Threading;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -53,37 +54,34 @@ namespace BuilderEssentials.Utilities
                     bool hasMirrorAxisPlaced = IsWithinRange(posY, MirrorWand.mouseLeftStart.Y, MirrorWand.mouseLeftEnd.Y);
                     if (hasMirrorAxisPlaced)
                     {
+                        int newPosX;
+                        bool inRange = false;
                         if (distanceToMirrorX < 0) //Right to the mirror axis
                         {
                             distanceToMirrorX = Math.Abs(distanceToMirrorX);
-                            int newPosX = (int)(MirrorWand.mouseLeftEnd.X - distanceToMirrorX);
+                            newPosX = (int)(MirrorWand.mouseLeftEnd.X - distanceToMirrorX);
 
                             if (IsWithinRange(newPosX, MirrorWand.start.X, MirrorWand.end.X))
-                            {
-                                if (wallType == -1)
-                                    WorldGen.PlaceTile(newPosX, (int)posY, item.createTile, false, false, -1, item.placeStyle);
-                                else
-                                    WorldGen.PlaceWall(newPosX, (int)posY, wallType);
-
-                                if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    NetMessage.SendTileSquare(-1, newPosX, (int)posY, 1);
-                            }
+                                inRange = true;
                         }
                         else //Left to the mirror axis
                         {
                             distanceToMirrorX = Math.Abs(distanceToMirrorX);
-                            int newPosX = (int)(MirrorWand.mouseLeftEnd.X + distanceToMirrorX);
+                            newPosX = (int)(MirrorWand.mouseLeftEnd.X + distanceToMirrorX);
 
                             if (IsWithinRange(newPosX, MirrorWand.start.X, MirrorWand.end.X))
-                            {
-                                if (wallType == -1)
-                                    WorldGen.PlaceTile(newPosX, (int)posY, item.createTile, false, false, -1, item.placeStyle);
-                                else
-                                    WorldGen.PlaceWall(newPosX, (int)posY, wallType);
+                                inRange = true;
+                        }
 
-                                if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    NetMessage.SendTileSquare(-1, newPosX, (int)posY, 1);
-                            }
+                        if (inRange)
+                        {
+                            if (wallType == -1)
+                                WorldGen.PlaceTile(newPosX, (int)posY, item.createTile, false, false, -1, item.placeStyle);
+                            else
+                                WorldGen.PlaceWall(newPosX, (int)posY, wallType);
+
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendTileSquare(-1, newPosX, (int)posY, 1);
                         }
                     }
                 }
@@ -93,37 +91,34 @@ namespace BuilderEssentials.Utilities
                     bool hasMirrorAxisPlaced = IsWithinRange(posX, MirrorWand.mouseLeftStart.X, MirrorWand.mouseLeftEnd.X);
                     if (hasMirrorAxisPlaced)
                     {
+                        int newPosY;
+                        bool inRange = false;
                         if (distanceToMirrorY < 0) //Bottom to the mirror axis
                         {
                             distanceToMirrorY = Math.Abs(distanceToMirrorY);
-                            int newPosY = (int)(MirrorWand.mouseLeftEnd.Y - distanceToMirrorY);
+                            newPosY = (int)(MirrorWand.mouseLeftEnd.Y - distanceToMirrorY);
 
                             if (IsWithinRange(newPosY, MirrorWand.start.Y, MirrorWand.end.Y))
-                            {
-                                if (wallType == -1)
-                                    WorldGen.PlaceTile((int)posX, newPosY, item.createTile, false, false, -1, item.placeStyle);
-                                else
-                                    WorldGen.PlaceWall((int)posX, newPosY, wallType);
-
-                                if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    NetMessage.SendTileSquare(-1, (int)posX, newPosY, 1);
-                            }
+                                inRange = true;
                         }
                         else //Top to the mirror axis
                         {
                             distanceToMirrorY = Math.Abs(distanceToMirrorY);
-                            int newPosY = (int)(MirrorWand.mouseLeftEnd.Y + distanceToMirrorY);
+                            newPosY = (int)(MirrorWand.mouseLeftEnd.Y + distanceToMirrorY);
 
                             if (IsWithinRange(newPosY, MirrorWand.start.Y, MirrorWand.end.Y))
-                            {
-                                if (wallType == -1)
-                                    WorldGen.PlaceTile((int)posX, newPosY, item.createTile, false, false, -1, item.placeStyle);
-                                else
-                                    WorldGen.PlaceWall((int)posX, newPosY, wallType);
+                                inRange = true;
+                        }
 
-                                if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    NetMessage.SendTileSquare(-1, (int)posX, newPosY, 1);
-                            }
+                        if (inRange)
+                        {
+                            if (wallType == -1)
+                                WorldGen.PlaceTile((int)posX, newPosY, item.createTile, false, false, -1, item.placeStyle);
+                            else
+                                WorldGen.PlaceWall((int)posX, newPosY, wallType);
+
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendTileSquare(-1, (int)posX, newPosY, 1);
                         }
                     }
                 }
