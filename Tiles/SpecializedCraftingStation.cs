@@ -31,7 +31,7 @@ namespace BuilderEssentials.Tiles
             TileObjectData.newTile.Height = 3;
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newTile.Width = 4;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
 
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
