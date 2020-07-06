@@ -158,9 +158,7 @@ namespace BuilderEssentials
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
-            {
                 Tools.BuildingModeToggle();
-            }
         }
 
         public override TagCompound Save()
@@ -268,13 +266,6 @@ namespace BuilderEssentials
             //Loads (or populates) all lists on enter world
             Tools.BuildingModeToggle();
             Tools.BuildingModeToggle();
-        }
-
-        public override void PreSavePlayer()
-        {
-            //Forces the player to leave in the non Building Mode "save"
-            if (!IsNormalAccessories)
-                Tools.BuildingModeToggle();
         }
 
         void FillListWithEmptyItems(ref List<Item> list, int size)

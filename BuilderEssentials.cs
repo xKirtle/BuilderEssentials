@@ -184,6 +184,12 @@ namespace BuilderEssentials
             TransparentSelectionInterface?.SetState(null);
         }
 
+        public override void PreSaveAndQuit()
+        {
+            if (!Main.LocalPlayer.GetModPlayer<BuilderPlayer>().IsNormalAccessories)
+                Tools.BuildingModeToggle();
+        }
+
         public override void AddRecipeGroups()
         {
             RecipeGroup workbench = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Workbench", new int[]
