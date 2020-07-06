@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,51 +13,48 @@ namespace BuilderEssentials.Tiles
     {
         public override void SetDefaults()
         {
-            Main.tileSolidTop[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileTable[Type] = true;
-            Main.tileLavaDeath[Type] = false;
-            animationFrameHeight = 54;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style6x3);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16};
-            TileObjectData.newTile.Height = 3;
+            Main.tileLighted[Type] = true;
+            Main.tileWaterDeath[Type] = true;
+            Main.tileLavaDeath[Type] = true;
+
+            TileObjectData.newTile.WaterDeath = true;
+            TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
+            TileObjectData.newTile.LavaPlacement = LiquidPlacement.NotAllowed;
+
+            animationFrameHeight = 74;
+            TileObjectData.newTile.UsesCustomCanPlace = true;
+            TileObjectData.newTile.Origin = new Point16(1, 3);
+            TileObjectData.newTile.CoordinatePadding = 2;
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16 };
+            TileObjectData.newTile.Height = 4;
             TileObjectData.newTile.CoordinateWidth = 16;
-            TileObjectData.newTile.Width = 6;
-            TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
-            TileObjectData.newTile.StyleWrapLimit = 2;
-            TileObjectData.newTile.StyleMultiplier = 2;
-            TileObjectData.newTile.StyleHorizontal = true;
-            TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-            TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-            TileObjectData.addAlternate(1);
+            TileObjectData.newTile.Width = 4;
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
+
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
             disableSmartCursor = true;
-            adjTiles = new int[] { TileID.WorkBenches, TileID.Furnaces, TileID.Hellforge, TileID.Anvils, TileID.AlchemyTable, TileID.Sinks,
-                TileID.Sawmill, TileID.Loom, TileID.Chairs, TileID.Tables, TileID.Tables2, TileID.CookingPots, TileID.TinkerersWorkbench,
-                TileID.ImbuingStation, TileID.DyeVat, TileID.HeavyWorkBench, TileID.DemonAltar, TileID.MythrilAnvil,
-                TileID.AdamantiteForge, TileID.Bookcases, TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation,
-                TileID.Kegs, TileID.Blendomatic, TileID.MeatGrinder, TileID.BoneWelder, TileID.GlassKiln, TileID.HoneyDispenser,
-                TileID.IceMachine, TileID.LivingLoom, TileID.SkyMill, TileID.Solidifier, TileID.FleshCloningVat, TileID.SteampunkBoiler,
-                TileID.LihzahrdFurnace, TileID.WaterDrip, TileID.Waterfall, TileID.LavaDrip, TileID.Lavafall,
-                TileID.HoneyDrip, TileID.Honeyfall, TileID.Campfire, TileID.Extractinator, TileID.SnowCloud, TileID.Tombstones };
+            ModTranslation name = CreateMapEntryName();
+            name.SetDefault("Multi Crafting Station");
+            AddMapEntry(new Color(92, 92, 92), name);
+
+            adjTiles = new int[] { TileID.MythrilAnvil, TileID.AdamantiteForge, TileID.Bookcases,
+                TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation };
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)
         {
-            //Spend 10 ticks on each of 8 frames, looping
-            frameCounter++;
-            if (frameCounter > 8)
+            //new frame each 5 ticks
+            if (++frameCounter > 5)
             {
                 frameCounter = 0;
-                frame++;
-                if (frame > 6)
-                {
+                if (++frame > 27)
                     frame = 0;
-                }
             }
         }
 
