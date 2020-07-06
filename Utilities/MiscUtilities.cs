@@ -33,14 +33,15 @@ namespace BuilderEssentials.Utilities
                 !player.CCed;
         }
 
+        public static bool IsWithinRange(float number, float value1, float value2)
+        {
+            return ((number >= value1 && number <= value2) || (number <= value1 && number >= value2));
+        }
+
         //2x2 tiles seem to be placed wrong in an odd numbered mirror, might need to do an offet "hotfix"
         public static void MirrorWandPlacement(int i, int j, Item item, int wallType)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            bool IsWithinRange(float number, float value1, float value2)
-            {
-                return ((number >= value1 && number <= value2) || (number <= value1 && number >= value2));
-            }
 
             //Mirror Wand
             if (modPlayer.mirrorWandEffects)//War Table seems to crash if attempted to use here?
@@ -125,6 +126,97 @@ namespace BuilderEssentials.Utilities
             }
         }
 
+        //public static void MirrorWandBreaking(int i, int j, int type, Item item)
+        //{
+        //    BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+
+        //    if (modPlayer.mirrorWandEffects)
+        //    {
+        //        float posX = i;
+        //        float posY = j;
+
+        //        if (TransparentSelection.selectedDirection == 0 || TransparentSelection.selectedDirection == 1)
+        //        {
+        //            float distanceToMirrorX = MirrorWand.mouseLeftEnd.X - posX;
+        //            bool hasMirrorAxisPlaced = IsWithinRange(posY, MirrorWand.mouseLeftStart.Y, MirrorWand.mouseLeftEnd.Y);
+
+        //            if (hasMirrorAxisPlaced)
+        //            {
+        //                int newPosX;
+        //                bool inRange = false;
+        //                if (distanceToMirrorX < 0) //Right to the mirror axis
+        //                {
+        //                    distanceToMirrorX = Math.Abs(distanceToMirrorX);
+        //                    newPosX = (int)(MirrorWand.mouseLeftEnd.X - distanceToMirrorX);
+
+        //                    if (IsWithinRange(newPosX, MirrorWand.start.X, MirrorWand.end.X))
+        //                        inRange = true;
+        //                }
+        //                else //Left to the mirror axis
+        //                {
+        //                    distanceToMirrorX = Math.Abs(distanceToMirrorX);
+        //                    newPosX = (int)(MirrorWand.mouseLeftEnd.X + distanceToMirrorX);
+
+        //                    if (IsWithinRange(newPosX, MirrorWand.start.X, MirrorWand.end.X))
+        //                        inRange = true;
+        //                }
+
+        //                if (inRange)
+        //                {
+        //                    Tile tile = Main.tile[newPosX, j];
+
+        //                    if (tile.type >= 0 && item.pick >= 35)
+        //                        WorldGen.KillTile(newPosX, j);
+        //                    else if (tile.wall > 0 && item.pick >= 35)
+        //                        WorldGen.KillWall(newPosX, j);
+
+        //                    if (Main.netMode == NetmodeID.MultiplayerClient)
+        //                        NetMessage.SendTileSquare(-1, newPosX, (int)posY, 1);
+        //                }
+        //            }
+        //        }
+        //        else if (TransparentSelection.selectedDirection == 2 || TransparentSelection.selectedDirection == 3)
+        //        {
+        //            float distanceToMirrorY = MirrorWand.mouseLeftEnd.Y - posY;
+        //            bool hasMirrorAxisPlaced = IsWithinRange(posX, MirrorWand.mouseLeftStart.X, MirrorWand.mouseLeftEnd.X);
+        //            if (hasMirrorAxisPlaced)
+        //            {
+        //                int newPosY;
+        //                bool inRange = false;
+        //                if (distanceToMirrorY < 0) //Bottom to the mirror axis
+        //                {
+        //                    distanceToMirrorY = Math.Abs(distanceToMirrorY);
+        //                    newPosY = (int)(MirrorWand.mouseLeftEnd.Y - distanceToMirrorY);
+
+        //                    if (IsWithinRange(newPosY, MirrorWand.start.Y, MirrorWand.end.Y))
+        //                        inRange = true;
+        //                }
+        //                else //Top to the mirror axis
+        //                {
+        //                    distanceToMirrorY = Math.Abs(distanceToMirrorY);
+        //                    newPosY = (int)(MirrorWand.mouseLeftEnd.Y + distanceToMirrorY);
+
+        //                    if (IsWithinRange(newPosY, MirrorWand.start.Y, MirrorWand.end.Y))
+        //                        inRange = true;
+        //                }
+
+        //                if (inRange)
+        //                {
+        //                    Tile tile = Main.tile[i, newPosY];
+
+        //                    if (tile.type >= 0 && item.pick >= 35)
+        //                        WorldGen.KillTile(i, newPosY);
+        //                    else if (tile.wall > 0 && item.pick >= 35)
+        //                        WorldGen.KillWall(i, newPosY);
+
+        //                    if (Main.netMode == NetmodeID.MultiplayerClient)
+        //                        NetMessage.SendTileSquare(-1, (int)posX, newPosY, 1);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
         public static bool IsTownNpc(NPC npc)
         {
             return (npc.type == NPCID.Guide || npc.type == NPCID.Merchant || npc.type == NPCID.Nurse ||
@@ -201,4 +293,21 @@ namespace BuilderEssentials.Utilities
             return inRange;
         }
     }
+
+    //class MirrorWandGlobalTile : GlobalTile
+    //{
+    //    int oldPosX = 0;
+    //    int oldPosY = 0;
+    //    public override bool Drop(int i, int j, int type)
+    //    {
+    //        if (i != oldPosX || j != oldPosY)
+    //        {
+    //            Tools.MirrorWandBreaking(i, j, type, Main.LocalPlayer.HeldItem);
+    //            oldPosX = i;
+    //            oldPosY = j;
+    //        }
+
+    //        return base.Drop(i, j, type);
+    //    }
+    //}
 }

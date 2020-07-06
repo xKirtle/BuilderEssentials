@@ -1,5 +1,6 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
+using log4net.Repository.Hierarchy;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -75,22 +76,34 @@ namespace BuilderEssentials
             IsNormalAccessories = true;
 
             NormalAccessories = new List<Item>(7);
+            FillListWithEmptyItems(ref NormalAccessories, 7);
             BuildingAccessories = new List<Item>(7);
+            FillListWithEmptyItems(ref BuildingAccessories, 7);
 
             NormalVanityAccessories = new List<Item>(7);
+            FillListWithEmptyItems(ref NormalVanityAccessories, 7);
             BuildingVanityAccessories = new List<Item>(7);
+            FillListWithEmptyItems(ref BuildingVanityAccessories, 7);
 
             NormalArmor = new List<Item>(3);
+            FillListWithEmptyItems(ref NormalArmor, 3);
             BuildingArmor = new List<Item>(3);
+            FillListWithEmptyItems(ref BuildingArmor, 3);
 
             NormalVanityArmor = new List<Item>(3);
+            FillListWithEmptyItems(ref NormalVanityArmor, 3);
             BuildingVanityArmor = new List<Item>(3);
+            FillListWithEmptyItems(ref BuildingVanityArmor, 3);
 
             NormalMiscEquips = new List<Item>(5);
+            FillListWithEmptyItems(ref NormalMiscEquips, 5);
             BuildingMiscEquips = new List<Item>(5);
+            FillListWithEmptyItems(ref BuildingMiscEquips, 5);
 
             NormalDyes = new List<Item>(15);
+            FillListWithEmptyItems(ref NormalDyes, 15);
             BuildingDyes = new List<Item>(15);
+            FillListWithEmptyItems(ref BuildingDyes, 15);
 
 
             //Creative Wheel Stuff
@@ -105,11 +118,11 @@ namespace BuilderEssentials
 
             //Mirror Wand
             mirrorWandEffects = false;
-            
+
 
             //Multi Wand Wheel Stuff
             wandWheelSelectedIndex = 0;
-    }
+        }
 
         public override void ResetEffects()
         {
@@ -145,7 +158,9 @@ namespace BuilderEssentials
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
+            {
                 Tools.BuildingModeToggle();
+            }
         }
 
         public override TagCompound Save()
@@ -260,6 +275,12 @@ namespace BuilderEssentials
             //Forces the player to leave in the non Building Mode "save"
             if (!IsNormalAccessories)
                 Tools.BuildingModeToggle();
+        }
+
+        void FillListWithEmptyItems(ref List<Item> list, int size)
+        {
+            for (int i = 0; i < size; i++)
+                list.Add(new Item());
         }
     }
 }

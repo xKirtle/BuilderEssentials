@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Steamworks;
+using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials
 {
@@ -25,6 +26,15 @@ namespace BuilderEssentials
         internal static UserInterface UserInterface;
         internal static UserInterface TransparentSelectionInterface;
         internal static ModHotKey ToggleBuildingMode;
+
+
+        public static bool accessories;
+        public static bool vanityAccessories;
+        public static bool armor;
+        public static bool vanityArmor;
+        public static bool miscEquips;
+        public static bool dyes;
+
 
         public void LoadTextures()
         {
@@ -72,6 +82,8 @@ namespace BuilderEssentials
                 BasePanel = new BasePanel();
                 BasePanel.Activate();
                 ShowUserInterface();
+
+                Tools.UpdateVariables();
             }
         }
 
@@ -90,19 +102,19 @@ namespace BuilderEssentials
             BuildingModeOn = null;
             BuildingModeOff = null;
 
-            for (int i = 0; i < CreativeWheelElements.Count; i++)
+            for (int i = 0; i < CreativeWheelElements?.Count; i++)
                 CreativeWheelElements[i] = null;
 
-            for (int i = 0; i < CWAutoHammerElements.Count; i++)
+            for (int i = 0; i < CWAutoHammerElements?.Count; i++)
                 CWAutoHammerElements[i] = null;
 
-            for (int i = 0; i < PaintColors.Count; i++)
+            for (int i = 0; i < PaintColors?.Count; i++)
                 PaintColors[i] = null;
 
-            for (int i = 0; i < PaintTools.Count; i++)
+            for (int i = 0; i < PaintTools?.Count; i++)
                 PaintTools[i] = null;
 
-            for (int i = 0; i < WandWheelElements.Count; i++)
+            for (int i = 0; i < WandWheelElements?.Count; i++)
                 WandWheelElements[i] = null;
         }
 

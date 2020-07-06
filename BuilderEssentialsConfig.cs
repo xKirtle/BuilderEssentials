@@ -1,10 +1,6 @@
 ﻿using BuilderEssentials.Utilities;
-using System;
-using System.Collections.Generic;
+using Terraria;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader.Config;
 
 namespace BuilderEssentials
@@ -38,24 +34,14 @@ namespace BuilderEssentials
         [DefaultValue(true)]
         public bool dyes;
 
-        public override void OnChanged()
-        {
-            Tools.accessories = accessories;
-            Tools.vanityAccessories = vanityAccessories;
-            Tools.armor = armor;
-            Tools.vanityArmor = vanityArmor;
-            Tools.miscEquips = miscEquips;
-            Tools.dyes = dyes;
-        }
-
         public override void OnLoaded()
         {
-            Tools.accessories = accessories;
-            Tools.vanityAccessories = vanityAccessories;
-            Tools.armor = armor;
-            Tools.vanityArmor = vanityArmor;
-            Tools.miscEquips = miscEquips;
-            Tools.dyes = dyes;
+            BuilderEssentials.accessories = accessories;
+            BuilderEssentials.vanityAccessories = vanityAccessories;
+            BuilderEssentials.armor = armor;
+            BuilderEssentials.vanityArmor = vanityArmor;
+            BuilderEssentials.miscEquips = miscEquips;
+            BuilderEssentials.dyes = dyes;
         }
     }
 }

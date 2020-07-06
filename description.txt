@@ -2,11 +2,13 @@ Builder Essentials is a mod designed to help and improve building in survival (a
 
 -------------------Features-------------------
   - A Building Mode that mainly features a secondary accessory system to store all your building accessories (can use a KeyBind)
+  - 4 Crafting stations that merge into one powerful crafting station that can craft all recipes
   - Multi Painting Tool that combines all paiting tools into one (works with vanilla paint)
   - Infinite Paint Bucket (only works with the Multi Paint Tool)
   - Accessories that aid in building that provide:
 Infinte Range, Fast Placement, Item Picker (like a color picker), Infinite Placement, AutoHammer, Placement Anywhere, Infinite Pick up Range, No Invasions/Events/Bosses/Hostile NPCs, Fixed daytime (12pm)
   - A Mirror Wand which allows you to build symmetrically
+  - A Mutli Wand tool that contains all 6 vanilla wands
 -------------------------------------------
 
 Default KeyBind to toggle Building Mode is N, be sure to set it up on the configs.
@@ -18,10 +20,13 @@ For more info/previews check the mod's Homepage!
 Happy Building!
 
 Latest Changelog:
-  - Introduced the Infinite Pickup Range (featured inside the Creative Wrench)
-  - Super Painting Tool now works 100% in multiplayer
   - Added options to Building Mode in the Mod Config
   - Fixed mod compatibility issues and a Placement Anywhere bug
+  - Fixed Zoom/UI Scale related bugs
+  - Added a Mutli Wand (contains all six default wands)
+  - Fixed a bug preventing the user to join a Multiplayer Server
+
+If you find any bug/weird behaviour please report it in our mod's homepage. Thank you!
 
 Dev Team
   - Kirtle (Programmer)

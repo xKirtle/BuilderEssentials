@@ -20,6 +20,17 @@ namespace BuilderEssentials.Utilities
         public static bool miscEquips;
         public static bool dyes;
 
+        public static void UpdateVariables()
+        {
+            //BuilderEssentialsConfig config = ModContent.GetInstance<BuilderEssentialsConfig>();
+            accessories = BuilderEssentials.accessories;
+            vanityAccessories = BuilderEssentials.vanityAccessories;
+            armor = BuilderEssentials.armor;
+            vanityArmor = BuilderEssentials.vanityArmor;
+            miscEquips = BuilderEssentials.miscEquips;
+            dyes = BuilderEssentials.dyes;
+        }
+
         public static void BuildingModeToggle()
         {
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
@@ -113,9 +124,9 @@ namespace BuilderEssentials.Utilities
             }
 
             //Misc Equips
-            if (miscEquips)
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < 5; i++)
+                if (miscEquips)
                 {
                     if (modPlayer.IsNormalAccessories)
                         modPlayer.NormalMiscEquips.Add(player.miscEquips[i]);
@@ -126,9 +137,9 @@ namespace BuilderEssentials.Utilities
 
 
             //Dyes
-            if (dyes)
+            for (int i = 0; i < 15; i++)
             {
-                for (int i = 0; i < 15; i++)
+                if (dyes)
                 {
                     if (i < 10) //Armor + Accessories Dyes
                     {
@@ -137,7 +148,7 @@ namespace BuilderEssentials.Utilities
                         else
                             modPlayer.BuildingDyes.Add(player.dye[i]);
                     }
-                    else //Misc Equipment Dyes
+                    else //Misc Equipement Dyes
                     {
                         if (modPlayer.IsNormalAccessories)
                             modPlayer.NormalDyes.Add(player.miscDyes[i - 10]);
@@ -193,9 +204,9 @@ namespace BuilderEssentials.Utilities
 
 
             //Misc Equips
-            if (miscEquips)
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < 5; i++)
+                if (miscEquips)
                 {
                     if (modPlayer.IsNormalAccessories)
                         player.miscEquips[i] = modPlayer.NormalMiscEquips[i];
@@ -206,9 +217,9 @@ namespace BuilderEssentials.Utilities
 
 
             //Dyes
-            if (dyes)
+            for (int i = 0; i < 15; i++)
             {
-                for (int i = 0; i < 15; i++)
+                if (dyes)
                 {
                     if (i < 10)
                     {

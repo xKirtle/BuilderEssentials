@@ -23,6 +23,7 @@ namespace BuilderEssentials.UI
         }
     }
 
+    //TODO: IMPLEMENT MIRROR AXIS BIGGER THAN 1 BLOCK WIDE
     public class TransparentSelection : UIElement
     {
         float distanceX;
