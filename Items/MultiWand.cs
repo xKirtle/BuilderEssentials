@@ -12,7 +12,7 @@ namespace BuilderEssentials.Items
         int toolRange;
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Contains all wands");
+            Tooltip.SetDefault("Contains all building wands");
         }
 
         public override void SetDefaults()
@@ -164,6 +164,20 @@ namespace BuilderEssentials.Items
                         break;
                 }
             }
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.LivingWoodWand);
+            recipe.AddIngredient(ItemID.BoneWand);
+            recipe.AddIngredient(ItemID.LeafWand);
+            recipe.AddIngredient(ItemID.HiveWand);
+            recipe.AddIngredient(ItemID.LivingMahoganyWand);
+            recipe.AddIngredient(ItemID.LivingMahoganyLeafWand);
+            recipe.AddTile(TileID.TinkerersWorkbench);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }
