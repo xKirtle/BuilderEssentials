@@ -295,11 +295,13 @@ namespace BuilderEssentials.Utilities
 
         public static bool UIPanelLogic(UIPanel UIPanel, ref bool UIOpen, ref bool UIVisible)
         {
+            BasePanel.hoverText?.Remove();
             if (UIPanel != null && Main.playerInventory)
             {
                 UIPanel.Remove();
                 UIOpen = false;
                 UIVisible = false;
+
                 return false;
             }
 

@@ -11,7 +11,7 @@ namespace BuilderEssentials.UI
     {
         public static UIImageButton buildingModeButton;
         public static bool isBuildingModeButtonVisible;
-        static UIText hoverText;
+        public static UIText hoverText;
         static string text;
         public override void OnInitialize()
         {
