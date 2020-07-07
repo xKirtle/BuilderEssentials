@@ -65,6 +65,13 @@ namespace BuilderEssentials.UI
                     wandsWheelUIOpen = false;
                     isWandsUIVisible = false;
                 }
+
+                if (AutoHammerWheel.IsAutoHammerUIVisible)
+                {
+                    AutoHammerWheel.AutoHammerWheelPanel.Remove();
+                    AutoHammerWheel.AutoHammerUIOpen = false;
+                    AutoHammerWheel.IsAutoHammerUIVisible = false;
+                }
             }
             else //!Main.playerInventory
             {
@@ -117,6 +124,18 @@ namespace BuilderEssentials.UI
             {
                 wandsWheelPanel.Remove();
                 isWandsUIVisible = false;
+            }
+
+            //AutoHammer Wheel UI
+            if (AutoHammerWheel.AutoHammerUIOpen && !AutoHammerWheel.IsAutoHammerUIVisible)
+            {
+                AutoHammerWheel.CreateAutoHammerWheelPanel(Main.mouseX, Main.mouseY, this);
+                AutoHammerWheel.IsAutoHammerUIVisible = true;
+            }
+            else if (!AutoHammerWheel.AutoHammerUIOpen && AutoHammerWheel.IsAutoHammerUIVisible)
+            {
+                AutoHammerWheel.AutoHammerWheelPanel.Remove();
+                AutoHammerWheel.IsAutoHammerUIVisible = false;
             }
 
             //Tooltips while hovering CWElements

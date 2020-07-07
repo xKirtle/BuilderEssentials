@@ -20,7 +20,8 @@ namespace BuilderEssentials
         public static List<Texture2D> CWAutoHammerElements;
         public static List<Texture2D> PaintColors;
         public static List<Texture2D> PaintTools;
-        public static List<Texture2D> WandWheelElements; //TEXTURES TO BE DONE
+        public static List<Texture2D> WandWheelElements;
+        public static List<Texture2D> AutoHammerElements;
         internal static BasePanel BasePanel;
         internal static TransparentSelectionUI TransparentSelectionUI;
         internal static UserInterface UserInterface;
@@ -63,6 +64,10 @@ namespace BuilderEssentials
             WandWheelElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
                 WandWheelElements.Add(this.GetTexture("UI/Elements/WandWheel/WandWheel" + i));
+
+            AutoHammerElements = new List<Texture2D>(6);
+            for (int i = 0; i < 6; i++)
+                AutoHammerElements.Add(this.GetTexture("UI/Elements/AutoHammer/AH" + i));
         }
 
         public override void Load()
@@ -116,6 +121,9 @@ namespace BuilderEssentials
 
             for (int i = 0; i < WandWheelElements?.Count; i++)
                 WandWheelElements[i] = null;
+
+            for (int i = 0; i < AutoHammerElements?.Count; i++)
+                AutoHammerElements[i] = null;
         }
 
         private GameTime _lastUpdateUiGameTime;
