@@ -11,16 +11,17 @@ namespace BuilderEssentials.UI
 {
     class MultiWandWheel : UIPanel
     {
-        static BuilderPlayer modPlayer;
         public static UIPanel MultiWandWheelPanel;
-        public static float MultiWandWheelWidth;
-        public static float MultiWandWheelHeight;
-        public static List<UIImageButton> WandWheelElements;
+        private static float MultiWandWheelWidth;
+        private static float MultiWandWheelHeight;
+        private static List<UIImageButton> WandWheelElements;
+        private static int selectedIndex = 0;
+        public static bool IsWandsUIVisible { get; set; }
+        public static bool WandsWheelUIOpen { get; set; }
+        public static bool Hovering = MultiWandWheelPanel != null && MultiWandWheelPanel.IsMouseHovering && IsWandsUIVisible;
 
         public static UIPanel CreateMultiWandWheelPanel(int mouseX, int mouseY, BasePanel basePanel)
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
             MultiWandWheelWidth = 250f;
             MultiWandWheelHeight = 250f;
 
@@ -64,7 +65,7 @@ namespace BuilderEssentials.UI
             }
 
             //Correct display of previously toggled settings
-            WandWheelElements[modPlayer.wandWheelSelectedIndex].SetVisibility(1f, 1f);
+            WandWheelElements[selectedIndex].SetVisibility(1f, 1f);
 
             //Append them to the Main Panel
             for (int i = 0; i < WandWheelElements.Count; i++)
@@ -73,14 +74,11 @@ namespace BuilderEssentials.UI
 
         private static void MainElementClick(int index)
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
             for (int i = 0; i < WandWheelElements.Count; i++)
                 WandWheelElements[i].SetVisibility(.75f, .4f);
 
             WandWheelElements[index].SetVisibility(1f, 1f);
-            modPlayer.wandWheelSelectedIndex = index;
-
+            selectedIndex = index;
         }
     }
 }

@@ -35,18 +35,18 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI == Main.myPlayer)
             {
-                if (BasePanel.wandsWheelPanel != null && !player.inventory[player.selectedItem].IsTheSameAs(item))
+                if (MultiWandWheel.MultiWandWheelPanel != null && !player.inventory[player.selectedItem].IsTheSameAs(item))
                 {
-                    BasePanel.wandsWheelPanel.Remove();
-                    BasePanel.wandsWheelUIOpen = false;
+                    MultiWandWheel.MultiWandWheelPanel.Remove();
+                    MultiWandWheel.WandsWheelUIOpen = false;
                 }
 
                 if (Main.mouseRight && Tools.IsUIAvailable()
-                        && (!player.mouseInterface || (BasePanel.wandsWheelUIOpen && BasePanel.wandsWheelPanel.IsMouseHovering))
+                        && (!player.mouseInterface || (MultiWandWheel.WandsWheelUIOpen && MultiWandWheel.MultiWandWheelPanel.IsMouseHovering))
                         && player.inventory[player.selectedItem].IsTheSameAs(item))
                 {
                     if (++mouseRightTimer == 2)
-                        BasePanel.wandsWheelUIOpen = !BasePanel.wandsWheelUIOpen;
+                        MultiWandWheel.WandsWheelUIOpen = !MultiWandWheel.WandsWheelUIOpen;
                 }
 
                 if (Main.mouseRightRelease)

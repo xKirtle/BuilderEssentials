@@ -10,42 +10,45 @@ namespace BuilderEssentials.UI
 {
     public class PaintWheel
     {
-        private static BuilderPlayer modPlayer;
-        public static UIPanel paintWheel;
-        private static float paintWheelWidth;
-        private static float paintWheelHeight;
+        public static UIPanel PaintWheelPanel;
+        private static float PaintWheelWidth;
+        private static float PaintWheelHeight;
         private static List<UIImageButton> colorsList;
         private static List<UIImageButton> paintToolsList;
+        public static int selectedIndex = 30; //No color
+        public static int selectedToolIndex = 0;
+        public static bool IsPaintingUIVisible { get; set; }
+        public static bool PaintingUIOpen { get; set; }
+        public static bool Hovering = PaintWheelPanel != null && PaintWheelPanel.IsMouseHovering && IsPaintingUIVisible;
         public static UIPanel CreatePaintWheel(int mouseX, int mouseY, BasePanel basePanel)
         {
-            modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            paintWheelWidth = 300f;
-            paintWheelHeight = 200f;
+            PaintWheelWidth = 300f;
+            PaintWheelHeight = 200f;
 
-            paintWheel = new UIPanel();
-            paintWheel.VAlign = 0f;
-            paintWheel.HAlign = 0f;
-            paintWheel.Width.Set(paintWheelWidth, 0);
-            paintWheel.Height.Set(paintWheelHeight, 0);
-            paintWheel.Left.Set(mouseX - paintWheelWidth / 2, 0);
-            paintWheel.Top.Set(mouseY - paintWheelHeight / 2, 0);
-            paintWheel.BorderColor = Color.Transparent; //Color.Red;
-            paintWheel.BackgroundColor = Color.Transparent;
+            PaintWheelPanel = new UIPanel();
+            PaintWheelPanel.VAlign = 0f;
+            PaintWheelPanel.HAlign = 0f;
+            PaintWheelPanel.Width.Set(PaintWheelWidth, 0);
+            PaintWheelPanel.Height.Set(PaintWheelHeight, 0);
+            PaintWheelPanel.Left.Set(mouseX - PaintWheelWidth / 2, 0);
+            PaintWheelPanel.Top.Set(mouseY - PaintWheelHeight / 2, 0);
+            PaintWheelPanel.BorderColor = Color.Transparent; //Color.Red;
+            PaintWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateColorsDisplay();
             for (int i = 0; i < colorsList.Count; i++)
-                paintWheel.Append(colorsList[i]);
+                PaintWheelPanel.Append(colorsList[i]);
 
             //Loading the color that was saved in modPlayer
-            ColorSelected(modPlayer.paintingColorSelectedIndex, true);
+            ColorSelected(selectedIndex, true);
 
             for (int i = 0; i < paintToolsList.Count; i++)
-                paintWheel.Append(paintToolsList[i]);
+                PaintWheelPanel.Append(paintToolsList[i]);
             //Loading the selected tool, default is 0
-            ToolSelected(modPlayer.paintingToolSelected);
+            ToolSelected(selectedToolIndex);
 
-            basePanel.Append(paintWheel);
-            return paintWheel;
+            basePanel.Append(PaintWheelPanel);
+            return PaintWheelPanel;
         }
 
         //Layout inspired by the great VipixToolBox Mod
@@ -82,8 +85,8 @@ namespace BuilderEssentials.UI
             double angle = Math.PI / 12;
             for (int i = 0; i < 12; i++)
             {
-                double x = (paintWheelWidth / 2) - (radius * Math.Cos(-angle * (i + .5)) * 1.10);
-                double y = (paintWheelHeight / 2) - (-radius * Math.Sin(-angle * (i + .5))) + 15;
+                double x = (PaintWheelWidth / 2) - (radius * Math.Cos(-angle * (i + .5)) * 1.10);
+                double y = (PaintWheelHeight / 2) - (-radius * Math.Sin(-angle * (i + .5))) + 15;
                 colorsList[i].VAlign = 0f;
                 colorsList[i].HAlign = 0f;
                 colorsList[i].Left.Set((float)x - colorSize, 0f);
@@ -96,8 +99,8 @@ namespace BuilderEssentials.UI
             angle = Math.PI / 12;
             for (int i = 12; i < 24; i++)
             {
-                double x = (paintWheelWidth / 2) - (radius * Math.Cos(-angle * ((i - 12) + .5)) * 1.15);
-                double y = (paintWheelHeight / 2) - (-radius * Math.Sin(-angle * ((i - 12) + .5)) - 10);
+                double x = (PaintWheelWidth / 2) - (radius * Math.Cos(-angle * ((i - 12) + .5)) * 1.15);
+                double y = (PaintWheelHeight / 2) - (-radius * Math.Sin(-angle * ((i - 12) + .5)) - 10);
                 colorsList[i].VAlign = 0f;
                 colorsList[i].HAlign = 0f;
                 colorsList[i].Left.Set((float)x - colorSize, 0f);
@@ -110,8 +113,8 @@ namespace BuilderEssentials.UI
             angle = Math.PI / 6;
             for (int i = 24; i < 30; i++)
             {
-                double x = (paintWheelWidth / 2) - (radius * Math.Cos(-angle * ((i - 24) + .5)) * 1);
-                double y = (paintWheelHeight / 2) - (-radius * Math.Sin(-angle * ((i - 24) + .5)) - 20);
+                double x = (PaintWheelWidth / 2) - (radius * Math.Cos(-angle * ((i - 24) + .5)) * 1);
+                double y = (PaintWheelHeight / 2) - (-radius * Math.Sin(-angle * ((i - 24) + .5)) - 20);
                 colorsList[i].VAlign = 0f;
                 colorsList[i].HAlign = 0f;
                 colorsList[i].Left.Set((float)x - colorSize, 0f);
@@ -120,8 +123,8 @@ namespace BuilderEssentials.UI
             }
 
             //Last element, no color
-            double noColorX = (paintWheelWidth / 2);
-            double noColorY = (paintWheelHeight / 2);
+            double noColorX = (PaintWheelWidth / 2);
+            double noColorY = (PaintWheelHeight / 2);
             colorsList[30].VAlign = 0f;
             colorsList[30].HAlign = 0f;
             colorsList[30].Left.Set((float)noColorX - colorSize, 0f);
@@ -130,8 +133,8 @@ namespace BuilderEssentials.UI
 
             for (int i = 0; i < 3; i++)
             {
-                double x = (paintWheelWidth / 3) * i + 15f;
-                double y = (paintWheelHeight / 2) + 35f;
+                double x = (PaintWheelWidth / 3) * i + 15f;
+                double y = (PaintWheelHeight / 2) + 35f;
                 paintToolsList[i].VAlign = 0f;
                 paintToolsList[i].HAlign = 0f;
                 paintToolsList[i].Left.Set((float)x, 0f);
@@ -154,30 +157,24 @@ namespace BuilderEssentials.UI
 
         private static void ColorSelected(int index, bool loading)
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (index != modPlayer.paintingColorSelectedIndex || loading)
+            if (index != selectedIndex || loading)
             {
-                modPlayer.paintingColorSelectedIndex = index;
-
                 for (int i = 0; i < colorsList.Count; i++)
                     colorsList[i].SetVisibility(.75f, .60f);
 
+                selectedIndex = index;
                 colorsList[index].SetVisibility(1f, 1f);
             }
         }
 
         private static void ToolSelected(int index)
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            ResetToolVariables();
-            modPlayer.paintingToolSelected = index;
+            for (int i = 0; i < paintToolsList.Count; i++)
+                paintToolsList[i].SetVisibility(.75f, .4f);
+
+            selectedToolIndex = index;
             paintToolsList[index].SetVisibility(1f, 1f);
 
-            void ResetToolVariables()
-            {
-                for (int i = 0; i < paintToolsList.Count; i++)
-                    paintToolsList[i].SetVisibility(.75f, .4f);
-            }
         }
     }
 }

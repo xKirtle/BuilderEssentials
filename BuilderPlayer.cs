@@ -44,7 +44,7 @@ namespace BuilderEssentials
         //Creative Wheel Stuff
         public List<int> creativeWheelSelectedIndex;
         public int autoHammerSelectedIndex;
-        public enum CreativeWheelItem : int
+        public enum CreativeWheelItem
         {
             ItemPicker,
             InfinitePlacement,
@@ -56,19 +56,8 @@ namespace BuilderEssentials
             InfinityUpgrade
         }
 
-
-        //Paint Stuff
-        public int paintingColorSelectedIndex;
-        public int paintingToolSelected;
-        public bool holdingPaintingTool;
-
-
         //Mirror Wand
         public bool mirrorWandEffects;
-
-
-        //Multi Wand Wheel Stuff
-        public int wandWheelSelectedIndex;
         public override void Initialize()
         {
             infiniteRange = false;
@@ -111,17 +100,8 @@ namespace BuilderEssentials
             autoHammerSelectedIndex = 5; //full tile
 
 
-            //Paint
-            paintingColorSelectedIndex = 30; //No color
-            paintingToolSelected = 0;
-
-
             //Mirror Wand
             mirrorWandEffects = false;
-
-
-            //Multi Wand Wheel Stuff
-            wandWheelSelectedIndex = 0;
         }
 
         public override void ResetEffects()
@@ -133,7 +113,6 @@ namespace BuilderEssentials
                 Player.tileRangeY = 4;
                 Player.defaultItemGrabRange = 38;
                 player.showItemIcon = false;
-                holdingPaintingTool = false;
                 infiniteRange = false;
 
                 if (!player.inventory[player.selectedItem].IsAir)
@@ -170,28 +149,23 @@ namespace BuilderEssentials
                 { "NormalAccessories", NormalAccessories },
                 { "BuildingAccessories", BuildingAccessories },
 
-                {"NormalVanityAccessories", NormalVanityAccessories },
-                {"BuildingVanityAccessories", BuildingVanityAccessories },
+                { "NormalVanityAccessories", NormalVanityAccessories },
+                { "BuildingVanityAccessories", BuildingVanityAccessories },
 
-                {"NormalArmor", NormalArmor },
-                {"BuildingArmor", BuildingArmor },
+                { "NormalArmor", NormalArmor },
+                { "BuildingArmor", BuildingArmor },
 
-                {"NormalVanityArmor", NormalVanityArmor },
-                {"BuildingVanityArmor", BuildingVanityArmor },
+                { "NormalVanityArmor", NormalVanityArmor },
+                { "BuildingVanityArmor", BuildingVanityArmor },
 
-                {"NormalMiscEquips", NormalMiscEquips },
-                {"BuildingMiscEquips", BuildingMiscEquips },
+                { "NormalMiscEquips", NormalMiscEquips },
+                { "BuildingMiscEquips", BuildingMiscEquips },
 
-                {"NormalDyes", NormalDyes },
-                {"BuildingDyes", BuildingDyes },
+                { "NormalDyes", NormalDyes },
+                { "BuildingDyes", BuildingDyes },
 
-                {"creativeWheelSelectedIndex", creativeWheelSelectedIndex},
-                {"autoHammerSelectedIndex", autoHammerSelectedIndex },
-
-                {"paintingColorSelectedIndex", paintingColorSelectedIndex},
-                {"paintingToolSelected", paintingToolSelected},
-
-                {"wandWheelSelectedIndex", wandWheelSelectedIndex }
+                { "creativeWheelSelectedIndex", creativeWheelSelectedIndex},
+                { "autoHammerSelectedIndex", autoHammerSelectedIndex },
             };
         }
 
@@ -243,17 +217,6 @@ namespace BuilderEssentials
 
             if (tag.ContainsKey("autoHammerSelectedIndex"))
                 autoHammerSelectedIndex = tag.GetInt("autoHammerSelectedIndex");
-
-            //Paint
-            if (tag.ContainsKey("paintingColorSelectedIndex"))
-                paintingColorSelectedIndex = tag.GetInt("paintingColorSelectedIndex");
-
-            if (tag.ContainsKey("paintingToolSelected"))
-                paintingToolSelected = tag.GetInt("paintingToolSelected");
-
-            //Multi Wand Wheel
-            if (tag.ContainsKey("wandWheelSelectedIndex"))
-                wandWheelSelectedIndex = tag.GetInt("wandWheelSelectedIndex");
         }
 
         public override void OnEnterWorld(Player player)

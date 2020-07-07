@@ -47,24 +47,20 @@ namespace BuilderEssentials.Items
         int mouseRightTimer = 0;
         public override void UpdateInventory(Player player)
         {
-            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
             if (player.whoAmI == Main.myPlayer)
             {
-                if (player.inventory[player.selectedItem].IsTheSameAs(item))
-                    modPlayer.holdingPaintingTool = true;
-
-                if (BasePanel.paintingPanel != null && !modPlayer.holdingPaintingTool)
+                if (PaintWheel.PaintWheelPanel != null && !player.HeldItem.IsTheSameAs(item))
                 {
-                    BasePanel.paintingPanel.Remove();
-                    BasePanel.paintingUIOpen = false;
+                    PaintWheel.PaintWheelPanel.Remove();
+                    PaintWheel.PaintingUIOpen = false;
                 }
 
                 if (Main.mouseRight && Tools.IsUIAvailable()
-                        && (!player.mouseInterface || (BasePanel.paintingUIOpen && BasePanel.paintingPanel.IsMouseHovering))
+                        && (!player.mouseInterface || (PaintWheel.PaintingUIOpen && PaintWheel.PaintWheelPanel.IsMouseHovering))
                         && player.inventory[player.selectedItem].IsTheSameAs(item))
                 {
                     if (++mouseRightTimer == 2)
-                        BasePanel.paintingUIOpen = !BasePanel.paintingUIOpen;
+                        PaintWheel.PaintingUIOpen = !PaintWheel.PaintingUIOpen;
                 }
 
                 if (Main.mouseRightRelease)
@@ -78,10 +74,10 @@ namespace BuilderEssentials.Items
             Tile pointedTile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
             if (modPlayer.infiniteRange || Tools.ToolHasRange(toolRange) &&
-                modPlayer.paintingColorSelectedIndex != 30) //Color selected
+                PaintWheel.selectedIndex != 30) //Color selected
             {
                 player.showItemIcon = true;
-                switch (modPlayer.paintingToolSelected)
+                switch (PaintWheel.selectedToolIndex)
                 {
                     case 0:
                         if (pointedTile.type >= 0 && pointedTile.active())
@@ -99,7 +95,7 @@ namespace BuilderEssentials.Items
             }
             else
             {
-                if (modPlayer.paintingColorSelectedIndex == 30 && modPlayer.paintingToolSelected == 2)
+                if (PaintWheel.selectedIndex == 30 && PaintWheel.selectedToolIndex == 2)
                 {
                     if (pointedTile.color() != 0)
                     {
@@ -130,16 +126,16 @@ namespace BuilderEssentials.Items
             Tile pointedTile = Main.tile[posX, posY];
 
             if ((modPlayer.infiniteRange || Tools.ToolHasRange(toolRange)) &&
-                (BasePanel.paintingPanel != null && !BasePanel.paintingPanel.IsMouseHovering) || firstTimeOpeningUI)
+                (PaintWheel.PaintWheelPanel != null && !PaintWheel.PaintWheelPanel.IsMouseHovering) || firstTimeOpeningUI)
             {
                 if (firstTimeOpeningUI)
                     firstTimeOpeningUI = false;
 
                 bool anyOperationDone = false;
                 bool paintScraper = false;
-                byte selectedColor = (byte)(modPlayer.paintingColorSelectedIndex + 1);
+                byte selectedColor = (byte)(PaintWheel.selectedIndex + 1);
                 //selectedindex + 1 because paint bytes don't start at 0
-                switch (modPlayer.paintingToolSelected)
+                switch (PaintWheel.selectedToolIndex)
                 {
                     case 0:
                         if (pointedTile.color() != selectedColor && selectedColor != 31)
