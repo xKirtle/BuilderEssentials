@@ -1,5 +1,6 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +9,7 @@ namespace BuilderEssentials.Items
 {
     class AutoHammer : ModItem
     {
+        int toolRange;
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Better than a regular hammer!");
@@ -16,6 +18,8 @@ namespace BuilderEssentials.Items
         public override void SetDefaults()
         {
             item.CloneDefaults(ItemID.Pwnhammer);
+            item.tileBoost += 2;
+            toolRange = 8;
         }
 
         int mouseRightTimer = 0;
@@ -39,7 +43,38 @@ namespace BuilderEssentials.Items
 
                 if (Main.mouseRightRelease)
                     mouseRightTimer = 0;
+
+                BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+                if (modPlayer.infiniteRange || Tools.ToolHasRange(toolRange) && AutoHammerWheel.selectedIndex != -1)
+                {
+                    player.showItemIcon2 = ItemID.WoodenHammer;
+                }
             }
+        }
+
+        int oldPosX;
+        int oldPosY;
+        Tile previousClickedTile;
+        public override bool CanUseItem(Player player)
+        {
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+
+            if (AutoHammerWheel.IsAutoHammerUIVisible)
+                return false;
+
+            if (AutoHammerWheel.selectedIndex == -1)
+                return true;
+
+            if (modPlayer.infiniteRange || Tools.ToolHasRange(toolRange))
+            {
+                if (AutoHammerWheel.selectedIndex != -1)
+                {
+                    Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile, AutoHammerWheel.selectedIndex);
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

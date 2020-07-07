@@ -6,10 +6,8 @@ namespace BuilderEssentials.Utilities
 
     public static partial class Tools
     {
-        public static void ChangeSlope(ref int oldPosX, ref int oldPosY, ref Tile previousClickedTile)
+        public static void ChangeSlope(ref int oldPosX, ref int oldPosY, ref Tile previousClickedTile, int selectedIndex)
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
             //TODO: DISABLE USE ON GAME INTERFACES WHEN USER CLICKS ON SETTINGS FOR EXAMPLE
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY;
@@ -17,7 +15,7 @@ namespace BuilderEssentials.Utilities
 
             if (tile.type >= 0 && tile.active())
             {
-                switch (modPlayer.autoHammerSelectedIndex)
+                switch (selectedIndex)
                 {
                     case 0:
                         tile.halfBrick(false);

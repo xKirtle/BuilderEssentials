@@ -75,7 +75,7 @@ namespace BuilderEssentials.Items.Accessories
                 !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
-                        Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile);
+                        Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile, modPlayer.autoHammerSelectedIndex);
                 }
                 else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
                 && !player.inventory[player.selectedItem].IsAir && !player.mouseInterface && !Main.playerInventory)

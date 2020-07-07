@@ -13,15 +13,9 @@ namespace BuilderEssentials.UI
         public static UIImageButton buildingModeButton;
         public static Texture2D buttonTexture;
         public static UIPanel creativeWheelPanel;
-        public static UIPanel paintingPanel;
-        public static UIPanel wandsWheelPanel;
         public static bool isBuildingModeButtonVisible;
         public static bool isCreativeWheelVisible;
         public static bool creativeWheelUIOpen;
-        public static bool isPaintingUIVisible;
-        public static bool paintingUIOpen;
-        public static bool isWandsUIVisible;
-        public static bool wandsWheelUIOpen;
         static UIText hoverText;
         public override void OnInitialize()
         {
@@ -52,18 +46,18 @@ namespace BuilderEssentials.UI
                     isCreativeWheelVisible = false;
                 }
 
-                if (isPaintingUIVisible)
+                if (PaintWheel.IsPaintingUIVisible)
                 {
-                    paintingPanel.Remove();
-                    paintingUIOpen = false;
-                    isPaintingUIVisible = false;
+                    PaintWheel.PaintWheelPanel.Remove();
+                    PaintWheel.PaintingUIOpen = false;
+                    PaintWheel.IsPaintingUIVisible = false;
                 }
 
-                if (isWandsUIVisible)
+                if (MultiWandWheel.IsWandsUIVisible)
                 {
-                    wandsWheelPanel.Remove();
-                    wandsWheelUIOpen = false;
-                    isWandsUIVisible = false;
+                    MultiWandWheel.MultiWandWheelPanel.Remove();
+                    MultiWandWheel.WandsWheelUIOpen = false;
+                    MultiWandWheel.IsWandsUIVisible = false;
                 }
 
                 if (AutoHammerWheel.IsAutoHammerUIVisible)
@@ -85,8 +79,7 @@ namespace BuilderEssentials.UI
             //Blocks mouse from interacting with the world when hovering on UI interfaces
             if ((buildingModeButton.IsMouseHovering && isBuildingModeButtonVisible) ||
             (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible) ||
-            (paintingPanel != null && paintingPanel.IsMouseHovering && isPaintingUIVisible) ||
-            (wandsWheelPanel != null && wandsWheelPanel.IsMouseHovering && isWandsUIVisible))
+            (PaintWheel.Hovering || MultiWandWheel.Hovering || AutoHammerWheel.Hovering))
                 Main.LocalPlayer.mouseInterface = true;
 
             //CreativeWrench Wheel UI
@@ -103,27 +96,27 @@ namespace BuilderEssentials.UI
             }
 
             //SuperPaintingTool Paint UI
-            if (paintingUIOpen && !isPaintingUIVisible)
+            if (PaintWheel.PaintingUIOpen && !PaintWheel.IsPaintingUIVisible)
             {
-                paintingPanel = PaintWheel.CreatePaintWheel(Main.mouseX, Main.mouseY, this); //Method to create it
-                isPaintingUIVisible = true;
+                PaintWheel.CreatePaintWheel(Main.mouseX, Main.mouseY, this); //Method to create it
+                PaintWheel.IsPaintingUIVisible = true;
             }
-            else if (!paintingUIOpen && isPaintingUIVisible)
+            else if (!PaintWheel.PaintingUIOpen && PaintWheel.IsPaintingUIVisible)
             {
-                paintingPanel.Remove();
-                isPaintingUIVisible = false;
+                PaintWheel.PaintWheelPanel.Remove();
+                PaintWheel.IsPaintingUIVisible = false;
             }
 
             //Wand Wheel UI
-            if (wandsWheelUIOpen && !isWandsUIVisible)
+            if (MultiWandWheel.WandsWheelUIOpen && !MultiWandWheel.IsWandsUIVisible)
             {
-                wandsWheelPanel = MultiWandWheel.CreateMultiWandWheelPanel(Main.mouseX, Main.mouseY, this);
-                isWandsUIVisible = true;
+                MultiWandWheel.CreateMultiWandWheelPanel(Main.mouseX, Main.mouseY, this);
+                MultiWandWheel.IsWandsUIVisible = true;
             }
-            else if (!wandsWheelUIOpen && isWandsUIVisible)
+            else if (!MultiWandWheel.WandsWheelUIOpen && MultiWandWheel.IsWandsUIVisible)
             {
-                wandsWheelPanel.Remove();
-                isWandsUIVisible = false;
+                MultiWandWheel.MultiWandWheelPanel.Remove();
+                MultiWandWheel.IsWandsUIVisible = false;
             }
 
             //AutoHammer Wheel UI
