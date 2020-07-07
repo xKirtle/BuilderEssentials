@@ -1,7 +1,6 @@
 ﻿using Terraria;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BuilderEssentials.Utilities;
 using System.Collections.Generic;
@@ -11,16 +10,12 @@ namespace BuilderEssentials.UI
     public class BasePanel : UIState
     {
         public static UIImageButton buildingModeButton;
-        public static Texture2D buttonTexture;
-        public static UIPanel creativeWheelPanel;
         public static bool isBuildingModeButtonVisible;
-        public static bool isCreativeWheelVisible;
-        public static bool creativeWheelUIOpen;
         static UIText hoverText;
+        static string text;
         public override void OnInitialize()
         {
-            buttonTexture = BuilderEssentials.BuildingModeOff;
-            buildingModeButton = new UIImageButton(buttonTexture);
+            buildingModeButton = new UIImageButton(BuilderEssentials.BuildingModeOff);
             buildingModeButton.VAlign = 0f;
             buildingModeButton.HAlign = 0f;
             buildingModeButton.Top.Set(40f, 0);
@@ -29,112 +24,51 @@ namespace BuilderEssentials.UI
             buildingModeButton.SetVisibility(0f, 0f);
             Append(buildingModeButton);
         }
+
+        public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (isBuildingModeButtonVisible)
+                Tools.BuildingModeToggle();
+        }
+
         public override void Update(GameTime gameTime)
         {
-            if (Main.playerInventory)
-            {
-                if (!isBuildingModeButtonVisible)
-                {
-                    buildingModeButton.SetVisibility(1f, .4f);
-                    isBuildingModeButtonVisible = true;
-                }
-
-                if (isCreativeWheelVisible)
-                {
-                    creativeWheelPanel.Remove();
-                    creativeWheelUIOpen = false;
-                    isCreativeWheelVisible = false;
-                }
-
-                if (PaintWheel.IsPaintingUIVisible)
-                {
-                    PaintWheel.PaintWheelPanel.Remove();
-                    PaintWheel.PaintingUIOpen = false;
-                    PaintWheel.IsPaintingUIVisible = false;
-                }
-
-                if (MultiWandWheel.IsWandsUIVisible)
-                {
-                    MultiWandWheel.MultiWandWheelPanel.Remove();
-                    MultiWandWheel.WandsWheelUIOpen = false;
-                    MultiWandWheel.IsWandsUIVisible = false;
-                }
-
-                if (AutoHammerWheel.IsAutoHammerUIVisible)
-                {
-                    AutoHammerWheel.AutoHammerWheelPanel.Remove();
-                    AutoHammerWheel.AutoHammerUIOpen = false;
-                    AutoHammerWheel.IsAutoHammerUIVisible = false;
-                }
-            }
-            else //!Main.playerInventory
-            {
-                if (isBuildingModeButtonVisible)
-                {
-                    buildingModeButton.SetVisibility(0f, 0f);
-                    isBuildingModeButtonVisible = false;
-                }
-            }
-
             //Blocks mouse from interacting with the world when hovering on UI interfaces
             if ((buildingModeButton.IsMouseHovering && isBuildingModeButtonVisible) ||
-            (creativeWheelPanel != null && creativeWheelPanel.IsMouseHovering && isCreativeWheelVisible) ||
-            (PaintWheel.Hovering || MultiWandWheel.Hovering || AutoHammerWheel.Hovering))
+            (CreativeWheel.Hovering || PaintWheel.Hovering || MultiWandWheel.Hovering || AutoHammerWheel.Hovering))
                 Main.LocalPlayer.mouseInterface = true;
 
+            if (Main.playerInventory && !isBuildingModeButtonVisible)
+            {
+                buildingModeButton.SetVisibility(1f, .4f);
+                isBuildingModeButtonVisible = true;
+            }
+            else if (!Main.playerInventory && isBuildingModeButtonVisible)
+            {
+                buildingModeButton.SetVisibility(0f, 0f);
+                isBuildingModeButtonVisible = false;
+            }
+
             //CreativeWrench Wheel UI
-            if (creativeWheelUIOpen && !isCreativeWheelVisible)
-            {
-                //creativeWheelPanel = CreativeWheel.CreateCreativeWheelPanel(Main.mouseX, Main.mouseY, this);
-                creativeWheelPanel = CreativeWheelRework.CreateCreativeWheelReworkPanel(Main.mouseX, Main.mouseY, this);
-                isCreativeWheelVisible = true;
-            }
-            else if (!creativeWheelUIOpen && isCreativeWheelVisible)
-            {
-                creativeWheelPanel.Remove();
-                isCreativeWheelVisible = false;
-            }
+            if (Tools.UIPanelLogic(CreativeWheel.CreativeWheelPanel, ref CreativeWheel.CreativeWheelUIOpen, ref CreativeWheel.IsCreativeWheelVisible))
+                CreativeWheel.CreateCreativeWheelReworkPanel(Main.mouseX, Main.mouseY, this);
 
             //SuperPaintingTool Paint UI
-            if (PaintWheel.PaintingUIOpen && !PaintWheel.IsPaintingUIVisible)
-            {
-                PaintWheel.CreatePaintWheel(Main.mouseX, Main.mouseY, this); //Method to create it
-                PaintWheel.IsPaintingUIVisible = true;
-            }
-            else if (!PaintWheel.PaintingUIOpen && PaintWheel.IsPaintingUIVisible)
-            {
-                PaintWheel.PaintWheelPanel.Remove();
-                PaintWheel.IsPaintingUIVisible = false;
-            }
+            if (Tools.UIPanelLogic(PaintWheel.PaintWheelPanel, ref PaintWheel.PaintingUIOpen, ref PaintWheel.IsPaintingUIVisible))
+                PaintWheel.CreatePaintWheel(Main.mouseX, Main.mouseY, this);
 
             //Wand Wheel UI
-            if (MultiWandWheel.WandsWheelUIOpen && !MultiWandWheel.IsWandsUIVisible)
-            {
+            if (Tools.UIPanelLogic(MultiWandWheel.MultiWandWheelPanel, ref MultiWandWheel.WandsWheelUIOpen, ref MultiWandWheel.IsWandsUIVisible))
                 MultiWandWheel.CreateMultiWandWheelPanel(Main.mouseX, Main.mouseY, this);
-                MultiWandWheel.IsWandsUIVisible = true;
-            }
-            else if (!MultiWandWheel.WandsWheelUIOpen && MultiWandWheel.IsWandsUIVisible)
-            {
-                MultiWandWheel.MultiWandWheelPanel.Remove();
-                MultiWandWheel.IsWandsUIVisible = false;
-            }
 
             //AutoHammer Wheel UI
-            if (AutoHammerWheel.AutoHammerUIOpen && !AutoHammerWheel.IsAutoHammerUIVisible)
-            {
+            if (Tools.UIPanelLogic(AutoHammerWheel.AutoHammerWheelPanel, ref AutoHammerWheel.AutoHammerUIOpen, ref AutoHammerWheel.IsAutoHammerUIVisible))
                 AutoHammerWheel.CreateAutoHammerWheelPanel(Main.mouseX, Main.mouseY, this);
-                AutoHammerWheel.IsAutoHammerUIVisible = true;
-            }
-            else if (!AutoHammerWheel.AutoHammerUIOpen && AutoHammerWheel.IsAutoHammerUIVisible)
-            {
-                AutoHammerWheel.AutoHammerWheelPanel.Remove();
-                AutoHammerWheel.IsAutoHammerUIVisible = false;
-            }
 
             //Tooltips while hovering CWElements
-            if (CreativeWheelRework.CreativeWheelReworkPanel != null)
+            if (CreativeWheel.CreativeWheelPanel != null && CreativeWheel.IsCreativeWheelVisible)
             {
-                List<UIImageButton> hoveredElements = CreativeWheelRework.CreativeWheelElements.FindAll(x => x.IsMouseHovering == true);
+                List<UIImageButton> hoveredElements = CreativeWheel.CreativeWheelElements.FindAll(x => x.IsMouseHovering == true);
 
                 if (hoverText != null)
                 {
@@ -143,8 +77,7 @@ namespace BuilderEssentials.UI
                 }
 
                 //Don't need the actual list itself, just a reference of it
-                var elementsList = CreativeWheelRework.CreativeWheelElements;
-                string text = "";
+                var elementsList = CreativeWheel.CreativeWheelElements;
                 foreach (var element in hoveredElements)
                 {
                     if (element == elementsList[0])
@@ -158,20 +91,42 @@ namespace BuilderEssentials.UI
                     if (element == elementsList[4])
                         text = "Gives infinite pick up range";
 
-                    hoverText = new UIText(text, 1, false);
-                    hoverText.VAlign = 0f;
-                    hoverText.HAlign = 0f;
-                    hoverText.Left.Set(Main.mouseX + 22, 0);
-                    hoverText.Top.Set(Main.mouseY + 22, 0);
+                    hoverText = Tools.CreateUIText(text, Main.mouseX + 22, Main.mouseY + 22);
                     Append(hoverText);
                 }
             }
-        }
 
-        public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
-        {
-            if (isBuildingModeButtonVisible)
-                Tools.BuildingModeToggle();
+            //Tooltips while hovering Multi Wand Elements
+            if (MultiWandWheel.MultiWandWheelPanel != null && MultiWandWheel.IsWandsUIVisible)
+            {
+                List<UIImageButton> hoveredElements = MultiWandWheel.WandWheelElements.FindAll(x => x.IsMouseHovering == true);
+
+                if (hoverText != null)
+                {
+                    hoverText.Remove();
+                    hoverText = null;
+                }
+
+                var elementsList = MultiWandWheel.WandWheelElements;
+                foreach (var element in hoveredElements)
+                {
+                    if (element == elementsList[0])
+                        text = "Places living wood (wood)";
+                    if (element == elementsList[1])
+                        text = "Places bones (bone)";
+                    if (element == elementsList[2])
+                        text = "Places leaves (wood)";
+                    if (element == elementsList[3])
+                        text = "Places Hives (hive)";
+                    if (element == elementsList[4])
+                        text = "Places living rich mahogany (rich mahogany)";
+                    if (element == elementsList[5])
+                        text = "Places rich mahogany leaves (rich mahogany)";
+
+                    hoverText = Tools.CreateUIText(text, Main.mouseX + 22, Main.mouseY + 22);
+                    Append(hoverText);
+                }
+            }
         }
     }
 }

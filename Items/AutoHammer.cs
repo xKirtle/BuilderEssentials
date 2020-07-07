@@ -1,6 +1,5 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,6 +17,7 @@ namespace BuilderEssentials.Items
         public override void SetDefaults()
         {
             item.CloneDefaults(ItemID.Pwnhammer);
+            item.rare = ItemRarityID.Red;
             item.tileBoost += 2;
             toolRange = 8;
         }
@@ -27,15 +27,9 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI == Main.myPlayer)
             {
-                if (AutoHammerWheel.AutoHammerWheelPanel != null && !player.inventory[player.selectedItem].IsTheSameAs(item))
-                {
-                    AutoHammerWheel.AutoHammerWheelPanel.Remove();
-                    AutoHammerWheel.AutoHammerUIOpen = false;
-                }
-
                 if (Main.mouseRight && Tools.IsUIAvailable()
                         && (!player.mouseInterface || (AutoHammerWheel.AutoHammerUIOpen && AutoHammerWheel.AutoHammerWheelPanel.IsMouseHovering))
-                        && player.inventory[player.selectedItem].IsTheSameAs(item))
+                        && player.HeldItem.IsTheSameAs(item))
                 {
                     if (++mouseRightTimer == 2)
                         AutoHammerWheel.AutoHammerUIOpen = !AutoHammerWheel.AutoHammerUIOpen;
@@ -75,6 +69,28 @@ namespace BuilderEssentials.Items
             }
 
             return true;
+        }
+
+        public override void UpdateInventory(Player player)
+        {
+            if (player.whoAmI == Main.myPlayer)
+            {
+                if (AutoHammerWheel.AutoHammerWheelPanel != null && !player.HeldItem.IsTheSameAs(item))
+                {
+                    AutoHammerWheel.AutoHammerWheelPanel.Remove();
+                    AutoHammerWheel.AutoHammerUIOpen = false;
+                }
+            }
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.Pwnhammer);
+            recipe.AddIngredient(ItemID.Wood, 200);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
 
 namespace BuilderEssentials.UI
@@ -14,10 +10,10 @@ namespace BuilderEssentials.UI
         public static UIPanel MultiWandWheelPanel;
         private static float MultiWandWheelWidth;
         private static float MultiWandWheelHeight;
-        private static List<UIImageButton> WandWheelElements;
-        private static int selectedIndex = 0;
-        public static bool IsWandsUIVisible { get; set; }
-        public static bool WandsWheelUIOpen { get; set; }
+        public static List<UIImageButton> WandWheelElements;
+        public static int selectedIndex = 0;
+        public static bool IsWandsUIVisible;
+        public static bool WandsWheelUIOpen;
         public static bool Hovering = MultiWandWheelPanel != null && MultiWandWheelPanel.IsMouseHovering && IsWandsUIVisible;
 
         public static UIPanel CreateMultiWandWheelPanel(int mouseX, int mouseY, BasePanel basePanel)

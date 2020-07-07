@@ -36,6 +36,10 @@ namespace BuilderEssentials.Items.Accessories
             {
                 modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
+                //Checking if player's heldItem is air
+                if (!player.HeldItem.IsAir)
+                    Tools.UIPanelLogic(CreativeWheel.CreativeWheelPanel, ref CreativeWheel.CreativeWheelUIOpen, ref CreativeWheel.IsCreativeWheelVisible);
+
                 //Accessory Stats
                 player.blockRange += 55;
                 player.wallSpeed += 10;
@@ -54,11 +58,11 @@ namespace BuilderEssentials.Items.Accessories
 
                 //Right click timer
                 if (Main.mouseRight && Tools.IsUIAvailable() &&
-                player.inventory[player.selectedItem].IsAir &&
-                (!player.mouseInterface || CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering))
+                player.HeldItem.IsAir &&
+                (!player.mouseInterface || CreativeWheel.CreativeWheelPanel.IsMouseHovering))
                 {
                     if (++mouseRightTimer == 2)
-                        BasePanel.creativeWheelUIOpen = !BasePanel.creativeWheelUIOpen;
+                        CreativeWheel.CreativeWheelUIOpen = !CreativeWheel.CreativeWheelUIOpen;
                 }
 
                 if (Main.mouseRightRelease)
@@ -71,14 +75,14 @@ namespace BuilderEssentials.Items.Accessories
 
                 //AutoHammer
                 if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer) &&
-                player.inventory[player.selectedItem].IsAir && CreativeWheelRework.CreativeWheelReworkPanel != null &&
+                player.HeldItem.IsAir && CreativeWheel.CreativeWheelPanel != null &&
                 !player.mouseInterface && !Main.playerInventory)
                 {
-                    if (!CreativeWheelRework.CreativeWheelReworkPanel.IsMouseHovering)
+                    if (!CreativeWheel.CreativeWheelPanel.IsMouseHovering)
                         Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile, modPlayer.autoHammerSelectedIndex);
                 }
                 else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
-                && !player.inventory[player.selectedItem].IsAir && !player.mouseInterface && !Main.playerInventory)
+                && !player.HeldItem.IsAir && !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!autoHammerAlert)
                     {

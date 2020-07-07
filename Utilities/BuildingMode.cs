@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BuilderEssentials.UI;
+﻿using BuilderEssentials.UI;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace BuilderEssentials.Utilities
 {

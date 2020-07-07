@@ -1,5 +1,4 @@
-﻿using BuilderEssentials.Items.Accessories;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

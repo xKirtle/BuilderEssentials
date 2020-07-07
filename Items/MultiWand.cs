@@ -35,7 +35,7 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI == Main.myPlayer)
             {
-                if (MultiWandWheel.MultiWandWheelPanel != null && !player.inventory[player.selectedItem].IsTheSameAs(item))
+                if (MultiWandWheel.MultiWandWheelPanel != null && !player.HeldItem.IsTheSameAs(item))
                 {
                     MultiWandWheel.MultiWandWheelPanel.Remove();
                     MultiWandWheel.WandsWheelUIOpen = false;
@@ -43,7 +43,7 @@ namespace BuilderEssentials.Items
 
                 if (Main.mouseRight && Tools.IsUIAvailable()
                         && (!player.mouseInterface || (MultiWandWheel.WandsWheelUIOpen && MultiWandWheel.MultiWandWheelPanel.IsMouseHovering))
-                        && player.inventory[player.selectedItem].IsTheSameAs(item))
+                        && player.HeldItem.IsTheSameAs(item))
                 {
                     if (++mouseRightTimer == 2)
                         MultiWandWheel.WandsWheelUIOpen = !MultiWandWheel.WandsWheelUIOpen;
@@ -75,9 +75,10 @@ namespace BuilderEssentials.Items
                 oldPosX = posX;
                 oldPosY = posY;
 
-                if (placementAnywhere || Tools.HasTileAround(posX, posY))
+                if ((placementAnywhere || Tools.HasTileAround(posX, posY)) && 
+                !MultiWandWheel.MultiWandWheelPanel.IsMouseHovering && !MultiWandWheel.IsWandsUIVisible)
                 {
-                    switch (modPlayer.wandWheelSelectedIndex)
+                    switch (MultiWandWheel.selectedIndex)
                     {
                         case 0: //living wood
                             if (infinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
@@ -142,7 +143,7 @@ namespace BuilderEssentials.Items
             if (modPlayer.infiniteRange || Tools.ToolHasRange(toolRange))
             {
                 player.showItemIcon = true;
-                switch (modPlayer.wandWheelSelectedIndex)
+                switch (MultiWandWheel.selectedIndex)
                 {
                     case 0:
                             player.showItemIcon2 = ItemID.LivingWoodWand;

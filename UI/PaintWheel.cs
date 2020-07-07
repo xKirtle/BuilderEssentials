@@ -17,8 +17,8 @@ namespace BuilderEssentials.UI
         private static List<UIImageButton> paintToolsList;
         public static int selectedIndex = 30; //No color
         public static int selectedToolIndex = 0;
-        public static bool IsPaintingUIVisible { get; set; }
-        public static bool PaintingUIOpen { get; set; }
+        public static bool IsPaintingUIVisible;
+        public static bool PaintingUIOpen;
         public static bool Hovering = PaintWheelPanel != null && PaintWheelPanel.IsMouseHovering && IsPaintingUIVisible;
         public static UIPanel CreatePaintWheel(int mouseX, int mouseY, BasePanel basePanel)
         {

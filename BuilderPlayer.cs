@@ -1,14 +1,9 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
-using log4net.Repository.Hierarchy;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using Terraria;
 using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 using Terraria.ModLoader.IO;
 
 namespace BuilderEssentials
@@ -58,6 +53,13 @@ namespace BuilderEssentials
 
         //Mirror Wand
         public bool mirrorWandEffects;
+
+        void FillListWithEmptyItems(ref List<Item> list, int size)
+        {
+            for (int i = 0; i < size; i++)
+                list.Add(new Item());
+        }
+
         public override void Initialize()
         {
             infiniteRange = false;
@@ -115,13 +117,13 @@ namespace BuilderEssentials
                 player.showItemIcon = false;
                 infiniteRange = false;
 
-                if (!player.inventory[player.selectedItem].IsAir)
+                if (!player.HeldItem.IsAir)
                 {
-                    if (BasePanel.creativeWheelPanel != null)
+                    if (CreativeWheel.CreativeWheelPanel != null)
                     {
-                        BasePanel.creativeWheelPanel.Remove();
-                        BasePanel.creativeWheelUIOpen = false;
-                        BasePanel.isCreativeWheelVisible = false;
+                        CreativeWheel.CreativeWheelPanel.Remove();
+                        CreativeWheel.CreativeWheelUIOpen = false;
+                        CreativeWheel.IsCreativeWheelVisible = false;
                     }
                 }
 
@@ -221,20 +223,9 @@ namespace BuilderEssentials
 
         public override void OnEnterWorld(Player player)
         {
-            if (!IsNormalAccessories)
-                BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOn);
-            else
-                BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOff);
-
             //Loads (or populates) all lists on enter world
             Tools.BuildingModeToggle();
             Tools.BuildingModeToggle();
-        }
-
-        void FillListWithEmptyItems(ref List<Item> list, int size)
-        {
-            for (int i = 0; i < size; i++)
-                list.Add(new Item());
         }
     }
 }

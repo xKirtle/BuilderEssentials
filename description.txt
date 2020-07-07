@@ -20,11 +20,10 @@ For more info/previews check the mod's Homepage!
 Happy Building!
 
 Latest Changelog:
-  - Added options to Building Mode in the Mod Config
-  - Fixed mod compatibility issues and a Placement Anywhere bug
   - Fixed Zoom/UI Scale related bugs
-  - Added a Mutli Wand (contains all six default wands)
   - Fixed a bug preventing the user to join a Multiplayer Server
+  - Added a Mutli Wand (contains all six default wands)
+  - Added the AutoHammer as its own item
 
 If you find any bug/weird behaviour please report it in our mod's homepage. Thank you!
 

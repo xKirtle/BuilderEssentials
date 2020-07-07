@@ -3,8 +3,8 @@ using BuilderEssentials.Items.Accessories;
 using BuilderEssentials.UI;
 using Microsoft.Xna.Framework;
 using System;
-using System.Threading;
 using Terraria;
+using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -291,6 +291,40 @@ namespace BuilderEssentials.Utilities
             bool inRange = Vector2.Distance(player.position, pointedCoord) < range * 16;
 
             return inRange;
+        }
+
+        public static bool UIPanelLogic(UIPanel UIPanel, ref bool UIOpen, ref bool UIVisible)
+        {
+            if (UIPanel != null && Main.playerInventory)
+            {
+                UIPanel.Remove();
+                UIOpen = false;
+                UIVisible = false;
+                return false;
+            }
+
+            if (UIOpen && !UIVisible)
+            {
+                UIVisible = true;
+                return true;
+            }
+            else if (!UIOpen && UIVisible)
+            {
+                UIPanel.Remove();
+                UIVisible = false;
+            }
+            return false;
+        }
+
+        public static UIText CreateUIText(string text, int left, int top)
+        {
+            UIText hoverText = new UIText(text, 1, false);
+            hoverText.VAlign = 0f;
+            hoverText.HAlign = 0f;
+            hoverText.Left.Set(left, 0);
+            hoverText.Top.Set(top, 0);
+
+            return hoverText;
         }
     }
 

@@ -56,7 +56,7 @@ namespace BuilderEssentials.Utilities
                         if (player.inventory[i].IsTheSameAs(item))
                         {
                             //Finds item in inventory and switch with selected item
-                            Item selectedItem = player.inventory[player.selectedItem];
+                            Item selectedItem = player.HeldItem;
                             player.inventory[player.selectedItem] = player.inventory[i];
                             player.inventory[i] = selectedItem;
                             isItemInInventory = true;
@@ -71,7 +71,7 @@ namespace BuilderEssentials.Utilities
                             if (player.inventory[i].IsAir)
                             {
                                 //Find first air space in inventory and switches selected item to there
-                                Item selectedItem = player.inventory[player.selectedItem];
+                                Item selectedItem = player.HeldItem;
                                 player.inventory[i] = selectedItem;
 
                                 player.inventory[player.selectedItem] = item;

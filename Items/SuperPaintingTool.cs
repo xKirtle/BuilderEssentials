@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
@@ -57,7 +56,7 @@ namespace BuilderEssentials.Items
 
                 if (Main.mouseRight && Tools.IsUIAvailable()
                         && (!player.mouseInterface || (PaintWheel.PaintingUIOpen && PaintWheel.PaintWheelPanel.IsMouseHovering))
-                        && player.inventory[player.selectedItem].IsTheSameAs(item))
+                        && player.HeldItem.IsTheSameAs(item))
                 {
                     if (++mouseRightTimer == 2)
                         PaintWheel.PaintingUIOpen = !PaintWheel.PaintingUIOpen;

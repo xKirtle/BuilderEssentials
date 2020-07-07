@@ -1,24 +1,24 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.UI
 {
-    public class CreativeWheelRework
+    public class CreativeWheel
     {
         static BuilderPlayer modPlayer;
-        public static UIPanel CreativeWheelReworkPanel;
+        public static UIPanel CreativeWheelPanel;
         public static float CreativeWheelReworkWidth;
         public static float CreativeWheelReworkHeight;
         public static List<UIImageButton> CreativeWheelElements;
         private static List<UIImageButton> CreativeWheelHammerElements;
         private static readonly int numberOfElements = 5;
+        public static bool IsCreativeWheelVisible;
+        public static bool CreativeWheelUIOpen;
+        public static bool Hovering = CreativeWheelPanel != null && CreativeWheelPanel.IsMouseHovering && IsCreativeWheelVisible;
 
         public static UIPanel CreateCreativeWheelReworkPanel(int mouseX, int mouseY, BasePanel basePanel)
         {
@@ -27,20 +27,20 @@ namespace BuilderEssentials.UI
             CreativeWheelReworkWidth = 250f;
             CreativeWheelReworkHeight = 250f;
 
-            CreativeWheelReworkPanel = new UIPanel();
-            CreativeWheelReworkPanel.VAlign = 0f;
-            CreativeWheelReworkPanel.HAlign = 0f;
-            CreativeWheelReworkPanel.Width.Set(CreativeWheelReworkWidth, 0);
-            CreativeWheelReworkPanel.Height.Set(CreativeWheelReworkHeight, 0);
-            CreativeWheelReworkPanel.Left.Set(mouseX - CreativeWheelReworkWidth / 2, 0); //mouseX - this.width/2
-            CreativeWheelReworkPanel.Top.Set(mouseY - CreativeWheelReworkHeight / 2, 0); //mouseY - this.height/2
-            CreativeWheelReworkPanel.BorderColor = Color.Transparent; //Color.Transparent;
-            CreativeWheelReworkPanel.BackgroundColor = Color.Transparent;
+            CreativeWheelPanel = new UIPanel();
+            CreativeWheelPanel.VAlign = 0f;
+            CreativeWheelPanel.HAlign = 0f;
+            CreativeWheelPanel.Width.Set(CreativeWheelReworkWidth, 0);
+            CreativeWheelPanel.Height.Set(CreativeWheelReworkHeight, 0);
+            CreativeWheelPanel.Left.Set(mouseX - CreativeWheelReworkWidth / 2, 0); //mouseX - this.width/2
+            CreativeWheelPanel.Top.Set(mouseY - CreativeWheelReworkHeight / 2, 0); //mouseY - this.height/2
+            CreativeWheelPanel.BorderColor = Color.Transparent; //Color.Transparent;
+            CreativeWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
-            basePanel.Append(CreativeWheelReworkPanel);
+            basePanel.Append(CreativeWheelPanel);
 
-            return CreativeWheelReworkPanel;
+            return CreativeWheelPanel;
         }
         private static void CreateLayout()
         {
@@ -79,7 +79,7 @@ namespace BuilderEssentials.UI
 
             //Append them to the Main Panel
             for (int i = 0; i < CreativeWheelElements.Count; i++)
-                CreativeWheelReworkPanel.Append(CreativeWheelElements[i]);
+                CreativeWheelPanel.Append(CreativeWheelElements[i]);
         }
 
         private static void MainElementClick(int index)
@@ -148,7 +148,7 @@ namespace BuilderEssentials.UI
             CreativeWheelHammerElements[selectedIndex].SetVisibility(1f, 1f);
 
             for (int i = 0; i < CreativeWheelHammerElements.Count; i++)
-                CreativeWheelReworkPanel.Append(CreativeWheelHammerElements[i]);
+                CreativeWheelPanel.Append(CreativeWheelHammerElements[i]);
         }
 
         private static void RemoveHammerLayout()
