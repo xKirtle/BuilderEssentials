@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.UI;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 
 namespace BuilderEssentials.Utilities
@@ -234,10 +235,8 @@ namespace BuilderEssentials.Utilities
         public static void UpdateButtonImage()
         {
             var modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (modPlayer.IsNormalAccessories)
-                BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOff);
-            else
-                BasePanel.buildingModeButton.SetImage(BuilderEssentials.BuildingModeOn);
+            Texture2D texture = modPlayer.IsNormalAccessories ? BuilderEssentials.BuildingModeOff : BuilderEssentials.BuildingModeOn;
+            BasePanel.buildingModeButton.SetImage(texture);
         }
     }
 }

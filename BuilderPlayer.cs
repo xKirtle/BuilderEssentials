@@ -146,8 +146,6 @@ namespace BuilderEssentials
         {
             return new TagCompound
             {
-                { "IsNormalAccessories", IsNormalAccessories },
-
                 { "NormalAccessories", NormalAccessories },
                 { "BuildingAccessories", BuildingAccessories },
 
@@ -167,16 +165,12 @@ namespace BuilderEssentials
                 { "BuildingDyes", BuildingDyes },
 
                 { "creativeWheelSelectedIndex", creativeWheelSelectedIndex},
-                { "autoHammerSelectedIndex", autoHammerSelectedIndex },
             };
         }
 
         public override void Load(TagCompound tag)
         {
             //Building Mode
-            if (tag.ContainsKey("IsNormalAccessories"))
-                IsNormalAccessories = tag.GetBool("IsNormalAccessories");
-
             if (tag.ContainsKey("NormalAccessories"))
                 NormalAccessories = tag.Get<List<Item>>("NormalAccessories");
 
@@ -216,9 +210,6 @@ namespace BuilderEssentials
             //Creative Wheel
             if (tag.ContainsKey("creativeWheelSelectedIndex"))
                 creativeWheelSelectedIndex = tag.Get<List<int>>("creativeWheelSelectedIndex");
-
-            if (tag.ContainsKey("autoHammerSelectedIndex"))
-                autoHammerSelectedIndex = tag.GetInt("autoHammerSelectedIndex");
         }
 
         public override void OnEnterWorld(Player player)
