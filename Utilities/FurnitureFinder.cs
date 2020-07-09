@@ -2125,6 +2125,284 @@ namespace BuilderEssentials.Utilities
                             break;
                     }
                     break;
+                case TileID.MetalBars:
+                    switch (tile.frameX / 18)
+                    {
+                        case 0:
+                            item.SetDefaults(ItemID.CopperBar);
+                            break;
+                        case 1:
+                            item.SetDefaults(ItemID.TinBar);
+                            break;
+                        case 2:
+                            item.SetDefaults(ItemID.IronBar);
+                            break;
+                        case 3:
+                            item.SetDefaults(ItemID.LeadBar);
+                            break;
+                        case 4:
+                            item.SetDefaults(ItemID.SilverBar);
+                            break;
+                        case 5:
+                            item.SetDefaults(ItemID.TungstenBar);
+                            break;
+                        case 6:
+                            item.SetDefaults(ItemID.GoldBar);
+                            break;
+                        case 7:
+                            item.SetDefaults(ItemID.PlatinumBar);
+                            break;
+                        case 8:
+                            item.SetDefaults(ItemID.DemoniteBar);
+                            break;
+                        case 9:
+                            item.SetDefaults(ItemID.MeteoriteBar);
+                            break;
+                        case 10:
+                            item.SetDefaults(ItemID.HellstoneBar);
+                            break;
+                        case 11:
+                            item.SetDefaults(ItemID.CobaltBar);
+                            break;
+                        case 12:
+                            item.SetDefaults(ItemID.PalladiumBar);
+                            break;
+                        case 13:
+                            item.SetDefaults(ItemID.MythrilBar);
+                            break;
+                        case 14:
+                            item.SetDefaults(ItemID.OrichalcumBar);
+                            break;
+                        case 15:
+                            item.SetDefaults(ItemID.AdamantiteBar);
+                            break;
+                        case 16:
+                            item.SetDefaults(ItemID.TitaniumBar);
+                            break;
+                        case 17:
+                            item.SetDefaults(ItemID.ChlorophyteBar);
+
+                            break;
+                        case 18:
+                            item.SetDefaults(ItemID.HallowedBar);
+                            break;
+                        case 19:
+                            item.SetDefaults(ItemID.CrimtaneBar);
+                            break;
+                        case 20:
+                            item.SetDefaults(ItemID.ShroomiteBar);
+                            break;
+                        case 21:
+                            item.SetDefaults(ItemID.SpectreBar);
+                            break;
+                        case 22:
+                            item.SetDefaults(ItemID.LunarBar);
+                            break;
+                    }
+                    break;
+                case TileID.Painting3X3:
+                    bool firstFrameY = tile.frameY / 54 == 0;
+                    switch (tile.frameX / 54)
+                    {
+                        case 0:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.EaterofWorldsTrophy);
+                            else // == 1
+                                item.SetDefaults(ItemID.MourningWoodTrophy);
+                            break;
+                        case 1:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.EyeofCthulhuTrophy);
+                            else
+                                item.SetDefaults(ItemID.PumpkingTrophy);
+                            break;
+                        case 2:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.BrainofCthulhuTrophy);
+                            else
+                                item.SetDefaults(ItemID.IceQueenTrophy);
+                            break;
+                        case 3:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.SkeletronTrophy);
+                            else
+                                item.SetDefaults(ItemID.SantaNK1Trophy);
+                            break;
+                        case 4:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.QueenBeeTrophy);
+                            else
+                                item.SetDefaults(ItemID.EverscreamTrophy);
+                            break;
+                        case 5:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.WallofFleshTrophy);
+                            else
+                                item.SetDefaults(ItemID.BlacksmithRack);
+                            break;
+                        case 6:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.DestroyerTrophy);
+                            else
+                                item.SetDefaults(ItemID.CarpentryRack);
+                            break;
+                        case 7:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.SkeletronPrimeTrophy);
+                            else
+                                item.SetDefaults(ItemID.HelmetRack);
+                            break;
+                        case 8:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.RetinazerTrophy);
+                            else
+                                item.SetDefaults(ItemID.SpearRack);
+                            break;
+                        case 9:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.SpazmatismTrophy);
+                            else
+                                item.SetDefaults(ItemID.SwordRack);
+                            break;
+                        case 10:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.PlanteraTrophy);
+                            else
+                                item.SetDefaults(ItemID.LifePreserver);
+                            break;
+                        case 11:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.GolemTrophy);
+                            else
+                                item.SetDefaults(ItemID.ShipsWheel);
+                            break;
+                        case 12:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.BloodMoonRising);
+                            else
+                                item.SetDefaults(ItemID.CompassRose);
+                            break;
+                        case 13:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.TheHangedMan);
+                            else
+                                item.SetDefaults(ItemID.WallAnchor);
+                            break;
+                        case 14:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.GloryoftheFire);
+                            else
+                                item.SetDefaults(ItemID.GoldfishTrophy);
+                            break;
+                        case 15:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.BoneWarp);
+                            else
+                                item.SetDefaults(ItemID.BunnyfishTrophy);
+                            break;
+                        case 16:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.WallSkeleton);
+                            else
+                                item.SetDefaults(ItemID.SwordfishTrophy);
+                            break;
+                        case 17:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.HangingSkeleton);
+                            else
+                                item.SetDefaults(ItemID.SharkteethTrophy);
+                            break;
+                        case 18:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.SkellingtonJSkellingsworth);
+                            else
+                                item.SetDefaults(ItemID.KingSlimeTrophy);
+                            break;
+                        case 19:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.TheCursedMan);
+                            else
+                                item.SetDefaults(ItemID.DukeFishronTrophy);
+                            break;
+                        case 20:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.Sunflowers);
+                            else
+                                item.SetDefaults(ItemID.AncientCultistTrophy);
+                            break;
+                        case 21:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.TerrarianGothic);
+                            else
+                                item.SetDefaults(ItemID.MartianSaucerTrophy);
+                            break;
+                        case 22:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.GuidePicasso);
+                            else
+                                item.SetDefaults(ItemID.FlyingDutchmanTrophy);
+                            break;
+                        case 23:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.TheGuardiansGaze);
+                            else
+                                item.SetDefaults(ItemID.MoonLordTrophy);
+                            break;
+                        case 24:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.FatherofSomeone);
+                            else
+                                item.SetDefaults(ItemID.BossTrophyDarkmage);
+                            break;
+                        case 25:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.NurseLisa);
+                            else
+                                item.SetDefaults(ItemID.BossTrophyBetsy);
+                            break;
+                        case 26:
+                            if (firstFrameY)
+                                item.SetDefaults(ItemID.Discover);
+                            else
+                                item.SetDefaults(ItemID.BossTrophyOgre);
+                            break;
+                        case 27:
+                            item.SetDefaults(ItemID.HandEarth);
+                            break;
+                        case 28:
+                            item.SetDefaults(ItemID.OldMiner);
+                            break;
+                        case 29:
+                            item.SetDefaults(ItemID.Skelehead);
+                            break;
+                        case 30:
+                            item.SetDefaults(ItemID.ImpFace);
+                            break;
+                        case 31:
+                            item.SetDefaults(ItemID.OminousPresence);
+                            break;
+                        case 32:
+                            item.SetDefaults(ItemID.ShiningMoon);
+                            break;
+                        case 33:
+                            item.SetDefaults(ItemID.TheMerchant);
+                            break;
+                        case 34:
+                            item.SetDefaults(ItemID.CrownoDevoursHisLunch);
+                            break;
+                        case 35:
+                            item.SetDefaults(ItemID.RareEnchantment);
+                            break;
+                    }
+                    break;
+                case TileID.Painting6X4:
+                    bool firstFrameX = tile.frameX / 108 == 0;
+                    switch (tile.frameY / 72)
+                    {
+                        default:
+                            break;
+                    }
+                    break;
             }
         }
     }
