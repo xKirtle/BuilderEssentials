@@ -2067,6 +2067,64 @@ namespace BuilderEssentials.Utilities
                             break;
                     }
                     break;
+                case TileID.WaterFountain:
+                    switch (tile.frameX / 36)
+                    {
+                        case 0:
+                            item.SetDefaults(ItemID.PureWaterFountain);
+                            break;
+                        case 1:
+                            item.SetDefaults(ItemID.DesertWaterFountain);
+                            break;
+                        case 2:
+                            item.SetDefaults(ItemID.JungleWaterFountain);
+                            break;
+                        case 3:
+                            item.SetDefaults(ItemID.IcyWaterFountain);
+                            break;
+                        case 4:
+                            item.SetDefaults(ItemID.CorruptWaterFountain);
+                            break;
+                        case 5:
+                            item.SetDefaults(ItemID.CrimsonWaterFountain);
+                            break;
+                        case 6:
+                            item.SetDefaults(ItemID.HallowedWaterFountain);
+                            break;
+                        case 7:
+                            item.SetDefaults(ItemID.BloodWaterFountain);
+                            break;
+                    }
+                    break;
+                case TileID.Campfire:
+                    switch (tile.frameX / 54)
+                    {
+                        case 0:
+                            item.SetDefaults(ItemID.Campfire);
+                            break;
+                        case 1:
+                            item.SetDefaults(ItemID.CursedCampfire);
+                            break;
+                        case 2:
+                            item.SetDefaults(ItemID.DemonCampfire);
+                            break;
+                        case 3:
+                            item.SetDefaults(ItemID.FrozenCampfire);
+                            break;
+                        case 4:
+                            item.SetDefaults(ItemID.IchorCampfire);
+                            break;
+                        case 5:
+                            item.SetDefaults(ItemID.RainbowCampfire);
+                            break;
+                        case 6:
+                            item.SetDefaults(ItemID.UltraBrightCampfire);
+                            break;
+                        case 7:
+                            item.SetDefaults(ItemID.BoneCampfire);
+                            break;
+                    }
+                    break;
             }
         }
     }
