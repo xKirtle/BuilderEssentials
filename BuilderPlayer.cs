@@ -15,8 +15,6 @@ namespace BuilderEssentials
 
 
         //Building Mode
-        public bool IsNormalAccessories;
-
         public List<Item> NormalAccessories;
         public List<Item> BuildingAccessories;
 
@@ -38,7 +36,6 @@ namespace BuilderEssentials
 
         //Creative Wheel Stuff
         public List<int> creativeWheelSelectedIndex;
-        public int autoHammerSelectedIndex;
         public enum CreativeWheelItem
         {
             ItemPicker,
@@ -54,52 +51,31 @@ namespace BuilderEssentials
         //Mirror Wand
         public bool mirrorWandEffects;
 
-        void FillListWithEmptyItems(ref List<Item> list, int size)
-        {
-            for (int i = 0; i < size; i++)
-                list.Add(new Item());
-        }
-
         public override void Initialize()
         {
             infiniteRange = false;
 
-            IsNormalAccessories = true;
-
             NormalAccessories = new List<Item>(7);
-            FillListWithEmptyItems(ref NormalAccessories, 7);
             BuildingAccessories = new List<Item>(7);
-            FillListWithEmptyItems(ref BuildingAccessories, 7);
 
             NormalVanityAccessories = new List<Item>(7);
-            FillListWithEmptyItems(ref NormalVanityAccessories, 7);
             BuildingVanityAccessories = new List<Item>(7);
-            FillListWithEmptyItems(ref BuildingVanityAccessories, 7);
 
             NormalArmor = new List<Item>(3);
-            FillListWithEmptyItems(ref NormalArmor, 3);
             BuildingArmor = new List<Item>(3);
-            FillListWithEmptyItems(ref BuildingArmor, 3);
 
             NormalVanityArmor = new List<Item>(3);
-            FillListWithEmptyItems(ref NormalVanityArmor, 3);
             BuildingVanityArmor = new List<Item>(3);
-            FillListWithEmptyItems(ref BuildingVanityArmor, 3);
 
             NormalMiscEquips = new List<Item>(5);
-            FillListWithEmptyItems(ref NormalMiscEquips, 5);
             BuildingMiscEquips = new List<Item>(5);
-            FillListWithEmptyItems(ref BuildingMiscEquips, 5);
 
             NormalDyes = new List<Item>(15);
-            FillListWithEmptyItems(ref NormalDyes, 15);
             BuildingDyes = new List<Item>(15);
-            FillListWithEmptyItems(ref BuildingDyes, 15);
 
 
             //Creative Wheel Stuff
             creativeWheelSelectedIndex = new List<int>();
-            autoHammerSelectedIndex = 5; //full tile
 
 
             //Mirror Wand
@@ -108,7 +84,6 @@ namespace BuilderEssentials
 
         public override void ResetEffects()
         {
-            //Closing the creative wheel if the held item isn't air
             if (player.whoAmI == Main.myPlayer)
             {
                 Player.tileRangeX = 5;
@@ -139,7 +114,7 @@ namespace BuilderEssentials
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
-                Tools.BuildingModeToggle();
+                BuildingMode.ToggleBuildingMode();
         }
 
         public override TagCompound Save()
@@ -210,13 +185,30 @@ namespace BuilderEssentials
             //Creative Wheel
             if (tag.ContainsKey("creativeWheelSelectedIndex"))
                 creativeWheelSelectedIndex = tag.Get<List<int>>("creativeWheelSelectedIndex");
+
+            EnsureSaveCompatibility();
         }
 
+        public void EnsureSaveCompatibility()
+        {
+            Tools.FixOldSaveData(ref NormalAccessories);
+            Tools.FixOldSaveData(ref BuildingAccessories);
+            Tools.FixOldSaveData(ref NormalVanityAccessories);
+            Tools.FixOldSaveData(ref BuildingVanityAccessories);
+            Tools.FixOldSaveData(ref NormalArmor);
+            Tools.FixOldSaveData(ref BuildingArmor);
+            Tools.FixOldSaveData(ref NormalVanityArmor);
+            Tools.FixOldSaveData(ref BuildingVanityArmor);
+            Tools.FixOldSaveData(ref NormalMiscEquips);
+            Tools.FixOldSaveData(ref BuildingMiscEquips);
+            Tools.FixOldSaveData(ref NormalDyes);
+            Tools.FixOldSaveData(ref BuildingDyes);
+        }
         public override void OnEnterWorld(Player player)
         {
             //Loads (or populates) all lists on enter world
-            Tools.BuildingModeToggle();
-            Tools.BuildingModeToggle();
+            BuildingMode.ToggleBuildingMode();
+            BuildingMode.ToggleBuildingMode();
         }
     }
 }

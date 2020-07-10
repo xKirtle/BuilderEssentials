@@ -3,6 +3,7 @@ using BuilderEssentials.Items.Accessories;
 using BuilderEssentials.UI;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
@@ -327,6 +328,15 @@ namespace BuilderEssentials.Utilities
             hoverText.Top.Set(top, 0);
 
             return hoverText;
+        }
+
+        public static void FixOldSaveData(ref List<Item> list)
+        {
+            if (list.Count < list.Capacity)
+            {
+                for (int i = list.Count; i < list.Capacity; i++)
+                    list.Add(new Item());
+            }
         }
     }
 

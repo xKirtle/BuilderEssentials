@@ -88,7 +88,7 @@ namespace BuilderEssentials
                 BasePanel.Activate();
                 ShowUserInterface();
 
-                Tools.UpdateVariables();
+                BuildingMode.UpdateVariables();
             }
         }
 
@@ -194,8 +194,8 @@ namespace BuilderEssentials
 
         public override void PreSaveAndQuit()
         {
-            if (!Main.LocalPlayer.GetModPlayer<BuilderPlayer>().IsNormalAccessories)
-                Tools.BuildingModeToggle();
+            if (!BuildingMode.IsNormalAccessories)
+                BuildingMode.ToggleBuildingMode();
         }
 
         public override void AddRecipeGroups()

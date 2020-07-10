@@ -28,7 +28,7 @@ namespace BuilderEssentials.UI
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
             if (isBuildingModeButtonVisible)
-                Tools.BuildingModeToggle();
+                BuildingMode.ToggleBuildingMode();
         }
 
         public override void Update(GameTime gameTime)

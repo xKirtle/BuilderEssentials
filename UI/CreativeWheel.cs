@@ -16,6 +16,7 @@ namespace BuilderEssentials.UI
         public static List<UIImageButton> CreativeWheelElements;
         private static List<UIImageButton> CreativeWheelHammerElements;
         private static readonly int numberOfElements = 5;
+        public static int autoHammerSelectedIndex = 5; //full tile
         public static bool IsCreativeWheelVisible;
         public static bool CreativeWheelUIOpen;
         public static bool Hovering = CreativeWheelPanel != null && CreativeWheelPanel.IsMouseHovering && IsCreativeWheelVisible;
@@ -73,7 +74,7 @@ namespace BuilderEssentials.UI
                 {
                     CreativeWheelElements[selectedItem].SetVisibility(1f, 1f);
                     if (selectedItem == 2) //AutoHammer
-                        CreateHammerLayout(modPlayer.autoHammerSelectedIndex);
+                        CreateHammerLayout(autoHammerSelectedIndex);
                 }
             }
 
@@ -99,7 +100,7 @@ namespace BuilderEssentials.UI
                     break;
                 case 2: //AutoHammer
                     if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer))
-                        CreateHammerLayout(modPlayer.autoHammerSelectedIndex);
+                        CreateHammerLayout(autoHammerSelectedIndex);
                     else
                         RemoveHammerLayout();
                     break;
@@ -159,7 +160,7 @@ namespace BuilderEssentials.UI
         }
         private static void AutoHammerElementClick(int index)
         {
-            modPlayer.autoHammerSelectedIndex = index;
+            autoHammerSelectedIndex = index;
             ResetVisibility();
             CreativeWheelHammerElements[index].SetVisibility(1f, 1f);
 

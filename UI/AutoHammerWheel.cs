@@ -15,7 +15,7 @@ namespace BuilderEssentials.UI
         private static float AutoHammerWheelWidth;
         private static float AutoHammerWheelHeight;
         private static List<UIImageButton> AutoHammerElements;
-        public static int selectedIndex = 5;//full tile
+        public static int selectedIndex = -1;
         public static bool IsAutoHammerUIVisible;
         public static bool AutoHammerUIOpen;
         public static bool Hovering = AutoHammerWheelPanel != null && AutoHammerWheelPanel.IsMouseHovering && IsAutoHammerUIVisible;
