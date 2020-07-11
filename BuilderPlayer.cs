@@ -80,6 +80,8 @@ namespace BuilderEssentials
 
             //Mirror Wand
             mirrorWandEffects = false;
+            EnsureSaveCompatibility();
+            BuildingMode.UpdateConfigVariables();
         }
 
         public override void ResetEffects()
@@ -186,6 +188,7 @@ namespace BuilderEssentials
             if (tag.ContainsKey("creativeWheelSelectedIndex"))
                 creativeWheelSelectedIndex = tag.Get<List<int>>("creativeWheelSelectedIndex");
 
+            //Calling this again here after Init to prevent older saves to stay with "null" saved values
             EnsureSaveCompatibility();
         }
 
@@ -203,12 +206,6 @@ namespace BuilderEssentials
             Tools.FixOldSaveData(ref BuildingMiscEquips);
             Tools.FixOldSaveData(ref NormalDyes);
             Tools.FixOldSaveData(ref BuildingDyes);
-        }
-        public override void OnEnterWorld(Player player)
-        {
-            //Loads (or populates) all lists on enter world
-            BuildingMode.ToggleBuildingMode();
-            BuildingMode.ToggleBuildingMode();
         }
     }
 }

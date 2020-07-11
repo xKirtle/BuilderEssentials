@@ -7,6 +7,7 @@ namespace BuilderEssentials
 {
     public class BuilderEssentialsConfig : ModConfig
     {
+        public static BuilderEssentialsConfig Instance;
         public override ConfigScope Mode => ConfigScope.ClientSide;
         [Header("Building Mode Options (Require Mod Reload)")]
         [Label("Different Accessories while on Building Mode")]
@@ -33,15 +34,5 @@ namespace BuilderEssentials
         [ReloadRequired]
         [DefaultValue(true)]
         public bool dyes;
-
-        public override void OnLoaded()
-        {
-            BuilderEssentials.accessories = accessories;
-            BuilderEssentials.vanityAccessories = vanityAccessories;
-            BuilderEssentials.armor = armor;
-            BuilderEssentials.vanityArmor = vanityArmor;
-            BuilderEssentials.miscEquips = miscEquips;
-            BuilderEssentials.dyes = dyes;
-        }
     }
 }

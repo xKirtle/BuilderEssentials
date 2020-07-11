@@ -28,15 +28,6 @@ namespace BuilderEssentials
         internal static UserInterface TransparentSelectionInterface;
         internal static ModHotKey ToggleBuildingMode;
 
-
-        public static bool accessories;
-        public static bool vanityAccessories;
-        public static bool armor;
-        public static bool vanityArmor;
-        public static bool miscEquips;
-        public static bool dyes;
-
-
         public void LoadTextures()
         {
             BuildingModeOn = this.GetTexture("UI/Elements/BuildingModeOn");
@@ -87,8 +78,6 @@ namespace BuilderEssentials
                 BasePanel = new BasePanel();
                 BasePanel.Activate();
                 ShowUserInterface();
-
-                BuildingMode.UpdateVariables();
             }
         }
 

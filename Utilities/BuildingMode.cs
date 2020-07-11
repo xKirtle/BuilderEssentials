@@ -15,15 +15,15 @@ namespace BuilderEssentials.Utilities
         public static bool miscEquips;
         public static bool dyes;
 
-        public static void UpdateVariables()
+        public static void UpdateConfigVariables()
         {
-            //BuilderEssentialsConfig config = ModContent.GetInstance<BuilderEssentialsConfig>();
-            accessories = BuilderEssentials.accessories;
-            vanityAccessories = BuilderEssentials.vanityAccessories;
-            armor = BuilderEssentials.armor;
-            vanityArmor = BuilderEssentials.vanityArmor;
-            miscEquips = BuilderEssentials.miscEquips;
-            dyes = BuilderEssentials.dyes;
+            BuilderEssentialsConfig config = BuilderEssentialsConfig.Instance;
+            accessories = config.accessories;
+            vanityAccessories = config.vanityAccessories;
+            armor = config.armor;
+            vanityArmor = config.vanityArmor;
+            miscEquips = config.miscEquips;
+            dyes = config.dyes;
         }
 
         public static void ToggleBuildingMode()
