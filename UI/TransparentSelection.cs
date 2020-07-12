@@ -11,6 +11,7 @@ namespace BuilderEssentials.UI
 {
     public class TransparentSelectionUI : UIState
     {
+        public static TransparentSelectionUI transparentSelectionUI;
         public override void OnInitialize()
         {
             UIElement transparentSelectionWand = new TransparentSelection();
