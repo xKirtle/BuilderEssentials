@@ -16,6 +16,9 @@ namespace BuilderEssentials.UI
         {
             UIElement transparentSelectionWand = new TransparentSelection();
             Append(transparentSelectionWand);
+
+            UIElement fillWand = new FillWandUI();
+            Append(fillWand);
         }
 
         public override void Update(GameTime gameTime)
