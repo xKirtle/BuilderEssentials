@@ -20,10 +20,10 @@ For more info/previews check the mod's Homepage!
 Happy Building!
 
 Latest Changelog:
-  - Fixed Zoom/UI Scale related bugs
-  - Fixed a bug preventing the user to join a Multiplayer Server
   - Added a Mutli Wand (contains all six default wands)
   - Added the AutoHammer as its own item
+  - Item Picker now supports all (vanilla/modded) items in the game
+  - Huge code refactor/cleanup
 
 If you find any bug/weird behaviour please report it in our mod's homepage. Thank you!
 

@@ -27,8 +27,8 @@ namespace BuilderEssentials
         internal static UserInterface UserInterface;
         internal static UserInterface TransparentSelectionInterface;
         internal static ModHotKey ToggleBuildingMode;
-        internal static ModHotKey IncreaseFillToolSize;
-        internal static ModHotKey DecreaseFillToolSize;
+        // internal static ModHotKey IncreaseFillToolSize;
+        // internal static ModHotKey DecreaseFillToolSize;
 
         public void LoadTextures()
         {
@@ -66,8 +66,8 @@ namespace BuilderEssentials
         public override void Load()
         {
             ToggleBuildingMode = RegisterHotKey("Toggle Building Mode", "N");
-            IncreaseFillToolSize = RegisterHotKey("Increase Fill Size Selection", "I");
-            DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection", "O");
+            // IncreaseFillToolSize = RegisterHotKey("Increase Fill Size Selection", "I");
+            // DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection", "O");
 
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
@@ -91,6 +91,8 @@ namespace BuilderEssentials
             UserInterface = null;
             TransparentSelectionInterface = null;
             ToggleBuildingMode = null;
+
+            //TODO: Unload static fields
 
             UnloadTextures();
         }

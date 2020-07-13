@@ -119,11 +119,11 @@ namespace BuilderEssentials
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
                 BuildingMode.ToggleBuildingMode();
 
-            if (BuilderEssentials.IncreaseFillToolSize.JustPressed && FillWand.fillSelectionSize < 6)
-                ++FillWand.fillSelectionSize;
+            // if (BuilderEssentials.IncreaseFillToolSize.JustPressed && FillWand.fillSelectionSize < 6)
+            //     ++FillWand.fillSelectionSize;
 
-            if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
-                --FillWand.fillSelectionSize;
+            // if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
+            //     --FillWand.fillSelectionSize;
 
 
         }
