@@ -43,8 +43,15 @@ namespace BuilderEssentials.Tiles
             name.SetDefault("Multi Crafting Station");
             AddMapEntry(new Color(92, 92, 92), name);
 
-            adjTiles = new int[] { TileID.MythrilAnvil, TileID.AdamantiteForge, TileID.Bookcases,
-                TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation };
+            //Can't use Modded ItemTypes here?
+            adjTiles = new int[] { TileID.WorkBenches, TileID.Furnaces, TileID.Hellforge, TileID.Anvils, TileID.AlchemyTable, TileID.Sinks,
+            TileID.Sawmill, TileID.Loom, TileID.Chairs, TileID.Tables, TileID.Tables2, TileID.CookingPots, TileID.TinkerersWorkbench,
+            TileID.ImbuingStation, TileID.DyeVat, TileID.HeavyWorkBench, TileID.DemonAltar, TileID.MythrilAnvil,
+            TileID.AdamantiteForge, TileID.Bookcases, TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation,
+            TileID.Kegs, TileID.Blendomatic, TileID.MeatGrinder, TileID.BoneWelder, TileID.GlassKiln, TileID.HoneyDispenser,
+            TileID.IceMachine, TileID.LivingLoom, TileID.SkyMill, TileID.Solidifier, TileID.FleshCloningVat, TileID.SteampunkBoiler,
+            TileID.LihzahrdFurnace, TileID.WaterDrip, TileID.Waterfall, TileID.LavaDrip, TileID.Lavafall,
+            TileID.HoneyDrip, TileID.Honeyfall, TileID.Campfire, TileID.Extractinator, TileID.SnowCloud, TileID.Tombstones};
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)
