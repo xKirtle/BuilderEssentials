@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials
 {
@@ -13,6 +14,7 @@ namespace BuilderEssentials
     {
         //Player
         public bool infiniteRange;
+        public Item previousHeldItem;
 
 
         //Building Mode
@@ -55,6 +57,7 @@ namespace BuilderEssentials
         public override void Initialize()
         {
             infiniteRange = false;
+            previousHeldItem = new Item();
 
             NormalAccessories = new List<Item>(7);
             BuildingAccessories = new List<Item>(7);
@@ -95,22 +98,14 @@ namespace BuilderEssentials
                 player.showItemIcon = false;
                 infiniteRange = false;
 
-                if (!player.HeldItem.IsAir)
-                {
-                    if (CreativeWheel.CreativeWheelPanel != null)
-                    {
-                        CreativeWheel.CreativeWheelPanel.Remove();
-                        CreativeWheel.CreativeWheelUIOpen = false;
-                        CreativeWheel.IsCreativeWheelVisible = false;
-                    }
-                }
-
                 if (creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
                 && !player.HasBuff(mod.BuffType("InfinitePlacementBuff")))
                     creativeWheelSelectedIndex.Remove((int)CreativeWheelItem.InfinityUpgrade);
 
                 if (mirrorWandEffects)
                     mirrorWandEffects = false;
+
+                RemoveUIPanels();
             }
         }
 
@@ -119,13 +114,13 @@ namespace BuilderEssentials
             if (BuilderEssentials.ToggleBuildingMode.JustPressed)
                 BuildingMode.ToggleBuildingMode();
 
-            // if (BuilderEssentials.IncreaseFillToolSize.JustPressed && FillWand.fillSelectionSize < 6)
-            //     ++FillWand.fillSelectionSize;
+            if (BuilderEssentials.IncreaseFillToolSize.JustPressed && FillWand.fillSelectionSize < 6)
+                ++FillWand.fillSelectionSize;
 
-            // if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
-            //     --FillWand.fillSelectionSize;
+            if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
+                --FillWand.fillSelectionSize;
 
-
+            FillWandUI.test = Main.tileTexture[FillWand.fillSelectionSize];
         }
 
         public override TagCompound Save()
@@ -215,6 +210,30 @@ namespace BuilderEssentials
             Tools.FixOldSaveData(ref BuildingMiscEquips);
             Tools.FixOldSaveData(ref NormalDyes);
             Tools.FixOldSaveData(ref BuildingDyes);
+        }
+
+        private void RemoveUIPanels()
+        {
+            var player = Main.LocalPlayer;
+            if (player.HeldItem != previousHeldItem)
+            {
+                previousHeldItem = player.HeldItem;
+                if (player.whoAmI == Main.myPlayer)
+                {
+                    if (player.HeldItem.type != ItemType<AutoHammer>())
+                        AutoHammerWheel.RemovePanel();
+
+                    if (player.HeldItem.type != ItemType<SuperPaintingTool>())
+                        PaintWheel.RemovePanel();
+
+                    if (player.HeldItem.type != ItemType<MultiWand>())
+                        MultiWandWheel.RemovePanel();
+
+                    if (!player.HeldItem.IsAir)
+                        CreativeWheel.RemovePanel();
+                }
+
+            }
         }
     }
 }

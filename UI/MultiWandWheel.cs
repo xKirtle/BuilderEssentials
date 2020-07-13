@@ -76,5 +76,15 @@ namespace BuilderEssentials.UI
             WandWheelElements[index].SetVisibility(1f, 1f);
             selectedIndex = index;
         }
+
+        public static void RemovePanel()
+        {
+            if (MultiWandWheelPanel != null)
+            {
+                MultiWandWheelPanel.Remove();
+                IsWandsUIVisible = false;
+                WandsWheelUIOpen = false;
+            }
+        }
     }
 }

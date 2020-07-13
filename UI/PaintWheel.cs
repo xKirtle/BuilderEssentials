@@ -176,5 +176,15 @@ namespace BuilderEssentials.UI
             paintToolsList[index].SetVisibility(1f, 1f);
 
         }
+
+        public static void RemovePanel()
+        {
+            if (PaintWheelPanel != null)
+            {
+                PaintWheelPanel.Remove();
+                IsPaintingUIVisible = false;
+                PaintingUIOpen = false;
+            }
+        }
     }
 }

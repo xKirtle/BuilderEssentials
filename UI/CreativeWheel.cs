@@ -170,5 +170,15 @@ namespace BuilderEssentials.UI
                     CreativeWheelHammerElements[i].SetVisibility(.75f, .4f);
             }
         }
+
+        public static void RemovePanel()
+        {
+            if (CreativeWheelPanel != null)
+            {
+                CreativeWheelPanel.Remove();
+                IsCreativeWheelVisible = false;
+                CreativeWheelUIOpen = false;
+            }
+        }
     }
 }

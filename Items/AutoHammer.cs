@@ -71,18 +71,6 @@ namespace BuilderEssentials.Items
             return true;
         }
 
-        public override void UpdateInventory(Player player)
-        {
-            if (player.whoAmI == Main.myPlayer)
-            {
-                if (AutoHammerWheel.AutoHammerWheelPanel != null && !player.HeldItem.IsTheSameAs(item))
-                {
-                    AutoHammerWheel.AutoHammerWheelPanel.Remove();
-                    AutoHammerWheel.AutoHammerUIOpen = false;
-                }
-            }
-        }
-
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);

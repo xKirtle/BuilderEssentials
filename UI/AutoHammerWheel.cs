@@ -86,5 +86,15 @@ namespace BuilderEssentials.UI
             else
                 selectedIndex = -1;
         }
+
+        public static void RemovePanel()
+        {
+            if (AutoHammerWheelPanel != null)
+            {
+                AutoHammerWheelPanel.Remove();
+                IsAutoHammerUIVisible = false;
+                AutoHammerUIOpen = false;
+            }
+        }
     }
 }
