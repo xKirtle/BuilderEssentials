@@ -120,7 +120,7 @@ namespace BuilderEssentials
             if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
                 --FillWand.fillSelectionSize;
 
-            FillWandUI.test = Main.tileTexture[FillWand.fillSelectionSize];
+            //FillWandUI.test = Main.tileTexture[FillWand.fillSelectionSize];
         }
 
         public override TagCompound Save()

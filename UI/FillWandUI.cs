@@ -15,7 +15,7 @@ namespace BuilderEssentials.UI
         Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
         Vector2 position = new Vector2();
 
-        public static Texture2D test = Main.tileTexture[0];
+        //public static Texture2D test = Main.tileTexture[0];
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>())
@@ -26,7 +26,7 @@ namespace BuilderEssentials.UI
                     {
                         //Centers in the bottom left corner of the filling square
                         position = new Vector2(Player.tileTargetX + j, Player.tileTargetY + i - FillWand.fillSelectionSize + 1) * 16 - Main.screenPosition;
-                        spriteBatch.Draw(test, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
                 }
             }
