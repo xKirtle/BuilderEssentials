@@ -37,7 +37,6 @@ namespace BuilderEssentials.Tiles
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
-            disableSmartCursor = true;
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Pre Hardmode Crafting Station");
             AddMapEntry(new Color(143, 208, 50), name);

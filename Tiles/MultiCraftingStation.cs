@@ -38,7 +38,6 @@ namespace BuilderEssentials.Tiles
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
-            disableSmartCursor = true;
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Multi Crafting Station");
             AddMapEntry(new Color(92, 92, 92), name);

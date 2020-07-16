@@ -37,7 +37,6 @@ namespace BuilderEssentials.Tiles
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
-            disableSmartCursor = true;
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Themed Furniture Crafting Station");
             AddMapEntry(new Color(249, 163, 27), name);
