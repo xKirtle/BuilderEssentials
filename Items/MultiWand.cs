@@ -76,7 +76,8 @@ namespace BuilderEssentials.Items
                 oldPosY = posY;
 
                 if ((placementAnywhere || Tools.HasTileAround(posX, posY)) && 
-                !MultiWandWheel.MultiWandWheelPanel.IsMouseHovering && !MultiWandWheel.IsWandsUIVisible)
+                (MultiWandWheel.MultiWandWheelPanel == null || !MultiWandWheel.MultiWandWheelPanel.IsMouseHovering)
+                && !MultiWandWheel.IsWandsUIVisible)
                 {
                     switch (MultiWandWheel.selectedIndex)
                     {
