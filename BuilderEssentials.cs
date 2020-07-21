@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
-using Steamworks;
 using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials
@@ -32,35 +31,35 @@ namespace BuilderEssentials
 
         public void LoadTextures()
         {
-            BuildingModeOn = this.GetTexture("UI/Elements/BuildingModeOn");
-            BuildingModeOff = this.GetTexture("UI/Elements/BuildingModeOff");
+            BuildingModeOn = GetTexture("UI/Elements/BuildingModeOn");
+            BuildingModeOff = GetTexture("UI/Elements/BuildingModeOff");
 
             CreativeWheelElements = new List<Texture2D>(5);
-            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWColorPicker"));
-            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement"));
-            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer"));
-            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWPlacementAnywhere"));
-            CreativeWheelElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWInfinitePickupRange"));
+            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWColorPicker"));
+            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement"));
+            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWAutoHammer"));
+            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWPlacementAnywhere"));
+            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWInfinitePickupRange"));
 
             CWAutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
-                CWAutoHammerElements.Add(this.GetTexture("UI/Elements/CreativeWheel/CWAutoHammer" + i));
+                CWAutoHammerElements.Add(GetTexture("UI/Elements/CreativeWheel/CWAutoHammer" + i));
 
             PaintColors = new List<Texture2D>(31);
             for (int i = 0; i < 31; i++)
-                PaintColors.Add(this.GetTexture("UI/Elements/Paint/Paint" + i));
+                PaintColors.Add(GetTexture("UI/Elements/Paint/Paint" + i));
 
             PaintTools = new List<Texture2D>(3);
             for (int i = 0; i < 3; i++)
-                PaintTools.Add(this.GetTexture("UI/Elements/Paint/PaintTool" + i));
+                PaintTools.Add(GetTexture("UI/Elements/Paint/PaintTool" + i));
 
             WandWheelElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
-                WandWheelElements.Add(this.GetTexture("UI/Elements/WandWheel/WandWheel" + i));
+                WandWheelElements.Add(GetTexture("UI/Elements/WandWheel/WandWheel" + i));
 
             AutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
-                AutoHammerElements.Add(this.GetTexture("UI/Elements/AutoHammer/AH" + i));
+                AutoHammerElements.Add(GetTexture("UI/Elements/AutoHammer/AH" + i));
         }
 
         public override void Load()
@@ -87,13 +86,27 @@ namespace BuilderEssentials
 
         public override void Unload()
         {
-            BasePanel = null;
-            UserInterface = null;
-            TransparentSelectionInterface = null;
+            //Hotkeys
             ToggleBuildingMode = null;
+            IncreaseFillToolSize = null;
+            DecreaseFillToolSize = null;
 
             //TODO: Unload static fields
 
+            //UI
+            BasePanel = null;
+            TransparentSelectionUI = null;
+            UserInterface = null;
+            TransparentSelectionInterface = null;
+            AutoHammerWheel.AutoHammerWheelPanel = null;
+            CreativeWheel.CreativeWheelPanel = null;
+            CreativeWheel.CreativeWheelElements = null;
+            MultiWandWheel.MultiWandWheelPanel = null;
+            MultiWandWheel.WandWheelElements = null;
+            PaintWheel.PaintWheelPanel = null;
+            TransparentSelectionUI.transparentSelectionUI = null;
+
+            //Textures
             UnloadTextures();
         }
 
@@ -189,6 +202,7 @@ namespace BuilderEssentials
 
         public override void PreSaveAndQuit()
         {
+            //Makes sure player leaves as non Building Mode
             if (!BuildingMode.IsNormalAccessories)
                 BuildingMode.ToggleBuildingMode();
         }
