@@ -46,7 +46,7 @@ namespace BuilderEssentials.UI
         private static void CreateLayout()
         {
             //Initialize the list that contains the CreativeWheel Elements, that are also intialized below
-            CreativeWheelElements = new List<UIImageButton>();
+            CreativeWheelElements = new List<UIImageButton>(BuilderEssentials.CreativeWheelElements.Count);
             for (int i = 0; i < BuilderEssentials.CreativeWheelElements.Count; i++)
                 CreativeWheelElements.Add(new UIImageButton(BuilderEssentials.CreativeWheelElements[i]));
 
@@ -126,7 +126,7 @@ namespace BuilderEssentials.UI
 
         private static void CreateHammerLayout(int selectedIndex)
         {
-            CreativeWheelHammerElements = new List<UIImageButton>();
+            CreativeWheelHammerElements = new List<UIImageButton>(BuilderEssentials.CWAutoHammerElements.Count);
             for (int i = 0; i < BuilderEssentials.CWAutoHammerElements.Count; i++)
                 CreativeWheelHammerElements.Add(new UIImageButton(BuilderEssentials.CWAutoHammerElements[i]));
 

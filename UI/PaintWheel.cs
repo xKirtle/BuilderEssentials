@@ -55,11 +55,11 @@ namespace BuilderEssentials.UI
         public static void CreateColorsDisplay()
         {
             //Initialize all colors into a list
-            colorsList = new List<UIImageButton>();
+            colorsList = new List<UIImageButton>(BuilderEssentials.PaintColors.Count);
             for (int i = 0; i < BuilderEssentials.PaintColors.Count; i++)
                 colorsList.Add(new UIImageButton(BuilderEssentials.PaintColors[i]));
 
-            paintToolsList = new List<UIImageButton>();
+            paintToolsList = new List<UIImageButton>(BuilderEssentials.PaintTools.Count);
             for (int i = 0; i < 3; i++)
                 paintToolsList.Add(new UIImageButton(BuilderEssentials.PaintTools[i]));
 

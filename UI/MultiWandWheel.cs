@@ -40,7 +40,7 @@ namespace BuilderEssentials.UI
         private static void CreateLayout()
         {
             //Initialize the list that contains the WandWheel Elements, that are also intialized below
-            WandWheelElements = new List<UIImageButton>();
+            WandWheelElements = new List<UIImageButton>(BuilderEssentials.WandWheelElements.Count);
             for (int i = 0; i < BuilderEssentials.WandWheelElements.Count; i++)
                 WandWheelElements.Add(new UIImageButton(BuilderEssentials.WandWheelElements[i]));
 

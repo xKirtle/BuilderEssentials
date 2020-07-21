@@ -44,7 +44,7 @@ namespace BuilderEssentials.UI
         private static void CreateLayout()
         {
             //Initialize the list that contains the WandWheel Elements, that are also intialized below
-            AutoHammerElements = new List<UIImageButton>();
+            AutoHammerElements = new List<UIImageButton>(BuilderEssentials.AutoHammerElements.Count);
             for (int i = 0; i < BuilderEssentials.AutoHammerElements.Count; i++)
                 AutoHammerElements.Add(new UIImageButton(BuilderEssentials.AutoHammerElements[i]));
 

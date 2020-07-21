@@ -10,9 +10,9 @@ namespace BuilderEssentials.Items
 {
     class SuperPaintingTool : ModItem
     {
-        public List<int> paints;
+        List<int> paints;
         bool foundModdedPaint;
-        private bool firstTimeOpeningUI = true;
+        bool firstTimeOpeningUI = true;
         int toolRange;
 
         public override void SetStaticDefaults()
