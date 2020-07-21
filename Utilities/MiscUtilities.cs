@@ -258,9 +258,9 @@ namespace BuilderEssentials.Utilities
         {
             foreach (Item item in Main.LocalPlayer.inventory)
             {
-                if (item.type == itemType)
+                if (item.type == itemType && item.stack >= 1)
                 {
-                    item.stack--;
+                    --item.stack;
                     return true;
                 }
             }

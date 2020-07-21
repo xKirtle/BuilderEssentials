@@ -2,6 +2,7 @@ using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Items
 {
@@ -16,7 +17,10 @@ namespace BuilderEssentials.Items
         public static int fillSelectionSize = 3;
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Fills Holes");
+            Tooltip.SetDefault("Fills Holes" +
+            "\nLeft Click to place" +
+            "\nRigth Click to remove" +
+            "\nMiddle Click to select working tiles");
         }
 
         public override void SetDefaults()
@@ -25,12 +29,13 @@ namespace BuilderEssentials.Items
             item.width = 32;
             item.useTime = 1;
             item.useAnimation = 10;
-            item.useStyle = ItemUseStyleID.SwingThrow;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.noMelee = true;
+            item.noUseGraphic = true;
             toolRange = 8;
         }
 
@@ -41,8 +46,7 @@ namespace BuilderEssentials.Items
                 BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
 
                 //Right Mouse Button
-                if (Main.mouseRight && Tools.IsUIAvailable() && player.HeldItem.IsTheSameAs(item) &&
-                    selectedTileItemType != -1)
+                if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) && selectedTileItemType != -1)
                     RightClick();
 
                 //Middle Mouse Button
@@ -66,21 +70,42 @@ namespace BuilderEssentials.Items
 
         public override bool UseItem(Player player)
         {
-            for (int i = 0; i < fillSelectionSize; i++)
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+
+            bool infinitePlacement = Tools.IsCreativeWrenchEquipped() &&
+                (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
+                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade));
+
+            if (oldPosX != Player.tileTargetX || oldPosY != Player.tileTargetY)
             {
-                for (int j = 0; j < fillSelectionSize; j++)
+                for (int i = 0; i < fillSelectionSize; i++)
                 {
-                    //Vanilla automatically checks for empty spaces, instead of replacing
-                    //-1 == non existant
-                    if (selectedTileItemType != -1)
+                    for (int j = 0; j < fillSelectionSize; j++)
                     {
-                        customItem.SetDefaults(selectedTileItemType);
-                        if (customItem.createTile != -1 && customItem.createWall == -1) //Tile
-                            WorldGen.PlaceTile(Player.tileTargetX + j, Player.tileTargetY - i, customItem.createTile);
-                        else if (customItem.createTile == -1 && customItem.createWall != -1) //Wall
-                            WorldGen.PlaceWall(Player.tileTargetX + j, Player.tileTargetY - i, customItem.createWall);
+                        int posX = Player.tileTargetX + j;
+                        int posY = Player.tileTargetY - i;
+                        Tile tile = Main.tile[posX, posY];
+
+                        //Vanilla automatically checks for empty spaces, instead of replacing
+                        if (selectedTileItemType != -1 && tile.type == 0 && !tile.active())
+                        {
+                            customItem.SetDefaults(selectedTileItemType);
+                            if (customItem.createTile != -1 && customItem.createWall == -1)
+                            {
+                                if (infinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                    WorldGen.PlaceTile(posX, posY, customItem.createTile);
+                            }
+                            else if (customItem.createTile == -1 && customItem.createWall != -1)
+                            {
+                                if (infinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                    WorldGen.PlaceWall(posX, posY, customItem.createWall);
+                            }
+                        }
                     }
                 }
+
+                oldPosX = Player.tileTargetX;
+                oldPosY = Player.tileTargetY;
             }
 
             return true;
