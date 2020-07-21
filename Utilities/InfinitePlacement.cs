@@ -17,7 +17,7 @@ namespace BuilderEssentials.Utilities
             Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
             //Placement Anywhere
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) && 
+            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) &&
             !tile.active() && (oldPosX != i || oldPosY != j) && Tools.IsCreativeWrenchEquipped())
             {
                 Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
@@ -91,7 +91,7 @@ namespace BuilderEssentials.Utilities
             if (modPlayer.mirrorWandEffects)
                 Tools.MirrorWandPlacement(i, j, item, -1);
 
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
+            if ((modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) && Tools.IsCreativeWrenchEquipped()) ||
             modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
             {
                 item.consumable = false;

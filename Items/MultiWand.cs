@@ -64,8 +64,8 @@ namespace BuilderEssentials.Items
             int posY = Player.tileTargetY;
             Tile tile = Main.tile[posX, posY];
 
-            bool infinitePlacement = Tools.IsCreativeWrenchEquipped() &&
-                (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
+            bool infinitePlacement = (Tools.IsCreativeWrenchEquipped() &&
+                (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)) ||
                 modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade));
             bool placementAnywhere = Tools.IsCreativeWrenchEquipped() &&
                 modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere);
