@@ -39,6 +39,12 @@ namespace BuilderEssentials.Items
             toolRange = 8;
         }
 
+        public override bool UseItem(Player player)
+        {
+            LeftClick();
+            return false;
+        }
+
         public override void HoldItem(Player player)
         {
             if (player.whoAmI == Main.myPlayer)
@@ -46,7 +52,7 @@ namespace BuilderEssentials.Items
                 BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
 
                 //Right Mouse Button
-                if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) && selectedTileItemType != -1)
+                if (Main.mouseRight && Tools.IsUIAvailable() && selectedTileItemType != -1)
                     RightClick();
 
                 //Middle Mouse Button
@@ -68,13 +74,14 @@ namespace BuilderEssentials.Items
             }
         }
 
-        public override bool UseItem(Player player)
+        private void LeftClick()
         {
-            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
             bool infinitePlacement = Tools.IsCreativeWrenchEquipped() &&
                 (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
                 modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade));
+            bool tilePlaced = false;
 
             if (oldPosX != Player.tileTargetX || oldPosY != Player.tileTargetY)
             {
@@ -93,22 +100,29 @@ namespace BuilderEssentials.Items
                             if (customItem.createTile != -1 && customItem.createWall == -1)
                             {
                                 if (infinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                {
                                     WorldGen.PlaceTile(posX, posY, customItem.createTile);
+                                    tilePlaced = true;
+                                }
                             }
                             else if (customItem.createTile == -1 && customItem.createWall != -1)
                             {
                                 if (infinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                {
                                     WorldGen.PlaceWall(posX, posY, customItem.createWall);
+                                    tilePlaced = true;
+                                }
                             }
                         }
                     }
                 }
 
-                oldPosX = Player.tileTargetX;
-                oldPosY = Player.tileTargetY;
+                if (tilePlaced)
+                {
+                    oldPosX = Player.tileTargetX;
+                    oldPosY = Player.tileTargetY;
+                }
             }
-
-            return true;
         }
 
         private void RightClick()

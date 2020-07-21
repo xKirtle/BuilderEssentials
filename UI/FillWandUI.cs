@@ -29,7 +29,7 @@ namespace BuilderEssentials.UI
 
                         //Centers in the bottom left corner of the filling square
                         position = new Vector2(Player.tileTargetX + j, Player.tileTargetY + i - FillWand.fillSelectionSize + 1) * 16 - Main.screenPosition;
-                        spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, .96f, SpriteEffects.None, 0f);
                     }
                 }
             }
