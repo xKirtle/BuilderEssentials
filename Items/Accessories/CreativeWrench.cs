@@ -57,8 +57,7 @@ namespace BuilderEssentials.Items.Accessories
                     player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
 
                 //Right click timer
-                if (Main.mouseRight && Tools.IsUIAvailable() &&
-                player.HeldItem.IsAir &&
+                if (Main.mouseRight && Tools.IsUIAvailable() && player.HeldItem.IsAir &&
                 (!player.mouseInterface || CreativeWheel.CreativeWheelPanel.IsMouseHovering))
                 {
                     if (++mouseRightTimer == 2)
@@ -70,8 +69,16 @@ namespace BuilderEssentials.Items.Accessories
 
                 //ItemPicker
                 if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker) &&
-                    !player.mouseInterface && !Main.playerInventory)
-                    Tools.PickItem(ref oldPosX, ref oldPosY);
+                    !player.mouseInterface && !Main.playerInventory && (modPlayer.pointedTilePos.X != oldPosX || modPlayer.pointedTilePos.Y != oldPosY))
+                    if (player.HeldItem.type != ModContent.ItemType<FillWand>())
+                    {
+                        Tile tile = modPlayer.pointedTile;
+                        if (Tools.PickItem(tile) != -1)
+                        {
+                            oldPosX = (int)modPlayer.pointedTilePos.X;
+                            oldPosY = (int)modPlayer.pointedTilePos.Y;
+                        }
+                    }
 
                 //AutoHammer
                 if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer) &&

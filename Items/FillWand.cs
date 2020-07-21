@@ -1,16 +1,18 @@
-using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials.Items
 {
-    public class FillWand : ModItem
+    class FillWand : ModItem
     {
-        int toolRange;
+        int toolRange; //Should it have range?
+
+        int oldPosX;
+        int oldPosY;
+        public static Item customItem = new Item();
+        public static int selectedTileItemType = 0;
         public static int fillSelectionSize = 3;
         public override void SetStaticDefaults()
         {
@@ -34,27 +36,50 @@ namespace BuilderEssentials.Items
 
         public override void HoldItem(Player player)
         {
-            //Main.NewText(fillSelectionSize);
-
-            //TODO: DECIDE HOW TO INPUT WHAT ITEM IN INVENTORY WILL BE USED TO PLACE BLOCKS
-
-
             if (player.whoAmI == Main.myPlayer)
             {
-                if (Main.mouseRight && Tools.IsUIAvailable() && player.HeldItem.IsTheSameAs(item))
+                BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
+
+                //Right Mouse Button
+                if (Main.mouseRight && Tools.IsUIAvailable() && player.HeldItem.IsTheSameAs(item) &&
+                    selectedTileItemType != -1)
                     RightClick();
+
+                //Middle Mouse Button
+                if (Main.mouseMiddle && !player.mouseInterface && !Main.playerInventory &&
+                    (modPlayer.pointedTilePos.X != oldPosX || modPlayer.pointedTilePos.Y != oldPosY))
+                {
+                    selectedTileItemType = Tools.PickItem(modPlayer.pointedTile, false);
+                    if (selectedTileItemType != -1)
+                    {
+                        oldPosX = (int)modPlayer.pointedTilePos.X;
+                        oldPosY = (int)modPlayer.pointedTilePos.Y;
+                    }
+                }
+
+                player.showItemIcon = true;
+
+                if (selectedTileItemType != -1)
+                    player.showItemIcon2 = selectedTileItemType;
             }
         }
 
         public override bool UseItem(Player player)
         {
-
-            for (int i = 0; i < FillWand.fillSelectionSize; i++)
+            for (int i = 0; i < fillSelectionSize; i++)
             {
-                for (int j = 0; j < FillWand.fillSelectionSize; j++)
+                for (int j = 0; j < fillSelectionSize; j++)
                 {
                     //Vanilla automatically checks for empty spaces, instead of replacing
-                    WorldGen.PlaceTile(Player.tileTargetX + j, Player.tileTargetY - i, 0);
+                    //-1 == non existant
+                    if (selectedTileItemType != -1)
+                    {
+                        customItem.SetDefaults(selectedTileItemType);
+                        if (customItem.createTile != -1 && customItem.createWall == -1) //Tile
+                            WorldGen.PlaceTile(Player.tileTargetX + j, Player.tileTargetY - i, customItem.createTile);
+                        else if (customItem.createTile == -1 && customItem.createWall != -1) //Wall
+                            WorldGen.PlaceWall(Player.tileTargetX + j, Player.tileTargetY - i, customItem.createWall);
+                    }
                 }
             }
 
@@ -63,14 +88,19 @@ namespace BuilderEssentials.Items
 
         private void RightClick()
         {
-            for (int i = 0; i < FillWand.fillSelectionSize; i++)
+            for (int i = 0; i < fillSelectionSize; i++)
             {
-                for (int j = 0; j < FillWand.fillSelectionSize; j++)
+                for (int j = 0; j < fillSelectionSize; j++)
                 {
-                    Tile tile = Main.tile[Player.tileTargetX + j, Player.tileTargetY - i];
+                    int posX = Player.tileTargetX + j;
+                    int posY = Player.tileTargetY - i;
+                    Tile tile = Main.tile[posX, posY];
+                    customItem.SetDefaults(selectedTileItemType);
 
-                    if (tile.type == TileID.Dirt)
-                        tile.active(false);
+                    if (tile.type == customItem.createTile)
+                        WorldGen.KillTile(posX, posY);
+                    else if (tile.wall == customItem.createWall)
+                        WorldGen.KillWall(posX, posY);
                 }
             }
         }

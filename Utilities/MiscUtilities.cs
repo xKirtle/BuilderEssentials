@@ -338,6 +338,35 @@ namespace BuilderEssentials.Utilities
                     list.Add(new Item());
             }
         }
+
+
+        //--------------Unused stuff--------------
+        public static Item TileToItem(Tile tile)
+        {
+            Item item = new Item();
+            item.SetDefaults(PickItem(tile, false));
+            return item;
+        }
+
+        public static ItemTypes WhatIsThisItem(int itemType)
+        {
+            Item item = new Item();
+            item.SetDefaults(itemType);
+
+            if (item.createTile != -1 && item.createWall == -1)
+                return ItemTypes.Tile;
+            else if (item.createTile == -1 && item.createWall != -1)
+                return ItemTypes.Wall;
+            else
+                return ItemTypes.Air;
+        }
+
+        public enum ItemTypes
+        {
+            Air,
+            Tile,
+            Wall
+        }
     }
 
     //class MirrorWandGlobalTile : GlobalTile
