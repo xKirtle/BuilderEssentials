@@ -1,6 +1,7 @@
 ﻿using BuilderEssentials.Items;
 using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameInput;
@@ -15,6 +16,8 @@ namespace BuilderEssentials
         //Player
         public bool infiniteRange;
         public Item previousHeldItem;
+        public Vector2 pointedTilePos;
+        public Tile pointedTile;
 
 
         //Building Mode
@@ -58,6 +61,8 @@ namespace BuilderEssentials
         {
             infiniteRange = false;
             previousHeldItem = new Item();
+            pointedTilePos = new Vector2();
+            pointedTile = new Tile();
 
             NormalAccessories = new List<Item>(7);
             BuildingAccessories = new List<Item>(7);
@@ -97,6 +102,8 @@ namespace BuilderEssentials
                 Player.defaultItemGrabRange = 38;
                 player.showItemIcon = false;
                 infiniteRange = false;
+                pointedTilePos = new Vector2(Player.tileTargetX, Player.tileTargetY);
+                pointedTile = Main.tile[(int)pointedTilePos.X, (int)pointedTilePos.Y];
 
                 if (creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
                 && !player.HasBuff(mod.BuffType("InfinitePlacementBuff")))

@@ -6,50 +6,53 @@ namespace BuilderEssentials.Utilities
 
     public static partial class Tools
     {
-        public static void PickItem(ref int oldPosX, ref int oldPosY)
+        //Thanks Oli. B for the concept
+        public static int PickItem(Tile tile, bool organizeInventory = true)
         {
             Player player = Main.LocalPlayer;
-            //Thanks Oli. B for the concept
-            int posX = Player.tileTargetX;
-            int posY = Player.tileTargetY;
-            Tile tile = Main.tile[posX, posY];
             Item item = new Item();
+            int itemID = -1;
             bool foundItem = false;
 
-            if (oldPosX != posX || oldPosY != posY)
+            if (tile.type >= 0 && tile.active())
             {
-                if (tile.type >= 0 && tile.active())
+                for (int i = 0; i < ItemLoader.ItemCount; i++)
                 {
-                    for (int i = 0; i < ItemLoader.ItemCount; i++)
+                    item.SetDefaults(i);
+                    if (item.createTile == tile.type)
                     {
-                        item.SetDefaults(i);
-                        if (item.createTile == tile.type)
-                        {
-                            foundItem = true;
-                            break;
-                        }
+                        foundItem = true;
+                        itemID = i;
+                        break;
                     }
                 }
-                else if (tile.type >= 0 && tile.wall >= 0)
+            }
+            else if (tile.type >= 0 && tile.wall >= 0)
+            {
+                for (int i = 0; i < ItemLoader.ItemCount; i++)
                 {
-                    for (int i = 0; i < ItemLoader.ItemCount; i++)
+                    item.SetDefaults(i);
+                    if (item.createWall == tile.wall)
                     {
-                        item.SetDefaults(i);
-                        if (item.createWall == tile.wall)
-                        {
-                            foundItem = true;
-                            break;
-                        }
+                        foundItem = true;
+                        itemID = i;
+                        break;
                     }
                 }
+            }
 
-                //organize inventory
-                if (foundItem)
+            //organize inventory
+            if (foundItem)
+            {
+                //Furniture Check
+                //If it is a furniture and has a different frame, item will be changed to the correct frame item
+                int furnitureTileType = FindFurniture(tile, ref item);
+                if (furnitureTileType != -1)
+                    itemID = furnitureTileType;
+                    
+
+                if (organizeInventory)
                 {
-                    //Furniture Check
-                    //If it is a furniture and has a different frame, item will be changed to the correct frame item
-                    FindFurniture(tile, ref item);
-
                     bool isItemInInventory = false;
                     for (int i = 0; i < 50; i++)
                     {
@@ -79,11 +82,10 @@ namespace BuilderEssentials.Utilities
                             }
                         }
                     }
-
-                    oldPosX = posX;
-                    oldPosY = posY;
                 }
             }
+
+            return itemID;
         }
     }
 }
