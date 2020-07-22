@@ -43,7 +43,7 @@ namespace BuilderEssentials.Buffs
             foreach (var npc in Main.npc)
             {
                 //Don't want to remove town NPC's
-                if (!Tools.IsTownNpc(npc))
+                if (npc.townNPC)
                     npc.active = false;
             }
         }
