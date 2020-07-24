@@ -89,6 +89,8 @@ namespace BuilderEssentials
 
             //Mirror Wand
             mirrorWandEffects = false;
+
+
             EnsureSaveCompatibility();
             BuildingMode.UpdateConfigVariables();
         }
@@ -106,7 +108,7 @@ namespace BuilderEssentials
                 pointedTile = Main.tile[(int)pointedTilePos.X, (int)pointedTilePos.Y];
 
                 if (creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
-                && !player.HasBuff(mod.BuffType("InfinitePlacementBuff")))
+                && !player.HasBuff(BuffType<Buffs.InfinitePlacementBuff>()))
                     creativeWheelSelectedIndex.Remove((int)CreativeWheelItem.InfinityUpgrade);
 
                 if (mirrorWandEffects)
@@ -126,8 +128,6 @@ namespace BuilderEssentials
 
             if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
                 --FillWand.fillSelectionSize;
-
-            //FillWandUI.test = Main.tileTexture[FillWand.fillSelectionSize];
         }
 
         public override TagCompound Save()

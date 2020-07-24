@@ -1,12 +1,8 @@
-﻿using Terraria.ID;
-using System;
-using Terraria;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using BuilderEssentials.Utilities;
-using static BuilderEssentials.BuilderPlayer;
 using Microsoft.Xna.Framework;
 using BuilderEssentials.Items.Accessories;
-using Terraria.DataStructures;
 
 namespace BuilderEssentials.Buffs
 {

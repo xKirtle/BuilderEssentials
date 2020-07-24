@@ -29,6 +29,30 @@ namespace BuilderEssentials
         internal static ModHotKey IncreaseFillToolSize;
         internal static ModHotKey DecreaseFillToolSize;
 
+        public static bool autoReplaceStack;        
+
+        public override void Load()
+        {
+            ToggleBuildingMode = RegisterHotKey("Toggle Building Mode", "N");
+            IncreaseFillToolSize = RegisterHotKey("Increase Fill Size Selection", "I");
+            DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection", "O");
+
+            if (!Main.dedServ && Main.netMode != NetmodeID.Server)
+            {
+                LoadTextures();
+
+                TransparentSelectionUI = new TransparentSelectionUI();
+                TransparentSelectionUI.Activate();
+                TransparentSelectionInterface = new UserInterface();
+                ShowExperimentalInterface();
+
+                UserInterface = new UserInterface();
+                BasePanel = new BasePanel();
+                BasePanel.Activate();
+                ShowUserInterface();
+            }
+        }
+
         public void LoadTextures()
         {
             BuildingModeOn = GetTexture("UI/Elements/BuildingModeOn");
@@ -60,28 +84,6 @@ namespace BuilderEssentials
             AutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
                 AutoHammerElements.Add(GetTexture("UI/Elements/AutoHammer/AH" + i));
-        }
-
-        public override void Load()
-        {
-            ToggleBuildingMode = RegisterHotKey("Toggle Building Mode", "N");
-            IncreaseFillToolSize = RegisterHotKey("Increase Fill Size Selection", "I");
-            DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection", "O");
-
-            if (!Main.dedServ && Main.netMode != NetmodeID.Server)
-            {
-                LoadTextures();
-
-                TransparentSelectionUI = new TransparentSelectionUI();
-                TransparentSelectionUI.Activate();
-                TransparentSelectionInterface = new UserInterface();
-                ShowExperimentalInterface();
-
-                UserInterface = new UserInterface();
-                BasePanel = new BasePanel();
-                BasePanel.Activate();
-                ShowUserInterface();
-            }
         }
 
         public override void Unload()
@@ -180,25 +182,10 @@ namespace BuilderEssentials
             }
         }
 
-        public static void ShowUserInterface()
-        {
-            UserInterface?.SetState(BasePanel);
-        }
-
-        public static void HideUserInterface()
-        {
-            UserInterface?.SetState(null);
-        }
-
-        public static void ShowExperimentalInterface()
-        {
-            TransparentSelectionInterface?.SetState(TransparentSelectionUI);
-        }
-
-        public static void HideExperimentalInterface()
-        {
-            TransparentSelectionInterface?.SetState(null);
-        }
+        public static void ShowUserInterface() => UserInterface?.SetState(BasePanel);
+        public static void HideUserInterface() => UserInterface?.SetState(null);
+        public static void ShowExperimentalInterface() => TransparentSelectionInterface?.SetState(TransparentSelectionUI);
+        public static void HideExperimentalInterface() => TransparentSelectionInterface?.SetState(null);
 
         public override void PreSaveAndQuit()
         {

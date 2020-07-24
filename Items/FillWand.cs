@@ -8,6 +8,7 @@ namespace BuilderEssentials.Items
 {
     class FillWand : ModItem
     {
+        //TODO: ADD SUPPORT TO MIRROR WAND
         int toolRange; //Should it have range?
 
         int oldPosX;
@@ -77,10 +78,6 @@ namespace BuilderEssentials.Items
         private void LeftClick()
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-
-            bool infinitePlacement = Tools.IsCreativeWrenchEquipped() &&
-                (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) ||
-                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade));
             bool tilePlaced = false;
 
             if (oldPosX != Player.tileTargetX || oldPosY != Player.tileTargetY)
@@ -99,7 +96,7 @@ namespace BuilderEssentials.Items
                             customItem.SetDefaults(selectedTileItemType);
                             if (customItem.createTile != -1 && customItem.createWall == -1)
                             {
-                                if (infinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                if (Tools.InfinitePlacement || Tools.ReduceItemStack(customItem.type))
                                 {
                                     WorldGen.PlaceTile(posX, posY, customItem.createTile);
                                     tilePlaced = true;
@@ -107,7 +104,7 @@ namespace BuilderEssentials.Items
                             }
                             else if (customItem.createTile == -1 && customItem.createWall != -1)
                             {
-                                if (infinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                if (Tools.InfinitePlacement || Tools.ReduceItemStack(customItem.type))
                                 {
                                     WorldGen.PlaceWall(posX, posY, customItem.createWall);
                                     tilePlaced = true;

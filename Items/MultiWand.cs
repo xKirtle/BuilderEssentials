@@ -64,60 +64,54 @@ namespace BuilderEssentials.Items
             int posY = Player.tileTargetY;
             Tile tile = Main.tile[posX, posY];
 
-            bool infinitePlacement = (Tools.IsCreativeWrenchEquipped() &&
-                (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement)) ||
-                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade));
-            bool placementAnywhere = Tools.IsCreativeWrenchEquipped() &&
-                modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere);
-
             if ((modPlayer.infiniteRange || Tools.ToolHasRange(toolRange)) && (posX != oldPosX || posY != oldPosY) && !tile.active())
             {
                 oldPosX = posX;
                 oldPosY = posY;
 
-                if ((placementAnywhere || Tools.HasTileAround(posX, posY)) && 
+                if ((Tools.PlacementAnywhere || Tools.HasTileAround(posX, posY)) && 
                 (MultiWandWheel.MultiWandWheelPanel == null || !MultiWandWheel.MultiWandWheelPanel.IsMouseHovering)
                 && !MultiWandWheel.IsWandsUIVisible)
                 {
                     switch (MultiWandWheel.selectedIndex)
                     {
                         case 0: //living wood
-                            if (infinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
+                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingWood);
                                 tilePlaced = true;
                             }
                             break;
                         case 1: //bone
-                            if (infinitePlacement || Tools.ReduceItemStack(ItemID.Bone))
+                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Bone))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.BoneBlock);
                                 tilePlaced = true;
                             }
                             break;
                         case 2: //leaf
-                            if (infinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
+                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LeafBlock);
                                 tilePlaced = true;
                             }
                             break;
                         case 3: //hive
-                            if (infinitePlacement || Tools.ReduceItemStack(ItemID.Hive))
+                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Hive))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.Hive);
                                 tilePlaced = true;
                             }
                             break;
                         case 4: //rich mahogany
-                            if (infinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
+                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingMahogany);
                                 tilePlaced = true;
                             }
                             break;
                         case 5: //living wood leaf
-                            if (infinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
+                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingMahoganyLeaves);
                                 tilePlaced = true;
