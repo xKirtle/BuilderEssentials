@@ -1,7 +1,6 @@
-﻿using Terraria.ID;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
-using static BuilderEssentials.BuilderPlayer;
+using static BuilderEssentials.Utilities.Tools;
 
 namespace BuilderEssentials.Buffs
 {
@@ -21,8 +20,8 @@ namespace BuilderEssentials.Buffs
         {
             BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
 
-            if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
-                modPlayer.creativeWheelSelectedIndex.Add((int)CreativeWheelItem.InfinityUpgrade);
+            if (!modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinityUpgrade.ToInt()))
+                modPlayer.creativeWheelSelectedIndex.Add(CreativeWheelItem.InfinityUpgrade.ToInt());
         }
     }
 }

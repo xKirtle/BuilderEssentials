@@ -8,6 +8,7 @@ using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
+using static BuilderEssentials.Utilities.Tools;
 
 namespace BuilderEssentials
 {
@@ -42,17 +43,6 @@ namespace BuilderEssentials
 
         //Creative Wheel Stuff
         public List<int> creativeWheelSelectedIndex;
-        public enum CreativeWheelItem
-        {
-            ItemPicker,
-            InfinitePlacement,
-            AutoHammer,
-            PlacementAnywhere,
-            InfinitePickupRange,
-
-            //Non important order (independent items)
-            InfinityUpgrade
-        }
 
         //Mirror Wand
         public bool mirrorWandEffects;
@@ -107,9 +97,9 @@ namespace BuilderEssentials
                 pointedTilePos = new Vector2(Player.tileTargetX, Player.tileTargetY);
                 pointedTile = Main.tile[(int)pointedTilePos.X, (int)pointedTilePos.Y];
 
-                if (creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade)
+                if (creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinityUpgrade.ToInt())
                 && !player.HasBuff(BuffType<Buffs.InfinitePlacementBuff>()))
-                    creativeWheelSelectedIndex.Remove((int)CreativeWheelItem.InfinityUpgrade);
+                    creativeWheelSelectedIndex.Remove(CreativeWheelItem.InfinityUpgrade.ToInt());
 
                 if (mirrorWandEffects)
                     mirrorWandEffects = false;

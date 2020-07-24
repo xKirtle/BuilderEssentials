@@ -1,5 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -7,6 +6,8 @@ namespace BuilderEssentials.Items.Placeable
 {
     class PreHardmodeCraftingStation : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/Placeable/PreHardmodeCraftingStation";
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Used to craft Pre Hardmode Recipes");

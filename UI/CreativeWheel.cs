@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using static BuilderEssentials.BuilderPlayer;
+using static BuilderEssentials.Utilities.Tools;
 
 namespace BuilderEssentials.UI
 {
@@ -99,7 +99,7 @@ namespace BuilderEssentials.UI
                 case 1: //InfinitePlacement
                     break;
                 case 2: //AutoHammer
-                    if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer))
+                    if (modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.AutoHammer.ToInt()))
                         CreateHammerLayout(autoHammerSelectedIndex);
                     else
                         RemoveHammerLayout();

@@ -1,8 +1,4 @@
 ﻿
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,6 +7,8 @@ namespace BuilderEssentials.Items.Accessories
 {
     class InfiniteWrench : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/Accessories/InfiniteWrench";
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Infinite Wrench");

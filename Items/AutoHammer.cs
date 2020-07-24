@@ -8,6 +8,8 @@ namespace BuilderEssentials.Items
 {
     class AutoHammer : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/AutoHammer";
+
         int toolRange;
         public override void SetStaticDefaults()
         {

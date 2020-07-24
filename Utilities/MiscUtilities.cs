@@ -337,7 +337,7 @@ namespace BuilderEssentials.Utilities
                 {
                     //Search for more of the same item in the inventory
                     int newItemIndex = -1;
-                    int index = 0;
+                    int index = -1;
                     foreach (Item invItem in player.inventory)
                     {
                         if (index++ < 50 && player.inventory[index].type == item.type)
@@ -354,23 +354,35 @@ namespace BuilderEssentials.Utilities
 
                     if (newItemIndex != -1)
                     {
+                        //Clone found item, place the clone in the heldItem and turn to air the original item
                         Item newItem = player.inventory[newItemIndex].Clone();
-                        if (reducedStack)
-                            newItem.stack += 1;
+                        if (reducedStack) newItem.stack += 1;
                         player.inventory[player.selectedItem] = newItem;
-
                         player.inventory[newItemIndex].TurnToAir();
                     }
                 }
             }
         }
         public static bool InfinitePlacement => (modPlayer.creativeWheelSelectedIndex.Contains(
-            (int)CreativeWheelItem.InfinitePlacement) && IsCreativeWrenchEquipped()) ||
-            modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade);
+            CreativeWheelItem.InfinitePlacement.ToInt()) && IsCreativeWrenchEquipped()) ||
+            modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinityUpgrade.ToInt());
 
         public static bool PlacementAnywhere => modPlayer.creativeWheelSelectedIndex.Contains(
-            (int)CreativeWheelItem.PlacementAnywhere) && IsCreativeWrenchEquipped();
+            CreativeWheelItem.PlacementAnywhere.ToInt()) && IsCreativeWrenchEquipped();
 
+        public enum CreativeWheelItem
+        {
+            ItemPicker,
+            InfinitePlacement,
+            AutoHammer,
+            PlacementAnywhere,
+            InfinitePickupRange,
+
+            //Non important order (independent items)
+            InfinityUpgrade
+        }
+
+        public static int ToInt(this CreativeWheelItem cwItem) => (int)cwItem;
 
         //--------------Unused stuff--------------
         public static Item TileToItem(Tile tile)
@@ -392,6 +404,8 @@ namespace BuilderEssentials.Utilities
             else
                 return ItemTypes.Air;
         }
+
+        public static int ToInt(this ItemTypes itemTypes) => (int)itemTypes;
 
         public enum ItemTypes
         {

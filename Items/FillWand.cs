@@ -2,12 +2,13 @@ using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Items
 {
     class FillWand : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/FillWand";
+
         //TODO: ADD SUPPORT TO MIRROR WAND
         int toolRange; //Should it have range?
 

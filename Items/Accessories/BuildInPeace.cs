@@ -6,6 +6,8 @@ namespace BuilderEssentials.Items.Accessories
 {
     class BuildInPeace : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/Accessories/BuildInPeace";
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Disables all events in the game and sets the clock to 12pm");

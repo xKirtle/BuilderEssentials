@@ -6,6 +6,8 @@ namespace BuilderEssentials.Items
 {
     class InfinitePaintBucket : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/InfinitePaintBucket";
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Necessary to use the Super Painting Tool");

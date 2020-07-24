@@ -55,35 +55,35 @@ namespace BuilderEssentials
 
         public void LoadTextures()
         {
-            BuildingModeOn = GetTexture("UI/Elements/BuildingModeOn");
-            BuildingModeOff = GetTexture("UI/Elements/BuildingModeOff");
+            BuildingModeOn = GetTexture("Textures/UIElements/BuildingModeOn");
+            BuildingModeOff = GetTexture("Textures/UIElements/BuildingModeOff");
 
             CreativeWheelElements = new List<Texture2D>(5);
-            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWColorPicker"));
-            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWInfinitePlacement"));
-            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWAutoHammer"));
-            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWPlacementAnywhere"));
-            CreativeWheelElements.Add(GetTexture("UI/Elements/CreativeWheel/CWInfinitePickupRange"));
+            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWColorPicker"));
+            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWInfinitePlacement"));
+            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWAutoHammer"));
+            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWPlacementAnywhere"));
+            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWInfinitePickupRange"));
 
             CWAutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
-                CWAutoHammerElements.Add(GetTexture("UI/Elements/CreativeWheel/CWAutoHammer" + i));
+                CWAutoHammerElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWAutoHammer" + i));
 
             PaintColors = new List<Texture2D>(31);
             for (int i = 0; i < 31; i++)
-                PaintColors.Add(GetTexture("UI/Elements/Paint/Paint" + i));
+                PaintColors.Add(GetTexture("Textures/UIElements/Paint/Paint" + i));
 
             PaintTools = new List<Texture2D>(3);
             for (int i = 0; i < 3; i++)
-                PaintTools.Add(GetTexture("UI/Elements/Paint/PaintTool" + i));
+                PaintTools.Add(GetTexture("Textures/UIElements/Paint/PaintTool" + i));
 
             WandWheelElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
-                WandWheelElements.Add(GetTexture("UI/Elements/WandWheel/WandWheel" + i));
+                WandWheelElements.Add(GetTexture("Textures/UIElements/WandWheel/WandWheel" + i));
 
             AutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
-                AutoHammerElements.Add(GetTexture("UI/Elements/AutoHammer/AH" + i));
+                AutoHammerElements.Add(GetTexture("Textures/UIElements/AutoHammer/AH" + i));
         }
 
         public override void Unload()

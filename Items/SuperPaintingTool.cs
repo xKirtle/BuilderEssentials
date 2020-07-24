@@ -10,6 +10,8 @@ namespace BuilderEssentials.Items
 {
     class SuperPaintingTool : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/SuperPaintingTool";
+
         List<int> paints;
         bool foundModdedPaint;
         bool firstTimeOpeningUI = true;

@@ -9,6 +9,8 @@ namespace BuilderEssentials.Items
 {
     class MultiWand : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/MultiWand";
+
         int toolRange;
         public override void SetStaticDefaults()
         {

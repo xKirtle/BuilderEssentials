@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
+﻿using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -11,6 +6,8 @@ namespace BuilderEssentials.Items.Placeable
 {
     class MultiCraftingStation : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/Placeable/MultiCraftingStation";
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Used to craft all recipes in the game");

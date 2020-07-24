@@ -3,12 +3,14 @@ using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static BuilderEssentials.BuilderPlayer;
+using static BuilderEssentials.Utilities.Tools;
 
 namespace BuilderEssentials.Items.Accessories
 {
     class CreativeWrench : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/Accessories/CreativeWrench";
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Useful for Building!");
@@ -49,11 +51,11 @@ namespace BuilderEssentials.Items.Accessories
                 modPlayer.infiniteRange = true;
 
                 //InfinitePickupRange
-                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePickupRange))
+                if (modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinitePickupRange.ToInt()))
                     Player.defaultItemGrabRange = 1000000; //I have no idea how much it should be so that should suffice??
 
                 //Infinite Placement
-                if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
+                if (modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinitePlacement.ToInt()))
                     player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
 
                 //Right click timer
@@ -68,7 +70,7 @@ namespace BuilderEssentials.Items.Accessories
                     mouseRightTimer = 0;
 
                 //ItemPicker
-                if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.ItemPicker) &&
+                if (Main.mouseMiddle && modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.ItemPicker.ToInt()) &&
                     !player.mouseInterface && !Main.playerInventory && (modPlayer.pointedTilePos.X != oldPosX || modPlayer.pointedTilePos.Y != oldPosY))
                     if (player.HeldItem.type != ModContent.ItemType<FillWand>())
                     {
@@ -81,14 +83,14 @@ namespace BuilderEssentials.Items.Accessories
                     }
 
                 //AutoHammer
-                if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer) &&
+                if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.AutoHammer.ToInt()) &&
                 player.HeldItem.IsAir && CreativeWheel.CreativeWheelPanel != null &&
                 !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!CreativeWheel.CreativeWheelPanel.IsMouseHovering)
                         Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile, CreativeWheel.autoHammerSelectedIndex);
                 }
-                else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.AutoHammer)
+                else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.AutoHammer.ToInt())
                 && !player.HeldItem.IsAir && !player.mouseInterface && !Main.playerInventory)
                 {
                     if (!autoHammerAlert)

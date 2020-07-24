@@ -8,6 +8,8 @@ namespace BuilderEssentials.Items
 {
     class MirrorWand : ModItem
     {
+        public override string Texture => "BuilderEssentials/Textures/Items/MirrorWand";
+
         public static bool firstValue = false;
         public static bool OperationComplete = false;
         public static Vector2 start;
