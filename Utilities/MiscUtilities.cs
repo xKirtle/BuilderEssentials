@@ -8,11 +8,13 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Utilities
 {
     public static partial class Tools
     {
+        static readonly BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
         public static bool IsUIAvailable()
         {
             //Add specific UI mouse hoverings etc..
@@ -325,6 +327,49 @@ namespace BuilderEssentials.Utilities
                     list.Add(new Item());
             }
         }
+
+        public static void AutoReplaceStack(Item item, bool reducedStack = true)
+        {
+            Player player = Main.LocalPlayer;
+            if (BuilderEssentials.autoReplaceStack)
+            {
+                if (item.stack == 1)
+                {
+                    //Search for more of the same item in the inventory
+                    int newItemIndex = -1;
+                    int index = 0;
+                    foreach (Item invItem in player.inventory)
+                    {
+                        if (index++ < 50 && player.inventory[index].type == item.type)
+                        {
+                            if (index != player.selectedItem)
+                            {
+                                newItemIndex = index;
+                                break;
+                            }
+                        }
+                        else if (index > 50)
+                            break;
+                    }
+
+                    if (newItemIndex != -1)
+                    {
+                        Item newItem = player.inventory[newItemIndex].Clone();
+                        if (reducedStack)
+                            newItem.stack += 1;
+                        player.inventory[player.selectedItem] = newItem;
+
+                        player.inventory[newItemIndex].TurnToAir();
+                    }
+                }
+            }
+        }
+        public static bool InfinitePlacement => (modPlayer.creativeWheelSelectedIndex.Contains(
+            (int)CreativeWheelItem.InfinitePlacement) && IsCreativeWrenchEquipped()) ||
+            modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade);
+
+        public static bool PlacementAnywhere => modPlayer.creativeWheelSelectedIndex.Contains(
+            (int)CreativeWheelItem.PlacementAnywhere) && IsCreativeWrenchEquipped();
 
 
         //--------------Unused stuff--------------

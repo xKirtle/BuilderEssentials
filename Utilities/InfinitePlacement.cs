@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
+using System.Threading;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,21 +13,23 @@ namespace BuilderEssentials.Utilities
         private int oldPosX;
         private int oldPosY;
         private List<Item> modifiedItemsConsumable = new List<Item>();
+        private bool canPlace = false;
         public override bool CanPlace(int i, int j, int type)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
             //Placement Anywhere
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere) &&
-            !tile.active() && (oldPosX != i || oldPosY != j) && Tools.IsCreativeWrenchEquipped())
+            if (Tools.PlacementAnywhere && !tile.active() && (oldPosX != i || oldPosY != j))
             {
-                Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
+                Item selectedItem = Main.LocalPlayer.HeldItem;
                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, true, -1, selectedItem.placeStyle);
                 tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
-                if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) &&
-                !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+                canPlace = true; //To make sure we don't call AutoReplaceStack on CanPlace and PlaceInWorld
+                Tools.AutoReplaceStack(selectedItem, false);
+
+                if (!Tools.InfinitePlacement)
                 {
                     if (selectedItem.type == ItemID.LivingMahoganyWand || selectedItem.type == ItemID.LivingMahoganyLeafWand)
                         Tools.ReduceItemStack(ItemID.RichMahogany);
@@ -70,10 +74,10 @@ namespace BuilderEssentials.Utilities
 
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+            Player player = Main.LocalPlayer;
+            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
 
-            if (!modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) &&
-            !modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+            if (!Tools.InfinitePlacement)
             {
                 if (item.consumable == false && modifiedItemsConsumable.Contains(item))
                 {
@@ -86,13 +90,17 @@ namespace BuilderEssentials.Utilities
                 item.type == ItemID.LivingMahoganyWand || item.type == ItemID.LivingMahoganyLeafWand ||
                 item.type == ItemID.LivingWoodWand || item.type == ItemID.StaffofRegrowth)
                     item.consumable = false;
+
+                if (!canPlace) //avoid calling AutoReplaceStack twice if it has been called above
+                    Tools.AutoReplaceStack(item);
+                else
+                    canPlace = false;
             }
 
             if (modPlayer.mirrorWandEffects)
                 Tools.MirrorWandPlacement(i, j, item, -1);
 
-            if ((modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement) && Tools.IsCreativeWrenchEquipped()) ||
-            modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade))
+            if (Tools.InfinitePlacement)
             {
                 item.consumable = false;
                 //Could be problematic checking for their names?
@@ -109,14 +117,15 @@ namespace BuilderEssentials.Utilities
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinityUpgrade) ||
-            modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.InfinitePlacement))
+            if (Tools.InfinitePlacement)
                 item.consumable = false;
             else
                 item.consumable = true;
 
             if (modPlayer.mirrorWandEffects)
                 Tools.MirrorWandPlacement(i, j, item, type);
+
+            Tools.AutoReplaceStack(item);
         }
     }
 }
