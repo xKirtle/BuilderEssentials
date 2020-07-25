@@ -1,4 +1,5 @@
 using BuilderEssentials.UI;
+using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -106,11 +107,8 @@ namespace BuilderEssentials.Items
 
         public override void UpdateInventory(Player player)
         {
-            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
-            base.UpdateInventory(player);
-
             if (OperationComplete && OperationCompleteLeft && TransparentSelection.validPlacement)
-                modPlayer.mirrorWandEffects = true;
+                BuilderEssentials.validMirrorWand = true;
         }
     }
 }

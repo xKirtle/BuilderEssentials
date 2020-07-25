@@ -29,7 +29,8 @@ namespace BuilderEssentials
         internal static ModHotKey IncreaseFillToolSize;
         internal static ModHotKey DecreaseFillToolSize;
 
-        public static bool autoReplaceStack;        
+        public static bool autoReplaceStack;
+        public static bool validMirrorWand;
 
         public override void Load()
         {

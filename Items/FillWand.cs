@@ -111,6 +111,13 @@ namespace BuilderEssentials.Items
                                     tilePlaced = true;
                                 }
                             }
+
+                            if (tilePlaced)
+                            {
+                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, customItem.type);
+                                if (Main.netMode == NetmodeID.MultiplayerClient)
+                                    NetMessage.SendTileSquare(-1, posX, posY, 1);
+                            }
                         }
                     }
                 }

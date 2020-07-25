@@ -65,13 +65,14 @@ namespace BuilderEssentials.Items
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY;
             Tile tile = Main.tile[posX, posY];
+            Item newItem = new Item();
 
             if ((modPlayer.infiniteRange || Tools.ToolHasRange(toolRange)) && (posX != oldPosX || posY != oldPosY) && !tile.active())
             {
                 oldPosX = posX;
                 oldPosY = posY;
 
-                if ((Tools.PlacementAnywhere || Tools.HasTileAround(posX, posY)) && 
+                if ((Tools.PlacementAnywhere || Tools.HasTileAround(posX, posY)) &&
                 (MultiWandWheel.MultiWandWheelPanel == null || !MultiWandWheel.MultiWandWheelPanel.IsMouseHovering)
                 && !MultiWandWheel.IsWandsUIVisible)
                 {
@@ -81,6 +82,8 @@ namespace BuilderEssentials.Items
                             if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingWood);
+                                newItem.SetDefaults(ItemID.Wood);
+                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, newItem.type);
                                 tilePlaced = true;
                             }
                             break;
@@ -88,6 +91,8 @@ namespace BuilderEssentials.Items
                             if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Bone))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.BoneBlock);
+                                newItem.SetDefaults(ItemID.Bone);
+                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, newItem.type);
                                 tilePlaced = true;
                             }
                             break;
@@ -95,6 +100,8 @@ namespace BuilderEssentials.Items
                             if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LeafBlock);
+                                newItem.SetDefaults(ItemID.Wood);
+                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, newItem.type);
                                 tilePlaced = true;
                             }
                             break;
@@ -102,6 +109,8 @@ namespace BuilderEssentials.Items
                             if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Hive))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.Hive);
+                                newItem.SetDefaults(ItemID.Hive);
+                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, newItem.type);
                                 tilePlaced = true;
                             }
                             break;
@@ -109,6 +118,8 @@ namespace BuilderEssentials.Items
                             if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingMahogany);
+                                newItem.SetDefaults(ItemID.RichMahogany);
+                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, newItem.type);
                                 tilePlaced = true;
                             }
                             break;
@@ -116,18 +127,17 @@ namespace BuilderEssentials.Items
                             if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingMahoganyLeaves);
+                                newItem.SetDefaults(ItemID.RichMahogany);
+                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, newItem.type);
                                 tilePlaced = true;
                             }
                             break;
                     }
 
-                    if (tilePlaced)
-                    {
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
+                    if (tilePlaced && Main.netMode == NetmodeID.MultiplayerClient)
+                        NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
 
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -143,13 +153,13 @@ namespace BuilderEssentials.Items
                 switch (MultiWandWheel.selectedIndex)
                 {
                     case 0:
-                            player.showItemIcon2 = ItemID.LivingWoodWand;
+                        player.showItemIcon2 = ItemID.LivingWoodWand;
                         break;
                     case 1:
-                            player.showItemIcon2 = ItemID.BoneWand;
+                        player.showItemIcon2 = ItemID.BoneWand;
                         break;
                     case 2:
-                            player.showItemIcon2 = ItemID.LeafWand;
+                        player.showItemIcon2 = ItemID.LeafWand;
                         break;
                     case 3:
                         player.showItemIcon2 = ItemID.HiveWand;

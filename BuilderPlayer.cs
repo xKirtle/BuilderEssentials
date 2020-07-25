@@ -44,9 +44,6 @@ namespace BuilderEssentials
         //Creative Wheel Stuff
         public List<int> creativeWheelSelectedIndex;
 
-        //Mirror Wand
-        public bool mirrorWandEffects;
-
         public override void Initialize()
         {
             infiniteRange = false;
@@ -76,11 +73,6 @@ namespace BuilderEssentials
             //Creative Wheel Stuff
             creativeWheelSelectedIndex = new List<int>();
 
-
-            //Mirror Wand
-            mirrorWandEffects = false;
-
-
             EnsureSaveCompatibility();
             BuildingMode.UpdateConfigVariables();
         }
@@ -101,8 +93,8 @@ namespace BuilderEssentials
                 && !player.HasBuff(BuffType<Buffs.InfinitePlacementBuff>()))
                     creativeWheelSelectedIndex.Remove(CreativeWheelItem.InfinityUpgrade.ToInt());
 
-                if (mirrorWandEffects)
-                    mirrorWandEffects = false;
+                if (BuilderEssentials.validMirrorWand)
+                    BuilderEssentials.validMirrorWand = false;
 
                 RemoveUIPanels();
             }

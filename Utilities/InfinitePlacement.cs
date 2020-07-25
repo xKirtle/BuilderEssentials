@@ -55,8 +55,7 @@ namespace BuilderEssentials.Utilities
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
 
-                if (modPlayer.mirrorWandEffects)
-                    Tools.MirrorWandPlacement(Player.tileTargetX, Player.tileTargetY, selectedItem, -1);
+                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, selectedItem.type);
 
                 return base.CanPlace(i, j, type);
             }
@@ -97,8 +96,7 @@ namespace BuilderEssentials.Utilities
                     canPlace = false;
             }
 
-            if (modPlayer.mirrorWandEffects)
-                Tools.MirrorWandPlacement(i, j, item, -1);
+            Tools.MirrorPlacement(i, j, item.type);
 
             if (Tools.InfinitePlacement)
             {
@@ -122,9 +120,7 @@ namespace BuilderEssentials.Utilities
             else
                 item.consumable = true;
 
-            if (modPlayer.mirrorWandEffects)
-                Tools.MirrorWandPlacement(i, j, item, type);
-
+            Tools.MirrorPlacement(i, j, item.type);
             Tools.AutoReplaceStack(item);
         }
     }
