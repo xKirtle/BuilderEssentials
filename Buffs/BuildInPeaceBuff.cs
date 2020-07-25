@@ -1,8 +1,8 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
 using BuilderEssentials.Items.Accessories;
+using Microsoft.Xna.Framework;
 
 namespace BuilderEssentials.Buffs
 {
@@ -39,7 +39,7 @@ namespace BuilderEssentials.Buffs
             foreach (var npc in Main.npc)
             {
                 //Don't want to remove town NPC's
-                if (npc.townNPC)
+                if (!npc.townNPC)
                     npc.active = false;
             }
         }
@@ -50,14 +50,10 @@ namespace BuilderEssentials.Buffs
         static bool summonedBossWhileBuffIsOn = false;
         public override bool UseItem(Item item, Player player)
         {
-            if (player.HasBuff(mod.BuffType("BuildInPeaceBuff")))
+            if (player.HasBuff(ModContent.BuffType<BuildInPeaceBuff>()))
             {
-                if (item.type == ItemID.SuspiciousLookingEye || item.type == ItemID.BloodySpine || item.type == ItemID.WormFood ||
-                    item.type == ItemID.MechanicalWorm || item.type == ItemID.MechanicalSkull || item.type == ItemID.MechanicalEye ||
-                    item.type == ItemID.LihzahrdPowerCell || item.type == ItemID.SnowGlobe || item.type == ItemID.NaughtyPresent ||
-                    item.type == ItemID.SlimeCrown || item.type == ItemID.Abeemination || item.type == ItemID.PumpkinMoonMedallion ||
-                    item.type == ItemID.PirateMap || item.type == ItemID.SolarTablet || item.type == ItemID.CelestialSigil ||
-                    item.type == ItemID.DD2ElderCrystal || item.type == ItemID.GoblinBattleStandard)
+                int[] bossItems = ItemID.Sets.SortingPriorityBossSpawns;
+                if (bossItems[item.type] != -1) //Doesn't quite work for modded bosses
                 {
                     if (!summonedBossWhileBuffIsOn)
                     {
