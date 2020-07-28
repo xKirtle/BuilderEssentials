@@ -1,6 +1,7 @@
 using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -74,10 +75,7 @@ namespace BuilderEssentials.Items
             }
 
             if (Main.mouseRight)
-            {
-                end.X = Player.tileTargetX;
-                end.Y = Player.tileTargetY;
-            }
+                end = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
             if (Main.mouseRightRelease && firstValue && !OperationComplete)
             {
@@ -95,7 +93,10 @@ namespace BuilderEssentials.Items
 
             if (Main.mouseLeft && firstvalueLeft && !OperationCompleteLeft)
             {
-                mouseLeftEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
+                //TODO: LIMIT MIRROR COORDS IN HERE
+
+                mouseLeftEnd.X = Player.tileTargetX;
+                mouseLeftEnd.Y = Player.tileTargetY;
             }
 
             if (Main.mouseLeftRelease && firstvalueLeft && !OperationCompleteLeft)

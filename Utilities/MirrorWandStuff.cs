@@ -14,8 +14,8 @@ namespace BuilderEssentials.Utilities
             item.SetDefaults(itemType);
             ItemTypes itemTypes = WhatIsThisItem(itemType);
 
-            bool VerticalMirrorSelection = TransparentSelection.selectedDirection == 0 || TransparentSelection.selectedDirection == 1;
-            bool HorizontalMirrorSelection = TransparentSelection.selectedDirection == 2 || TransparentSelection.selectedDirection == 3;
+            bool VerticalMirrorSelection = TransparentSelection.selectedLeftQuarter == 0 || TransparentSelection.selectedLeftQuarter == 1;
+            bool HorizontalMirrorSelection = TransparentSelection.selectedLeftQuarter == 2 || TransparentSelection.selectedLeftQuarter == 3;
 
             if (BuilderEssentials.validMirrorWand)
             {
