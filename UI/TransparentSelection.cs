@@ -4,6 +4,7 @@ using Terraria.UI;
 using Terraria;
 using BuilderEssentials.Items;
 using System;
+using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials.UI
 {
@@ -38,6 +39,7 @@ namespace BuilderEssentials.UI
         public static byte selectedQuarter = 4;
         //0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
         public static byte selectedLeftQuarter = 4;
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Values are initialized with 0 and single click will make start == end
@@ -106,7 +108,8 @@ namespace BuilderEssentials.UI
 
                 //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
                 if (MirrorWand.firstvalueLeft)
-                {
+                {   
+                    //Quarter
                     if (MirrorWand.mouseLeftStart.X < MirrorWand.mouseLeftEnd.X && MirrorWand.mouseLeftStart.Y < MirrorWand.mouseLeftEnd.Y)
                         selectedLeftQuarter = 3;
                     else if (MirrorWand.mouseLeftStart.X < MirrorWand.mouseLeftEnd.X && MirrorWand.mouseLeftStart.Y > MirrorWand.mouseLeftEnd.Y)
@@ -121,7 +124,7 @@ namespace BuilderEssentials.UI
                 }
 
                 //Checking if Mirror Axis is inside the selection
-                if (!IsMirrorAxisInsideSelection(selectedLeftQuarter))
+                if (!IsMirrorAxisInsideSelection())
                 {
                     color = new Color(1f, 0f, 0f, .75f) * 0.8f;
                     validPlacement = false;
@@ -157,65 +160,6 @@ namespace BuilderEssentials.UI
                         spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
                 }
-
-                #region OldCode
-                ////0:TopBottom; 1:BottomTop; 2:LeftRight; 3:RightLeft
-                //if (MirrorWand.firstvalueLeft)
-                //{
-                //    //TODO: IMPLEMENT MIRROR AXIS BIGGER THAN 1 BLOCK WIDE
-                //    //will need to rewrite the whole selection system below
-
-                //    bool TopBottom = MirrorWand.mouseLeftStart.Y <= MirrorWand.mouseLeftEnd.Y;
-                //    bool BottomTop = MirrorWand.mouseLeftStart.Y >= MirrorWand.mouseLeftEnd.Y;
-                //    bool LeftRight = MirrorWand.mouseLeftStart.X <= MirrorWand.mouseLeftEnd.X;
-                //    bool RightLeft = MirrorWand.mouseLeftStart.X >= MirrorWand.mouseLeftEnd.X;
-
-                //    if (TopBottom && !BottomTop && LeftRight && !RightLeft)
-                //    {
-                //        selectedDirection = 0;
-                //        MirrorWand.mouseLeftEnd.X = MirrorWand.mouseLeftStart.X;
-                //    }
-                //    if (!TopBottom && BottomTop && !LeftRight && RightLeft)
-                //    {
-                //        selectedDirection = 1;
-                //        MirrorWand.mouseLeftEnd.X = MirrorWand.mouseLeftStart.X;
-                //    }
-                //    if (!TopBottom && BottomTop && LeftRight && !RightLeft)
-                //    {
-                //        selectedDirection = 2;
-                //        MirrorWand.mouseLeftEnd.Y = MirrorWand.mouseLeftStart.Y;
-                //    }
-                //    if (TopBottom && !BottomTop && !LeftRight && RightLeft)
-                //    {
-                //        selectedDirection = 3;
-                //        MirrorWand.mouseLeftEnd.Y = MirrorWand.mouseLeftStart.Y;
-                //    }
-
-                //    distanceXLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.X - MirrorWand.mouseLeftStart.X);
-                //    distanceYLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.Y - MirrorWand.mouseLeftStart.Y);
-                //}
-
-                //if (!IsMirrorAxisInsideSelection(selectedQuarter))
-                //{
-                //    color = new Color(1f, 0f, 0f, .75f) * 0.8f;
-                //    validPlacement = false;
-                //}
-                //else
-                //    validPlacement = true;
-
-                //if (selectedDirection == 2 || selectedDirection == 3)
-                //    for (int i = 0; i < distanceXLeftMouse + 1; i++)
-                //    {
-                //        position = GetVectorBasedOnDirection(selectedDirection, i);
-                //        spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                //    }
-                //else if (selectedDirection == 0 || selectedDirection == 1)
-                //    for (int i = 0; i < distanceYLeftMouse + 1; i++)
-                //    {
-                //        position = GetVectorBasedOnDirection(selectedDirection, i);
-                //        spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                //    }
-                #endregion
             }
         }
 
@@ -405,72 +349,22 @@ namespace BuilderEssentials.UI
             return position;
         }
 
-        // //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
-        // byte selectedQuarter = 4;
-
-        private bool IsMirrorAxisInsideSelection(byte selectedQuarter)
+        private bool IsMirrorAxisInsideSelection()
         {
-            switch (selectedQuarter)
+            if (MirrorWand.VerticalLine) //X Mirror Axis
             {
-                case 0:
-                    return selectedQuarterZero();
-                case 1:
-                    return selectedQuarterOne();
-                case 2:
-                    return selectedQuarterTwo();
-                case 3:
-                    return selectedQuarterThree();
-                default:
-                    return false;
+                if (Tools.IsWithinRange(MirrorWand.mouseLeftStart.X, MirrorWand.start.X, MirrorWand.end.X) &&
+                    Tools.IsWithinRange(MirrorWand.mouseLeftEnd.X, MirrorWand.start.X, MirrorWand.end.X))
+                    return true;
+            }
+            else if (MirrorWand.HorizontalLine) //Y Mirror Axis
+            {
+                if (Tools.IsWithinRange(MirrorWand.mouseLeftStart.Y, MirrorWand.start.Y, MirrorWand.end.Y) &&
+                    Tools.IsWithinRange(MirrorWand.mouseLeftEnd.Y, MirrorWand.start.Y, MirrorWand.end.Y))
+                    return true;
             }
 
-            bool selectedQuarterZero()
-            {
-                //if mouseLeft Start and End is within Y
-                if ((MirrorWand.mouseLeftStart.Y < MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y > MirrorWand.end.Y
-                && MirrorWand.mouseLeftEnd.Y < MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y > MirrorWand.end.Y)
-                //if mouseLeft Start and End is within X
-                && (MirrorWand.mouseLeftStart.X < MirrorWand.start.X && MirrorWand.mouseLeftStart.X > MirrorWand.end.X
-                && MirrorWand.mouseLeftEnd.X < MirrorWand.start.X && MirrorWand.mouseLeftEnd.X > MirrorWand.end.X))
-                    return true;
-                else return false;
-            }
-
-            bool selectedQuarterOne()
-            {
-                //if mouseLeft Start and End is within Y
-                if ((MirrorWand.mouseLeftStart.Y < MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y > MirrorWand.end.Y
-                && MirrorWand.mouseLeftEnd.Y < MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y > MirrorWand.end.Y)
-                //if mouseLeft Start and End is within X
-                && (MirrorWand.mouseLeftStart.X > MirrorWand.start.X && MirrorWand.mouseLeftStart.X < MirrorWand.end.X
-                && MirrorWand.mouseLeftEnd.X > MirrorWand.start.X && MirrorWand.mouseLeftEnd.X < MirrorWand.end.X))
-                    return true;
-                else return false;
-            }
-
-            bool selectedQuarterTwo()
-            {
-                //if mouseLeft Start and End is within Y
-                if ((MirrorWand.mouseLeftStart.Y > MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y < MirrorWand.end.Y
-                && MirrorWand.mouseLeftEnd.Y > MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y < MirrorWand.end.Y)
-                //if mouseLeft Start and End is within X
-                && (MirrorWand.mouseLeftStart.X < MirrorWand.start.X && MirrorWand.mouseLeftStart.X > MirrorWand.end.X
-                && MirrorWand.mouseLeftEnd.X < MirrorWand.start.X && MirrorWand.mouseLeftEnd.X > MirrorWand.end.X))
-                    return true;
-                else return false;
-            }
-
-            bool selectedQuarterThree()
-            {
-                //if mouseLeft Start and End is within Y
-                if ((MirrorWand.mouseLeftStart.Y > MirrorWand.start.Y && MirrorWand.mouseLeftStart.Y < MirrorWand.end.Y
-                && MirrorWand.mouseLeftEnd.Y > MirrorWand.start.Y && MirrorWand.mouseLeftEnd.Y < MirrorWand.end.Y)
-                //if mouseLeft Start and End is within X
-                && (MirrorWand.mouseLeftStart.X > MirrorWand.start.X && MirrorWand.mouseLeftStart.X < MirrorWand.end.X
-                && MirrorWand.mouseLeftEnd.X > MirrorWand.start.X && MirrorWand.mouseLeftEnd.X < MirrorWand.end.X))
-                    return true;
-                else return false;
-            }
+            return false;
         }
     }
 }

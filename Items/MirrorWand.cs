@@ -1,5 +1,4 @@
 using BuilderEssentials.UI;
-using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -21,6 +20,14 @@ namespace BuilderEssentials.Items
         public static bool OperationCompleteLeft = false;
         public static Vector2 mouseLeftStart;
         public static Vector2 mouseLeftEnd;
+        //--------------------------------------
+        static bool TopBottom;
+        static bool BottomTop;
+        static bool LeftRight;
+        static bool RightLeft;
+        public static bool Horizontal;
+        public static bool HorizontalLine;
+        public static bool VerticalLine;
         //--------------------------------------
         public override void SetStaticDefaults()
         {
@@ -69,8 +76,7 @@ namespace BuilderEssentials.Items
             //----------------Right Click----------------
             if (!firstValue && !OperationComplete)
             {
-                start.X = Player.tileTargetX;
-                start.Y = Player.tileTargetY;
+                start = new Vector2(Player.tileTargetX, Player.tileTargetY);
                 firstValue = true;
             }
 
@@ -84,7 +90,6 @@ namespace BuilderEssentials.Items
             }
 
             //----------------Left Click----------------
-
             if (Main.mouseLeft && !firstvalueLeft && !OperationCompleteLeft)
             {
                 mouseLeftStart = new Vector2(Player.tileTargetX, Player.tileTargetY);
@@ -93,10 +98,39 @@ namespace BuilderEssentials.Items
 
             if (Main.mouseLeft && firstvalueLeft && !OperationCompleteLeft)
             {
-                //TODO: LIMIT MIRROR COORDS IN HERE
+                //Update coords
+                mouseLeftEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
-                mouseLeftEnd.X = Player.tileTargetX;
-                mouseLeftEnd.Y = Player.tileTargetY;
+                //Direction
+                TopBottom = mouseLeftStart.Y <= mouseLeftEnd.Y;
+                BottomTop = mouseLeftStart.Y >= mouseLeftEnd.Y;
+                LeftRight = mouseLeftStart.X <= mouseLeftEnd.X;
+                RightLeft = mouseLeftStart.X >= mouseLeftEnd.X;
+                Horizontal = Math.Abs(mouseLeftStart.X - mouseLeftEnd.X) > Math.Abs(mouseLeftStart.Y - mouseLeftEnd.Y);
+
+                VerticalLine = (TopBottom || BottomTop) && !Horizontal;
+                HorizontalLine = (LeftRight || RightLeft) && Horizontal;
+
+
+                //Limit coords based on mirror width
+                if (VerticalLine)
+                {
+                    if (mouseLeftEnd.X == mouseLeftStart.X)
+                        return;
+                    else if (mouseLeftEnd.X - mouseLeftStart.X > 1) //End Right side
+                        mouseLeftEnd.X = mouseLeftStart.X + 1;
+                    else if (mouseLeftEnd.X - mouseLeftStart.X < 1) //End Left side
+                        mouseLeftEnd.X = mouseLeftStart.X - 1;
+                }
+                if (HorizontalLine)
+                {
+                    if (mouseLeftEnd.Y == mouseLeftStart.Y)
+                        return;
+                    else if (mouseLeftEnd.Y - mouseLeftStart.Y > 1) //End Bottom side
+                        mouseLeftEnd.Y = mouseLeftStart.Y + 1;
+                    else if (mouseLeftEnd.Y - mouseLeftStart.Y < 1) //End Top side
+                        mouseLeftEnd.Y = mouseLeftStart.Y - 1;
+                }
             }
 
             if (Main.mouseLeftRelease && firstvalueLeft && !OperationCompleteLeft)

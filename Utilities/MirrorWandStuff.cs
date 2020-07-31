@@ -10,6 +10,8 @@ namespace BuilderEssentials.Utilities
     {
         public static void MirrorPlacement(int i, int j, int itemType)
         {
+            //TODO: ACCOUNT FOR 2 WIDE MIRROR AXIS
+
             Item item = new Item();
             item.SetDefaults(itemType);
             ItemTypes itemTypes = WhatIsThisItem(itemType);
