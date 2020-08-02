@@ -94,8 +94,6 @@ namespace BuilderEssentials
             IncreaseFillToolSize = null;
             DecreaseFillToolSize = null;
 
-            //TODO: Unload static fields
-
             //UI
             BasePanel = null;
             TransparentSelectionUI = null;

@@ -72,7 +72,7 @@ namespace BuilderEssentials.Items
                 oldPosX = posX;
                 oldPosY = posY;
 
-                if ((Tools.PlacementAnywhere || Tools.HasTileAround(posX, posY)) &&
+                if ((Tools.PlacementAnywhere || Tools.ValidTilePlacement(posX, posY)) &&
                 (MultiWandWheel.MultiWandWheelPanel == null || !MultiWandWheel.MultiWandWheelPanel.IsMouseHovering)
                 && !MultiWandWheel.IsWandsUIVisible)
                 {

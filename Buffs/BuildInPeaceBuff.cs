@@ -19,8 +19,6 @@ namespace BuilderEssentials.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
-
             //TODO: If invasion is summoned with an item, maybe make that item not be used?
 
             Main.raining = false;

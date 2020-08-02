@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using BuilderEssentials.Buffs;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,9 +24,7 @@ namespace BuilderEssentials.Items.Accessories
             item.rare = ItemRarityID.Red;
         }
 
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            player.AddBuff(mod.BuffType("BuildInPeaceBuff"), 10);
-        }
+        public override void UpdateAccessory(Player player, bool hideVisual) 
+            => player.AddBuff(ModContent.BuffType<BuildInPeaceBuff>(), 10);
     }
 }

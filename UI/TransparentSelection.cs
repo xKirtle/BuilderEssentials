@@ -98,6 +98,7 @@ namespace BuilderEssentials.UI
                 }
             }
 
+            //MIRROR AXIS
             if ((MirrorWand.mouseLeftStart.X != MirrorWand.mouseLeftEnd.X || MirrorWand.mouseLeftStart.Y != MirrorWand.mouseLeftEnd.Y)
                 && (MirrorWand.mouseLeftStart != Vector2.Zero && MirrorWand.mouseLeftEnd != Vector2.Zero))
             {

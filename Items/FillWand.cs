@@ -78,7 +78,6 @@ namespace BuilderEssentials.Items
 
         private void LeftClick()
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             bool tilePlaced = false;
 
             if (oldPosX != Player.tileTargetX || oldPosY != Player.tileTargetY)
