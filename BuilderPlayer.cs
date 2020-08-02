@@ -43,6 +43,7 @@ namespace BuilderEssentials
 
         //Creative Wheel Stuff
         public List<int> creativeWheelSelectedIndex;
+        public bool isCreativeWrenchEquiped;
 
         public override void Initialize()
         {
@@ -72,6 +73,7 @@ namespace BuilderEssentials
 
             //Creative Wheel Stuff
             creativeWheelSelectedIndex = new List<int>();
+            isCreativeWrenchEquiped = false;
 
             EnsureSaveCompatibility();
             BuildingMode.UpdateConfigVariables();
@@ -85,16 +87,15 @@ namespace BuilderEssentials
                 Player.tileRangeY = 4;
                 Player.defaultItemGrabRange = 38;
                 player.showItemIcon = false;
+                isCreativeWrenchEquiped = false;
                 infiniteRange = false;
                 pointedTilePos = new Vector2(Player.tileTargetX, Player.tileTargetY);
                 pointedTile = Main.tile[(int)pointedTilePos.X, (int)pointedTilePos.Y];
+                BuilderEssentials.validMirrorWand = false;
 
                 if (creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinityUpgrade.ToInt())
                 && !player.HasBuff(BuffType<Buffs.InfinitePlacementBuff>()))
                     creativeWheelSelectedIndex.Remove(CreativeWheelItem.InfinityUpgrade.ToInt());
-
-                if (BuilderEssentials.validMirrorWand)
-                    BuilderEssentials.validMirrorWand = false;
 
                 RemoveUIPanels();
             }
@@ -187,18 +188,18 @@ namespace BuilderEssentials
 
         public void EnsureSaveCompatibility()
         {
-            Tools.FixOldSaveData(ref NormalAccessories);
-            Tools.FixOldSaveData(ref BuildingAccessories);
-            Tools.FixOldSaveData(ref NormalVanityAccessories);
-            Tools.FixOldSaveData(ref BuildingVanityAccessories);
-            Tools.FixOldSaveData(ref NormalArmor);
-            Tools.FixOldSaveData(ref BuildingArmor);
-            Tools.FixOldSaveData(ref NormalVanityArmor);
-            Tools.FixOldSaveData(ref BuildingVanityArmor);
-            Tools.FixOldSaveData(ref NormalMiscEquips);
-            Tools.FixOldSaveData(ref BuildingMiscEquips);
-            Tools.FixOldSaveData(ref NormalDyes);
-            Tools.FixOldSaveData(ref BuildingDyes);
+            FixOldSaveData(ref NormalAccessories);
+            FixOldSaveData(ref BuildingAccessories);
+            FixOldSaveData(ref NormalVanityAccessories);
+            FixOldSaveData(ref BuildingVanityAccessories);
+            FixOldSaveData(ref NormalArmor);
+            FixOldSaveData(ref BuildingArmor);
+            FixOldSaveData(ref NormalVanityArmor);
+            FixOldSaveData(ref BuildingVanityArmor);
+            FixOldSaveData(ref NormalMiscEquips);
+            FixOldSaveData(ref BuildingMiscEquips);
+            FixOldSaveData(ref NormalDyes);
+            FixOldSaveData(ref BuildingDyes);
         }
 
         private void RemoveUIPanels()

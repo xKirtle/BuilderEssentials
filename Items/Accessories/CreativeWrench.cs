@@ -85,7 +85,7 @@ namespace BuilderEssentials.Items.Accessories
                 //AutoHammer
                 if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.AutoHammer.ToInt()) &&
                 player.HeldItem.IsAir && CreativeWheel.CreativeWheelPanel != null &&
-                !player.mouseInterface && !Main.playerInventory)
+                !player.mouseInterface && !Main.playerInventory && !Main.ingameOptionsWindow)
                 {
                     if (!CreativeWheel.CreativeWheelPanel.IsMouseHovering)
                         Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile, CreativeWheel.autoHammerSelectedIndex);
@@ -101,6 +101,8 @@ namespace BuilderEssentials.Items.Accessories
                 }
             }
         }
+
+        public override void UpdateEquip(Player player) => player.GetModPlayer<BuilderPlayer>().isCreativeWrenchEquiped = true;
 
         public override void AddRecipes()
         {
