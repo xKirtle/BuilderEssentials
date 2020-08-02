@@ -21,13 +21,14 @@ namespace BuilderEssentials.Items
         public static Vector2 mouseLeftStart;
         public static Vector2 mouseLeftEnd;
         //--------------------------------------
-        static bool TopBottom;
-        static bool BottomTop;
-        static bool LeftRight;
-        static bool RightLeft;
-        public static bool Horizontal;
+        public static bool TopBottom;
+        public static bool BottomTop;
+        public static bool LeftRight;
+        public static bool RightLeft;
+        static bool Horizontal;
         public static bool HorizontalLine;
         public static bool VerticalLine;
+        public static bool WideMirrorAxis;
         //--------------------------------------
         public override void SetStaticDefaults()
         {
@@ -52,6 +53,11 @@ namespace BuilderEssentials.Items
             item.noMelee = false;
         }
 
+        public override Vector2? HoldoutOffset()
+        {
+            return new Vector2(-10, 0);
+        }
+
         public override bool AltFunctionUse(Player player) //Right click selects area that will mirror stuff
         {
             if (OperationComplete)
@@ -71,6 +77,7 @@ namespace BuilderEssentials.Items
             return true;
         }
 
+        //TODO: GOING LMB 1 WIDE LEFT TO RIGHT / RIGHT TO LEFT WILL MAKE IT DRAW IN THE MIRRORED SIDE BECAUSE OF SOME MATH.ABS
         public override void HoldItem(Player player)
         {
             //----------------Right Click----------------
@@ -94,6 +101,7 @@ namespace BuilderEssentials.Items
             {
                 mouseLeftStart = new Vector2(Player.tileTargetX, Player.tileTargetY);
                 firstvalueLeft = true;
+                WideMirrorAxis = false;
             }
 
             if (Main.mouseLeft && firstvalueLeft && !OperationCompleteLeft)
@@ -115,21 +123,24 @@ namespace BuilderEssentials.Items
                 //Limit coords based on mirror width
                 if (VerticalLine)
                 {
-                    if (mouseLeftEnd.X == mouseLeftStart.X)
-                        return;
+                    if (mouseLeftEnd.X == mouseLeftStart.X) { }
                     else if (mouseLeftEnd.X - mouseLeftStart.X > 1) //End Right side
                         mouseLeftEnd.X = mouseLeftStart.X + 1;
                     else if (mouseLeftEnd.X - mouseLeftStart.X < 1) //End Left side
                         mouseLeftEnd.X = mouseLeftStart.X - 1;
+
+                    WideMirrorAxis = mouseLeftEnd.X != mouseLeftStart.X;
+
                 }
                 if (HorizontalLine)
                 {
-                    if (mouseLeftEnd.Y == mouseLeftStart.Y)
-                        return;
+                    if (mouseLeftEnd.Y == mouseLeftStart.Y) { }
                     else if (mouseLeftEnd.Y - mouseLeftStart.Y > 1) //End Bottom side
                         mouseLeftEnd.Y = mouseLeftStart.Y + 1;
                     else if (mouseLeftEnd.Y - mouseLeftStart.Y < 1) //End Top side
                         mouseLeftEnd.Y = mouseLeftStart.Y - 1;
+
+                    WideMirrorAxis = mouseLeftEnd.Y != mouseLeftStart.Y;
                 }
             }
 
@@ -142,7 +153,7 @@ namespace BuilderEssentials.Items
 
         public override void UpdateInventory(Player player)
         {
-            if (OperationComplete && OperationCompleteLeft && TransparentSelection.validPlacement)
+            if (OperationComplete && OperationCompleteLeft && TransparentSelection.validPlacement && start != end)
                 BuilderEssentials.validMirrorWand = true;
         }
     }
