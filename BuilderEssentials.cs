@@ -448,6 +448,13 @@ namespace BuilderEssentials
                 ItemID.UltraBrightCampfire
             });
             RecipeGroup.RegisterGroup("BuilderEssentials:Campfires", campfires);
+
+            RecipeGroup magicMirrors = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Magic Mirror", new int[]
+            {
+                ItemID.MagicMirror,
+                ItemID.IceMirror
+            });
+            RecipeGroup.RegisterGroup("BuilderEssentials:MagicMirrors", magicMirrors);
         }
     }
 }

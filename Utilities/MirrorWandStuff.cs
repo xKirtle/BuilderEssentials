@@ -20,26 +20,26 @@ namespace BuilderEssentials.Utilities
                 float posY = j;
                 if (MirrorWand.VerticalLine)
                 {
-                    float distanceToMirror = MirrorWand.mouseLeftEnd.X - posX;
-                    if (MirrorWand.mouseLeftStart.X - posX > MirrorWand.mouseLeftEnd.X - posX)
-                        distanceToMirror = MirrorWand.mouseLeftStart.X - posX;
+                    float distanceToMirror = MirrorWand.mirrorEnd.X - posX;
+                    if (MirrorWand.mirrorStart.X - posX > MirrorWand.mirrorEnd.X - posX)
+                        distanceToMirror = MirrorWand.mirrorStart.X - posX;
                         
-                    if (IsWithinRange(posY, MirrorWand.mouseLeftStart.Y, MirrorWand.mouseLeftEnd.Y))
+                    if (IsWithinRange(posY, MirrorWand.mirrorStart.Y, MirrorWand.mirrorEnd.Y))
                     {
                         float newPos;
                         bool inRange = false;
                         if (distanceToMirror < 0) //Right to the mirror axis
                         {
-                            newPos = MirrorWand.mouseLeftEnd.X - Math.Abs(distanceToMirror);
+                            newPos = MirrorWand.mirrorEnd.X - Math.Abs(distanceToMirror);
                             if (MirrorWand.WideMirrorAxis && MirrorWand.LeftRight) newPos -= 1;
-                            if (IsWithinRange(newPos, MirrorWand.start.X, MirrorWand.end.X))
+                            if (IsWithinRange(newPos, MirrorWand.selectionStart.X, MirrorWand.selectionEnd.X))
                                 inRange = true;
                         }
                         else //Left to the mirror axis
                         {
-                            newPos = MirrorWand.mouseLeftEnd.X + Math.Abs(distanceToMirror);
+                            newPos = MirrorWand.mirrorEnd.X + Math.Abs(distanceToMirror);
                             if (MirrorWand.WideMirrorAxis && MirrorWand.LeftRight) newPos -= 1;
-                            if (IsWithinRange(newPos, MirrorWand.start.X, MirrorWand.end.X))
+                            if (IsWithinRange(newPos, MirrorWand.selectionStart.X, MirrorWand.selectionEnd.X))
                                 inRange = true;
                         }
 
@@ -64,27 +64,27 @@ namespace BuilderEssentials.Utilities
                 }
                 else if (MirrorWand.HorizontalLine)
                 {
-                    float distanceToMirror = MirrorWand.mouseLeftEnd.Y - posY;
-                    if (IsWithinRange(posX, MirrorWand.mouseLeftStart.X, MirrorWand.mouseLeftEnd.X))
+                    float distanceToMirror = MirrorWand.mirrorEnd.Y - posY;
+                    if (IsWithinRange(posX, MirrorWand.mirrorStart.X, MirrorWand.mirrorEnd.X))
                     {
                         float newPos;
                         bool inRange = false;
                         if (distanceToMirror < 0) //Bottom to the mirror axis
                         {
-                            newPos = MirrorWand.mouseLeftEnd.Y - Math.Abs(distanceToMirror);
+                            newPos = MirrorWand.mirrorEnd.Y - Math.Abs(distanceToMirror);
                             if (MirrorWand.WideMirrorAxis && MirrorWand.TopBottom) newPos -= 1;
                             else if (MirrorWand.WideMirrorAxis && MirrorWand.BottomTop) newPos += 1;
 
-                            if (IsWithinRange(newPos, MirrorWand.start.Y, MirrorWand.end.Y))
+                            if (IsWithinRange(newPos, MirrorWand.selectionStart.Y, MirrorWand.selectionEnd.Y))
                                 inRange = true;
                         }
                         else //Top to the mirror axis
                         {
-                            newPos = MirrorWand.mouseLeftEnd.Y + Math.Abs(distanceToMirror);
+                            newPos = MirrorWand.mirrorEnd.Y + Math.Abs(distanceToMirror);
                             if (MirrorWand.WideMirrorAxis && MirrorWand.TopBottom) newPos -= 1;
                             else if (MirrorWand.WideMirrorAxis && MirrorWand.BottomTop) newPos += 1;
 
-                            if (IsWithinRange(newPos, MirrorWand.start.Y, MirrorWand.end.Y))
+                            if (IsWithinRange(newPos, MirrorWand.selectionStart.Y, MirrorWand.selectionEnd.Y))
                                 inRange = true;
                         }
 

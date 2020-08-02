@@ -47,18 +47,6 @@ namespace BuilderEssentials.Utilities
             return -1;
         }
 
-        public static bool IsCreativeWrenchEquipped()
-        {
-            Player player = Main.LocalPlayer;
-            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
-            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
-            {
-                if (player.armor[i].type == ModContent.ItemType<CreativeWrench>())
-                    return true;
-            }
-            return false;
-        }
-
         public static bool ReduceItemStack(int itemType)
         {
             foreach (Item item in Main.LocalPlayer.inventory)
@@ -86,7 +74,7 @@ namespace BuilderEssentials.Utilities
             //Left
             if (Main.tile[posX - 1, posY].active())
                 return true;
-
+            //Has Wall behind?
             if (Main.tile[posX, posY].wall != 0)
                 return true;
 

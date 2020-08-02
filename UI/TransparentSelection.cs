@@ -43,8 +43,8 @@ namespace BuilderEssentials.UI
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Values are initialized with 0 and single click will make start == end
-            if ((MirrorWand.start.X != MirrorWand.end.X || MirrorWand.start.Y != MirrorWand.end.Y)
-            && (MirrorWand.start != Vector2.Zero && MirrorWand.end != Vector2.Zero))
+            if ((MirrorWand.selectionStart.X != MirrorWand.selectionEnd.X || MirrorWand.selectionStart.Y != MirrorWand.selectionEnd.Y)
+            && (MirrorWand.selectionStart != Vector2.Zero && MirrorWand.selectionEnd != Vector2.Zero))
             {
                 Texture2D texture = Main.extraTexture[2];
                 Rectangle value = new Rectangle(0, 0, 16, 16);
@@ -53,19 +53,19 @@ namespace BuilderEssentials.UI
 
                 //Retrieve which way the player is making the selection
                 //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
-                if (MirrorWand.firstValue)
+                if (MirrorWand.firstSelectionValue)
                 {
-                    if (MirrorWand.start.X < MirrorWand.end.X && MirrorWand.start.Y < MirrorWand.end.Y)
+                    if (MirrorWand.selectionStart.X < MirrorWand.selectionEnd.X && MirrorWand.selectionStart.Y < MirrorWand.selectionEnd.Y)
                         selectedQuarter = 3;
-                    else if (MirrorWand.start.X < MirrorWand.end.X && MirrorWand.start.Y > MirrorWand.end.Y)
+                    else if (MirrorWand.selectionStart.X < MirrorWand.selectionEnd.X && MirrorWand.selectionStart.Y > MirrorWand.selectionEnd.Y)
                         selectedQuarter = 1;
-                    else if (MirrorWand.start.X > MirrorWand.end.X && MirrorWand.start.Y > MirrorWand.end.Y)
+                    else if (MirrorWand.selectionStart.X > MirrorWand.selectionEnd.X && MirrorWand.selectionStart.Y > MirrorWand.selectionEnd.Y)
                         selectedQuarter = 0;
-                    else if (MirrorWand.start.X > MirrorWand.end.X && MirrorWand.start.Y < MirrorWand.end.Y)
+                    else if (MirrorWand.selectionStart.X > MirrorWand.selectionEnd.X && MirrorWand.selectionStart.Y < MirrorWand.selectionEnd.Y)
                         selectedQuarter = 2;
 
-                    distanceX = Math.Abs(MirrorWand.end.X - MirrorWand.start.X);
-                    distanceY = Math.Abs(MirrorWand.end.Y - MirrorWand.start.Y);
+                    distanceX = Math.Abs(MirrorWand.selectionEnd.X - MirrorWand.selectionStart.X);
+                    distanceY = Math.Abs(MirrorWand.selectionEnd.Y - MirrorWand.selectionStart.Y);
                 }
 
                 if (selectedQuarter != 4) //Doesn't allow it to run once without clicking right click
@@ -99,8 +99,8 @@ namespace BuilderEssentials.UI
             }
 
             //MIRROR AXIS
-            if ((MirrorWand.mouseLeftStart.X != MirrorWand.mouseLeftEnd.X || MirrorWand.mouseLeftStart.Y != MirrorWand.mouseLeftEnd.Y)
-                && (MirrorWand.mouseLeftStart != Vector2.Zero && MirrorWand.mouseLeftEnd != Vector2.Zero))
+            if ((MirrorWand.mirrorStart.X != MirrorWand.mirrorEnd.X || MirrorWand.mirrorStart.Y != MirrorWand.mirrorEnd.Y)
+                && (MirrorWand.mirrorStart != Vector2.Zero && MirrorWand.mirrorEnd != Vector2.Zero))
             {
                 Texture2D texture = Main.extraTexture[2];
                 Rectangle value = new Rectangle(0, 0, 16, 16);
@@ -108,20 +108,20 @@ namespace BuilderEssentials.UI
                 Vector2 position = new Vector2();
 
                 //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
-                if (MirrorWand.firstvalueLeft)
+                if (MirrorWand.firstMirrorValue)
                 {   
                     //Quarter
-                    if (MirrorWand.mouseLeftStart.X < MirrorWand.mouseLeftEnd.X && MirrorWand.mouseLeftStart.Y < MirrorWand.mouseLeftEnd.Y)
+                    if (MirrorWand.mirrorStart.X < MirrorWand.mirrorEnd.X && MirrorWand.mirrorStart.Y < MirrorWand.mirrorEnd.Y)
                         selectedLeftQuarter = 3;
-                    else if (MirrorWand.mouseLeftStart.X < MirrorWand.mouseLeftEnd.X && MirrorWand.mouseLeftStart.Y > MirrorWand.mouseLeftEnd.Y)
+                    else if (MirrorWand.mirrorStart.X < MirrorWand.mirrorEnd.X && MirrorWand.mirrorStart.Y > MirrorWand.mirrorEnd.Y)
                         selectedLeftQuarter = 1;
-                    else if (MirrorWand.mouseLeftStart.X > MirrorWand.mouseLeftEnd.X && MirrorWand.mouseLeftStart.Y > MirrorWand.mouseLeftEnd.Y)
+                    else if (MirrorWand.mirrorStart.X > MirrorWand.mirrorEnd.X && MirrorWand.mirrorStart.Y > MirrorWand.mirrorEnd.Y)
                         selectedLeftQuarter = 0;
-                    else if (MirrorWand.mouseLeftStart.X > MirrorWand.mouseLeftEnd.X && MirrorWand.mouseLeftStart.Y < MirrorWand.mouseLeftEnd.Y)
+                    else if (MirrorWand.mirrorStart.X > MirrorWand.mirrorEnd.X && MirrorWand.mirrorStart.Y < MirrorWand.mirrorEnd.Y)
                         selectedLeftQuarter = 2;
 
-                    distanceXLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.X - MirrorWand.mouseLeftStart.X);
-                    distanceYLeftMouse = Math.Abs(MirrorWand.mouseLeftEnd.Y - MirrorWand.mouseLeftStart.Y);
+                    distanceXLeftMouse = Math.Abs(MirrorWand.mirrorEnd.X - MirrorWand.mirrorStart.X);
+                    distanceYLeftMouse = Math.Abs(MirrorWand.mirrorEnd.Y - MirrorWand.mirrorStart.Y);
                 }
 
                 //Checking if Mirror Axis is inside the selection
@@ -188,16 +188,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X + iteration, MirrorWand.start.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X + iteration, MirrorWand.selectionStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X + iteration, MirrorWand.start.Y + distanceY) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X + iteration, MirrorWand.selectionStart.Y + distanceY) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X, MirrorWand.start.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X, MirrorWand.selectionStart.Y + iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X + distanceX, MirrorWand.start.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X + distanceX, MirrorWand.selectionStart.Y + iteration) * 16 - Main.screenPosition;
                 }
             }
 
@@ -206,16 +206,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X + iteration, MirrorWand.start.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X + iteration, MirrorWand.selectionStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X + iteration, MirrorWand.start.Y - distanceY) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X + iteration, MirrorWand.selectionStart.Y - distanceY) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X, MirrorWand.start.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X, MirrorWand.selectionStart.Y - iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X + distanceX, MirrorWand.start.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X + distanceX, MirrorWand.selectionStart.Y - iteration) * 16 - Main.screenPosition;
                 }
             }
 
@@ -224,16 +224,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X - iteration, MirrorWand.start.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X - iteration, MirrorWand.selectionStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X - iteration, MirrorWand.start.Y - distanceY) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X - iteration, MirrorWand.selectionStart.Y - distanceY) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X, MirrorWand.start.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X, MirrorWand.selectionStart.Y - iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X - distanceX, MirrorWand.start.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X - distanceX, MirrorWand.selectionStart.Y - iteration) * 16 - Main.screenPosition;
                 }
             }
 
@@ -242,16 +242,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X - iteration, MirrorWand.start.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X - iteration, MirrorWand.selectionStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X - iteration, MirrorWand.start.Y + distanceY) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X - iteration, MirrorWand.selectionStart.Y + distanceY) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.start.X, MirrorWand.start.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X, MirrorWand.selectionStart.Y + iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.start.X - distanceX, MirrorWand.start.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.selectionStart.X - distanceX, MirrorWand.selectionStart.Y + iteration) * 16 - Main.screenPosition;
                 }
             }
             return position;
@@ -281,16 +281,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X + iteration, MirrorWand.mouseLeftStart.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X + iteration, MirrorWand.mirrorStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X + iteration, MirrorWand.mouseLeftStart.Y + distanceYLeftMouse) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X + iteration, MirrorWand.mirrorStart.Y + distanceYLeftMouse) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X, MirrorWand.mouseLeftStart.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X, MirrorWand.mirrorStart.Y + iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X + distanceXLeftMouse, MirrorWand.mouseLeftStart.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X + distanceXLeftMouse, MirrorWand.mirrorStart.Y + iteration) * 16 - Main.screenPosition;
                 }
             }
 
@@ -299,16 +299,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X + iteration, MirrorWand.mouseLeftStart.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X + iteration, MirrorWand.mirrorStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X + iteration, MirrorWand.mouseLeftStart.Y - distanceYLeftMouse) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X + iteration, MirrorWand.mirrorStart.Y - distanceYLeftMouse) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X, MirrorWand.mouseLeftStart.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X, MirrorWand.mirrorStart.Y - iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X + distanceXLeftMouse, MirrorWand.mouseLeftStart.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X + distanceXLeftMouse, MirrorWand.mirrorStart.Y - iteration) * 16 - Main.screenPosition;
                 }
             }
 
@@ -317,16 +317,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X - iteration, MirrorWand.mouseLeftStart.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X - iteration, MirrorWand.mirrorStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X - iteration, MirrorWand.mouseLeftStart.Y - distanceYLeftMouse) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X - iteration, MirrorWand.mirrorStart.Y - distanceYLeftMouse) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X, MirrorWand.mouseLeftStart.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X, MirrorWand.mirrorStart.Y - iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X - distanceXLeftMouse, MirrorWand.mouseLeftStart.Y - iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X - distanceXLeftMouse, MirrorWand.mirrorStart.Y - iteration) * 16 - Main.screenPosition;
                 }
             }
 
@@ -335,16 +335,16 @@ namespace BuilderEssentials.UI
                 if (isAxisX)
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X - iteration, MirrorWand.mouseLeftStart.Y) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X - iteration, MirrorWand.mirrorStart.Y) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X - iteration, MirrorWand.mouseLeftStart.Y + distanceYLeftMouse) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X - iteration, MirrorWand.mirrorStart.Y + distanceYLeftMouse) * 16 - Main.screenPosition;
                 }
                 else
                 {
                     if (isTopOrLeft)
-                        position = new Vector2(MirrorWand.mouseLeftStart.X, MirrorWand.mouseLeftStart.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X, MirrorWand.mirrorStart.Y + iteration) * 16 - Main.screenPosition;
                     else
-                        position = new Vector2(MirrorWand.mouseLeftStart.X - distanceXLeftMouse, MirrorWand.mouseLeftStart.Y + iteration) * 16 - Main.screenPosition;
+                        position = new Vector2(MirrorWand.mirrorStart.X - distanceXLeftMouse, MirrorWand.mirrorStart.Y + iteration) * 16 - Main.screenPosition;
                 }
             }
             return position;
@@ -354,14 +354,14 @@ namespace BuilderEssentials.UI
         {
             if (MirrorWand.VerticalLine) //X Mirror Axis
             {
-                if (Tools.IsWithinRange(MirrorWand.mouseLeftStart.X, MirrorWand.start.X, MirrorWand.end.X) &&
-                    Tools.IsWithinRange(MirrorWand.mouseLeftEnd.X, MirrorWand.start.X, MirrorWand.end.X))
+                if (Tools.IsWithinRange(MirrorWand.mirrorStart.X, MirrorWand.selectionStart.X, MirrorWand.selectionEnd.X) &&
+                    Tools.IsWithinRange(MirrorWand.mirrorEnd.X, MirrorWand.selectionStart.X, MirrorWand.selectionEnd.X))
                     return true;
             }
             else if (MirrorWand.HorizontalLine) //Y Mirror Axis
             {
-                if (Tools.IsWithinRange(MirrorWand.mouseLeftStart.Y, MirrorWand.start.Y, MirrorWand.end.Y) &&
-                    Tools.IsWithinRange(MirrorWand.mouseLeftEnd.Y, MirrorWand.start.Y, MirrorWand.end.Y))
+                if (Tools.IsWithinRange(MirrorWand.mirrorStart.Y, MirrorWand.selectionStart.Y, MirrorWand.selectionEnd.Y) &&
+                    Tools.IsWithinRange(MirrorWand.mirrorEnd.Y, MirrorWand.selectionStart.Y, MirrorWand.selectionEnd.Y))
                     return true;
             }
 

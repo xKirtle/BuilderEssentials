@@ -39,10 +39,10 @@ namespace BuilderEssentials.Items.Accessories
         {
             //Not really worried about balancing at this point
             ModRecipe modRecipe = new ModRecipe(mod);
-            modRecipe.AddIngredient(ItemID.ArchitectGizmoPack, 1);
-            modRecipe.AddIngredient(ItemID.LaserRuler, 1);
-            modRecipe.AddIngredient(ItemID.Toolbox, 1);
-            modRecipe.AddIngredient(ItemID.Toolbelt, 1);
+            modRecipe.AddIngredient(ItemID.ArchitectGizmoPack);
+            modRecipe.AddIngredient(ItemID.LaserRuler);
+            modRecipe.AddIngredient(ItemID.Toolbox);
+            modRecipe.AddIngredient(ItemID.Toolbelt);
             modRecipe.AddTile(TileID.AdamantiteForge);
             modRecipe.SetResult(this);
             modRecipe.AddRecipe();

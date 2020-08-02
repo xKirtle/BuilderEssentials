@@ -22,7 +22,7 @@ namespace BuilderEssentials.Items
             Tooltip.SetDefault("Fills Holes" +
             "\nLeft Click to place" +
             "\nRigth Click to remove" +
-            "\nMiddle Click to select working tiles");
+            "\nMiddle Click on tiles to select working tiles");
         }
 
         public override void SetDefaults()
@@ -41,9 +41,20 @@ namespace BuilderEssentials.Items
             toolRange = 8;
         }
 
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.MoltenHamaxe);
+            recipe.AddIngredient(ItemID.DirtRod);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
+
         public override bool UseItem(Player player)
         {
-            LeftClick();
+            if (player.whoAmI == Main.myPlayer)
+                LeftClick();
             return false;
         }
 
@@ -144,6 +155,10 @@ namespace BuilderEssentials.Items
                         WorldGen.KillTile(posX, posY);
                     else if (tile.wall == customItem.createWall)
                         WorldGen.KillWall(posX, posY);
+
+                    //Add support in MirrorWand to remove mirrored blocks here
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                        NetMessage.SendTileSquare(-1, posX, posY, 1);
                 }
             }
         }

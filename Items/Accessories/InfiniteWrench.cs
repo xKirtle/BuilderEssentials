@@ -1,5 +1,4 @@
-﻿
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -41,8 +40,8 @@ namespace BuilderEssentials.Items.Accessories
 
 
             ModRecipe modRecipe = new ModRecipe(mod);
-            modRecipe.AddIngredient(mod.GetItem("InfinityUpgrade"), 1);
-            modRecipe.AddIngredient(mod.GetItem("PlacementWrench"), 1);
+            modRecipe.AddIngredient(ModContent.ItemType<InfinityUpgrade>());
+            modRecipe.AddIngredient(mod.GetItem("PlacementWrench"));
             modRecipe.AddTile(TileID.TinkerersWorkbench);
             modRecipe.SetResult(this);
             modRecipe.AddRecipe();

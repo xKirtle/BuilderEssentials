@@ -3,12 +3,10 @@ using Terraria.ID;
 
 namespace BuilderEssentials.Utilities
 {
-
     public static partial class Tools
     {
         public static void ChangeSlope(ref int oldPosX, ref int oldPosY, ref Tile previousClickedTile, int selectedIndex)
         {
-            //TODO: DISABLE USE ON GAME INTERFACES WHEN USER CLICKS ON SETTINGS FOR EXAMPLE
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY;
             Tile tile = Main.tile[posX, posY];
@@ -34,8 +32,8 @@ namespace BuilderEssentials.Utilities
                         tile.slope(4);
                         break;
                     case 4:
-                        tile.slope(0);
                         tile.halfBrick(true);
+                        tile.slope(0);
                         break;
                     case 5:
                         tile.halfBrick(false);
