@@ -1,29 +1,10 @@
-Builder Essentials is a mod designed to help and improve building in survival (and post Moon Lord / creative).
+Builder Essentials aims to improve the building experience in Terraria tackling unpleasant Vanilla additions that makes building much harder than it needs to be as well as adding QoL mechanics and items.
 
--------------------Features-------------------
-  - A Building Mode that mainly features a secondary accessory system to store all your building accessories (can use a KeyBind)
-  - 4 Crafting stations that merge into one powerful crafting station that can craft all recipes
-  - Multi Painting Tool that combines all paiting tools into one (works with vanilla paint)
-  - Infinite Paint Bucket (only works with the Multi Paint Tool)
-  - Accessories that aid in building that provide:
-Infinte Range, Fast Placement, Item Picker (like a color picker), Infinite Placement, AutoHammer, Placement Anywhere, Infinite Pick up Range, No Invasions/Events/Bosses/Hostile NPCs, Fixed daytime (12pm)
-  - A Mirror Wand which allows you to build symmetrically
-  - A Mutli Wand tool that contains all 6 vanilla wands
--------------------------------------------
-
-Default KeyBind to toggle Building Mode is N, be sure to set it up on the configs.
-
-Be sure to check the Mod Config to setup your Building Mode in a way that suits your playstyle.
+This mod uses keybinds that tModLoader turns off by default, please make sure you set them for the best experience! Also be sure to check the Mod Config to setup this mod to your liking.
 
 For more info/previews check the mod's Homepage!
 
 Happy Building!
-
-Latest Changelog:
-  - Added a Mutli Wand (contains all six default wands)
-  - Added the AutoHammer as its own item
-  - Item Picker now supports all (vanilla/modded) items in the game
-  - Huge code refactor/cleanup
 
 If you find any bug/weird behaviour please report it in our mod's homepage. Thank you!
 
