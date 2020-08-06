@@ -49,6 +49,10 @@ namespace BuilderEssentials.UI
                 isBuildingModeButtonVisible = false;
             }
 
+            //SideMenu Shapes UI
+            if (Tools.UIPanelLogic(SideMenu.SideMenuArrowPanel, ref SideMenu.SideMenuArrowUIOpen, ref SideMenu.IsSideMenuArrowUIVisible))
+                SideMenu.CreateSideMenuArrowPanel(this);
+
             //CreativeWrench Wheel UI
             if (Tools.UIPanelLogic(CreativeWheel.CreativeWheelPanel, ref CreativeWheel.CreativeWheelUIOpen, ref CreativeWheel.IsCreativeWheelVisible))
                 CreativeWheel.CreateCreativeWheelReworkPanel(Main.mouseX, Main.mouseY, this);

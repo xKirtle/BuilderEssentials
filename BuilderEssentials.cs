@@ -15,6 +15,7 @@ namespace BuilderEssentials
     {
         public static Texture2D BuildingModeOff;
         public static Texture2D BuildingModeOn;
+        public static Texture2D SideMenu;
         public static List<Texture2D> CreativeWheelElements;
         public static List<Texture2D> CWAutoHammerElements;
         public static List<Texture2D> PaintColors;
@@ -58,6 +59,7 @@ namespace BuilderEssentials
         {
             BuildingModeOn = GetTexture("Textures/UIElements/BuildingModeOn");
             BuildingModeOff = GetTexture("Textures/UIElements/BuildingModeOff");
+            SideMenu = GetTexture("Textures/UIElements/SideMenu");
 
             CreativeWheelElements = new List<Texture2D>(5);
             CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWColorPicker"));
@@ -115,6 +117,7 @@ namespace BuilderEssentials
         {
             BuildingModeOn = null;
             BuildingModeOff = null;
+            SideMenu = null;
 
             for (int i = 0; i < CreativeWheelElements?.Count; i++)
                 CreativeWheelElements[i] = null;
