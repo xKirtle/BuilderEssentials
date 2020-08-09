@@ -26,7 +26,7 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
+            player.AddBuff(ModContent.BuffType<Buffs.InfinitePlacementBuff>(), 10);
             player.blockRange += 55;
             player.wallSpeed += 10;
             player.tileSpeed += 50;
@@ -36,12 +36,9 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void AddRecipes()
         {
-            //Not really worried about balancing at this point
-
-
             ModRecipe modRecipe = new ModRecipe(mod);
             modRecipe.AddIngredient(ModContent.ItemType<InfinityUpgrade>());
-            modRecipe.AddIngredient(mod.GetItem("PlacementWrench"));
+            modRecipe.AddIngredient(ModContent.ItemType<PlacementWrench>());
             modRecipe.AddTile(TileID.TinkerersWorkbench);
             modRecipe.SetResult(this);
             modRecipe.AddRecipe();

@@ -26,7 +26,7 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
+            player.AddBuff(ModContent.BuffType<Buffs.InfinitePlacementBuff>(), 10);
         }
 
         public override void AddRecipes()
@@ -34,10 +34,10 @@ namespace BuilderEssentials.Items.Accessories
             //Not really worried about balancing at this point
             ModRecipe modRecipe = new ModRecipe(mod);
             modRecipe.AddIngredient(ItemID.LunarBar, 40);
-            modRecipe.AddIngredient(ItemID.FragmentNebula, 20);
             modRecipe.AddIngredient(ItemID.FragmentSolar, 20);
-            modRecipe.AddIngredient(ItemID.FragmentStardust, 20);
             modRecipe.AddIngredient(ItemID.FragmentVortex, 20);
+            modRecipe.AddIngredient(ItemID.FragmentNebula, 20);
+            modRecipe.AddIngredient(ItemID.FragmentStardust, 20);
             modRecipe.AddTile(TileID.LunarCraftingStation);
             modRecipe.SetResult(this);
             modRecipe.AddRecipe();

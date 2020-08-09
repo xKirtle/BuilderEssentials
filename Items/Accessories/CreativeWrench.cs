@@ -56,7 +56,7 @@ namespace BuilderEssentials.Items.Accessories
 
                 //Infinite Placement
                 if (modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinitePlacement.ToInt()))
-                    player.AddBuff(mod.BuffType("InfinitePlacementBuff"), 10);
+                    player.AddBuff(ModContent.BuffType<Buffs.InfinitePlacementBuff>(), 10);
 
                 //Right click timer
                 if (Main.mouseRight && Tools.IsUIAvailable() && player.HeldItem.IsAir &&

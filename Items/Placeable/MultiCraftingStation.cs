@@ -32,10 +32,10 @@ namespace BuilderEssentials.Items.Placeable
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(mod.GetItem("PreHardmodeCraftingStation"));
-            recipe.AddIngredient(mod.GetItem("HardmodeCraftingStation"));
-            recipe.AddIngredient(mod.GetItem("SpecializedCraftingStation"));
-            recipe.AddIngredient(mod.GetItem("ThemedFurnitureCraftingStation"));
+            recipe.AddIngredient(GetModItem(ItemType<PreHardmodeCraftingStation>()));
+            recipe.AddIngredient(GetModItem(ItemType<HardmodeCraftingStation>()));
+            recipe.AddIngredient(GetModItem(ItemType<SpecializedCraftingStation>()));
+            recipe.AddIngredient(GetModItem(ItemType<ThemedFurnitureCraftingStation>()));
             recipe.AddTile(TileID.TinkerersWorkbench);
             recipe.SetResult(this);
             recipe.AddRecipe();
