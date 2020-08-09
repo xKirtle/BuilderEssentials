@@ -50,8 +50,8 @@ namespace BuilderEssentials.UI
             }
 
             //SideMenu Shapes UI
-            if (Tools.UIPanelLogic(SideMenu.SideMenuArrowPanel, ref SideMenu.SideMenuArrowUIOpen, ref SideMenu.IsSideMenuArrowUIVisible))
-                SideMenu.CreateSideMenuArrowPanel(this);
+            if (Tools.UIPanelLogic(SideMenuArrow.SideMenuArrowPanel, ref SideMenuArrow.SideMenuArrowUIOpen, ref SideMenuArrow.IsSideMenuArrowUIVisible, false))
+                SideMenuArrow.CreateSideMenuArrowPanel(this);
 
             //CreativeWrench Wheel UI
             if (Tools.UIPanelLogic(CreativeWheel.CreativeWheelPanel, ref CreativeWheel.CreativeWheelUIOpen, ref CreativeWheel.IsCreativeWheelVisible))

@@ -90,10 +90,10 @@ namespace BuilderEssentials.Utilities
             return inRange;
         }
 
-        public static bool UIPanelLogic(UIPanel UIPanel, ref bool UIOpen, ref bool UIVisible)
+        public static bool UIPanelLogic(UIPanel UIPanel, ref bool UIOpen, ref bool UIVisible, bool closeWithInventory = true)
         {
             BasePanel.hoverText?.Remove();
-            if (UIPanel != null && Main.playerInventory)
+            if (closeWithInventory && UIPanel != null && Main.playerInventory)
             {
                 UIPanel.Remove();
                 UIOpen = false;
