@@ -1,4 +1,7 @@
-﻿using Terraria;
+﻿using BuilderEssentials.Utilities;
+using System.Linq;
+using System.Security.Policy;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,6 +15,7 @@ namespace BuilderEssentials.Items
         {
             Tooltip.SetDefault("Necessary to use the Super Painting Tool");
         }
+
         public override void SetDefaults()
         {
             item.height = 20;
@@ -37,6 +41,48 @@ namespace BuilderEssentials.Items
             recipe.AddTile(TileID.DyeVat);
             recipe.SetResult(this);
             recipe.AddRecipe();
+        }
+
+        bool paintSelected;
+        public override void UpdateInventory(Player player)
+        {
+            if (paintSelected)
+            {
+                //Works fine until inventory is full, not very good
+                int index = Tools.FindNextEmptyInventorySlot();
+                if (index == -1) index = player.inventory.Length;
+                player.inventory[index].stack = 999;
+                player.inventory[index].paint = 1;
+
+                Main.NewText(index);
+            }
+        }
+
+
+        //TODO: MAKE COLOR SELECTION UI (ALSO REPLACE ALTFUNCTIONUSE WITH UPDATEINVENTORY) AND FINISH THE GLOBAL ITEM USEITEM REPLACEMENT
+        public override bool AltFunctionUse(Player player)
+        {
+            Main.NewText("asd");
+            paintSelected = true;
+
+            return true;
+        }
+    }
+
+    public class asd : GlobalItem
+    {
+        public override bool UseItem(Item item, Player player)
+        {
+            if (item.type == ItemID.SpectrePaintbrush || item.type == ItemID.SpectrePaintRoller || item.type == ItemID.SpectrePaintScraper)
+            {
+                foreach (Item invItem in player.inventory)
+                {
+                    //if infinitepaintbucket is in inventory and has a color selected, manually paint pointed coords with selected byte color
+                    //if paint is in inventory, manually paint pointed coords with the first paint (lowest inv index)
+                }
+            }
+
+            return base.UseItem(item, player);
         }
     }
 }
