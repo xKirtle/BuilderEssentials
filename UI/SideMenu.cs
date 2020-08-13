@@ -1,7 +1,4 @@
-﻿using IL.Terraria.World.Generation;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Steamworks;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -9,7 +6,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.UI
 {
-    class SideMenu : UIPanel
+    class SideMenu
     {
         public static UIPanel SideMenuPanel;
         private static float SideMenuWidth;
@@ -72,7 +69,6 @@ namespace BuilderEssentials.UI
             };
             SideMenuPanel.Append(closeMenuCross);
 
-            //Shapes Options
             List<UIImage> ShapesMenuList = new List<UIImage>(8);
             bool[] optionSelected = new bool[8];
 
@@ -95,7 +91,7 @@ namespace BuilderEssentials.UI
                 SideMenuPanel.Append(tempUIImage);
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++) //Bottom Row
             {
                 int index = i;
                 UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 5}"));
@@ -114,53 +110,43 @@ namespace BuilderEssentials.UI
 
             void SMClicked(int index)
             {
-                //TODO: REFACTOR THIS FUNCTION, UGLY MESS
                 optionSelected[index] = !optionSelected[index];
+                isMirrorEnabled = optionSelected[4];
+                isFillEnabled = optionSelected[7];
 
-                if (index == 4) //Mirror
-                    isMirrorEnabled = optionSelected[index];
-
-                if (index == 7) //Fill
-                    isFillEnabled = optionSelected[index];
-
-                SetUIImage(index);
-                void SetUIImage(int someIndex)
+                for (int i = 0; i < 8; i++)
                 {
-                    if (optionSelected[someIndex] && !isFillEnabled)
-                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMAlternate{someIndex + 1}"));
-                    else if (!optionSelected[someIndex] && !isFillEnabled)
-                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SM{someIndex + 1}"));
-                    else if (optionSelected[someIndex] && isFillEnabled)
-                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFillAlternate{someIndex + 1}"));
-                    else if (!optionSelected[someIndex] && isFillEnabled)
-                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFill{someIndex + 1}"));
+                    if (i == index || i == 4 || i == 7)
+                        continue;
 
-                    //Mirror stuff
-                    if (optionSelected[someIndex] && isMirrorEnabled && isFillEnabled && (someIndex == 5 || someIndex == 6))
-                    ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFillAlternateMirror{someIndex + 1}"));
-                    else if (optionSelected[someIndex] && isMirrorEnabled && !isFillEnabled && (someIndex == 5 || someIndex == 6))
-                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMAlternateMirror{someIndex + 1}"));
-                    else if (!optionSelected[someIndex] && isMirrorEnabled && isFillEnabled && (someIndex == 5 || someIndex == 6))
-                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFillMirror{someIndex + 1}"));
-                    else if (!optionSelected[someIndex] && isMirrorEnabled && !isFillEnabled && (someIndex == 5 || someIndex == 6))
-                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMMirror{someIndex + 1}"));
+                    if (index != 4 && index != 7)
+                        optionSelected[i] = false;
 
+                    int tempIndex = i;
+                    SetUIImage(tempIndex);
+                    SetUIImage(tempIndex);
                 }
 
-                if (index == 4 || index == 7)
+                SetUIImage(index);
+
+                void SetUIImage(int someIndex)
                 {
-                    for (int i = 0; i < 8; i++)
-                    {
-                        int tempIndex = i;
-                        SetUIImage(tempIndex);
-                        SetUIImage(tempIndex);
-                    }
+                    string texture = textureLocation + "SM";
+                    if (isFillEnabled)
+                        texture += "Fill";
+                    if (optionSelected[someIndex])
+                        texture += "Alternate";
+                    if (isMirrorEnabled && (someIndex == 5 || someIndex == 6))
+                        texture += "Mirror";
+                    texture += $"{someIndex + 1}";
+
+                    ShapesMenuList[someIndex].SetImage(GetTexture(texture));
                 }
             }
         }
     }
 
-    class SideMenuArrow : UIPanel
+    class SideMenuArrow
     {
         public static UIPanel SideMenuArrowPanel;
         private static float SideMenuArrowWidth;
