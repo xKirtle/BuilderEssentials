@@ -9,6 +9,7 @@ namespace BuilderEssentials.Items
 {
     class MirrorWand : ModItem
     {
+        //TODO: MAKE MIRROR SELECTION BE SAVED PER WORLD, RATHER THAN ON THE MOD ITSELF
         public override string Texture => "BuilderEssentials/Textures/Items/MirrorWand";
 
         public static bool firstSelectionValue = false;
