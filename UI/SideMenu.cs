@@ -1,8 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using IL.Terraria.World.Generation;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Steamworks;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
-using Terraria.UI;
+using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.UI
 {
@@ -15,31 +18,150 @@ namespace BuilderEssentials.UI
         public static bool SideMenuUIOpen;
         public static bool Hovering = SideMenuPanel != null && SideMenuPanel.IsMouseHovering && IsSideMenuUIVisible;
 
+        private static bool isFillEnabled = false;
+        private static bool isMirrorEnabled = false;
+
         public static UIPanel CreateSideMenuPanel(BasePanel basePanel)
         {
-            SideMenuWidth = 250f;
-            SideMenuHeight = 250f;
+            SideMenuWidth = 294f;
+            SideMenuHeight = 175f;
 
             SideMenuPanel = new UIPanel();
             SideMenuPanel.VAlign = 0f;
             SideMenuPanel.HAlign = 0f;
             SideMenuPanel.Width.Set(SideMenuWidth, 0);
             SideMenuPanel.Height.Set(SideMenuHeight, 0);
-            SideMenuPanel.Left.Set(Main.screenWidth / 2 - SideMenuWidth, 0);
-            SideMenuPanel.Top.Set(Main.screenHeight / 2 - SideMenuHeight, 0);
+            SideMenuPanel.Left.Set(10f, 0);
+            SideMenuPanel.Top.Set(Main.screenHeight / 2 - SideMenuHeight / 2, 0);
             SideMenuPanel.BorderColor = Color.Red;
-            SideMenuPanel.BackgroundColor = Color.Black;
+            SideMenuPanel.BackgroundColor = Color.Transparent;
             SideMenuPanel.OnClick += (__, _) => { };
+
+            CreateLayout(basePanel);
 
             SideMenuArrow.SideMenuArrowPanel.Remove();
             basePanel.Append(SideMenuPanel);
 
             return SideMenuPanel;
         }
+
+        private static void CreateLayout(BasePanel basePanel)
+        {
+            //Background
+            UIImage SMBackground = new UIImage(GetTexture("BuilderEssentials/Textures/UIElements/ShapesMenu/Background"));
+            SMBackground.VAlign = 0f;
+            SMBackground.HAlign = 0f;
+            SMBackground.Width.Set(0, 0);
+            SMBackground.Height.Set(0f, 0);
+            SMBackground.Left.Set(-12f, 0);
+            SMBackground.Top.Set(-12f, 0);
+            SideMenuPanel.Append(SMBackground);
+
+            //Cross to Close Menu
+            UIImage closeMenuCross = new UIImage(GetTexture("BuilderEssentials/Textures/UIElements/ShapesMenu/CloseCross"));
+            closeMenuCross.VAlign = 0f;
+            closeMenuCross.HAlign = 0f;
+            closeMenuCross.Width.Set(19f, 0);
+            closeMenuCross.Height.Set(19f, 0);
+            closeMenuCross.Left.Set(SideMenuWidth - 35f, 0);
+            closeMenuCross.Top.Set(-7f, 0);
+            closeMenuCross.OnClick += (__, _) =>
+            {
+                SideMenuPanel.Remove();
+                SideMenuArrow.CreateSideMenuArrowPanel(basePanel);
+            };
+            SideMenuPanel.Append(closeMenuCross);
+
+            //Shapes Options
+            List<UIImage> ShapesMenuList = new List<UIImage>(8);
+            bool[] optionSelected = new bool[8];
+
+            string textureLocation = "BuilderEssentials/Textures/UIElements/ShapesMenu/";
+
+            for (int i = 0; i < 4; i++) //Top Row
+            {
+                int index = i;
+                UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 1}"));
+                tempUIImage.VAlign = 0f;
+                tempUIImage.HAlign = 0f;
+                tempUIImage.Width.Set(36f, 0);
+                tempUIImage.Height.Set(36f, 0);
+                tempUIImage.Left.Set(i * 70 + 3f, 0);
+                tempUIImage.Top.Set(30f, 0);
+                tempUIImage.OnClick += (__, _) => SMClicked(index);
+
+                optionSelected[index] = false;
+                ShapesMenuList.Add(tempUIImage);
+                SideMenuPanel.Append(tempUIImage);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                int index = i;
+                UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 5}"));
+                tempUIImage.VAlign = 0f;
+                tempUIImage.HAlign = 0f;
+                tempUIImage.Width.Set(36f, 0);
+                tempUIImage.Height.Set(36f, 0);
+                tempUIImage.Left.Set(i * 70 + 3f, 0);
+                tempUIImage.Top.Set(95f, 0);
+                tempUIImage.OnClick += (__, _) => SMClicked(index + 4);
+
+                optionSelected[index + 4] = false;
+                ShapesMenuList.Add(tempUIImage);
+                SideMenuPanel.Append(tempUIImage);
+            }
+
+            void SMClicked(int index)
+            {
+                //TODO: REFACTOR THIS FUNCTION, UGLY MESS
+                optionSelected[index] = !optionSelected[index];
+
+                if (index == 4) //Mirror
+                    isMirrorEnabled = optionSelected[index];
+
+                if (index == 7) //Fill
+                    isFillEnabled = optionSelected[index];
+
+                SetUIImage(index);
+                void SetUIImage(int someIndex)
+                {
+                    if (optionSelected[someIndex] && !isFillEnabled)
+                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMAlternate{someIndex + 1}"));
+                    else if (!optionSelected[someIndex] && !isFillEnabled)
+                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SM{someIndex + 1}"));
+                    else if (optionSelected[someIndex] && isFillEnabled)
+                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFillAlternate{someIndex + 1}"));
+                    else if (!optionSelected[someIndex] && isFillEnabled)
+                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFill{someIndex + 1}"));
+
+                    //Mirror stuff
+                    if (optionSelected[someIndex] && isMirrorEnabled && isFillEnabled && (someIndex == 5 || someIndex == 6))
+                    ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFillAlternateMirror{someIndex + 1}"));
+                    else if (optionSelected[someIndex] && isMirrorEnabled && !isFillEnabled && (someIndex == 5 || someIndex == 6))
+                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMAlternateMirror{someIndex + 1}"));
+                    else if (!optionSelected[someIndex] && isMirrorEnabled && isFillEnabled && (someIndex == 5 || someIndex == 6))
+                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMFillMirror{someIndex + 1}"));
+                    else if (!optionSelected[someIndex] && isMirrorEnabled && !isFillEnabled && (someIndex == 5 || someIndex == 6))
+                        ShapesMenuList[someIndex].SetImage(GetTexture(textureLocation + $"SMMirror{someIndex + 1}"));
+
+                }
+
+                if (index == 4 || index == 7)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int tempIndex = i;
+                        SetUIImage(tempIndex);
+                        SetUIImage(tempIndex);
+                    }
+                }
+            }
+        }
     }
 
     class SideMenuArrow : UIPanel
-    { 
+    {
         public static UIPanel SideMenuArrowPanel;
         private static float SideMenuArrowWidth;
         private static float SideMenuArrowHeight;
@@ -71,7 +193,7 @@ namespace BuilderEssentials.UI
 
         private static void CreateLayout()
         {
-            UIImage sideArrow = new UIImage(BuilderEssentials.SideMenu);
+            UIImage sideArrow = new UIImage(GetTexture("BuilderEssentials/Textures/UIElements/SideMenu"));
             sideArrow.VAlign = 0f;
             sideArrow.HAlign = 0f;
             sideArrow.Width.Set(15f, 0);
