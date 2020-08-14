@@ -110,17 +110,48 @@ namespace BuilderEssentials.UI
 
             void SMClicked(int index)
             {
+                //TODO: ADD SOME VISUAL CLUE THAT USER CANT SELECT HALF CIRCLES/ELIPSES WHILE SQUARE/RECTANGLE IS SELECTED
                 optionSelected[index] = !optionSelected[index];
                 isMirrorEnabled = optionSelected[4];
                 isFillEnabled = optionSelected[7];
 
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    if (i == index || i == 4 || i == 7)
+                    if (i == index)
                         continue;
 
-                    if (index != 4 && index != 7)
-                        optionSelected[i] = false;
+                    if (index < 4)
+                    optionSelected[i] = false;
+
+                    int tempIndex = i;
+                    SetUIImage(tempIndex);
+                    SetUIImage(tempIndex);
+                }
+
+                for (int i = 4; i < 8; i++)
+                {
+                    if (i == index)
+                        continue;
+
+                    //Allows only one at a time (half circles/elipses)
+                    if (optionSelected[5] && optionSelected[6])
+                    {
+                        if (index != 5)
+                            optionSelected[5] = false;
+                        else
+                            optionSelected[6] = false;
+                    }
+
+                    //Half circles/elipses cannot be toggled if selected is a square/rectangle
+                    if ((index == 5 || index == 6) && (optionSelected[2] || optionSelected[3]))
+                        optionSelected[index] = false;
+
+                    //Disables half circles/elipses if square/rectangle is selected
+                    if (index == 2 || index == 3)
+                    {
+                        optionSelected[5] = false;
+                        optionSelected[6] = false;
+                    }
 
                     int tempIndex = i;
                     SetUIImage(tempIndex);
