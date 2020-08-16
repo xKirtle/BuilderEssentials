@@ -146,8 +146,8 @@ namespace BuilderEssentials.UI
                     if ((index == 5 || index == 6) && (optionSelected[2] || optionSelected[3]))
                         optionSelected[index] = false;
 
-                    //Disables half circles/elipses if square/rectangle is selected
-                    if (index == 2 || index == 3)
+                    //Disables half circles/elipses if square/rectangle is selected or if both circle and elipse are not selected
+                    if (index == 2 || index == 3 || (!optionSelected[0] && !optionSelected[1]))
                     {
                         optionSelected[5] = false;
                         optionSelected[6] = false;
@@ -183,7 +183,7 @@ namespace BuilderEssentials.UI
         private static float SideMenuArrowWidth;
         private static float SideMenuArrowHeight;
         public static bool IsSideMenuArrowUIVisible;
-        public static bool SideMenuArrowUIOpen;
+        public static bool SideMenuArrowUIOpen = true;
         public static bool Hovering = SideMenuArrowPanel != null && SideMenuArrowPanel.IsMouseHovering && IsSideMenuArrowUIVisible;
 
         public static UIPanel CreateSideMenuArrowPanel(BasePanel basePanel)
