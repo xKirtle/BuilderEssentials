@@ -21,10 +21,6 @@ namespace BuilderEssentials
         public static List<Texture2D> PaintTools;
         public static List<Texture2D> WandWheelElements;
         public static List<Texture2D> AutoHammerElements;
-        internal static BasePanel BasePanel;
-        internal static TransparentSelectionUI TransparentSelectionUI;
-        internal static UserInterface UserInterface;
-        internal static UserInterface TransparentSelectionInterface;
         internal static ModHotKey ToggleBuildingMode;
         internal static ModHotKey IncreaseFillToolSize;
         internal static ModHotKey DecreaseFillToolSize;
@@ -45,16 +41,26 @@ namespace BuilderEssentials
                 TransparentSelectionUI = new TransparentSelectionUI();
                 TransparentSelectionUI.Activate();
                 TransparentSelectionInterface = new UserInterface();
-                ShowExperimentalInterface();
+                TransparentSelectionInterface.SetState(TransparentSelectionUI);
 
                 UserInterface = new UserInterface();
                 BasePanel = new BasePanel();
                 BasePanel.Activate();
-                ShowUserInterface();
+                UserInterface.SetState(BasePanel);
+
+                BuildingModeInterface = new UserInterface();
+                BMState = new BuildingModeState();
+                BMState.Activate();
+                BuildingModeInterface.SetState(BMState);
+
+                ShapesMenuInterface = new UserInterface();
+                ShapesMenu = new ShapesMenu();
+                ShapesMenu.Activate();
+                ShapesMenuInterface.SetState(ShapesMenu);
             }
         }
 
-        public void LoadTextures()
+        private void LoadTextures()
         {
             BuildingModeOn = GetTexture("Textures/UIElements/BuildingModeOn");
             BuildingModeOff = GetTexture("Textures/UIElements/BuildingModeOff");
@@ -135,6 +141,15 @@ namespace BuilderEssentials
                 AutoHammerElements[i] = null;
         }
 
+
+        internal static UserInterface UserInterface;
+        internal static BasePanel BasePanel;
+        internal static UserInterface TransparentSelectionInterface;
+        internal static TransparentSelectionUI TransparentSelectionUI;
+        internal static UserInterface BuildingModeInterface;
+        internal static BuildingModeState BMState;
+        internal static UserInterface ShapesMenuInterface;
+        internal static ShapesMenu ShapesMenu;
         private GameTime _lastUpdateUiGameTime;
         public override void UpdateUI(GameTime gameTime)
         {
@@ -144,6 +159,12 @@ namespace BuilderEssentials
 
             if (TransparentSelectionInterface?.CurrentState != null)
                 TransparentSelectionInterface.Update(gameTime);
+
+            if (BuildingModeInterface?.CurrentState != null)
+                BuildingModeInterface.Update(gameTime);
+
+            if (ShapesMenuInterface?.CurrentState != null)
+                ShapesMenuInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -156,7 +177,7 @@ namespace BuilderEssentials
                     "Builder Essentials: TransparentSelection",
                     delegate
                     {
-                        if (_lastUpdateUiGameTime != null && UserInterface?.CurrentState != null)
+                        if (_lastUpdateUiGameTime != null && TransparentSelectionInterface?.CurrentState != null)
                         {
                             TransparentSelectionInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
                         }
@@ -179,12 +200,39 @@ namespace BuilderEssentials
                     },
                        InterfaceScaleType.UI));
             }
-        }
 
-        public static void ShowUserInterface() => UserInterface?.SetState(BasePanel);
-        public static void HideUserInterface() => UserInterface?.SetState(null);
-        public static void ShowExperimentalInterface() => TransparentSelectionInterface?.SetState(TransparentSelectionUI);
-        public static void HideExperimentalInterface() => TransparentSelectionInterface?.SetState(null);
+            interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
+            if (interfaceLayer != -1)
+            {
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
+                    "Builder Essentials: BuildingMode",
+                    delegate
+                    {
+                        if (_lastUpdateUiGameTime != null && BuildingModeInterface?.CurrentState != null)
+                        {
+                            BuildingModeInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                        }
+                        return true;
+                    },
+                       InterfaceScaleType.UI));
+            }
+
+            interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+            if (interfaceLayer != -1)
+            {
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
+                    "Builder Essentials: ShapesMenu",
+                    delegate
+                    {
+                        if (_lastUpdateUiGameTime != null && ShapesMenuInterface?.CurrentState != null)
+                        {
+                            ShapesMenuInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                        }
+                        return true;
+                    },
+                       InterfaceScaleType.UI));
+            }
+        }
 
         public override void PreSaveAndQuit()
         {
