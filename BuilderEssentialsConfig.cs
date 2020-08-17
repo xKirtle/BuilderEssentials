@@ -1,6 +1,4 @@
-﻿using BuilderEssentials.Utilities;
-using Terraria;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
 namespace BuilderEssentials

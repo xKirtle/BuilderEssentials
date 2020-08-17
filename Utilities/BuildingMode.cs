@@ -4,7 +4,7 @@ using Terraria;
 
 namespace BuilderEssentials.Utilities
 {
-    public static partial class BuildingMode
+    public static class BuildingMode
     {
         public static bool IsNormalAccessories = true;
         //Variables updated through ModConfig
@@ -159,7 +159,7 @@ namespace BuilderEssentials.Utilities
         public static void UpdateButtonImage()
         {
             Texture2D texture = IsNormalAccessories ? BuilderEssentials.BuildingModeOff : BuilderEssentials.BuildingModeOn;
-            BasePanel.buildingModeButton.SetImage(texture);
+            BuildingModeState.buildingModeButton.SetImage(texture);
         }
     }
 }

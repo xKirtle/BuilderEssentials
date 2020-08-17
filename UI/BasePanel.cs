@@ -9,49 +9,14 @@ namespace BuilderEssentials.UI
 {
     public class BasePanel : UIState
     {
-        public static UIImageButton buildingModeButton;
-        public static bool isBuildingModeButtonVisible;
         public static UIText hoverText;
         static string text;
-        public override void OnInitialize()
-        {
-            buildingModeButton = new UIImageButton(BuilderEssentials.BuildingModeOff);
-            buildingModeButton.VAlign = 0f;
-            buildingModeButton.HAlign = 0f;
-            buildingModeButton.Top.Set(40f, 0);
-            buildingModeButton.Left.Set(510f, 0);
-            buildingModeButton.OnClick += ChangeAccessories_OnClick;
-            buildingModeButton.SetVisibility(0f, 0f);
-            Append(buildingModeButton);
-        }
-
-        public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)
-        {
-            if (isBuildingModeButtonVisible)
-                BuildingMode.ToggleBuildingMode();
-        }
 
         public override void Update(GameTime gameTime)
         {
             //Blocks mouse from interacting with the world when hovering on UI interfaces
-            if ((buildingModeButton.IsMouseHovering && isBuildingModeButtonVisible) ||
-            (CreativeWheel.Hovering || PaintWheel.Hovering || MultiWandWheel.Hovering || AutoHammerWheel.Hovering))
+            if (BuildingModeState.Hovering || CreativeWheel.Hovering || PaintWheel.Hovering || MultiWandWheel.Hovering || AutoHammerWheel.Hovering)
                 Main.LocalPlayer.mouseInterface = true;
-
-            if (Main.playerInventory && !isBuildingModeButtonVisible)
-            {
-                buildingModeButton.SetVisibility(1f, .4f);
-                isBuildingModeButtonVisible = true;
-            }
-            else if (!Main.playerInventory && isBuildingModeButtonVisible)
-            {
-                buildingModeButton.SetVisibility(0f, 0f);
-                isBuildingModeButtonVisible = false;
-            }
-
-            //SideMenu Shapes UI
-            if (Tools.UIPanelLogic(SideMenuArrow.SideMenuArrowPanel, ref SideMenuArrow.SideMenuArrowUIOpen, ref SideMenuArrow.IsSideMenuArrowUIVisible, false))
-                SideMenuArrow.CreateSideMenuArrowPanel(this);
 
             //CreativeWrench Wheel UI
             if (Tools.UIPanelLogic(CreativeWheel.CreativeWheelPanel, ref CreativeWheel.CreativeWheelUIOpen, ref CreativeWheel.IsCreativeWheelVisible))
