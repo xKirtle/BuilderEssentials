@@ -2,72 +2,101 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.UI;
 using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.UI
 {
-    class SideMenu
+    class ShapesMenu : UIState
     {
-        public static UIPanel SideMenuPanel;
-        private static float SideMenuWidth;
-        private static float SideMenuHeight;
-        public static bool IsSideMenuUIVisible;
-        public static bool SideMenuUIOpen;
-        public static bool Hovering = SideMenuPanel != null && SideMenuPanel.IsMouseHovering && IsSideMenuUIVisible;
+        public static ShapesMenu Instance;
+        public override void OnInitialize()
+        {
+            Instance = this;
+
+            CreateArrowPanel();
+        }
+
+        #region ArrowPanel
+        public static UIPanel ArrowPanel;
+        private static float ArrowWidth;
+        private static float ArrowHeight;
+
+        public static void CreateArrowPanel()
+        {
+            ArrowWidth = 30f;
+            ArrowHeight = 44f;
+
+            ArrowPanel = new UIPanel();
+            ArrowPanel.Width.Set(ArrowWidth, 0);
+            ArrowPanel.Height.Set(ArrowHeight, 0);
+            ArrowPanel.Left.Set(-4f, 0);
+            ArrowPanel.Top.Set(Main.screenHeight / 2, 0);
+            ArrowPanel.BorderColor = Color.Transparent;
+            ArrowPanel.BackgroundColor = Color.Transparent;
+            ArrowPanel.OnClick += (__, _) => { ArrowPanel.Remove(); CreateShapesMenuPanel(); };
+
+            UIImage ArrowPanelImage = new UIImage(GetTexture("BuilderEssentials/Textures/UIElements/SideMenu"));
+            ArrowPanelImage.Width.Set(15f, 0);
+            ArrowPanelImage.Height.Set(44f, 0);
+            ArrowPanelImage.Left.Set(-9f, 0);
+            ArrowPanelImage.Top.Set(-11f, 0);
+
+            ArrowPanel.Append(ArrowPanelImage);
+            Instance.Append(ArrowPanel);
+        }
+        #endregion
+
+        #region ShapesMenuPanel
+        public static DraggableUIPanel SMPanel;
+        private static float SMWidth;
+        private static float SMHeight;
 
         private static bool isFillEnabled = false;
         private static bool isMirrorEnabled = false;
-
-        public static UIPanel CreateSideMenuPanel(BasePanel basePanel)
+        public static void CreateShapesMenuPanel()
         {
-            SideMenuWidth = 294f;
-            SideMenuHeight = 175f;
+            SMWidth = 294f;
+            SMHeight = 175f;
 
-            SideMenuPanel = new UIPanel();
-            SideMenuPanel.VAlign = 0f;
-            SideMenuPanel.HAlign = 0f;
-            SideMenuPanel.Width.Set(SideMenuWidth, 0);
-            SideMenuPanel.Height.Set(SideMenuHeight, 0);
-            SideMenuPanel.Left.Set(10f, 0);
-            SideMenuPanel.Top.Set(Main.screenHeight / 2 - SideMenuHeight / 2, 0);
-            SideMenuPanel.BorderColor = Color.Red;
-            SideMenuPanel.BackgroundColor = Color.Transparent;
-            SideMenuPanel.OnClick += (__, _) => { };
+            SMPanel = new DraggableUIPanel();
+            SMPanel.Width.Set(SMWidth, 0);
+            SMPanel.Height.Set(SMHeight, 0);
+            SMPanel.Left.Set(10f, 0);
+            SMPanel.Top.Set(Main.screenHeight / 2 - SMHeight / 2, 0);
+            SMPanel.BorderColor = Color.Red;
+            SMPanel.BackgroundColor = Color.Transparent;
+            SMPanel.OnMouseDown += (element, listener) => 
+            {
+                Vector2 SMPosition = new Vector2(SMPanel.Left.Pixels, SMPanel.Top.Pixels);
+                Vector2 clickPos = Vector2.Subtract(element.MousePosition, SMPosition);
+                DraggableUIPanel.canDrag = clickPos.Y >= 0 && clickPos.Y <= 25;
+            };
 
-            CreateLayout(basePanel);
+            CreateLayout();
 
-            SideMenuArrow.SideMenuArrowPanel.Remove();
-            basePanel.Append(SideMenuPanel);
-
-            return SideMenuPanel;
+            ArrowPanel.Remove();
+            Instance.Append(SMPanel);
         }
 
-        private static void CreateLayout(BasePanel basePanel)
+        private static void CreateLayout()
         {
             //Background
             UIImage SMBackground = new UIImage(GetTexture("BuilderEssentials/Textures/UIElements/ShapesMenu/Background"));
-            SMBackground.VAlign = 0f;
-            SMBackground.HAlign = 0f;
             SMBackground.Width.Set(0, 0);
             SMBackground.Height.Set(0f, 0);
             SMBackground.Left.Set(-12f, 0);
             SMBackground.Top.Set(-12f, 0);
-            SideMenuPanel.Append(SMBackground);
+            SMPanel.Append(SMBackground);
 
             //Cross to Close Menu
             UIImage closeMenuCross = new UIImage(GetTexture("BuilderEssentials/Textures/UIElements/ShapesMenu/CloseCross"));
-            closeMenuCross.VAlign = 0f;
-            closeMenuCross.HAlign = 0f;
             closeMenuCross.Width.Set(19f, 0);
             closeMenuCross.Height.Set(19f, 0);
-            closeMenuCross.Left.Set(SideMenuWidth - 35f, 0);
+            closeMenuCross.Left.Set(SMWidth - 35f, 0);
             closeMenuCross.Top.Set(-7f, 0);
-            closeMenuCross.OnClick += (__, _) =>
-            {
-                SideMenuPanel.Remove();
-                SideMenuArrow.CreateSideMenuArrowPanel(basePanel);
-            };
-            SideMenuPanel.Append(closeMenuCross);
+            closeMenuCross.OnClick += (__, _) => { SMPanel.Remove(); CreateArrowPanel(); };
+            SMPanel.Append(closeMenuCross);
 
             List<UIImage> ShapesMenuList = new List<UIImage>(8);
             bool[] optionSelected = new bool[8];
@@ -78,8 +107,6 @@ namespace BuilderEssentials.UI
             {
                 int index = i;
                 UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 1}"));
-                tempUIImage.VAlign = 0f;
-                tempUIImage.HAlign = 0f;
                 tempUIImage.Width.Set(36f, 0);
                 tempUIImage.Height.Set(36f, 0);
                 tempUIImage.Left.Set(i * 70 + 3f, 0);
@@ -88,15 +115,13 @@ namespace BuilderEssentials.UI
 
                 optionSelected[index] = false;
                 ShapesMenuList.Add(tempUIImage);
-                SideMenuPanel.Append(tempUIImage);
+                SMPanel.Append(tempUIImage);
             }
 
             for (int i = 0; i < 4; i++) //Bottom Row
             {
                 int index = i;
                 UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 5}"));
-                tempUIImage.VAlign = 0f;
-                tempUIImage.HAlign = 0f;
                 tempUIImage.Width.Set(36f, 0);
                 tempUIImage.Height.Set(36f, 0);
                 tempUIImage.Left.Set(i * 70 + 3f, 0);
@@ -105,7 +130,7 @@ namespace BuilderEssentials.UI
 
                 optionSelected[index + 4] = false;
                 ShapesMenuList.Add(tempUIImage);
-                SideMenuPanel.Append(tempUIImage);
+                SMPanel.Append(tempUIImage);
             }
 
             void SMClicked(int index)
@@ -121,7 +146,7 @@ namespace BuilderEssentials.UI
                         continue;
 
                     if (index < 4)
-                    optionSelected[i] = false;
+                        optionSelected[i] = false;
 
                     int tempIndex = i;
                     SetUIImage(tempIndex);
@@ -175,50 +200,16 @@ namespace BuilderEssentials.UI
                 }
             }
         }
-    }
 
-    class SideMenuArrow
-    {
-        public static UIPanel SideMenuArrowPanel;
-        private static float SideMenuArrowWidth;
-        private static float SideMenuArrowHeight;
-        public static bool IsSideMenuArrowUIVisible;
-        public static bool SideMenuArrowUIOpen = true;
-        public static bool Hovering = SideMenuArrowPanel != null && SideMenuArrowPanel.IsMouseHovering && IsSideMenuArrowUIVisible;
+        #endregion
 
-        public static UIPanel CreateSideMenuArrowPanel(BasePanel basePanel)
+        public override void Update(GameTime gameTime)
         {
-            SideMenuArrowWidth = 30f;
-            SideMenuArrowHeight = 44f;
+            if ((SMPanel != null && SMPanel.IsMouseHovering) || (ArrowPanel != null && ArrowPanel.IsMouseHovering))
+                Main.LocalPlayer.mouseInterface = true;
 
-            SideMenuArrowPanel = new UIPanel();
-            SideMenuArrowPanel.VAlign = 0f;
-            SideMenuArrowPanel.HAlign = 0f;
-            SideMenuArrowPanel.Width.Set(SideMenuArrowWidth, 0);
-            SideMenuArrowPanel.Height.Set(SideMenuArrowHeight, 0);
-            SideMenuArrowPanel.Left.Set(-4f, 0);
-            SideMenuArrowPanel.Top.Set(Main.screenHeight / 2, 0);
-            SideMenuArrowPanel.BorderColor = Color.Transparent;
-            SideMenuArrowPanel.BackgroundColor = Color.Transparent;
-            SideMenuArrowPanel.OnClick += (__, _) => { SideMenu.CreateSideMenuPanel(basePanel); };
-
-            CreateLayout();
-            basePanel.Append(SideMenuArrowPanel);
-
-            return SideMenuArrowPanel;
-        }
-
-        private static void CreateLayout()
-        {
-            UIImage sideArrow = new UIImage(GetTexture("BuilderEssentials/Textures/UIElements/SideMenu"));
-            sideArrow.VAlign = 0f;
-            sideArrow.HAlign = 0f;
-            sideArrow.Width.Set(15f, 0);
-            sideArrow.Height.Set(44f, 0);
-            sideArrow.Left.Set(-9f, 0);
-            sideArrow.Top.Set(-11f, 0);
-
-            SideMenuArrowPanel.Append(sideArrow);
+            if (DraggableUIPanel.canDrag)
+                SMPanel.UpdatePosition();
         }
     }
 }
