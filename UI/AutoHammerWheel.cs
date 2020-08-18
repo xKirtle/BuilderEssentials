@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
 
 namespace BuilderEssentials.UI
@@ -20,14 +16,12 @@ namespace BuilderEssentials.UI
         public static bool AutoHammerUIOpen;
         public static bool Hovering = AutoHammerWheelPanel != null && AutoHammerWheelPanel.IsMouseHovering && IsAutoHammerUIVisible;
 
-        public static UIPanel CreateAutoHammerWheelPanel(int mouseX, int mouseY, BasePanel basePanel)
+        public static void CreateAutoHammerWheelPanel(int mouseX, int mouseY)
         {
             AutoHammerWheelWidth = 250f;
             AutoHammerWheelHeight = 250f;
 
             AutoHammerWheelPanel = new UIPanel();
-            AutoHammerWheelPanel.VAlign = 0f;
-            AutoHammerWheelPanel.HAlign = 0f;
             AutoHammerWheelPanel.Width.Set(AutoHammerWheelWidth, 0);
             AutoHammerWheelPanel.Height.Set(AutoHammerWheelHeight, 0);
             AutoHammerWheelPanel.Left.Set(mouseX - AutoHammerWheelWidth / 2, 0);
@@ -36,9 +30,7 @@ namespace BuilderEssentials.UI
             AutoHammerWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
-            basePanel.Append(AutoHammerWheelPanel);
-
-            return AutoHammerWheelPanel;
+            ItemsWheel.Instance.Append(AutoHammerWheelPanel);
         }
 
         private static void CreateLayout()
@@ -56,8 +48,6 @@ namespace BuilderEssentials.UI
                 int index = i; //Magic values to keep the rotation aligned the way I want, sorry
                 double x = (AutoHammerWheelWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 3)));
                 double y = (AutoHammerWheelHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 3)));
-                AutoHammerElements[i].VAlign = 0f;
-                AutoHammerElements[i].HAlign = 0f;
                 AutoHammerElements[i].Left.Set((float)x, 0f);
                 AutoHammerElements[i].Top.Set((float)y, 0f);
                 AutoHammerElements[i].SetVisibility(.75f, .4f);

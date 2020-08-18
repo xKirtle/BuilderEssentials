@@ -12,7 +12,6 @@ namespace BuilderEssentials.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            SideMenuArrow.SideMenuArrowUIOpen = !SideMenuArrow.SideMenuArrowUIOpen;
         }
     }
 }

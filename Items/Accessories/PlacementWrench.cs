@@ -7,11 +7,7 @@ namespace BuilderEssentials.Items.Accessories
     class PlacementWrench : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/PlacementWrench";
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Allows infinite range");
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Allows infinite range");
 
         public override void SetDefaults()
         {

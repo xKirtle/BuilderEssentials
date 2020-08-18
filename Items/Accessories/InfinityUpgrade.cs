@@ -8,11 +8,7 @@ namespace BuilderEssentials.Items.Accessories
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/InfinityUpgrade";
 
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Infinity Upgrade");
-            Tooltip.SetDefault("Allows infinite placement");
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Allows infinite placement");
 
         public override void SetDefaults()
         {

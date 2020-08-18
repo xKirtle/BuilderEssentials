@@ -10,11 +10,7 @@ namespace BuilderEssentials.Items.Accessories
     class CreativeWrench : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/CreativeWrench";
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Useful for Building!");
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Useful for Building!");
 
         public override void SetDefaults()
         {

@@ -92,7 +92,6 @@ namespace BuilderEssentials.Utilities
 
         public static bool UIPanelLogic(UIPanel UIPanel, ref bool UIOpen, ref bool UIVisible, bool closeWithInventory = true)
         {
-            BasePanel.hoverText?.Remove();
             if (closeWithInventory && UIPanel != null && Main.playerInventory)
             {
                 UIPanel.Remove();
@@ -118,8 +117,6 @@ namespace BuilderEssentials.Utilities
         public static UIText CreateUIText(string text, int left, int top)
         {
             UIText hoverText = new UIText(text, 1, false);
-            hoverText.VAlign = 0f;
-            hoverText.HAlign = 0f;
             hoverText.Left.Set(left, 0);
             hoverText.Top.Set(top, 0);
 

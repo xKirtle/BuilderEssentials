@@ -1,3 +1,4 @@
+using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace BuilderEssentials.UI
         public static bool CreativeWheelUIOpen;
         public static bool Hovering = CreativeWheelPanel != null && CreativeWheelPanel.IsMouseHovering && IsCreativeWheelVisible;
 
-        public static UIPanel CreateCreativeWheelReworkPanel(int mouseX, int mouseY, BasePanel basePanel)
+        public static void CreateCreativeWheelReworkPanel(int mouseX, int mouseY)
         {
             modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
 
@@ -29,8 +30,6 @@ namespace BuilderEssentials.UI
             CreativeWheelReworkHeight = 250f;
 
             CreativeWheelPanel = new UIPanel();
-            CreativeWheelPanel.VAlign = 0f;
-            CreativeWheelPanel.HAlign = 0f;
             CreativeWheelPanel.Width.Set(CreativeWheelReworkWidth, 0);
             CreativeWheelPanel.Height.Set(CreativeWheelReworkHeight, 0);
             CreativeWheelPanel.Left.Set(mouseX - CreativeWheelReworkWidth / 2, 0); //mouseX - this.width/2
@@ -39,10 +38,9 @@ namespace BuilderEssentials.UI
             CreativeWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
-            basePanel.Append(CreativeWheelPanel);
-
-            return CreativeWheelPanel;
+            ItemsWheel.Instance.Append(CreativeWheelPanel);
         }
+
         private static void CreateLayout()
         {
             //Initialize the list that contains the CreativeWheel Elements, that are also intialized below
@@ -58,8 +56,6 @@ namespace BuilderEssentials.UI
                 int index = i; //Magic values to keep the rotation aligned the way I want, sorry
                 double x = (CreativeWheelReworkWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 3) - 0.3));
                 double y = (CreativeWheelReworkHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 3) - 0.3));
-                CreativeWheelElements[i].VAlign = 0f;
-                CreativeWheelElements[i].HAlign = 0f;
                 CreativeWheelElements[i].Left.Set((float)x, 0f);
                 CreativeWheelElements[i].Top.Set((float)y, 0f);
                 CreativeWheelElements[i].SetVisibility(.75f, .4f);
@@ -124,6 +120,36 @@ namespace BuilderEssentials.UI
             }
         }
 
+        private static string text;
+        private static UIText hoverText;
+        public static void HoverTextUpdate()
+        {
+            hoverText?.Remove();
+            if (CreativeWheelPanel != null && IsCreativeWheelVisible)
+            {
+                List<UIImageButton> hoveredElements = CreativeWheelElements.FindAll(x => x.IsMouseHovering == true);
+
+                //Don't need the actual list itself, just a reference of it
+                var elementsList = CreativeWheel.CreativeWheelElements;
+                foreach (var element in hoveredElements)
+                {
+                    if (element == elementsList[0])
+                        text = "Middle Click to grab a block to your inventory";
+                    if (element == elementsList[1])
+                        text = "Allows infinite placement of any block/wall";
+                    if (element == elementsList[2])
+                        text = "Select a slope and Left Mouse Click with an empty hand";
+                    if (element == elementsList[3])
+                        text = "Allows block placement in the middle of the air";
+                    if (element == elementsList[4])
+                        text = "Gives infinite pick up range";
+
+                    hoverText = Tools.CreateUIText(text, Main.mouseX + 22, Main.mouseY + 22);
+                    ItemsWheel.Instance.Append(hoverText);
+                }
+            }
+        }
+
         private static void CreateHammerLayout(int selectedIndex)
         {
             CreativeWheelHammerElements = new List<UIImageButton>(BuilderEssentials.CWAutoHammerElements.Count);
@@ -138,8 +164,6 @@ namespace BuilderEssentials.UI
                 //We add 11 to both x and y axis since that's half of the width/height on the small icons around the AutoHammer
                 double x = (CreativeWheelElements[2].Left.Pixels + 11) + (radius * Math.Cos(angle * (i + 3)));
                 double y = (CreativeWheelElements[2].Top.Pixels + 11) - (radius * Math.Sin(angle * (i + 3)));
-                CreativeWheelHammerElements[i].VAlign = 0f;
-                CreativeWheelHammerElements[i].HAlign = 0f;
                 CreativeWheelHammerElements[i].Left.Set((float)x, 0f);
                 CreativeWheelHammerElements[i].Top.Set((float)y, 0f);
                 CreativeWheelHammerElements[i].SetVisibility(.75f, .4f);

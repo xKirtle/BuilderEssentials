@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BuilderEssentials.Utilities;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 
 namespace BuilderEssentials.UI
@@ -16,14 +18,12 @@ namespace BuilderEssentials.UI
         public static bool WandsWheelUIOpen;
         public static bool Hovering = MultiWandWheelPanel != null && MultiWandWheelPanel.IsMouseHovering && IsWandsUIVisible;
 
-        public static UIPanel CreateMultiWandWheelPanel(int mouseX, int mouseY, BasePanel basePanel)
+        public static void CreateMultiWandWheelPanel(int mouseX, int mouseY)
         {
             MultiWandWheelWidth = 250f;
             MultiWandWheelHeight = 250f;
 
             MultiWandWheelPanel = new UIPanel();
-            MultiWandWheelPanel.VAlign = 0f;
-            MultiWandWheelPanel.HAlign = 0f;
             MultiWandWheelPanel.Width.Set(MultiWandWheelWidth, 0);
             MultiWandWheelPanel.Height.Set(MultiWandWheelHeight, 0);
             MultiWandWheelPanel.Left.Set(mouseX - MultiWandWheelWidth / 2, 0);
@@ -32,9 +32,7 @@ namespace BuilderEssentials.UI
             MultiWandWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
-            basePanel.Append(MultiWandWheelPanel);
-
-            return MultiWandWheelPanel;
+            ItemsWheel.Instance.Append(MultiWandWheelPanel);
         }
 
         private static void CreateLayout()
@@ -52,8 +50,6 @@ namespace BuilderEssentials.UI
                 int index = i; //Magic values to keep the rotation aligned the way I want, sorry
                 double x = (MultiWandWheelWidth / 2 - 35f) + (radius * Math.Cos(angle * (i + 3)));
                 double y = (MultiWandWheelHeight / 2 - 35f) - (radius * Math.Sin(angle * (i + 3)));
-                WandWheelElements[i].VAlign = 0f;
-                WandWheelElements[i].HAlign = 0f;
                 WandWheelElements[i].Left.Set((float)x, 0f);
                 WandWheelElements[i].Top.Set((float)y, 0f);
                 WandWheelElements[i].SetVisibility(.75f, .4f);
@@ -75,6 +71,37 @@ namespace BuilderEssentials.UI
 
             WandWheelElements[index].SetVisibility(1f, 1f);
             selectedIndex = index;
+        }
+
+        private static string text;
+        private static UIText hoverText;
+        public static void HoverTextUpdate()
+        {
+            hoverText?.Remove();
+            if (MultiWandWheelPanel != null && IsWandsUIVisible)
+            {
+                List<UIImageButton> hoveredElements = WandWheelElements.FindAll(x => x.IsMouseHovering == true);
+
+                var elementsList = WandWheelElements;
+                foreach (var element in hoveredElements)
+                {
+                    if (element == elementsList[0])
+                        text = "Places living wood (wood)";
+                    if (element == elementsList[1])
+                        text = "Places bones (bone)";
+                    if (element == elementsList[2])
+                        text = "Places leaves (wood)";
+                    if (element == elementsList[3])
+                        text = "Places Hives (hive)";
+                    if (element == elementsList[4])
+                        text = "Places living rich mahogany (rich mahogany)";
+                    if (element == elementsList[5])
+                        text = "Places rich mahogany leaves (rich mahogany)";
+
+                    hoverText = Tools.CreateUIText(text, Main.mouseX + 33, Main.mouseY + 33);
+                    ItemsWheel.Instance.Append(hoverText);
+                }
+            }
         }
 
         public static void RemovePanel()

@@ -1,10 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 
 namespace BuilderEssentials.UI
 {
@@ -20,14 +17,12 @@ namespace BuilderEssentials.UI
         public static bool IsPaintingUIVisible;
         public static bool PaintingUIOpen;
         public static bool Hovering = PaintWheelPanel != null && PaintWheelPanel.IsMouseHovering && IsPaintingUIVisible;
-        public static UIPanel CreatePaintWheel(int mouseX, int mouseY, BasePanel basePanel)
+        public static void CreatePaintWheel(int mouseX, int mouseY)
         {
             PaintWheelWidth = 300f;
             PaintWheelHeight = 200f;
 
             PaintWheelPanel = new UIPanel();
-            PaintWheelPanel.VAlign = 0f;
-            PaintWheelPanel.HAlign = 0f;
             PaintWheelPanel.Width.Set(PaintWheelWidth, 0);
             PaintWheelPanel.Height.Set(PaintWheelHeight, 0);
             PaintWheelPanel.Left.Set(mouseX - PaintWheelWidth / 2, 0);
@@ -47,8 +42,7 @@ namespace BuilderEssentials.UI
             //Loading the selected tool, default is 0
             ToolSelected(selectedToolIndex);
 
-            basePanel.Append(PaintWheelPanel);
-            return PaintWheelPanel;
+            ItemsWheel.Instance.Append(PaintWheelPanel);
         }
 
         //Layout inspired by the great VipixToolBox Mod

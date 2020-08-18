@@ -44,9 +44,9 @@ namespace BuilderEssentials
                 TransparentSelectionInterface.SetState(TransparentSelectionUI);
 
                 UserInterface = new UserInterface();
-                BasePanel = new BasePanel();
-                BasePanel.Activate();
-                UserInterface.SetState(BasePanel);
+                ItemsWheelState = new ItemsWheel();
+                ItemsWheelState.Activate();
+                UserInterface.SetState(ItemsWheelState);
 
                 BuildingModeInterface = new UserInterface();
                 BMState = new BuildingModeState();
@@ -101,7 +101,7 @@ namespace BuilderEssentials
             DecreaseFillToolSize = null;
 
             //UI
-            BasePanel = null;
+            ItemsWheelState = null;
             TransparentSelectionUI = null;
             UserInterface = null;
             TransparentSelectionInterface = null;
@@ -143,7 +143,7 @@ namespace BuilderEssentials
 
 
         internal static UserInterface UserInterface;
-        internal static BasePanel BasePanel;
+        internal static ItemsWheel ItemsWheelState;
         internal static UserInterface TransparentSelectionInterface;
         internal static TransparentSelectionUI TransparentSelectionUI;
         internal static UserInterface BuildingModeInterface;

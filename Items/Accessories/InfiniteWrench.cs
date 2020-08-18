@@ -7,12 +7,7 @@ namespace BuilderEssentials.Items.Accessories
     class InfiniteWrench : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/InfiniteWrench";
-
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Infinite Wrench");
-            Tooltip.SetDefault("Allows infinite range and fast placement");
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Allows infinite range and fast placement");
 
         public override void SetDefaults()
         {
