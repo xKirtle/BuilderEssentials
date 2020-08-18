@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using IL.Terraria.World.Generation;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -54,10 +55,11 @@ namespace BuilderEssentials.UI
 
         private static bool isFillEnabled = false;
         private static bool isMirrorEnabled = false;
+        private static bool isHalfShapesEnabled = false;
         public static void CreateShapesMenuPanel()
         {
-            SMWidth = 294f;
-            SMHeight = 175f;
+            SMWidth = 213f;
+            SMHeight = 167f;
 
             SMPanel = new DraggableUIPanel();
             SMPanel.Width.Set(SMWidth, 0);
@@ -66,7 +68,7 @@ namespace BuilderEssentials.UI
             SMPanel.Top.Set(Main.screenHeight / 2 - SMHeight / 2, 0);
             SMPanel.BorderColor = Color.Red;
             SMPanel.BackgroundColor = Color.Transparent;
-            SMPanel.OnMouseDown += (element, listener) => 
+            SMPanel.OnMouseDown += (element, listener) =>
             {
                 Vector2 SMPosition = new Vector2(SMPanel.Left.Pixels, SMPanel.Top.Pixels);
                 Vector2 clickPos = Vector2.Subtract(element.MousePosition, SMPosition);
@@ -98,109 +100,100 @@ namespace BuilderEssentials.UI
             closeMenuCross.OnClick += (__, _) => { SMPanel.Remove(); CreateArrowPanel(); };
             SMPanel.Append(closeMenuCross);
 
-            List<UIImage> ShapesMenuList = new List<UIImage>(8);
-            bool[] optionSelected = new bool[8];
+            List<UIImage> ShapesMenuList = new List<UIImage>(6);
+            bool[] optionSelected = new bool[6];
 
             string textureLocation = "BuilderEssentials/Textures/UIElements/ShapesMenu/";
 
-            for (int i = 0; i < 4; i++) //Top Row
+            for (int i = 0; i < 3; i++) //Top Row
             {
                 int index = i;
                 UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 1}"));
                 tempUIImage.Width.Set(36f, 0);
                 tempUIImage.Height.Set(36f, 0);
-                tempUIImage.Left.Set(i * 70 + 3f, 0);
-                tempUIImage.Top.Set(30f, 0);
-                tempUIImage.OnClick += (__, _) => SMClicked(index);
+                tempUIImage.Left.Set(i * 64 + 3f, 0);
+                tempUIImage.Top.Set(24f, 0);
+                tempUIImage.OnMouseDown += (__, _) => SMClicked(index);
 
                 optionSelected[index] = false;
                 ShapesMenuList.Add(tempUIImage);
                 SMPanel.Append(tempUIImage);
             }
 
-            for (int i = 0; i < 4; i++) //Bottom Row
+            for (int i = 0; i < 3; i++) //Bottom Row
             {
                 int index = i;
-                UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 5}"));
+                UIImage tempUIImage = new UIImage(GetTexture(textureLocation + $"SM{i + 4}"));
                 tempUIImage.Width.Set(36f, 0);
                 tempUIImage.Height.Set(36f, 0);
-                tempUIImage.Left.Set(i * 70 + 3f, 0);
-                tempUIImage.Top.Set(95f, 0);
-                tempUIImage.OnClick += (__, _) => SMClicked(index + 4);
+                tempUIImage.Left.Set(i * 64 + 3f, 0);
+                tempUIImage.Top.Set(87f, 0);
+                tempUIImage.OnMouseDown += (__, _) => SMClicked(index + 3);
 
-                optionSelected[index + 4] = false;
+                optionSelected[index + 3] = false;
                 ShapesMenuList.Add(tempUIImage);
                 SMPanel.Append(tempUIImage);
             }
+
+            //4 => 3
+            //5 => 4
+            //3 => 5
+
+
+            //Updating the Disabled half shapes sprites
+            ShapesMenuList[3].SetImage(GetTexture(textureLocation + "SMDisabled4"));
+            ShapesMenuList[4].SetImage(GetTexture(textureLocation + "SMDisabled5"));
 
             void SMClicked(int index)
             {
                 //TODO: ADD SOME VISUAL CLUE THAT USER CANT SELECT HALF CIRCLES/ELIPSES WHILE SQUARE/RECTANGLE IS SELECTED
                 optionSelected[index] = !optionSelected[index];
-                isMirrorEnabled = optionSelected[4];
-                isFillEnabled = optionSelected[7];
+                isFillEnabled = optionSelected[2];
+                isMirrorEnabled = optionSelected[5];
 
-                for (int i = 0; i < 4; i++)
+                //Can't select both elipse and rectangle at the same time
+                if (index == 0)
+                    optionSelected[1] = false;
+                else if (index == 1)
+                    optionSelected[0] = false;
+
+                //Disable half shapes if elipse is disabled
+                if (!optionSelected[0])
+                    optionSelected[3] = optionSelected[4] = false;
+
+                //if elipse is enabled and index clicked was a half shape, disable the other half shape
+                if (optionSelected[0] && (index == 3 || index == 4))
+                    optionSelected[index == 3 ? 4 : 3] = false;
+
+                //Check whether half shapes can be selected or not
+                isHalfShapesEnabled = optionSelected[0];
+
+                //Update buttons based on optionSelected[]
+                SetUIImage(index, true);
+
+                void SetUIImage(int clickedIndex, bool updateAll = false)
                 {
-                    if (i == index)
-                        continue;
-
-                    if (index < 4)
-                        optionSelected[i] = false;
-
-                    int tempIndex = i;
-                    SetUIImage(tempIndex);
-                    SetUIImage(tempIndex);
-                }
-
-                for (int i = 4; i < 8; i++)
-                {
-                    if (i == index)
-                        continue;
-
-                    //Allows only one at a time (half circles/elipses)
-                    if (optionSelected[5] && optionSelected[6])
+                    int length = updateAll == false ? 1 : 6;
+                    for (int i = 0; i < length; i++)
                     {
-                        if (index != 5)
-                            optionSelected[5] = false;
-                        else
-                            optionSelected[6] = false;
+                        int tempIndex = updateAll == false ? clickedIndex : i;
+
+                        string texture = textureLocation + "SM";
+                        if (isFillEnabled)
+                            texture += "Fill";
+                        if (optionSelected[tempIndex])
+                            texture += "Alternate";
+                        if (isMirrorEnabled && (tempIndex == 3 || tempIndex == 4))
+                            texture += "Mirror";
+                        if (!isHalfShapesEnabled && (tempIndex == 3 || tempIndex == 4))
+                            texture += "Disabled";
+                        texture += $"{tempIndex + 1}";
+
+                        ShapesMenuList[tempIndex].SetImage(GetTexture(texture));
                     }
-
-                    //Half circles/elipses cannot be toggled if selected is a square/rectangle
-                    if ((index == 5 || index == 6) && (optionSelected[2] || optionSelected[3]))
-                        optionSelected[index] = false;
-
-                    //Disables half circles/elipses if square/rectangle is selected or if both circle and elipse are not selected
-                    if (index == 2 || index == 3 || (!optionSelected[0] && !optionSelected[1]))
-                    {
-                        optionSelected[5] = false;
-                        optionSelected[6] = false;
-                    }
-
-                    int tempIndex = i;
-                    SetUIImage(tempIndex);
-                    SetUIImage(tempIndex);
-                }
-
-                SetUIImage(index);
-
-                void SetUIImage(int someIndex)
-                {
-                    string texture = textureLocation + "SM";
-                    if (isFillEnabled)
-                        texture += "Fill";
-                    if (optionSelected[someIndex])
-                        texture += "Alternate";
-                    if (isMirrorEnabled && (someIndex == 5 || someIndex == 6))
-                        texture += "Mirror";
-                    texture += $"{someIndex + 1}";
-
-                    ShapesMenuList[someIndex].SetImage(GetTexture(texture));
                 }
             }
         }
-
         #endregion
 
         public override void Update(GameTime gameTime)
