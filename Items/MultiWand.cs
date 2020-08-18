@@ -1,9 +1,8 @@
-﻿using BuilderEssentials.UI;
+﻿using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Items
 {

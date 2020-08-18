@@ -1,5 +1,4 @@
 ﻿using BuilderEssentials.Items;
-using BuilderEssentials.UI;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
 using static BuilderEssentials.Utilities.Tools;
+using BuilderEssentials.UI.ItemsUI.Wheels;
 
 namespace BuilderEssentials
 {

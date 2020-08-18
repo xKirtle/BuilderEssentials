@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using static BuilderEssentials.Utilities.Tools;
 
-namespace BuilderEssentials.UI
+namespace BuilderEssentials.UI.ItemsUI.Wheels
 {
     public class CreativeWheel
     {
@@ -38,7 +38,7 @@ namespace BuilderEssentials.UI
             CreativeWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
-            ItemsWheel.Instance.Append(CreativeWheelPanel);
+            ItemsWheelState.Instance.Append(CreativeWheelPanel);
         }
 
         private static void CreateLayout()
@@ -145,7 +145,7 @@ namespace BuilderEssentials.UI
                         text = "Gives infinite pick up range";
 
                     hoverText = Tools.CreateUIText(text, Main.mouseX + 22, Main.mouseY + 22);
-                    ItemsWheel.Instance.Append(hoverText);
+                    ItemsWheelState.Instance.Append(hoverText);
                 }
             }
         }

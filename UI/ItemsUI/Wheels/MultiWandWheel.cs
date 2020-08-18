@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 
-namespace BuilderEssentials.UI
+namespace BuilderEssentials.UI.ItemsUI.Wheels
 {
     class MultiWandWheel : UIPanel
     {
@@ -32,7 +32,7 @@ namespace BuilderEssentials.UI
             MultiWandWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
-            ItemsWheel.Instance.Append(MultiWandWheelPanel);
+            ItemsWheelState.Instance.Append(MultiWandWheelPanel);
         }
 
         private static void CreateLayout()
@@ -99,7 +99,7 @@ namespace BuilderEssentials.UI
                         text = "Places rich mahogany leaves (rich mahogany)";
 
                     hoverText = Tools.CreateUIText(text, Main.mouseX + 33, Main.mouseY + 33);
-                    ItemsWheel.Instance.Append(hoverText);
+                    ItemsWheelState.Instance.Append(hoverText);
                 }
             }
         }

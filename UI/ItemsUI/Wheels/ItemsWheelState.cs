@@ -3,12 +3,12 @@ using Terraria.UI;
 using Microsoft.Xna.Framework;
 using BuilderEssentials.Utilities;
 
-namespace BuilderEssentials.UI
+namespace BuilderEssentials.UI.ItemsUI.Wheels
 {
-    public class ItemsWheel : UIState
+    public class ItemsWheelState : UIState
     {
-        public static ItemsWheel Instance;
-        public ItemsWheel() => Instance = this;
+        public static ItemsWheelState Instance;
+        public ItemsWheelState() => Instance = this;
 
         public override void Update(GameTime gameTime)
         {

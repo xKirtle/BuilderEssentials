@@ -1,4 +1,4 @@
-﻿using BuilderEssentials.UI;
+﻿using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ID;

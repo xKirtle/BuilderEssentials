@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using BuilderEssentials.Utilities;
+using BuilderEssentials.UI.ItemsUI.Wheels;
 
 namespace BuilderEssentials
 {
@@ -44,7 +45,7 @@ namespace BuilderEssentials
                 TransparentSelectionInterface.SetState(TransparentSelectionUI);
 
                 UserInterface = new UserInterface();
-                ItemsWheelState = new ItemsWheel();
+                ItemsWheelState = new ItemsWheelState();
                 ItemsWheelState.Activate();
                 UserInterface.SetState(ItemsWheelState);
 
@@ -143,7 +144,7 @@ namespace BuilderEssentials
 
 
         internal static UserInterface UserInterface;
-        internal static ItemsWheel ItemsWheelState;
+        internal static ItemsWheelState ItemsWheelState;
         internal static UserInterface TransparentSelectionInterface;
         internal static TransparentSelectionUI TransparentSelectionUI;
         internal static UserInterface BuildingModeInterface;

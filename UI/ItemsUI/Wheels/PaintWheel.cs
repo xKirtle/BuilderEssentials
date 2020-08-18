@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria.GameContent.UI.Elements;
 
-namespace BuilderEssentials.UI
+namespace BuilderEssentials.UI.ItemsUI.Wheels
 {
     public class PaintWheel
     {
@@ -42,7 +42,7 @@ namespace BuilderEssentials.UI
             //Loading the selected tool, default is 0
             ToolSelected(selectedToolIndex);
 
-            ItemsWheel.Instance.Append(PaintWheelPanel);
+            ItemsWheelState.Instance.Append(PaintWheelPanel);
         }
 
         //Layout inspired by the great VipixToolBox Mod

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria.GameContent.UI.Elements;
 
-namespace BuilderEssentials.UI
+namespace BuilderEssentials.UI.ItemsUI.Wheels
 {
     class AutoHammerWheel : UIPanel
     {
@@ -30,7 +30,7 @@ namespace BuilderEssentials.UI
             AutoHammerWheelPanel.BackgroundColor = Color.Transparent;
 
             CreateLayout();
-            ItemsWheel.Instance.Append(AutoHammerWheelPanel);
+            ItemsWheelState.Instance.Append(AutoHammerWheelPanel);
         }
 
         private static void CreateLayout()
