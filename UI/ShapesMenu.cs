@@ -1,5 +1,6 @@
-﻿using IL.Terraria.World.Generation;
+﻿using BuilderEssentials.UI.ShapesDrawing;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -14,8 +15,30 @@ namespace BuilderEssentials.UI
         public override void OnInitialize()
         {
             Instance = this;
+            OnMouseDown += DragStart;
+            OnMouseUp += DragEnd;
 
             CreateArrowPanel();
+
+            //TODO: MAKE ITS OWN UI STATE
+            CircleShape circleShape = new CircleShape();
+            Append(circleShape);
+        }
+
+        //TODO: Disable coord updates if mouse on UI elements
+        public bool dragging;
+        public Vector2 startDrag = Vector2.Zero;
+        public Vector2 endDrag = Vector2.Zero;
+        public bool shiftPressed;
+        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
+        {
+            dragging = true;
+            startDrag = endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
+        }
+
+        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
+        {
+            dragging = false;
         }
 
         #region ArrowPanel
@@ -203,6 +226,11 @@ namespace BuilderEssentials.UI
 
             if (DraggableUIPanel.canDrag)
                 SMPanel.UpdatePosition();
+
+            if (dragging)
+                endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
+
+            shiftPressed = Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.LeftShift);
         }
     }
 }
