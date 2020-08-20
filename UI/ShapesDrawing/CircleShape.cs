@@ -8,12 +8,13 @@ namespace BuilderEssentials.UI.ShapesDrawing
 {
     public class CircleShape : UIElement
     {
-        ShapesMenu sm;
-        public override void OnInitialize() => sm = ShapesMenu.Instance;
+        ShapesState sd;
+        bool fillColor;
+        public override void OnInitialize() => sd = ShapesState.Instance;
 
         //Taken from http://members.chello.at/easyfilter/bresenham.html. All credits go to Alois Zingl
-        #region Ellipse Algorithm
-        void DrawEllipse(int x0, int y0, int x1, int y1, SpriteBatch spriteBatch)
+        #region Algorithms by Alois Zingl
+        void DrawEllipse(int x0, int y0, int x1, int y1)
         {
             int a = Math.Abs(x1 - x0), b = Math.Abs(y1 - y0), b1 = b & 1; //values of diameter
             long dx = 4 * (1 - a) * b * b, dy = 4 * (b1 + 1) * a * a; //error increment 
@@ -26,65 +27,97 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
             do
             {
-                SetRectangle(x1, y0, spriteBatch); //   I. Quadrant
-                SetRectangle(x0, y0, spriteBatch); //  II. Quadrant
-                SetRectangle(x0, y1, spriteBatch); // III. Quadrant
-                SetRectangle(x1, y1, spriteBatch); //  IV. Quadrant
+                SetRectangle(x1, y0); //   I. Quadrant
+                SetRectangle(x0, y0); //  II. Quadrant
+                SetRectangle(x0, y1); // III. Quadrant
+                SetRectangle(x1, y1); //  IV. Quadrant
                 e2 = 2 * err;
                 if (e2 <= dy) { y0++; y1--; err += dy += a; }  //y step
                 if (e2 >= dx || 2 * err > dy) { x0++; x1--; err += dx += b1; } //x step
+
             } while (x0 <= x1);
 
             while (y0 - y1 < b)
             {  //too early stop of flat ellipses a=1
-                SetRectangle(x0 - 1, y0, spriteBatch); //-> finish tip of ellipse
-                SetRectangle(x1 + 1, y0++, spriteBatch);
-                SetRectangle(x0 - 1, y1, spriteBatch);
-                SetRectangle(x1 + 1, y1--, spriteBatch);
+                SetRectangle(x0 - 1, y0); //-> finish tip of ellipse
+                SetRectangle(x1 + 1, y0++);
+                SetRectangle(x0 - 1, y1);
+                SetRectangle(x1 + 1, y1--);
             }
         }
+
+        void DrawLine(int x0, int y0, int x1, int y1)
+        {
+            int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+            int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+            int err = dx + dy, e2; //error value e_xy
+            for (; ; )
+            { // loop
+                SetRectangle(x0, y0);
+                e2 = 2 * err;
+                if (e2 >= dy)
+                { // e_xy+e_x > 0
+                    if (x0 == x1) break;
+                    err += dy; x0 += sx;
+                }
+                if (e2 <= dx)
+                { // e_xy+e_y < 0
+                    if (y0 == y1) break;
+                    err += dx; y0 += sy;
+                }
+            }
+        }
+
         #endregion
 
-        void SetRectangle(int x, int y, SpriteBatch spriteBatch)
+        //Draws "pixels" on screen
+        void SetRectangle(int x, int y)
         {
             Texture2D texture = Main.extraTexture[2];
             Rectangle value = new Rectangle(0, 0, 16, 16);
-            Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
+            Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Red
             Vector2 position = new Vector2(x, y) * 16 - Main.screenPosition;
 
-            spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (fillColor)
+                color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
+
+            Main.spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         void EllipseToCircleCoordsFix()
         {
-            int distanceX = (int)(sm.endDrag.X - sm.startDrag.X);
-            int distanceY = (int)(sm.endDrag.Y - sm.startDrag.Y);
+            int distanceX = (int)(sd.endDrag.X - sd.startDrag.X);
+            int distanceY = (int)(sd.endDrag.Y - sd.startDrag.Y);
 
             //Turning rectangle (startDrag->endDrag) into a square
-            if (Math.Abs(distanceX) > Math.Abs(distanceY)) //Horizontal Ellipse
+            if (Math.Abs(distanceX) < Math.Abs(distanceY)) //Horizontal Ellipse
             {
                 if (distanceX > 0) //I. and IV. Quadrant
-                    sm.endDrag.X = sm.startDrag.X + Math.Abs(distanceY);
+                    sd.endDrag.X = sd.startDrag.X + Math.Abs(distanceY);
                 else //II. and III. Quadrant
-                    sm.endDrag.X = sm.startDrag.X - Math.Abs(distanceY);
+                    sd.endDrag.X = sd.startDrag.X - Math.Abs(distanceY);
             }
             else //Vertical Ellipse
             {
                 if (distanceY > 0) //III. and IV. Quadrant
-                    sm.endDrag.Y = sm.startDrag.Y + Math.Abs(distanceX);
+                    sd.endDrag.Y = sd.startDrag.Y + Math.Abs(distanceX);
                 else //I. and II. Quadrant
-                    sm.endDrag.Y = sm.startDrag.Y - Math.Abs(distanceX);
+                    sd.endDrag.Y = sd.startDrag.Y - Math.Abs(distanceX);
 
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (sm.dragging && sm.shiftPressed) //Can only be circle if player is still making the selection
+            if (sd.dragging && sd.shiftPressed) //Can only be circle if player is still making the selection
                 EllipseToCircleCoordsFix();
 
-            if (sm.startDrag != sm.endDrag)
-                DrawEllipse((int)sm.startDrag.X, (int)sm.startDrag.Y, (int)sm.endDrag.X, (int)sm.endDrag.Y, spriteBatch);
+            if (sd.startDrag != sd.endDrag)
+            {
+                fillColor = ShapesMenu.optionSelected[0];
+
+                DrawEllipse((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
+            }
         }
     }
 }
