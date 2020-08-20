@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using BuilderEssentials.Utilities;
 using BuilderEssentials.UI.ItemsUI.Wheels;
+using BuilderEssentials.UI.ShapesDrawing;
 
 namespace BuilderEssentials
 {
@@ -58,6 +59,11 @@ namespace BuilderEssentials
                 ShapesMenu = new ShapesMenu();
                 ShapesMenu.Activate();
                 ShapesMenuInterface.SetState(ShapesMenu);
+
+                ShapesInterface = new UserInterface();
+                ShapesState = new ShapesState();
+                ShapesState.Activate();
+                ShapesInterface.SetState(ShapesState);
             }
         }
 
@@ -151,6 +157,8 @@ namespace BuilderEssentials
         internal static BuildingModeState BMState;
         internal static UserInterface ShapesMenuInterface;
         internal static ShapesMenu ShapesMenu;
+        internal static UserInterface ShapesInterface;
+        internal static ShapesState ShapesState;
         private GameTime _lastUpdateUiGameTime;
         public override void UpdateUI(GameTime gameTime)
         {
@@ -166,6 +174,9 @@ namespace BuilderEssentials
 
             if (ShapesMenuInterface?.CurrentState != null)
                 ShapesMenuInterface.Update(gameTime);
+
+            if (ShapesInterface?.CurrentState != null)
+                ShapesInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -181,6 +192,21 @@ namespace BuilderEssentials
                         if (_lastUpdateUiGameTime != null && TransparentSelectionInterface?.CurrentState != null)
                         {
                             TransparentSelectionInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                        }
+                        return true;
+                    },
+                       InterfaceScaleType.Game));
+            }
+
+            if (interfaceLayer != -1)
+            {
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
+                    "Builder Essentials: ShapesSelection",
+                    delegate
+                    {
+                        if (_lastUpdateUiGameTime != null && ShapesInterface?.CurrentState != null)
+                        {
+                            ShapesInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
                         }
                         return true;
                     },
