@@ -16,6 +16,13 @@ namespace BuilderEssentials.UI.ShapesDrawing
         #region Algorithms by Alois Zingl
         void DrawEllipse(int x0, int y0, int x1, int y1)
         {
+            var sel = ShapesMenu.optionSelected;
+            bool quadOne = (sel[4] && sel[5]) || (sel[3] && !sel[5]);
+            bool quadTwo = (sel[4] && !sel[5]) || (sel[3] && !sel[5]);
+            bool quadThree = (sel[3] && sel[5]) || (sel[4] && !sel[5]);
+            bool quadFour = (sel[3] && sel[5]) || (sel[4] && sel[5]);
+            bool noQuad = quadOne == false && quadTwo == false && quadThree == false && quadFour == false;
+
             int a = Math.Abs(x1 - x0), b = Math.Abs(y1 - y0), b1 = b & 1; //values of diameter
             long dx = 4 * (1 - a) * b * b, dy = 4 * (b1 + 1) * a * a; //error increment 
             long err = dx + dy + b1 * a * a, e2; //error of 1.step
@@ -27,10 +34,14 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
             do
             {
-                SetRectangle(x1, y0); //   I. Quadrant
-                SetRectangle(x0, y0); //  II. Quadrant
-                SetRectangle(x0, y1); // III. Quadrant
-                SetRectangle(x1, y1); //  IV. Quadrant
+                if (noQuad || quadOne)
+                    SetRectangle(x1, y0);    //   I. Quadrant
+                if (noQuad || quadTwo)
+                    SetRectangle(x0, y0);    //  II. Quadrant
+                if (noQuad || quadThree)
+                SetRectangle(x0, y1);        // III. Quadrant
+                if (noQuad || quadFour)
+                    SetRectangle(x1, y1);    //  IV. Quadrant
                 e2 = 2 * err;
                 if (e2 <= dy) { y0++; y1--; err += dy += a; }  //y step
                 if (e2 >= dx || 2 * err > dy) { x0++; x1--; err += dx += b1; } //x step
@@ -86,6 +97,8 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
         void EllipseToCircleCoordsFix()
         {
+            //TODO: FIX HALF SHAPES HORIZONTAL/VERTICAL OFFSETS
+
             int distanceX = (int)(sd.endDrag.X - sd.startDrag.X);
             int distanceY = (int)(sd.endDrag.Y - sd.startDrag.Y);
 
@@ -112,9 +125,9 @@ namespace BuilderEssentials.UI.ShapesDrawing
             if (sd.dragging && sd.shiftPressed) //Can only be circle if player is still making the selection
                 EllipseToCircleCoordsFix();
 
-            if (sd.startDrag != sd.endDrag)
+            if (sd.startDrag != sd.endDrag && ShapesMenu.optionSelected[0])
             {
-                fillColor = ShapesMenu.optionSelected[0];
+                fillColor = ShapesMenu.optionSelected[2];
 
                 DrawEllipse((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
             }
