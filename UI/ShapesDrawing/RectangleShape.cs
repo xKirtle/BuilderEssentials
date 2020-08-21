@@ -6,13 +6,14 @@ namespace BuilderEssentials.UI.ShapesDrawing
     {
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (ShapesMenu.optionSelected[1])
-            {
-                if (sd.dragging && sd.shiftPressed) //Can only be square if player is still making the selection
-                    SquareCoords();
+            //Disable drawing if conditions met
+            if (!ShapesMenu.SDEquipped || !ShapesMenu.optionSelected[1])
+                return;
 
-                DrawRectangle((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
-            }
+            if (sd.dragging && sd.shiftPressed) //Can only be square if player is still making the selection
+                SquareCoords();
+
+            DrawRectangle((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
         }
     }
 }

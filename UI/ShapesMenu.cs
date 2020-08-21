@@ -10,12 +10,11 @@ namespace BuilderEssentials.UI
     class ShapesMenu : UIState
     {
         public static ShapesMenu Instance;
+        public static bool SDEquipped;
         public override void OnInitialize()
         {
             Instance = this;
             optionSelected = new bool[6];
-
-            CreateArrowPanel();
         }
 
         #region ArrowPanel
@@ -195,10 +194,13 @@ namespace BuilderEssentials.UI
 
         public override void Update(GameTime gameTime)
         {
+            if (SMPanel == null && ArrowPanel == null && SDEquipped)
+                CreateArrowPanel();
+
             if ((SMPanel != null && SMPanel.IsMouseHovering) || (ArrowPanel != null && ArrowPanel.IsMouseHovering))
                 Main.LocalPlayer.mouseInterface = true;
 
-            if (DraggableUIPanel.canDrag)
+            if (SMPanel != null && DraggableUIPanel.canDrag)
                 SMPanel.UpdatePosition();
         }
     }

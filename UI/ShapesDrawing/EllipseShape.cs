@@ -28,17 +28,18 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (ShapesMenu.optionSelected[0])
-            {
-                if (sd.dragging && sd.shiftPressed) //Can only be circle if player is still making the selection
-                    SquareCoords();
+            //Disable drawing if conditions met
+            if (!ShapesMenu.SDEquipped || !ShapesMenu.optionSelected[0])
+                return;
 
-                if (sd.dragging && (ShapesMenu.optionSelected[3] || ShapesMenu.optionSelected[4]))
-                    FixHalfShapesOffset();
+            if (sd.dragging && sd.shiftPressed) //Can only be circle if player is still making the selection
+                SquareCoords();
 
-                if (sd.startDrag != sd.endDrag)
-                    DrawEllipse((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
-            }
+            if (sd.dragging && (ShapesMenu.optionSelected[3] || ShapesMenu.optionSelected[4]))
+                FixHalfShapesOffset();
+
+            if (sd.startDrag != sd.endDrag)
+                DrawEllipse((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
         }
     }
 }

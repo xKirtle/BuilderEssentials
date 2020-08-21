@@ -9,6 +9,7 @@ using Terraria.ModLoader.IO;
 using static Terraria.ModLoader.ModContent;
 using static BuilderEssentials.Utilities.Tools;
 using BuilderEssentials.UI.ItemsUI.Wheels;
+using BuilderEssentials.UI;
 
 namespace BuilderEssentials
 {
@@ -92,6 +93,7 @@ namespace BuilderEssentials
                 pointedTilePos = new Vector2(Player.tileTargetX, Player.tileTargetY);
                 pointedTile = Main.tile[(int)pointedTilePos.X, (int)pointedTilePos.Y];
                 BuilderEssentials.validMirrorWand = false;
+                ShapesMenu.SDEquipped = false;
 
                 if (creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinityUpgrade.ToInt())
                 && !player.HasBuff(BuffType<Buffs.InfinitePlacementBuff>()))
@@ -221,6 +223,14 @@ namespace BuilderEssentials
 
                     if (!player.HeldItem.IsAir)
                         CreativeWheel.RemovePanel();
+
+                    if (!ShapesMenu.SDEquipped)
+                    {
+                        ShapesMenu.ArrowPanel?.Remove();
+                        ShapesMenu.ArrowPanel = null;
+                        ShapesMenu.SMPanel?.Remove();
+                        ShapesMenu.SMPanel = null;
+                    }
                 }
 
             }
