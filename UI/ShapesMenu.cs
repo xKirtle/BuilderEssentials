@@ -53,7 +53,7 @@ namespace BuilderEssentials.UI
         private static float SMWidth;
         private static float SMHeight;
 
-        private static bool isFillEnabled = false;
+        public static bool isFillEnabled = false;
         private static bool isMirrorEnabled = false;
         private static bool isHalfShapesEnabled = false;
         public static bool[] optionSelected;

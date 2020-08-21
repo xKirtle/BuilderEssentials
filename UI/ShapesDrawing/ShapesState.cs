@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.UI;
-using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {
@@ -16,8 +15,11 @@ namespace BuilderEssentials.UI.ShapesDrawing
             OnMouseDown += DragStart;
             OnMouseUp += DragEnd;
 
-            CircleShape circleShape = new CircleShape();
+            EllipseShape circleShape = new EllipseShape();
             Append(circleShape);
+
+            RectangleShape rectangleShape = new RectangleShape();
+            Append(rectangleShape);
         }
 
         //TODO: Disable coord updates if mouse on UI elements
@@ -41,6 +43,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
             if (dragging)
                 endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
+            //Disable ingame shift while shiftPressed?
             shiftPressed = Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.LeftShift);
         }
     }

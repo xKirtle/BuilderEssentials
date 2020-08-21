@@ -6,15 +6,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {
-    public class CircleShape : UIElement
+    class BaseShape : UIElement
     {
-        ShapesState sd;
-        bool fillColor;
+        public ShapesState sd;
         public override void OnInitialize() => sd = ShapesState.Instance;
 
         //Taken from http://members.chello.at/easyfilter/bresenham.html. All credits go to Alois Zingl
         #region Algorithms by Alois Zingl
-        void DrawEllipse(int x0, int y0, int x1, int y1)
+        public void DrawEllipse(int x0, int y0, int x1, int y1)
         {
             var sel = ShapesMenu.optionSelected;
             bool quadOne = (sel[4] && sel[5]) || (sel[3] && !sel[5]);
@@ -39,7 +38,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
                 if (noQuad || quadTwo)
                     SetRectangle(x0, y0);    //  II. Quadrant
                 if (noQuad || quadThree)
-                SetRectangle(x0, y1);        // III. Quadrant
+                    SetRectangle(x0, y1);    // III. Quadrant
                 if (noQuad || quadFour)
                     SetRectangle(x1, y1);    //  IV. Quadrant
                 e2 = 2 * err;
@@ -57,7 +56,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
             }
         }
 
-        void DrawLine(int x0, int y0, int x1, int y1)
+        public void DrawLine(int x0, int y0, int x1, int y1)
         {
             int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
             int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
@@ -78,27 +77,70 @@ namespace BuilderEssentials.UI.ShapesDrawing
                 }
             }
         }
-
         #endregion
 
+        public void DrawRectangle(int x0, int y0, int x1, int y1)
+        {
+            //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
+            int selectedQuarter = 4;
+
+            if (sd.startDrag.X < sd.endDrag.X && sd.startDrag.Y < sd.endDrag.Y)
+                selectedQuarter = 3;
+            else if (sd.startDrag.X < sd.endDrag.X && sd.startDrag.Y > sd.endDrag.Y)
+                selectedQuarter = 1;
+            else if (sd.startDrag.X > sd.endDrag.X && sd.startDrag.Y > sd.endDrag.Y)
+                selectedQuarter = 0;
+            else if (sd.startDrag.X > sd.endDrag.X && sd.startDrag.Y < sd.endDrag.Y)
+                selectedQuarter = 2;
+
+            //Maybe there's a better way to do this?
+            switch (selectedQuarter)
+            {
+                case 0:
+                    DrawLine(x1, y1, x0 - 1, y1); //Top Line
+                    DrawLine(x0, y1, x0, y0 - 1); //Right Line
+                    DrawLine(x0, y0, x1 + 1, y0); //Bottom Line
+                    DrawLine(x1, y0, x1, y1 + 1); //Left Line
+                    break;
+                case 1:
+                    DrawLine(x0, y1, x1 - 1, y1); //Top Line
+                    DrawLine(x1, y1, x1, y0 - 1); //Right Line
+                    DrawLine(x1, y0, x0 + 1, y0); //Bottom Line
+                    DrawLine(x0, y0, x0, y1 + 1); //Left Line
+                    break;
+                case 2:
+                    DrawLine(x1, y0, x0 - 1, y0); //Top Line
+                    DrawLine(x0, y0, x0, y1 - 1); //Right Line
+                    DrawLine(x0, y1, x1 + 1, y1); //Bottom Line
+                    DrawLine(x1, y1, x1, y0 + 1); //Left Line
+                    break;
+                case 3:
+                    DrawLine(x0, y0, x1 - 1, y0); //Top Line
+                    DrawLine(x1, y0, x1, y1 - 1); //Right Line
+                    DrawLine(x1, y1, x0 + 1, y1); //Bottom Line
+                    DrawLine(x0, y1, x0, y0 + 1); //Left Line
+                    break;
+                default:
+                    break;
+            }
+        }
+
         //Draws "pixels" on screen
-        void SetRectangle(int x, int y)
+        public void SetRectangle(int x, int y)
         {
             Texture2D texture = Main.extraTexture[2];
             Rectangle value = new Rectangle(0, 0, 16, 16);
             Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Red
             Vector2 position = new Vector2(x, y) * 16 - Main.screenPosition;
 
-            if (fillColor)
+            if (ShapesMenu.isFillEnabled)
                 color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
 
             Main.spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
-        void EllipseToCircleCoordsFix()
+        public void SquareCoords()
         {
-            //TODO: FIX HALF SHAPES HORIZONTAL/VERTICAL OFFSETS
-
             int distanceX = (int)(sd.endDrag.X - sd.startDrag.X);
             int distanceY = (int)(sd.endDrag.Y - sd.startDrag.Y);
 
@@ -116,20 +158,6 @@ namespace BuilderEssentials.UI.ShapesDrawing
                     sd.endDrag.Y = sd.startDrag.Y + Math.Abs(distanceX);
                 else //I. and II. Quadrant
                     sd.endDrag.Y = sd.startDrag.Y - Math.Abs(distanceX);
-
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (sd.dragging && sd.shiftPressed) //Can only be circle if player is still making the selection
-                EllipseToCircleCoordsFix();
-
-            if (sd.startDrag != sd.endDrag && ShapesMenu.optionSelected[0])
-            {
-                fillColor = ShapesMenu.optionSelected[2];
-
-                DrawEllipse((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
             }
         }
     }
