@@ -34,7 +34,7 @@ namespace BuilderEssentials.Utilities
         }
 
         public static bool IsWithinRange(float number, float value1, float value2) =>
-            (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
+            (number > value1 && number < value2) || (number < value1 && number > value2);
 
         public static int FindNextEmptyInventorySlot()
         {
