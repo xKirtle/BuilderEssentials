@@ -3,6 +3,8 @@ using Terraria.UI;
 using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.ModLoader;
+using BuilderEssentials.Items;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {
@@ -81,19 +83,10 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
         public void DrawRectangle(int x0, int y0, int x1, int y1)
         {
-            //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
-            int selectedQuarter = 4;
-
-            if (sd.startDrag.X < sd.endDrag.X && sd.startDrag.Y < sd.endDrag.Y)
-                selectedQuarter = 3;
-            else if (sd.startDrag.X < sd.endDrag.X && sd.startDrag.Y > sd.endDrag.Y)
-                selectedQuarter = 1;
-            else if (sd.startDrag.X > sd.endDrag.X && sd.startDrag.Y > sd.endDrag.Y)
-                selectedQuarter = 0;
-            else if (sd.startDrag.X > sd.endDrag.X && sd.startDrag.Y < sd.endDrag.Y)
-                selectedQuarter = 2;
+            int selectedQuarter = SelectedQuarter(x0, y0, x1, y1);
 
             //Maybe there's a better way to do this?
+            //If vertical is always full lenght and horizontal stays in the middle?
             switch (selectedQuarter)
             {
                 case 0:
@@ -125,16 +118,35 @@ namespace BuilderEssentials.UI.ShapesDrawing
             }
         }
 
+        public int SelectedQuarter(int x0, int y0, int x1, int y1)
+        {
+            //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
+            int selectedQuarter = -1;
+
+            if (x0 < x1 && y0 < y1)
+                selectedQuarter = 3;
+            else if (x0 < x1 && y0 > y1)
+                selectedQuarter = 1;
+            else if (x0 > x1 && y0 > y1)
+                selectedQuarter = 0;
+            else if (x0 > x1 && y0 < y1)
+                selectedQuarter = 2;
+
+            return selectedQuarter;
+        }
+
         //Draws "pixels" on screen
         public void SetRectangle(int x, int y)
         {
             Texture2D texture = Main.extraTexture[2];
             Rectangle value = new Rectangle(0, 0, 16, 16);
-            Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Red
+            Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Blue
             Vector2 position = new Vector2(x, y) * 16 - Main.screenPosition;
 
-            if (ShapesMenu.isFillEnabled)
-                color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
+            //TODO: IMPLEMENT EASY WAY TO DEFINE WHICH COLOR FOR WHAT ELEMENT
+
+            //color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
+            //color = new Color(1f, 0f, 0f, .75f) * 0.8f; //Red
 
             Main.spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }

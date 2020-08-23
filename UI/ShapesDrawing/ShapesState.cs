@@ -44,7 +44,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
                 endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
             //Disable ingame shift while shiftPressed?
-            shiftPressed = Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.LeftShift);
+            shiftPressed = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
         }
     }
 }
