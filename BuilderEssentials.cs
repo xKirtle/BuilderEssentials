@@ -118,7 +118,6 @@ namespace BuilderEssentials
             MultiWandWheel.MultiWandWheelPanel = null;
             MultiWandWheel.WandWheelElements = null;
             PaintWheel.PaintWheelPanel = null;
-            TransparentSelectionUI.transparentSelectionUI = null;
 
             //Textures
             UnloadTextures();
