@@ -8,6 +8,7 @@ using BuilderEssentials.Utilities;
 using BuilderEssentials.UI.ShapesDrawing;
 using Microsoft.Xna.Framework.Input;
 using static Terraria.ModLoader.ModContent;
+using Terraria.ModLoader;
 
 namespace BuilderEssentials.UI
 {
@@ -50,6 +51,8 @@ namespace BuilderEssentials.UI
         public Vector2 startMirror = Vector2.Zero;
         public Vector2 endMirror = Vector2.Zero;
         public bool horizontalSelection;
+        public int selectedQuarter;
+        public bool wideMirror;
         public bool validMirrorPlacement;
         private void DragStartMirror(UIMouseEvent evt, UIElement listeningElement)
         {
@@ -81,13 +84,17 @@ namespace BuilderEssentials.UI
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Selection
-            if (ts.startSel != ts.endSel)
+            //MirrorWand shapes should not be visible if we're using the shapes drawer
+            if (Main.LocalPlayer.HeldItem.type != ItemType<ShapesDrawer>() && ts.startSel != ts.endSel)
+            {
+                color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Blue
                 DrawRectangle((int)ts.startSel.X, (int)ts.startSel.Y, (int)ts.endSel.X, (int)ts.endSel.Y);
+            }
 
             //Mirror
 
             //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
-            int selectedQuarter = SelectedQuarter((int)ts.startMirror.X, (int)ts.startMirror.Y, (int)ts.endMirror.X, (int)ts.endMirror.Y);
+            ts.selectedQuarter = SelectedQuarter((int)ts.startMirror.X, (int)ts.startMirror.Y, (int)ts.endMirror.X, (int)ts.endMirror.Y);
 
             int distanceX = (int)(ts.endMirror.X - ts.startMirror.X);
             int distanceY = (int)(ts.endMirror.Y - ts.startMirror.Y);
@@ -96,13 +103,13 @@ namespace BuilderEssentials.UI
             //selectedQuarter 0 and 1 is the same as 2 and 3 inversed
             //true true, false true | true false, false false.
             bool c2 = true;
-            if (selectedQuarter >= 2)
+            if (ts.selectedQuarter >= 2)
             {
                 c2 = !c2;
-                selectedQuarter -= 2;
+                ts.selectedQuarter -= 2;
             }
 
-            FixX(!Convert.ToBoolean(selectedQuarter));
+            FixX(!Convert.ToBoolean(ts.selectedQuarter));
             FixY(c2);
 
             void FixX(bool left = true)
@@ -121,22 +128,30 @@ namespace BuilderEssentials.UI
                     ts.endMirror.Y = ts.startMirror.Y + 1;
             }
 
+            ts.wideMirror = ts.endMirror.X == ts.startMirror.X - 1 || ts.endMirror.X == ts.startMirror.X + 1 
+                || ts.endMirror.Y == ts.startMirror.Y - 1 || ts.endMirror.Y == ts.startMirror.Y + 1;
 
             ts.validMirrorPlacement = IsMirrorAxisInsideSelection();
-
             int newDistanceX = (int)(ts.endMirror.X - ts.startMirror.X);
             int newDistanceY = (int)(ts.endMirror.Y - ts.startMirror.Y);
-            if (ts.startMirror != ts.endMirror &&
-                ((!ts.horizontalSelection && Math.Abs(newDistanceX) >= 1) || (ts.horizontalSelection && Math.Abs(newDistanceY) >= 1)))
-                DrawRectangle((int)ts.startMirror.X, (int)ts.startMirror.Y, (int)ts.endMirror.X, (int)ts.endMirror.Y);
-            else if (ts.startMirror != ts.endMirror)
-                DrawLine((int)ts.startMirror.X, (int)ts.startMirror.Y, (int)ts.endMirror.X, (int)ts.endMirror.Y);
+
+            //MirrorWand shapes should not be visible if we're using the shapes drawer
+            if (!ShapesMenu.SDEquipped)
+            {
+                color = new Color(1f, 0f, 0f, .75f) * 0.8f; //Red
+                if (ts.validMirrorPlacement)
+                    color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
+
+                if (ts.startMirror != ts.endMirror
+                    && ((!ts.horizontalSelection && Math.Abs(newDistanceX) >= 1) || (ts.horizontalSelection && Math.Abs(newDistanceY) >= 1)))
+                    DrawRectangle((int)ts.startMirror.X, (int)ts.startMirror.Y, (int)ts.endMirror.X, (int)ts.endMirror.Y);
+                else if (ts.startMirror != ts.endMirror)
+                    DrawLine((int)ts.startMirror.X, (int)ts.startMirror.Y, (int)ts.endMirror.X, (int)ts.endMirror.Y);
+            }
         }
 
-        private bool IsMirrorAxisInsideSelection()
-        {
-            return Tools.IsWithinRange(ts.startMirror.X, ts.startSel.X, ts.endSel.X) && Tools.IsWithinRange(ts.endMirror.X, ts.startSel.X, ts.endSel.X)
+        private bool IsMirrorAxisInsideSelection() =>
+            ts.startMirror != ts.endMirror && Tools.IsWithinRange(ts.startMirror.X, ts.startSel.X, ts.endSel.X) && Tools.IsWithinRange(ts.endMirror.X, ts.startSel.X, ts.endSel.X)
             && Tools.IsWithinRange(ts.startMirror.Y, ts.startSel.Y, ts.endSel.Y) && Tools.IsWithinRange(ts.endMirror.Y, ts.startSel.Y, ts.endSel.Y);
-        }
     }
 }

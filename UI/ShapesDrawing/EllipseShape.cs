@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {
@@ -37,6 +39,10 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
             if (sd.dragging && (ShapesMenu.optionSelected[3] || ShapesMenu.optionSelected[4]))
                 FixHalfShapesOffset();
+
+            color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Blue
+            if (ShapesMenu.optionSelected[2])
+                color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
 
             if (sd.startDrag != sd.endDrag)
                 DrawEllipse((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);

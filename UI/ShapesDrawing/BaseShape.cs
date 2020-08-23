@@ -10,8 +10,14 @@ namespace BuilderEssentials.UI.ShapesDrawing
 {
     class BaseShape : UIElement
     {
+        public static BaseShape Instance;
         public ShapesState sd;
-        public override void OnInitialize() => sd = ShapesState.Instance;
+        public Color color;
+        public override void OnInitialize()
+        {
+            Instance = this;
+            sd = ShapesState.Instance;
+        }
 
         //Taken from http://members.chello.at/easyfilter/bresenham.html. All credits go to Alois Zingl
         #region Algorithms by Alois Zingl
@@ -123,13 +129,13 @@ namespace BuilderEssentials.UI.ShapesDrawing
             //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
             int selectedQuarter = -1;
 
-            if (x0 < x1 && y0 < y1)
+            if (x0 <= x1 && y0 <= y1)
                 selectedQuarter = 3;
-            else if (x0 < x1 && y0 > y1)
+            else if (x0 <= x1 && y0 >= y1)
                 selectedQuarter = 1;
-            else if (x0 > x1 && y0 > y1)
+            else if (x0 >= x1 && y0 >= y1)
                 selectedQuarter = 0;
-            else if (x0 > x1 && y0 < y1)
+            else if (x0 >= x1 && y0 <= y1)
                 selectedQuarter = 2;
 
             return selectedQuarter;
@@ -140,13 +146,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
         {
             Texture2D texture = Main.extraTexture[2];
             Rectangle value = new Rectangle(0, 0, 16, 16);
-            Color color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Blue
             Vector2 position = new Vector2(x, y) * 16 - Main.screenPosition;
-
-            //TODO: IMPLEMENT EASY WAY TO DEFINE WHICH COLOR FOR WHAT ELEMENT
-
-            //color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
-            //color = new Color(1f, 0f, 0f, .75f) * 0.8f; //Red
 
             Main.spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
