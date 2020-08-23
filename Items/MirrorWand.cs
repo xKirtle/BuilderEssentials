@@ -9,7 +9,6 @@ namespace BuilderEssentials.Items
 {
     class MirrorWand : ModItem
     {
-        //TODO: MAKE MIRROR SELECTION BE SAVED PER WORLD, RATHER THAN ON THE MOD ITSELF
         public override string Texture => "BuilderEssentials/Textures/Items/MirrorWand";
 
         public override void SetStaticDefaults()
@@ -44,12 +43,6 @@ namespace BuilderEssentials.Items
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();
-        }
-
-        public override void UpdateInventory(Player player)
-        {
-            //if (selectionComplete && mirrorComplete && selectionStart != selectionEnd)
-            //    BuilderEssentials.validMirrorWand = true;
         }
     }
 }

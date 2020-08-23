@@ -92,7 +92,6 @@ namespace BuilderEssentials
                 infiniteRange = false;
                 pointedTilePos = new Vector2(Player.tileTargetX, Player.tileTargetY);
                 pointedTile = Main.tile[(int)pointedTilePos.X, (int)pointedTilePos.Y];
-                BuilderEssentials.validMirrorWand = false;
                 ShapesMenu.SDEquipped = false;
 
                 if (creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinityUpgrade.ToInt())
