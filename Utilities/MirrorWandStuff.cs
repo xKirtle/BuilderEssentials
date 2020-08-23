@@ -11,8 +11,6 @@ namespace BuilderEssentials.Utilities
     {
         public static void MirrorPlacement(int i, int j, int itemType)
         {
-            //TODO: FIX MULTI TILE PLACEMENTS
-
             TransparentSelectionUI ts = TransparentSelectionUI.Instance;
 
             //Vanilla, what the hell?
@@ -65,7 +63,7 @@ namespace BuilderEssentials.Utilities
                     if (ts.startMirror.X - posX > ts.endMirror.X - posX)
                         distanceToMirror = ts.startMirror.X - posX;
 
-                    if (IsWithinRange(posY, ts.startMirror.Y, ts.endMirror.Y))
+                    if (IsWithinRange(posY, ts.startMirror.Y, ts.endMirror.Y, true))
                     {
                         float newPos;
                         bool inRange = false;
@@ -106,7 +104,7 @@ namespace BuilderEssentials.Utilities
                 else if (ts.horizontalSelection)
                 {
                     float distanceToMirror = ts.endMirror.Y - posY;
-                    if (IsWithinRange(posX, ts.startMirror.X, ts.endMirror.X))
+                    if (IsWithinRange(posX, ts.startMirror.X, ts.endMirror.X, true))
                     {
                         float newPos;
                         bool inRange = false;

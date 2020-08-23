@@ -8,25 +8,28 @@ using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Utilities
 {
+    //TODO: REDO THIS WHOLE THING BECAUSE IT SUCKS AND IT'S THROWING RANDOM NULLREF EXCEPTIONS
     public class InfinitePlacementTile : GlobalTile
     {
         private int oldPosX;
         private int oldPosY;
         private List<Item> modifiedItemsConsumable = new List<Item>();
-        private bool canPlace = false;
+        private bool canPlace = true;
+        private bool canMirror = true;
         public override bool CanPlace(int i, int j, int type)
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            Tile tile = Framing.GetTileSafely(i, j);
+            //Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
             //Placement Anywhere
             if (Tools.PlacementAnywhere && !tile.active() && (oldPosX != i || oldPosY != j))
             {
                 Item selectedItem = Main.LocalPlayer.HeldItem;
-                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, selectedItem.createTile, false, true, -1, selectedItem.placeStyle);
-                tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+                WorldGen.PlaceTile(i, j, selectedItem.createTile, false, true, -1, selectedItem.placeStyle);
+                tile = Framing.GetTileSafely(i, j);
 
-                canPlace = true; //To make sure we don't call AutoReplaceStack on CanPlace and PlaceInWorld
+                canPlace = false; //To make sure we don't call AutoReplaceStack on CanPlace and PlaceInWorld
                 Tools.AutoReplaceStack(selectedItem, false);
 
                 if (!Tools.InfinitePlacement)
@@ -55,9 +58,8 @@ namespace BuilderEssentials.Utilities
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
 
-                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, selectedItem.type);
-
-                return base.CanPlace(i, j, type);
+                canMirror = false;
+                Tools.MirrorPlacement(i, j, selectedItem.type);
             }
 
             //Doesn't work for walls?
@@ -90,13 +92,16 @@ namespace BuilderEssentials.Utilities
                 item.type == ItemID.LivingWoodWand || item.type == ItemID.StaffofRegrowth)
                     item.consumable = false;
 
-                if (!canPlace) //avoid calling AutoReplaceStack twice if it has been called above
+                if (canPlace) //avoid calling AutoReplaceStack twice if it has been called above
                     Tools.AutoReplaceStack(item);
                 else
-                    canPlace = false;
+                    canPlace = true;
             }
 
-            Tools.MirrorPlacement(i, j, item.type);
+            if (canMirror)
+                Tools.MirrorPlacement(i, j, item.type);
+            else
+                canMirror = true;
 
             if (Tools.InfinitePlacement)
             {

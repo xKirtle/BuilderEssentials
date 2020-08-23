@@ -33,8 +33,13 @@ namespace BuilderEssentials.Utilities
                 !player.CCed;
         }
 
-        public static bool IsWithinRange(float number, float value1, float value2) =>
-            (number > value1 && number < value2) || (number < value1 && number > value2);
+        public static bool IsWithinRange(float number, float value1, float value2, bool equal = false)
+        {
+            if (!equal)
+                return (number > value1 && number < value2) || (number < value1 && number > value2);
+            else
+                return (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
+        }
 
         public static int FindNextEmptyInventorySlot()
         {
