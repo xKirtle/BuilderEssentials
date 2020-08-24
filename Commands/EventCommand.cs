@@ -1,5 +1,4 @@
-﻿using BuilderEssentials.UI;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials.Commands
@@ -12,6 +11,7 @@ namespace BuilderEssentials.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
+
         }
     }
 }

@@ -7,6 +7,7 @@ using BuilderEssentials.Items;
 using BuilderEssentials.Utilities;
 using static BuilderEssentials.Utilities.Tools;
 using Terraria.ID;
+using IL.Terraria.World.Generation;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {
@@ -22,7 +23,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
         }
 
         //Taken from http://members.chello.at/easyfilter/bresenham.html. All credits go to Alois Zingl
-        #region Algorithms by Alois Zingl
+        #region Algorithms by Alois Zingl (adapted)
         public void DrawEllipse(int x0, int y0, int x1, int y1)
         {
             var sel = ShapesMenu.optionSelected;
@@ -51,6 +52,52 @@ namespace BuilderEssentials.UI.ShapesDrawing
                     SetRectangle(x0, y1);    // III. Quadrant
                 if (noQuad || quadFour)
                     SetRectangle(x1, y1);    //  IV. Quadrant
+
+                //Fill
+                if (ShapesDrawer.channeling && ShapesMenu.optionSelected[2] && ShapesDrawer.selectedItemType != -1)
+                {
+                    //No half shape selected
+                    if (noQuad)
+                    {
+                        //Horizontal
+                        DrawLine(x0, y0, x1, y0);
+                        DrawLine(x0, y1, x1, y1);
+                        //Vertical
+                        DrawLine(x0, y0, x0, y1);
+                        DrawLine(x1, y0, x1, y1);
+
+                        //Diagonals (sometimes a few blocks are left to be placed and this fills the remaining)
+                        DrawLine(x0, y0, x1, y1);
+                        DrawLine(x0, y1, x1, y0);
+                    }
+
+                    //Half Shapes
+                    if (ShapesMenu.optionSelected[3])
+                    {
+                        int tempY = !ShapesMenu.optionSelected[5] ? y0 : y1;
+                        bool condition = !ShapesMenu.optionSelected[5] ? tempY < y1 : tempY > y1;
+
+                        do
+                        {
+                            DrawLine(x0, tempY, x1, tempY);
+                            tempY += condition ? 1 : -1;
+                        }
+                        while (condition);
+                    }
+                    else if (ShapesMenu.optionSelected[4])
+                    {
+                        int tempX = !ShapesMenu.optionSelected[5] ? x0 : x1;
+                        bool condition = !ShapesMenu.optionSelected[5] ? tempX > x1 : tempX < x1;
+
+                        do
+                        {
+                            DrawLine(tempX, y0, tempX, y1);
+                            tempX += condition ? -1 : 1;
+                        }
+                        while (condition);
+                    }
+                }
+
                 e2 = 2 * err;
                 if (e2 <= dy) { y0++; y1--; err += dy += a; }  //y step
                 if (e2 >= dx || 2 * err > dy) { x0++; x1--; err += dx += b1; } //x step
@@ -124,6 +171,17 @@ namespace BuilderEssentials.UI.ShapesDrawing
                 default:
                     break;
             }
+
+            //Fill
+            if (ShapesDrawer.channeling && ShapesMenu.optionSelected[2] && ShapesDrawer.selectedItemType != -1)
+            {
+                do
+                {
+                    y0++;
+                    DrawLine(x0, y0, x1, y0);
+                }
+                while (y0 < y1);
+            }
         }
 
         public int SelectedQuarter(int x0, int y0, int x1, int y1)
@@ -153,9 +211,11 @@ namespace BuilderEssentials.UI.ShapesDrawing
             if (ShapesDrawer.channeling && ShapesDrawer.selectedItemType != -1)
             {
                 //TODO: MAKE RESOURCES DEPLETE
+                //TODO: EXCLUDE TILES BIGGER THAN 1x1
 
                 Item myItem = new Item();
                 myItem.SetDefaults(ShapesDrawer.selectedItemType);
+                //Can't get tileObjectData to work?
 
                 switch (WhatIsThisItem(ShapesDrawer.selectedItemType))
                 {

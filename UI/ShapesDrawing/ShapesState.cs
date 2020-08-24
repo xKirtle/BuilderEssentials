@@ -31,7 +31,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
         public bool shiftPressed;
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (Main.LocalPlayer.HeldItem.type == ItemType<ShapesDrawer>() && Main.LocalPlayer.selectedItem <= 10)
+            if (Main.LocalPlayer.HeldItem.type == ItemType<ShapesDrawer>() && (ShapesMenu.optionSelected[0] || ShapesMenu.optionSelected[1]))
             {
                 dragging = true;
                 startDrag = endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
