@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BuilderEssentials.Items;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.UI;
+using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {
@@ -12,8 +14,8 @@ namespace BuilderEssentials.UI.ShapesDrawing
         {
             Instance = this;
 
-            OnMouseDown += DragStart;
-            OnMouseUp += DragEnd;
+            OnRightMouseDown += DragStart;
+            OnRightMouseUp += DragEnd;
 
             EllipseShape circleShape = new EllipseShape();
             Append(circleShape);
@@ -29,8 +31,11 @@ namespace BuilderEssentials.UI.ShapesDrawing
         public bool shiftPressed;
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
-            dragging = true;
-            startDrag = endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
+            if (Main.LocalPlayer.HeldItem.type == ItemType<ShapesDrawer>() && Main.LocalPlayer.selectedItem <= 10)
+            {
+                dragging = true;
+                startDrag = endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
+            }
         }
 
         private void DragEnd(UIMouseEvent evt, UIElement listeningElement)

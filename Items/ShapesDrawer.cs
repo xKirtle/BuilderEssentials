@@ -23,7 +23,7 @@ namespace BuilderEssentials.Items
             {
                 BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
                 ShapesMenu.SDEquipped = true;
-                channeling = Main.mouseRight;
+                channeling = Main.mouseLeft;
 
                 //Middle mouse
                 if (Main.mouseMiddle && !player.mouseInterface &&
