@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using BuilderEssentials.Items;
+using BuilderEssentials.Utilities;
+using static BuilderEssentials.Utilities.Tools;
+using Terraria.ID;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {
@@ -11,7 +14,6 @@ namespace BuilderEssentials.UI.ShapesDrawing
     {
         public static BaseShape Instance;
         public ShapesState sd;
-        public SpriteBatch sb;
         public Color color;
         public override void OnInitialize()
         {
@@ -150,13 +152,29 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
             if (ShapesDrawer.channeling && ShapesDrawer.selectedItemType != -1)
             {
+                //TODO: MAKE RESOURCES DEPLETE
+
                 Item myItem = new Item();
                 myItem.SetDefaults(ShapesDrawer.selectedItemType);
-                //TODO: ACCOUNT FOR TILES/WALLS
-                WorldGen.PlaceTile(x, y, myItem.createTile);
+
+                switch (WhatIsThisItem(ShapesDrawer.selectedItemType))
+                {
+                    case ItemTypes.Air:
+                        break;
+                    case ItemTypes.Tile:
+                        WorldGen.PlaceTile(x, y, myItem.createTile);
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                            NetMessage.SendTileSquare(-1, x, y, 1);
+                        break;
+                    case ItemTypes.Wall:
+                        WorldGen.PlaceWall(x, y, myItem.createWall);
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                            NetMessage.SendTileSquare(-1, x, y, 1);
+                        break;
+                }
             }
 
-            sb.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         public void SquareCoords()
