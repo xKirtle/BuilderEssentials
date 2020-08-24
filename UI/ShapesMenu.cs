@@ -142,7 +142,6 @@ namespace BuilderEssentials.UI
 
             void SMClicked(int index)
             {
-                //TODO: ADD SOME VISUAL CLUE THAT USER CANT SELECT HALF CIRCLES/ELIPSES WHILE SQUARE/RECTANGLE IS SELECTED
                 optionSelected[index] = !optionSelected[index];
                 isFillEnabled = optionSelected[2];
                 isMirrorEnabled = optionSelected[5];

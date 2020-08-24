@@ -9,9 +9,6 @@ namespace BuilderEssentials.Items
     {
         public override string Texture => "BuilderEssentials/Textures/Items/FillWand";
 
-        //TODO: ADD SUPPORT TO MIRROR WAND
-        int toolRange; //Should it have range?
-
         int oldPosX;
         int oldPosY;
         public static Item customItem = new Item();
@@ -38,7 +35,6 @@ namespace BuilderEssentials.Items
             item.autoReuse = true;
             item.noMelee = true;
             item.noUseGraphic = true;
-            toolRange = 8;
         }
 
         public override void AddRecipes()
@@ -69,7 +65,7 @@ namespace BuilderEssentials.Items
                     RightClick();
 
                 //Middle Mouse Button
-                if (Main.mouseMiddle && !player.mouseInterface && !Main.playerInventory &&
+                if (Main.mouseMiddle && !player.mouseInterface &&
                     (modPlayer.pointedTilePos.X != oldPosX || modPlayer.pointedTilePos.Y != oldPosY))
                 {
                     selectedTileItemType = Tools.PickItem(modPlayer.pointedTile, false);
@@ -97,6 +93,7 @@ namespace BuilderEssentials.Items
                 {
                     for (int j = 0; j < fillSelectionSize; j++)
                     {
+                        tilePlaced = false;
                         int posX = Player.tileTargetX + j;
                         int posY = Player.tileTargetY - i;
                         Tile tile = Main.tile[posX, posY];
@@ -122,12 +119,8 @@ namespace BuilderEssentials.Items
                                 }
                             }
 
-                            if (tilePlaced)
-                            {
-                                Tools.MirrorPlacement(Player.tileTargetX, Player.tileTargetY, customItem.type);
-                                if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    NetMessage.SendTileSquare(-1, posX, posY, 1);
-                            }
+                            if (tilePlaced && Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendTileSquare(-1, posX, posY, 1);
                         }
                     }
                 }

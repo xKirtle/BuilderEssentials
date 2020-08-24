@@ -30,6 +30,8 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            sb = spriteBatch;
+
             //Disable drawing if conditions met
             if (!ShapesMenu.SDEquipped || !ShapesMenu.optionSelected[0])
                 return;

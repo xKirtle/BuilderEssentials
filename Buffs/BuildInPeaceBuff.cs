@@ -19,8 +19,6 @@ namespace BuilderEssentials.Buffs
         }
         public override void Update(Player player, ref int buffIndex)
         {
-            //TODO: If invasion is summoned with an item, maybe make that item not be used?
-
             Main.raining = false;
             Main.bloodMoon = false;
             Main.StopSlimeRain(false);
@@ -40,29 +38,6 @@ namespace BuilderEssentials.Buffs
                 if (!npc.townNPC)
                     npc.active = false;
             }
-        }
-    }
-
-    public class BuildInPeaceSummonItem : GlobalItem
-    {
-        static bool summonedBossWhileBuffIsOn = false;
-        public override bool UseItem(Item item, Player player)
-        {
-            if (player.HasBuff(ModContent.BuffType<BuildInPeaceBuff>()))
-            {
-                int[] bossItems = ItemID.Sets.SortingPriorityBossSpawns;
-                if (bossItems[item.type] != -1) //Doesn't quite work for modded bosses
-                {
-                    if (!summonedBossWhileBuffIsOn)
-                    {
-                        Main.NewText("You can't summon bosses or invasions while you have the Build In Peace accessory equipped.", Color.Red);
-                        summonedBossWhileBuffIsOn = true;
-                    }
-                    item.stack += 1;
-                    return false;
-                }
-            }
-            return base.UseItem(item, player);
         }
     }
 

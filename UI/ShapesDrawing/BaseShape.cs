@@ -3,7 +3,6 @@ using Terraria.UI;
 using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
 using BuilderEssentials.Items;
 
 namespace BuilderEssentials.UI.ShapesDrawing
@@ -12,6 +11,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
     {
         public static BaseShape Instance;
         public ShapesState sd;
+        public SpriteBatch sb;
         public Color color;
         public override void OnInitialize()
         {
@@ -148,7 +148,15 @@ namespace BuilderEssentials.UI.ShapesDrawing
             Rectangle value = new Rectangle(0, 0, 16, 16);
             Vector2 position = new Vector2(x, y) * 16 - Main.screenPosition;
 
-            Main.spriteBatch.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (ShapesDrawer.channeling && ShapesDrawer.selectedItemType != -1)
+            {
+                Item myItem = new Item();
+                myItem.SetDefaults(ShapesDrawer.selectedItemType);
+                //TODO: ACCOUNT FOR TILES/WALLS
+                WorldGen.PlaceTile(x, y, myItem.createTile);
+            }
+
+            sb.Draw(texture, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         public void SquareCoords()

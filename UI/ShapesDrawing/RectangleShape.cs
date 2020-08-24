@@ -7,6 +7,8 @@ namespace BuilderEssentials.UI.ShapesDrawing
     {
         public override void Draw(SpriteBatch spriteBatch)
         {
+            sb = spriteBatch;
+
             //Disable drawing if conditions met
             if (!ShapesMenu.SDEquipped || !ShapesMenu.optionSelected[1])
                 return;
@@ -18,7 +20,8 @@ namespace BuilderEssentials.UI.ShapesDrawing
             if (ShapesMenu.optionSelected[2])
                 color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
 
-            DrawRectangle((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
+            if (sd.startDrag != sd.endDrag)
+                DrawRectangle((int)sd.startDrag.X, (int)sd.startDrag.Y, (int)sd.endDrag.X, (int)sd.endDrag.Y);
         }
     }
 }
