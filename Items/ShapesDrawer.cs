@@ -2,6 +2,7 @@
 using BuilderEssentials.UI.ShapesDrawing;
 using BuilderEssentials.Utilities;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials.Items
@@ -11,7 +12,28 @@ namespace BuilderEssentials.Items
         BaseShape bs = BaseShape.Instance;
         public override string Texture => "BuilderEssentials/Textures/Items/ShapesDrawer";
 
-        public override void SetStaticDefaults() => Tooltip.SetDefault("Used to draw shapes");
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault("Used to draw shapes" +
+            "\nRight Click to make selection" +
+            "\nMiddle Click to select working tile" +
+            "\nLeft Click to place blocks in the selection");
+        }
+
+        public override void SetDefaults()
+        {
+            item.height = 40;
+            item.width = 40;
+            item.useTime = 1;
+            item.useAnimation = 10;
+            item.useStyle = ItemUseStyleID.HoldingOut;
+            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.rare = ItemRarityID.Red;
+            item.UseSound = SoundID.Item1;
+            item.autoReuse = true;
+            item.noMelee = true;
+            item.noUseGraphic = true;
+        }
 
         public static bool channeling;
         public static int selectedItemType = -1;
