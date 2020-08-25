@@ -210,27 +210,28 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
             if (ShapesDrawer.channeling && ShapesDrawer.selectedItemType != -1)
             {
-                //TODO: MAKE RESOURCES DEPLETE
                 //TODO: EXCLUDE TILES BIGGER THAN 1x1
 
                 Item myItem = new Item();
                 myItem.SetDefaults(ShapesDrawer.selectedItemType);
-                //Can't get tileObjectData to work?
 
-                switch (WhatIsThisItem(ShapesDrawer.selectedItemType))
+                if (Tools.InfinitePlacement || Tools.ReduceItemStack(myItem.type))
                 {
-                    case ItemTypes.Air:
-                        break;
-                    case ItemTypes.Tile:
-                        WorldGen.PlaceTile(x, y, myItem.createTile);
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            NetMessage.SendTileSquare(-1, x, y, 1);
-                        break;
-                    case ItemTypes.Wall:
-                        WorldGen.PlaceWall(x, y, myItem.createWall);
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            NetMessage.SendTileSquare(-1, x, y, 1);
-                        break;
+                    switch (WhatIsThisItem(ShapesDrawer.selectedItemType))
+                    {
+                        case ItemTypes.Air:
+                            break;
+                        case ItemTypes.Tile:
+                            WorldGen.PlaceTile(x, y, myItem.createTile);
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendTileSquare(-1, x, y, 1);
+                            break;
+                        case ItemTypes.Wall:
+                            WorldGen.PlaceWall(x, y, myItem.createWall);
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendTileSquare(-1, x, y, 1);
+                            break;
+                    }
                 }
             }
 
