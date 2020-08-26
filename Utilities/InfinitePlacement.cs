@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static BuilderEssentials.BuilderPlayer;
 
 namespace BuilderEssentials.Utilities
 {
@@ -60,15 +57,9 @@ namespace BuilderEssentials.Utilities
 
                 canMirror = false;
                 Tools.MirrorPlacement(i, j, selectedItem.type);
-            }
 
-            //Doesn't work for walls?
-            // if (modPlayer.creativeWheelSelectedIndex.Contains((int)CreativeWheelItem.PlacementAnywhere))// && tile.wall >= 0)
-            // {
-            //     Item selectedItem = Main.LocalPlayer.inventory[Main.LocalPlayer.selectedItem];
-            //     WorldGen.PlaceWall(Player.tileTargetX, Player.tileTargetY, selectedItem.createWall);
-            //     return true;
-            // }
+                return true;
+            }
 
             return base.CanPlace(i, j, type);
         }
