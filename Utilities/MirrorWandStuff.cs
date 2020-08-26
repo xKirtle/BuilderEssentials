@@ -1,5 +1,6 @@
 ﻿using BuilderEssentials.UI;
 using System;
+using System.Diagnostics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -13,15 +14,6 @@ namespace BuilderEssentials.Utilities
         {
             TransparentSelectionUI ts = TransparentSelectionUI.Instance;
 
-            //Vanilla, what the hell?
-            //    //size 2, origin (0, 0), x needs to decrease 1
-            //    //size 2, origin (0, 1), x needs to decrease 1
-            //    //size 2, origin (0, 4), x needs to decrease 1
-            //    //size 2, origin (1, 1), x needs to increase 1
-            //    //size 4, origin (1, 1), x needs to decrease 1
-            //    //size 4, origin (1, 2), x needs to decrease 2
-            //    //size 4, origin (1, 3), x needs to decrease 1
-
             Item item = new Item();
             item.SetDefaults(itemType);
             ItemTypes itemTypes = WhatIsThisItem(itemType);
@@ -31,9 +23,7 @@ namespace BuilderEssentials.Utilities
                 int correctionOrigin = 0;
                 try
                 {
-                    //Throwing ingame error for non multi tile items
                     Tile tile = Framing.GetTileSafely(i, j);
-                    //Tile tile = Main.tile[i, j];
 
                     var tileOrigin = TileObjectData.GetTileData(tile).Origin;
                     var tileSize = TileObjectData.GetTileData(tile).CoordinateFullWidth / 16;
@@ -48,7 +38,7 @@ namespace BuilderEssentials.Utilities
                     if (tileSize == 4 && tileOrigin == new Point16(1, 2))
                         correctionOrigin = -2;
                 }
-                catch (Exception) { }
+                catch (Exception ex) { Debug.Print(ex.Message); }
 
                 float posX = i;
                 float posY = j;
