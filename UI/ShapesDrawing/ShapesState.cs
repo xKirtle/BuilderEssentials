@@ -24,14 +24,14 @@ namespace BuilderEssentials.UI.ShapesDrawing
             Append(rectangleShape);
         }
 
-        //TODO: Disable coord updates if mouse on UI elements
         public bool dragging;
         public Vector2 startDrag = Vector2.Zero;
         public Vector2 endDrag = Vector2.Zero;
         public bool shiftPressed;
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (Main.LocalPlayer.HeldItem.type == ItemType<ShapesDrawer>() && (ShapesMenu.optionSelected[0] || ShapesMenu.optionSelected[1]))
+            if (!Main.LocalPlayer.mouseInterface && Main.LocalPlayer.HeldItem.type == ItemType<ShapesDrawer>() 
+                && (ShapesMenu.optionSelected[0] || ShapesMenu.optionSelected[1]))
             {
                 dragging = true;
                 startDrag = endDrag = new Vector2(Player.tileTargetX, Player.tileTargetY);
