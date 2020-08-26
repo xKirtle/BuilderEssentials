@@ -108,16 +108,16 @@ namespace BuilderEssentials
             DecreaseFillToolSize = null;
 
             //UI
-            ItemsWheelState = null;
-            TransparentSelectionUI = null;
             UserInterface = null;
+            ItemsWheelState = null;
             TransparentSelectionInterface = null;
-            AutoHammerWheel.AutoHammerWheelPanel = null;
-            CreativeWheel.CreativeWheelPanel = null;
-            CreativeWheel.CreativeWheelElements = null;
-            MultiWandWheel.MultiWandWheelPanel = null;
-            MultiWandWheel.WandWheelElements = null;
-            PaintWheel.PaintWheelPanel = null;
+            TransparentSelectionUI = null;
+            BuildingModeInterface = null;
+            BMState = null;
+            ShapesMenuInterface = null;
+            ShapesMenu = null;
+            ShapesInterface = null;
+            ShapesState = null;
 
             //Textures
             UnloadTextures();
