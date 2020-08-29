@@ -24,16 +24,12 @@ namespace BuilderEssentials
         public static List<Texture2D> AutoHammerElements;
         internal static ModHotKey IncreaseFillToolSize;
         internal static ModHotKey DecreaseFillToolSize;
-        internal static bool LoadoutsEnabled;
 
         public static bool autoReplaceStack;
         public static bool validMirrorWand;
 
         public override void Load()
         {
-            Mod Loadouts = ModLoader.GetMod("Loadouts");
-            LoadoutsEnabled = Loadouts != null;
-                
             IncreaseFillToolSize = RegisterHotKey("Increase Fill Size Selection", "I");
             DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection", "O");
 

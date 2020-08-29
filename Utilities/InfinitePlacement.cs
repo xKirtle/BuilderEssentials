@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace BuilderEssentials.Utilities
 {
-    //TODO: REDO THIS WHOLE THING BECAUSE IT SUCKS AND IT'S THROWING RANDOM NULLREF EXCEPTIONS
+    //TODO: REDO THIS WHOLE THING BECAUSE IT SUCKS
     public class InfinitePlacementTile : GlobalTile
     {
         private int oldPosX;
@@ -17,7 +17,6 @@ namespace BuilderEssentials.Utilities
         {
             BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             Tile tile = Framing.GetTileSafely(i, j);
-            //Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 
             //Placement Anywhere
             if (Tools.PlacementAnywhere && !tile.active() && (oldPosX != i || oldPosY != j))
