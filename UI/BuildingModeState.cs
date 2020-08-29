@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace BuilderEssentials.UI
@@ -18,7 +19,9 @@ namespace BuilderEssentials.UI
             buildingModeButton.Left.Set(510f, 0);
             buildingModeButton.OnClick += ChangeAccessories_OnClick;
             buildingModeButton.SetVisibility(0f, 0f);
-            Append(buildingModeButton);
+
+            if (!BuilderEssentials.LoadoutsEnabled)
+                Append(buildingModeButton);
         }
 
         public void ChangeAccessories_OnClick(UIMouseEvent evt, UIElement listeningElement)

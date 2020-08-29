@@ -26,12 +26,17 @@ namespace BuilderEssentials
         internal static ModHotKey ToggleBuildingMode;
         internal static ModHotKey IncreaseFillToolSize;
         internal static ModHotKey DecreaseFillToolSize;
+        internal static bool LoadoutsEnabled;
 
         public static bool autoReplaceStack;
         public static bool validMirrorWand;
 
         public override void Load()
         {
+            Mod Loadouts = ModLoader.GetMod("Loadouts");
+            LoadoutsEnabled = Loadouts != null;
+                
+
             ToggleBuildingMode = RegisterHotKey("Toggle Building Mode", "N");
             IncreaseFillToolSize = RegisterHotKey("Increase Fill Size Selection", "I");
             DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection", "O");

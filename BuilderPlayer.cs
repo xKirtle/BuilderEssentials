@@ -108,7 +108,7 @@ namespace BuilderEssentials
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (BuilderEssentials.ToggleBuildingMode.JustPressed)
+            if (BuilderEssentials.ToggleBuildingMode.JustPressed && !BuilderEssentials.LoadoutsEnabled)
                 BuildingMode.ToggleBuildingMode();
 
             if (BuilderEssentials.IncreaseFillToolSize.JustPressed && FillWand.fillSelectionSize < 6)
@@ -195,8 +195,6 @@ namespace BuilderEssentials
             //Calling this again here after Init to prevent older saves to stay with "null" saved values
             EnsureSaveCompatibility();
         }
-
-        public override void OnEnterWorld(Player player) => BuildingMode.UpdateButtonImage();
 
         public void EnsureSaveCompatibility()
         {
