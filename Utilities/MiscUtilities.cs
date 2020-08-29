@@ -67,23 +67,8 @@ namespace BuilderEssentials.Utilities
 
         public static bool ValidTilePlacement(int posX, int posY)
         {
-            //Top
-            if (Main.tile[posX, posY - 1].active())
-                return true;
-            //Right
-            if (Main.tile[posX + 1, posY].active())
-                return true;
-            //Bottom
-            if (Main.tile[posX, posY + 1].active())
-                return true;
-            //Left
-            if (Main.tile[posX - 1, posY].active())
-                return true;
-            //Has Wall behind?
-            if (Main.tile[posX, posY].wall != 0)
-                return true;
-
-            return false;
+            return Main.tile[posX, posY - 1].active() || Main.tile[posX + 1, posY].active() || Main.tile[posX, posY + 1].active()
+                || Main.tile[posX - 1, posY].active() || Main.tile[posX, posY].wall != 0;
         }
 
         public static bool ToolHasRange(int range)

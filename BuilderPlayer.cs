@@ -23,6 +23,8 @@ namespace BuilderEssentials
 
 
         //Building Mode
+        public bool IsNormalAccessories;
+
         public List<Item> NormalAccessories;
         public List<Item> BuildingAccessories;
 
@@ -52,6 +54,8 @@ namespace BuilderEssentials
             previousHeldItem = new Item();
             pointedTilePos = new Vector2();
             pointedTile = new Tile();
+
+            IsNormalAccessories = true;
 
             NormalAccessories = new List<Item>(7);
             BuildingAccessories = new List<Item>(7);
@@ -118,6 +122,8 @@ namespace BuilderEssentials
         {
             return new TagCompound
             {
+                { "IsNormalAccessories", IsNormalAccessories },
+
                 { "NormalAccessories", NormalAccessories },
                 { "BuildingAccessories", BuildingAccessories },
 
@@ -143,6 +149,9 @@ namespace BuilderEssentials
         public override void Load(TagCompound tag)
         {
             //Building Mode
+            if (tag.ContainsKey("IsNormalAccessories"))
+                IsNormalAccessories = tag.GetBool("IsNormalAccessories");
+
             if (tag.ContainsKey("NormalAccessories"))
                 NormalAccessories = tag.Get<List<Item>>("NormalAccessories");
 
@@ -186,6 +195,8 @@ namespace BuilderEssentials
             //Calling this again here after Init to prevent older saves to stay with "null" saved values
             EnsureSaveCompatibility();
         }
+
+        public override void OnEnterWorld(Player player) => BuildingMode.UpdateButtonImage();
 
         public void EnsureSaveCompatibility()
         {

@@ -6,7 +6,6 @@ namespace BuilderEssentials.Utilities
 {
     public static class BuildingMode
     {
-        public static bool IsNormalAccessories = true;
         //Variables updated through ModConfig
         public static bool accessories;
         public static bool vanityAccessories;
@@ -28,8 +27,10 @@ namespace BuilderEssentials.Utilities
 
         public static void ToggleBuildingMode()
         {
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+
             SaveCurrentAccessories();
-            IsNormalAccessories = !IsNormalAccessories;
+            modPlayer.IsNormalAccessories = !modPlayer.IsNormalAccessories;
             LoadAccessories();
             UpdateButtonImage();
         }
@@ -40,7 +41,7 @@ namespace BuilderEssentials.Utilities
             var player = Main.LocalPlayer;
             int maxAccessoryIndex = 5 + Main.LocalPlayer.extraAccessorySlots;
 
-            if (IsNormalAccessories)
+            if (modPlayer.IsNormalAccessories)
             {
                 if (accessories)
                     for (int i = 3; i < 3 + maxAccessoryIndex; i++)
@@ -100,7 +101,7 @@ namespace BuilderEssentials.Utilities
             var player = Main.LocalPlayer;
             int maxAccessoryIndex = 5 + Main.LocalPlayer.extraAccessorySlots;
 
-            if (IsNormalAccessories)
+            if (modPlayer.IsNormalAccessories)
             {
                 if (accessories)
                     for (int i = 3; i < 3 + maxAccessoryIndex; i++)
@@ -158,7 +159,9 @@ namespace BuilderEssentials.Utilities
 
         public static void UpdateButtonImage()
         {
-            Texture2D texture = IsNormalAccessories ? BuilderEssentials.BuildingModeOff : BuilderEssentials.BuildingModeOn;
+            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
+
+            Texture2D texture = modPlayer.IsNormalAccessories ? BuilderEssentials.BuildingModeOff : BuilderEssentials.BuildingModeOn;
             BuildingModeState.buildingModeButton.SetImage(texture);
         }
     }

@@ -260,13 +260,6 @@ namespace BuilderEssentials
             }
         }
 
-        public override void PreSaveAndQuit()
-        {
-            //Makes sure player leaves as non Building Mode
-            if (!BuildingMode.IsNormalAccessories)
-                BuildingMode.ToggleBuildingMode();
-        }
-
         public override void AddRecipeGroups()
         {
             RecipeGroup workbench = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " Workbench", new int[]
