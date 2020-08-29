@@ -20,25 +20,26 @@ namespace BuilderEssentials.Utilities
 
             if (ts.validMirrorPlacement)
             {
+                //compensate for multi tiles
                 int correctionOrigin = 0;
-                try
-                {
-                    Tile tile = Framing.GetTileSafely(i, j);
+                //if (itemTypes == ItemTypes.Tile)
+                //{
+                //    //GetTileData throwing random null refs
+                //    Tile tile = Framing.GetTileSafely(i, j);
+                //    var tileOrigin = TileObjectData.GetTileData(tile).Origin;
+                //    var tileSize = TileObjectData.GetTileData(tile).CoordinateFullWidth / 16;
 
-                    var tileOrigin = TileObjectData.GetTileData(tile).Origin;
-                    var tileSize = TileObjectData.GetTileData(tile).CoordinateFullWidth / 16;
 
-                    if (tileSize == 2 && (tileOrigin == new Point16(0, 0) || tileOrigin == new Point16(0, 1)
-                        || tileOrigin == new Point16(0, 4) || tileOrigin == new Point16(1, 1)))
-                        correctionOrigin = -1;
+                //    if (tileSize == 2 && (tileOrigin == new Point16(0, 0) || tileOrigin == new Point16(0, 1)
+                //        || tileOrigin == new Point16(0, 4) || tileOrigin == new Point16(1, 1)))
+                //        correctionOrigin = -1;
 
-                    if (tileSize == 4 && (tileOrigin == new Point16(1, 1) || tileOrigin == new Point16(1, 3)))
-                        correctionOrigin = -1;
+                //    if (tileSize == 4 && (tileOrigin == new Point16(1, 1) || tileOrigin == new Point16(1, 3)))
+                //        correctionOrigin = -1;
 
-                    if (tileSize == 4 && tileOrigin == new Point16(1, 2))
-                        correctionOrigin = -2;
-                }
-                catch (Exception ex) { Debug.Print(ex.Message); }
+                //    if (tileSize == 4 && tileOrigin == new Point16(1, 2))
+                //        correctionOrigin = -2;
+                //}
 
                 float posX = i;
                 float posY = j;
@@ -56,38 +57,19 @@ namespace BuilderEssentials.Utilities
                     if (IsWithinRange(posY, ts.startMirror.Y, ts.endMirror.Y, true))
                     {
                         float newPos;
-                        bool inRange = false;
                         if (distanceToMirror < 0) //Right to the mirror axis
                         {
                             newPos = ts.endMirror.X - Math.Abs(distanceToMirror) + correctionOrigin;
                             if (ts.wideMirror && LeftRight) newPos -= 1;
                             if (IsWithinRange(newPos, ts.startSel.X, ts.endSel.X))
-                                inRange = true;
+                                PlaceTile((int)newPos, (int)posY, item.type);
                         }
                         else //Left to the mirror axis
                         {
                             newPos = ts.endMirror.X + Math.Abs(distanceToMirror + correctionOrigin);
                             if (ts.wideMirror && LeftRight) newPos -= 1;
                             if (IsWithinRange(newPos, ts.startSel.X, ts.endSel.X))
-                                inRange = true;
-                        }
-
-                        if (inRange)
-                        {
-                            switch (itemTypes)
-                            {
-                                case ItemTypes.Air:
-                                    break;
-                                case ItemTypes.Tile:
-                                    WorldGen.PlaceTile((int)newPos, (int)posY, item.createTile, style: item.placeStyle);
-                                    break;
-                                case ItemTypes.Wall:
-                                    WorldGen.PlaceWall((int)newPos, (int)posY, item.createWall);
-                                    break;
-                            }
-
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                NetMessage.SendTileSquare(-1, (int)newPos, (int)posY, 1);
+                                PlaceTile((int)newPos, (int)posY, item.type);
                         }
                     }
                 }
@@ -97,7 +79,6 @@ namespace BuilderEssentials.Utilities
                     if (IsWithinRange(posX, ts.startMirror.X, ts.endMirror.X, true))
                     {
                         float newPos;
-                        bool inRange = false;
                         if (distanceToMirror < 0) //Bottom to the mirror axis
                         {
                             newPos = ts.endMirror.Y - Math.Abs(distanceToMirror);
@@ -105,7 +86,7 @@ namespace BuilderEssentials.Utilities
                             else if (ts.wideMirror && BottomTop) newPos += 1;
 
                             if (IsWithinRange(newPos, ts.startSel.Y, ts.endSel.Y))
-                                inRange = true;
+                                PlaceTile((int)posX, (int)newPos, item.type);
                         }
                         else //Top to the mirror axis
                         {
@@ -114,25 +95,7 @@ namespace BuilderEssentials.Utilities
                             else if (ts.wideMirror && BottomTop) newPos += 1;
 
                             if (IsWithinRange(newPos, ts.startSel.Y, ts.endSel.Y))
-                                inRange = true;
-                        }
-
-                        if (inRange)
-                        {
-                            switch (itemTypes)
-                            {
-                                case ItemTypes.Air:
-                                    break;
-                                case ItemTypes.Tile:
-                                    WorldGen.PlaceTile((int)posX, (int)newPos, item.createTile, false, false, -1, item.placeStyle);
-                                    break;
-                                case ItemTypes.Wall:
-                                    WorldGen.PlaceWall((int)posX, (int)newPos, item.createWall);
-                                    break;
-                            }
-
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                NetMessage.SendTileSquare(-1, (int)posX, (int)newPos, 1);
+                                PlaceTile((int)posX, (int)newPos, item.type);
                         }
                     }
                 }

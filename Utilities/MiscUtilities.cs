@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials.Utilities
@@ -197,6 +198,30 @@ namespace BuilderEssentials.Utilities
                 return ItemTypes.Wall;
             else
                 return ItemTypes.Air;
+        }
+
+        public static Tile PlaceTile(int i, int j, int itemType)
+        {
+            ItemTypes itemTypes = WhatIsThisItem(itemType);
+            Item item = new Item();
+            item.SetDefaults(itemType);
+
+            switch (itemTypes)
+            {
+                case ItemTypes.Air:
+                    break;
+                case ItemTypes.Tile:
+                    WorldGen.PlaceTile(i, j, item.createTile, style: item.placeStyle);
+                    break;
+                case ItemTypes.Wall:
+                    WorldGen.PlaceWall(i, j, item.createWall);
+                    break;
+            }
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, i, j, 1);
+
+            return Framing.GetTileSafely(i, j);
         }
     }
 }

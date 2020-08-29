@@ -13,6 +13,8 @@ namespace BuilderEssentials.Items
 
         public override void SetStaticDefaults()
         {
+            DisplayName.SetDefault("(Unreleased) Mirror Wand");
+
             Tooltip.SetDefault("Mirrors everything!" +
             "\nRight Click to make a selection area" +
             "\nLeft Click to make a mirror axis" +
@@ -36,13 +38,13 @@ namespace BuilderEssentials.Items
 
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddRecipeGroup("BuilderEssentials:MagicMirrors");
-            recipe.AddIngredient(ItemID.SoulofLight, 25);
-            recipe.AddIngredient(ItemID.SoulofNight, 25);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
+            //ModRecipe recipe = new ModRecipe(mod);
+            //recipe.AddRecipeGroup("BuilderEssentials:MagicMirrors");
+            //recipe.AddIngredient(ItemID.SoulofLight, 25);
+            //recipe.AddIngredient(ItemID.SoulofNight, 25);
+            //recipe.AddTile(TileID.MythrilAnvil);
+            //recipe.SetResult(this);
+            //recipe.AddRecipe();
         }
     }
 }
