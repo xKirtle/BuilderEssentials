@@ -113,15 +113,6 @@ namespace BuilderEssentials.Utilities
             return hoverText;
         }
 
-        public static void FixOldSaveData(ref List<Item> list)
-        {
-            if (list.Count < list.Capacity)
-            {
-                for (int i = list.Count; i < list.Capacity; i++)
-                    list.Add(new Item());
-            }
-        }
-
         public static void AutoReplaceStack(Item item, bool reducedStack = true)
         {
             Player player = Main.LocalPlayer;

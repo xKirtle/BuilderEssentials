@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
-using BuilderEssentials.Utilities;
 using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.UI.ShapesDrawing;
 
@@ -23,7 +22,6 @@ namespace BuilderEssentials
         public static List<Texture2D> PaintTools;
         public static List<Texture2D> WandWheelElements;
         public static List<Texture2D> AutoHammerElements;
-        internal static ModHotKey ToggleBuildingMode;
         internal static ModHotKey IncreaseFillToolSize;
         internal static ModHotKey DecreaseFillToolSize;
         internal static bool LoadoutsEnabled;
@@ -36,8 +34,6 @@ namespace BuilderEssentials
             Mod Loadouts = ModLoader.GetMod("Loadouts");
             LoadoutsEnabled = Loadouts != null;
                 
-
-            ToggleBuildingMode = RegisterHotKey("Toggle Building Mode", "N");
             IncreaseFillToolSize = RegisterHotKey("Increase Fill Size Selection", "I");
             DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection", "O");
 
@@ -54,11 +50,6 @@ namespace BuilderEssentials
                 ItemsWheelState = new ItemsWheelState();
                 ItemsWheelState.Activate();
                 UserInterface.SetState(ItemsWheelState);
-
-                BuildingModeInterface = new UserInterface();
-                BMState = new BuildingModeState();
-                BMState.Activate();
-                BuildingModeInterface.SetState(BMState);
 
                 ShapesMenuInterface = new UserInterface();
                 ShapesMenu = new ShapesMenu();
@@ -108,7 +99,6 @@ namespace BuilderEssentials
         public override void Unload()
         {
             //Hotkeys
-            ToggleBuildingMode = null;
             IncreaseFillToolSize = null;
             DecreaseFillToolSize = null;
 
@@ -117,8 +107,6 @@ namespace BuilderEssentials
             ItemsWheelState = null;
             TransparentSelectionInterface = null;
             TransparentSelectionUI = null;
-            BuildingModeInterface = null;
-            BMState = null;
             ShapesMenuInterface = null;
             ShapesMenu = null;
             ShapesInterface = null;
@@ -157,8 +145,6 @@ namespace BuilderEssentials
         internal static ItemsWheelState ItemsWheelState;
         internal static UserInterface TransparentSelectionInterface;
         internal static TransparentSelectionUI TransparentSelectionUI;
-        internal static UserInterface BuildingModeInterface;
-        internal static BuildingModeState BMState;
         internal static UserInterface ShapesMenuInterface;
         internal static ShapesMenu ShapesMenu;
         internal static UserInterface ShapesInterface;
@@ -172,9 +158,6 @@ namespace BuilderEssentials
 
             if (TransparentSelectionInterface?.CurrentState != null)
                 TransparentSelectionInterface.Update(gameTime);
-
-            if (BuildingModeInterface?.CurrentState != null)
-                BuildingModeInterface.Update(gameTime);
 
             if (ShapesMenuInterface?.CurrentState != null)
                 ShapesMenuInterface.Update(gameTime);
@@ -226,22 +209,6 @@ namespace BuilderEssentials
                         if (_lastUpdateUiGameTime != null && UserInterface?.CurrentState != null)
                         {
                             UserInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
-                        }
-                        return true;
-                    },
-                       InterfaceScaleType.UI));
-            }
-
-            interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
-            if (interfaceLayer != -1)
-            {
-                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
-                    "Builder Essentials: BuildingMode",
-                    delegate
-                    {
-                        if (_lastUpdateUiGameTime != null && BuildingModeInterface?.CurrentState != null)
-                        {
-                            BuildingModeInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
                         }
                         return true;
                     },

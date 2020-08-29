@@ -13,7 +13,7 @@ namespace BuilderEssentials.UI.ItemsUI.Wheels
         public override void Update(GameTime gameTime)
         {
             //Blocks mouse from interacting with the world when hovering on UI interfaces
-            if (BuildingModeState.Hovering || CreativeWheel.Hovering || PaintWheel.Hovering || MultiWandWheel.Hovering || AutoHammerWheel.Hovering)
+            if (CreativeWheel.Hovering || PaintWheel.Hovering || MultiWandWheel.Hovering || AutoHammerWheel.Hovering)
                 Main.LocalPlayer.mouseInterface = true;
 
             //CreativeWrench Wheel UI
