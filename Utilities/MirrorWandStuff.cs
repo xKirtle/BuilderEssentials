@@ -1,9 +1,7 @@
 ﻿using BuilderEssentials.UI;
 using System;
-using System.Diagnostics;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ObjectData;
 
 namespace BuilderEssentials.Utilities
@@ -20,26 +18,46 @@ namespace BuilderEssentials.Utilities
 
             if (ts.validMirrorPlacement)
             {
+                //Vanilla, what the hell?
+                //size 2, origin (0, 0), x needs to decrease 1
+                //size 2, origin (0, 1), x needs to decrease 1
+                //size 2, origin (0, 2), x needs to decrease 1
+                //size 2, origin (0, 4), x needs to decrease 1
+                //size 2, origin (1, 1), x needs to decrease 1
+                //size 2, origin (1, 2), x needs to decrease 1
+                //size 4, origin (1, 1), x needs to decrease 1
+                //size 4, origin (1, 2), x needs to decrease 2
+                //size 4, origin (1, 3), x needs to decrease 1
+
                 //compensate for multi tiles
                 int correctionOrigin = 0;
-                //if (itemTypes == ItemTypes.Tile)
-                //{
-                //    //GetTileData throwing random null refs
-                //    Tile tile = Framing.GetTileSafely(i, j);
-                //    var tileOrigin = TileObjectData.GetTileData(tile).Origin;
-                //    var tileSize = TileObjectData.GetTileData(tile).CoordinateFullWidth / 16;
+                Point16 tileOrigin = Point16.Zero;
+                int tileSize = 0;
+                if (itemTypes == ItemTypes.Tile)
+                {
+                    try
+                    {
+                        //GetTileData throwing random null refs
+                        Tile tile = Framing.GetTileSafely(i, j);
+                        tileOrigin = TileObjectData.GetTileData(tile).Origin;
+                        tileSize = TileObjectData.GetTileData(tile).CoordinateFullWidth / 16;
 
 
-                //    if (tileSize == 2 && (tileOrigin == new Point16(0, 0) || tileOrigin == new Point16(0, 1)
-                //        || tileOrigin == new Point16(0, 4) || tileOrigin == new Point16(1, 1)))
-                //        correctionOrigin = -1;
+                        if (tileSize == 2 && (tileOrigin == new Point16(0, 0) || tileOrigin == new Point16(0, 1)
+                            || tileOrigin == new Point16(0, 2)) || tileOrigin == new Point16(0, 4) || tileOrigin == new Point16(1, 2))
+                            correctionOrigin -= 1;
 
-                //    if (tileSize == 4 && (tileOrigin == new Point16(1, 1) || tileOrigin == new Point16(1, 3)))
-                //        correctionOrigin = -1;
+                        if (tileSize == 2 && tileOrigin == new Point16(1, 1))
+                            correctionOrigin += 1;
 
-                //    if (tileSize == 4 && tileOrigin == new Point16(1, 2))
-                //        correctionOrigin = -2;
-                //}
+                        if (tileSize == 4 && (tileOrigin == new Point16(1, 1) || tileOrigin == new Point16(1, 3)))
+                            correctionOrigin -= 1;
+
+                        if (tileSize == 4 && tileOrigin == new Point16(1, 2))
+                            correctionOrigin -= 2;
+                    }
+                    catch (Exception) { }
+                }
 
                 float posX = i;
                 float posY = j;
