@@ -9,12 +9,9 @@ namespace BuilderEssentials.Items
     class AutoHammer : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/AutoHammer";
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Better than a regular hammer!");
 
         int toolRange;
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Better than a regular hammer!");
-        }
 
         public override void SetDefaults()
         {

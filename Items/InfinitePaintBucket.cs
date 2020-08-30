@@ -1,7 +1,4 @@
-﻿using BuilderEssentials.Utilities;
-using System.Linq;
-using System.Security.Policy;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,7 +7,6 @@ namespace BuilderEssentials.Items
     class InfinitePaintBucket : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/InfinitePaintBucket";
-
         public override void SetStaticDefaults() => Tooltip.SetDefault("Necessary to use the Super Painting Tool");
 
         public override void SetDefaults()

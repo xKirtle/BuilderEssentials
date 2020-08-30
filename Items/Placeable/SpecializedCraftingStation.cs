@@ -7,11 +7,7 @@ namespace BuilderEssentials.Items.Placeable
     class SpecializedCraftingStation : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Placeable/SpecializedCraftingStation";
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Used to craft Specialized Recipes");
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Used to craft Specialized Recipes");
 
         public override void SetDefaults()
         {

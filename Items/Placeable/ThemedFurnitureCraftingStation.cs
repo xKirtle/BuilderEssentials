@@ -7,11 +7,7 @@ namespace BuilderEssentials.Items.Placeable
     class ThemedFurnitureCraftingStation : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Placeable/ThemedFurnitureCraftingStation";
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Used to craft Furniture Recipes");
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Used to craft Furniture Recipes");
 
         public override void SetDefaults()
         {

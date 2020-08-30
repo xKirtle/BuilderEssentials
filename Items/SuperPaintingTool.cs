@@ -11,16 +11,12 @@ namespace BuilderEssentials.Items
     class SuperPaintingTool : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/SuperPaintingTool";
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Able to paint and remove paint from tiles and walls");
 
         List<int> paints;
         bool foundModdedPaint;
         bool firstTimeOpeningUI = true;
         int toolRange;
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Able to paint and remove paint from tiles and walls");
-        }
 
         public override void SetDefaults()
         {

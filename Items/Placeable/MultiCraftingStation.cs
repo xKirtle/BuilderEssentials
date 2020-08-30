@@ -7,11 +7,7 @@ namespace BuilderEssentials.Items.Placeable
     class MultiCraftingStation : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Placeable/MultiCraftingStation";
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Used to craft all recipes in the game");
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Used to craft all recipes in the game");
 
         public override void SetDefaults()
         {

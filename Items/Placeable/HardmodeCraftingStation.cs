@@ -7,12 +7,7 @@ namespace BuilderEssentials.Items.Placeable
     class HardmodeCraftingStation : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Placeable/HardmodeCraftingStation";
-
-        public override void SetStaticDefaults()
-        {
-            Tooltip.SetDefault("Used to craft Hardmode Recipes");
-
-        }
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Used to craft Hardmode Recipes");
 
         public override void SetDefaults()
         {
