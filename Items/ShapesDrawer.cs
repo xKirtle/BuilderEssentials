@@ -28,7 +28,7 @@ namespace BuilderEssentials.Items
             item.useTime = 1;
             item.useAnimation = 10;
             item.useStyle = ItemUseStyleID.HoldingOut;
-            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.value = Item.buyPrice(0, 0, 0, 0);
             item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
@@ -64,6 +64,25 @@ namespace BuilderEssentials.Items
                     player.showItemIcon2 = selectedItemType;
                 }
             }
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.CopperPickaxe);
+            recipe.AddIngredient(ItemID.CopperAxe);
+            recipe.AddIngredient(ItemID.CopperHammer);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.TinPickaxe);
+            recipe.AddIngredient(ItemID.TinAxe);
+            recipe.AddIngredient(ItemID.TinHammer);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }
