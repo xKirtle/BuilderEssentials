@@ -20,7 +20,8 @@ namespace BuilderEssentials.Items
             Tooltip.SetDefault("Fills Holes" +
             "\nLeft Click to place" +
             "\nRigth Click to remove" +
-            "\nMiddle Click on tiles to select working tiles");
+            "\nMiddle Click to select working tiles" +
+            "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]");
         }
 
         public override void SetDefaults()
@@ -36,6 +37,8 @@ namespace BuilderEssentials.Items
             item.autoReuse = true;
             item.noMelee = true;
         }
+
+        public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
 
         public override void AddRecipes()
         {

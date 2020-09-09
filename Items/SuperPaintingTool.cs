@@ -11,7 +11,11 @@ namespace BuilderEssentials.Items
     class SuperPaintingTool : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/SuperPaintingTool";
-        public override void SetStaticDefaults() => Tooltip.SetDefault("Able to paint and remove paint from tiles and walls");
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault("Able to paint and remove paint from tiles and walls!" +
+            "\nRight Click to open selection menu");
+        }
 
         List<int> paints;
         bool foundModdedPaint;
@@ -37,7 +41,6 @@ namespace BuilderEssentials.Items
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.noMelee = true;
-            item.noUseGraphic = true;
             toolRange = 8;
         }
 

@@ -1,5 +1,4 @@
 ﻿using BuilderEssentials.UI;
-using BuilderEssentials.UI.ShapesDrawing;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -10,7 +9,6 @@ namespace BuilderEssentials.Items
 {
     class ShapesDrawer : ModItem
     {
-        BaseShape bs = BaseShape.Instance;
         public override string Texture => "BuilderEssentials/Textures/Items/ShapesDrawer";
 
         public override void SetStaticDefaults()
@@ -18,7 +16,9 @@ namespace BuilderEssentials.Items
             Tooltip.SetDefault("Used to draw shapes" +
             "\nRight Click to make selection" +
             "\nMiddle Click to select working tile" +
-            "\nLeft Click to place blocks in the selection");
+            "\nLeft Click to place blocks in the selection" +
+            "\n[c/FFCC00:Press LShift to make circles/squares]" +
+            "\n[c/FFCC00:Enables a selection menu on the left of the screen]");
         }
 
         public override void SetDefaults()

@@ -9,7 +9,11 @@ namespace BuilderEssentials.Items
     class AutoHammer : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/AutoHammer";
-        public override void SetStaticDefaults() => Tooltip.SetDefault("Better than a regular hammer!");
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault("Better than a regular hammer!" +
+            "\nRight Click to open selection menu");
+        }
 
         int toolRange;
 
@@ -41,9 +45,7 @@ namespace BuilderEssentials.Items
 
                 BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
                 if (modPlayer.infiniteRange || Tools.ToolHasRange(toolRange) && AutoHammerWheel.selectedIndex != -1)
-                {
-                    player.showItemIcon2 = ItemID.WoodenHammer;
-                }
+                    player.showItemIcon2 = item.type;
             }
         }
 

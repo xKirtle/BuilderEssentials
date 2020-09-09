@@ -10,7 +10,7 @@ namespace BuilderEssentials.Items
     class MultiWand : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/MultiWand";
-        public override void SetStaticDefaults() => Tooltip.SetDefault("Contains all building wands");
+        public override void SetStaticDefaults() => Tooltip.SetDefault("Contains all building wands!\nRight Click to open selection menu");
 
         int toolRange;
 

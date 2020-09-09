@@ -1,14 +1,14 @@
 using BuilderEssentials.UI;
-using Terraria.UI;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
 using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.UI.ShapesDrawing;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.UI;
+using Terraria.ModLoader;
+using Terraria.Localization;
 
 namespace BuilderEssentials
 {
@@ -64,12 +64,14 @@ namespace BuilderEssentials
             BuildingModeOn = GetTexture("Textures/UIElements/BuildingModeOn");
             BuildingModeOff = GetTexture("Textures/UIElements/BuildingModeOff");
 
-            CreativeWheelElements = new List<Texture2D>(5);
-            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWColorPicker"));
-            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWInfinitePlacement"));
-            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWAutoHammer"));
-            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWPlacementAnywhere"));
-            CreativeWheelElements.Add(GetTexture("Textures/UIElements/CreativeWheel/CWInfinitePickupRange"));
+            CreativeWheelElements = new List<Texture2D>(5)
+            {
+                GetTexture("Textures/UIElements/CreativeWheel/CWColorPicker"),
+                GetTexture("Textures/UIElements/CreativeWheel/CWInfinitePlacement"),
+                GetTexture("Textures/UIElements/CreativeWheel/CWAutoHammer"),
+                GetTexture("Textures/UIElements/CreativeWheel/CWPlacementAnywhere"),
+                GetTexture("Textures/UIElements/CreativeWheel/CWInfinitePickupRange")
+            };
 
             CWAutoHammerElements = new List<Texture2D>(6);
             for (int i = 0; i < 6; i++)
