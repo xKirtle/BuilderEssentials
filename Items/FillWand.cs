@@ -1,4 +1,5 @@
 using BuilderEssentials.Utilities;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -24,9 +25,9 @@ namespace BuilderEssentials.Items
 
         public override void SetDefaults()
         {
-            item.height = 32;
-            item.width = 32;
-            item.useTime = 1;
+            item.height = 46;
+            item.width = 46;
+            item.useTime = 10;
             item.useAnimation = 10;
             item.useStyle = ItemUseStyleID.HoldingOut;
             item.value = Item.buyPrice(0, 10, 0, 0);
@@ -34,7 +35,6 @@ namespace BuilderEssentials.Items
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.noMelee = true;
-            item.noUseGraphic = true;
         }
 
         public override void AddRecipes()

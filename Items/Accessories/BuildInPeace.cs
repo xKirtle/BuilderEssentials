@@ -14,8 +14,8 @@ namespace BuilderEssentials.Items.Accessories
         {
             item.accessory = true;
             item.vanity = false;
-            item.width = 30;
-            item.height = 22;
+            item.width = 42;
+            item.height = 42;
             item.value = Item.sellPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
         }

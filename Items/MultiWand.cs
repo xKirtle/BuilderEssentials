@@ -1,5 +1,6 @@
 ﻿using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.Utilities;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,18 +16,19 @@ namespace BuilderEssentials.Items
 
         public override void SetDefaults()
         {
-            item.height = 32;
-            item.width = 32;
+            item.height = 44;
+            item.width = 44;
             item.useTime = 1;
             item.useAnimation = 10;
-            item.useStyle = ItemUseStyleID.SwingThrow;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
-            item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.noMelee = false;
             toolRange = 8;
         }
+
+        public override Vector2? HoldoutOffset() => new Vector2(2, -9);
 
         int mouseRightTimer = 0;
         public override void UpdateInventory(Player player)

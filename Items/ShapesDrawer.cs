@@ -1,6 +1,7 @@
 ﻿using BuilderEssentials.UI;
 using BuilderEssentials.UI.ShapesDrawing;
 using BuilderEssentials.Utilities;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -32,8 +33,9 @@ namespace BuilderEssentials.Items
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.noMelee = true;
-            item.noUseGraphic = true;
         }
+
+        public override Vector2? HoldoutOffset() => new Vector2(2, -9);
 
         public static bool channeling;
         public static int selectedItemType = -1;

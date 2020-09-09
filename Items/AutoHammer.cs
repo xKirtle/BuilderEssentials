@@ -16,6 +16,8 @@ namespace BuilderEssentials.Items
         public override void SetDefaults()
         {
             item.CloneDefaults(ItemID.Pwnhammer);
+            item.height = 40;
+            item.width = 40;
             item.rare = ItemRarityID.Red;
             item.tileBoost += 2;
             toolRange = 8;
