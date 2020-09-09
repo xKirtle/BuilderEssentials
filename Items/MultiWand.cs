@@ -77,7 +77,7 @@ namespace BuilderEssentials.Items
                     switch (MultiWandWheel.selectedIndex)
                     {
                         case 0: //living wood
-                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
+                            if (Tools.InfinitePlacement || Tools.CanReduceItemStack(ItemID.Wood))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingWood);
                                 newItem.SetDefaults(ItemID.Wood);
@@ -86,7 +86,7 @@ namespace BuilderEssentials.Items
                             }
                             break;
                         case 1: //bone
-                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Bone))
+                            if (Tools.InfinitePlacement || Tools.CanReduceItemStack(ItemID.Bone))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.BoneBlock);
                                 newItem.SetDefaults(ItemID.Bone);
@@ -95,7 +95,7 @@ namespace BuilderEssentials.Items
                             }
                             break;
                         case 2: //leaf
-                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Wood))
+                            if (Tools.InfinitePlacement || Tools.CanReduceItemStack(ItemID.Wood))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LeafBlock);
                                 newItem.SetDefaults(ItemID.Wood);
@@ -104,7 +104,7 @@ namespace BuilderEssentials.Items
                             }
                             break;
                         case 3: //hive
-                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.Hive))
+                            if (Tools.InfinitePlacement || Tools.CanReduceItemStack(ItemID.Hive))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.Hive);
                                 newItem.SetDefaults(ItemID.Hive);
@@ -113,7 +113,7 @@ namespace BuilderEssentials.Items
                             }
                             break;
                         case 4: //rich mahogany
-                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
+                            if (Tools.InfinitePlacement || Tools.CanReduceItemStack(ItemID.RichMahogany))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingMahogany);
                                 newItem.SetDefaults(ItemID.RichMahogany);
@@ -122,7 +122,7 @@ namespace BuilderEssentials.Items
                             }
                             break;
                         case 5: //living wood leaf
-                            if (Tools.InfinitePlacement || Tools.ReduceItemStack(ItemID.RichMahogany))
+                            if (Tools.InfinitePlacement || Tools.CanReduceItemStack(ItemID.RichMahogany))
                             {
                                 WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.LivingMahoganyLeaves);
                                 newItem.SetDefaults(ItemID.RichMahogany);

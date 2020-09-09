@@ -53,13 +53,13 @@ namespace BuilderEssentials.Utilities
             return -1;
         }
 
-        public static bool ReduceItemStack(int itemType)
+        public static bool CanReduceItemStack(int itemType, bool reduceStack = true)
         {
             foreach (Item item in Main.LocalPlayer.inventory)
             {
                 if (item.type == itemType && item.stack >= 1)
                 {
-                    --item.stack;
+                    if (reduceStack) --item.stack;
                     return true;
                 }
             }

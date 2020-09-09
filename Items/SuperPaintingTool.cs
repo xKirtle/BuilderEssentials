@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.Utilities;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +9,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.Items
 {
+    //TODO: Make the tool use the first paint color it finds in the inventory if red cross is selected
     class SuperPaintingTool : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/SuperPaintingTool";
@@ -33,16 +35,17 @@ namespace BuilderEssentials.Items
 
             item.height = 44;
             item.width = 44;
-            item.useTime = 10;
-            item.useAnimation = 10;
-            item.useStyle = ItemUseStyleID.SwingThrow;
+            item.useTime = 1;
+            item.useAnimation = 1;
+            item.useStyle = ItemUseStyleID.HoldingOut;
             item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
-            item.noMelee = true;
             toolRange = 8;
         }
+
+        public override Vector2? HoldoutOffset() => new Vector2(5, -8);
 
         int mouseRightTimer = 0;
         public override void UpdateInventory(Player player)
@@ -184,7 +187,7 @@ namespace BuilderEssentials.Items
                     }
                 }
             }
-            return false;
+            return true;
         }
 
         private bool CheckIfPaintIsInInventoryAndUseIt(byte paintColor)

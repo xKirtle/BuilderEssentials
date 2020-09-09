@@ -16,6 +16,7 @@ namespace BuilderEssentials.UI.ShapesDrawing
         public static BaseShape Instance;
         public ShapesState sd;
         public Color color;
+        private bool selectionPlaced = false;
         public override void OnInitialize()
         {
             Instance = this;
@@ -215,21 +216,28 @@ namespace BuilderEssentials.UI.ShapesDrawing
                 Item myItem = new Item();
                 myItem.SetDefaults(ShapesDrawer.selectedItemType);
 
-                if (Tools.InfinitePlacement || Tools.ReduceItemStack(myItem.type))
+                if (Tools.InfinitePlacement || Tools.CanReduceItemStack(myItem.type, false))
                 {
                     switch (WhatIsThisItem(ShapesDrawer.selectedItemType))
                     {
                         case ItemTypes.Air:
                             break;
                         case ItemTypes.Tile:
-                            WorldGen.PlaceTile(x, y, myItem.createTile);
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                NetMessage.SendTileSquare(-1, x, y, 1);
+                            if (WorldGen.PlaceTile(x, y, myItem.createTile))
+                            {
+                                Tools.CanReduceItemStack(myItem.type);
+                                if (Main.netMode == NetmodeID.MultiplayerClient)
+                                    NetMessage.SendTileSquare(-1, x, y, 1);
+                            }
                             break;
                         case ItemTypes.Wall:
-                            WorldGen.PlaceWall(x, y, myItem.createWall);
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                NetMessage.SendTileSquare(-1, x, y, 1);
+                            if (Framing.GetTileSafely(x, y).wall == 0) //No wall
+                            {
+                                WorldGen.PlaceWall(x, y, myItem.createWall);
+                                Tools.CanReduceItemStack(myItem.type);
+                                if (Main.netMode == NetmodeID.MultiplayerClient)
+                                    NetMessage.SendTileSquare(-1, x, y, 1);
+                            }
                             break;
                     }
                 }

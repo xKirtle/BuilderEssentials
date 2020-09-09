@@ -15,7 +15,6 @@ namespace BuilderEssentials.Utilities
         private bool canMirror = true;
         public override bool CanPlace(int i, int j, int type)
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
             Tile tile = Framing.GetTileSafely(i, j);
 
             //Placement Anywhere
@@ -31,13 +30,13 @@ namespace BuilderEssentials.Utilities
                 if (!Tools.InfinitePlacement)
                 {
                     if (selectedItem.type == ItemID.LivingMahoganyWand || selectedItem.type == ItemID.LivingMahoganyLeafWand)
-                        Tools.ReduceItemStack(ItemID.RichMahogany);
+                        Tools.CanReduceItemStack(ItemID.RichMahogany);
                     else if (selectedItem.type == ItemID.LivingWoodWand || selectedItem.type == ItemID.LeafWand)
-                        Tools.ReduceItemStack(ItemID.Wood);
+                        Tools.CanReduceItemStack(ItemID.Wood);
                     else if (selectedItem.type == ItemID.BoneWand)
-                        Tools.ReduceItemStack(ItemID.Bone);
+                        Tools.CanReduceItemStack(ItemID.Bone);
                     else if (selectedItem.type == ItemID.HiveWand)
-                        Tools.ReduceItemStack(ItemID.Hive);
+                        Tools.CanReduceItemStack(ItemID.Hive);
                     else if (selectedItem.type == ItemID.StaffofRegrowth) { } //Condition to make specific wands not removed
                     else
                     {
@@ -65,9 +64,6 @@ namespace BuilderEssentials.Utilities
 
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            Player player = Main.LocalPlayer;
-            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
-
             if (!Tools.InfinitePlacement)
             {
                 if (item.consumable == false && modifiedItemsConsumable.Contains(item))
@@ -109,12 +105,7 @@ namespace BuilderEssentials.Utilities
     {
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
-            BuilderPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BuilderPlayer>();
-            if (Tools.InfinitePlacement)
-                item.consumable = false;
-            else
-                item.consumable = true;
-
+            item.consumable = !Tools.InfinitePlacement;
             Tools.MirrorPlacement(i, j, item.type);
             Tools.AutoReplaceStack(item);
         }

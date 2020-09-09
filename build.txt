@@ -1,6 +1,6 @@
 displayName = Builder Essentials
 author = Kirtle
-version = 0.1.16
+version = 0.1.16.1
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
 modReferences = Loadouts
 homepage = https://discord.gg/wQYMbQq

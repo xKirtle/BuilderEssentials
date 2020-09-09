@@ -107,7 +107,7 @@ namespace BuilderEssentials.Items
                             customItem.SetDefaults(selectedTileItemType);
                             if (customItem.createTile != -1 && customItem.createWall == -1)
                             {
-                                if (Tools.InfinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                if (Tools.InfinitePlacement || Tools.CanReduceItemStack(customItem.type))
                                 {
                                     WorldGen.PlaceTile(posX, posY, customItem.createTile);
                                     tilePlaced = true;
@@ -115,7 +115,7 @@ namespace BuilderEssentials.Items
                             }
                             else if (customItem.createTile == -1 && customItem.createWall != -1)
                             {
-                                if (Tools.InfinitePlacement || Tools.ReduceItemStack(customItem.type))
+                                if (Tools.InfinitePlacement || Tools.CanReduceItemStack(customItem.type))
                                 {
                                     WorldGen.PlaceWall(posX, posY, customItem.createWall);
                                     tilePlaced = true;
