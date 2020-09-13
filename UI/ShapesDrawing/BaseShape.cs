@@ -138,49 +138,36 @@ namespace BuilderEssentials.UI.ShapesDrawing
 
         public void DrawRectangle(int x0, int y0, int x1, int y1)
         {
-            int selectedQuarter = SelectedQuarter(x0, y0, x1, y1);
-
-            //Maybe there's a better way to do this?
-            //If vertical is always full lenght and horizontal stays in the middle?
-            switch (selectedQuarter)
+            if (x0 == x1 || y0 == y1)
+                DrawLine(x0, y0, x1, y1);
+            else
             {
-                case 0:
-                    DrawLine(x1, y1, x0 - 1, y1); //Top Line
-                    DrawLine(x0, y1, x0, y0 - 1); //Right Line
-                    DrawLine(x0, y0, x1 + 1, y0); //Bottom Line
-                    DrawLine(x1, y0, x1, y1 + 1); //Left Line
-                    break;
-                case 1:
-                    DrawLine(x0, y1, x1 - 1, y1); //Top Line
-                    DrawLine(x1, y1, x1, y0 - 1); //Right Line
-                    DrawLine(x1, y0, x0 + 1, y0); //Bottom Line
-                    DrawLine(x0, y0, x0, y1 + 1); //Left Line
-                    break;
-                case 2:
-                    DrawLine(x1, y0, x0 - 1, y0); //Top Line
-                    DrawLine(x0, y0, x0, y1 - 1); //Right Line
-                    DrawLine(x0, y1, x1 + 1, y1); //Bottom Line
-                    DrawLine(x1, y1, x1, y0 + 1); //Left Line
-                    break;
-                case 3:
-                    DrawLine(x0, y0, x1 - 1, y0); //Top Line
-                    DrawLine(x1, y0, x1, y1 - 1); //Right Line
-                    DrawLine(x1, y1, x0 + 1, y1); //Bottom Line
-                    DrawLine(x0, y1, x0, y0 + 1); //Left Line
-                    break;
-                default:
-                    break;
+                int direction = y0 < y1 ? 1 : -1;
+                DrawLine(x0, y0, x1, y0); // top
+                DrawLine(x0, y1, x1, y1); // bottom
+                DrawLine(x0, y0 + direction, x0, y1 - direction); //left
+                DrawLine(x1, y0 + direction, x1, y1 - direction); //right
             }
 
             //Fill
             if (ShapesDrawer.channeling && ShapesMenu.optionSelected[2] && ShapesDrawer.selectedItemType != -1)
             {
-                do
+                if (y0 < y1)
                 {
-                    y0++;
-                    DrawLine(x0, y0, x1, y0);
+                    while (y0 < y1)
+                    {
+                        y0++;
+                        DrawLine(x0, y0, x1, y0);
+                    }
                 }
-                while (y0 < y1);
+                else
+                {
+                    while (y0 > y1)
+                    {
+                        y0--;
+                        DrawLine(x0, y0, x1, y0);
+                    }
+                }
             }
         }
 
