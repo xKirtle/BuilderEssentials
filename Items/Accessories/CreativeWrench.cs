@@ -9,6 +9,7 @@ namespace BuilderEssentials.Items.Accessories
 {
     class CreativeWrench : ModItem
     {
+        //TODO: REDO THE CREATIVE WRENCH WITH PROPER ORGANIZATION
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/CreativeWrench";
         public override void SetStaticDefaults()
         {
@@ -31,7 +32,6 @@ namespace BuilderEssentials.Items.Accessories
         int mouseRightTimer = 0;
         BuilderPlayer modPlayer;
         bool autoHammerAlert = false;
-        Tile previousClickedTile;
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             if (player.whoAmI == Main.myPlayer)
@@ -88,7 +88,7 @@ namespace BuilderEssentials.Items.Accessories
                 !player.mouseInterface && !Main.playerInventory && !Main.ingameOptionsWindow)
                 {
                     if (!CreativeWheel.CreativeWheelPanel.IsMouseHovering)
-                        Tools.ChangeSlope(ref oldPosX, ref oldPosY, ref previousClickedTile, CreativeWheel.autoHammerSelectedIndex);
+                        Tools.ChangeSlope(CreativeWheel.autoHammerSelectedIndex);
                 }
                 else if (Main.mouseLeft && modPlayer.creativeWheelSelectedIndex.Contains(CreativeWheelItem.AutoHammer.ToInt())
                 && !player.HeldItem.IsAir && !player.mouseInterface && !Main.playerInventory)

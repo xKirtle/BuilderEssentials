@@ -72,13 +72,11 @@ namespace BuilderEssentials.Utilities
                 || Main.tile[posX - 1, posY].active() || Main.tile[posX, posY].wall != 0;
         }
 
-        public static bool ToolHasRange(int range)
+        public static bool ToolHasRange(float range)
         {
             Player player = Main.LocalPlayer;
             Vector2 pointedCoord = new Vector2(Main.mouseX + Main.screenPosition.X, Main.mouseY + Main.screenPosition.Y);
-            bool inRange = Vector2.Distance(player.position, pointedCoord) < range * 16;
-
-            return inRange;
+            return (float)Vector2.Distance(player.Center, pointedCoord) < range * 16;
         }
 
         public static bool UIPanelLogic(UIPanel UIPanel, ref bool UIOpen, ref bool UIVisible, bool closeWithInventory = true)

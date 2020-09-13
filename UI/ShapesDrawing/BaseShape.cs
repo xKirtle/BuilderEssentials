@@ -16,7 +16,6 @@ namespace BuilderEssentials.UI.ShapesDrawing
         public static BaseShape Instance;
         public ShapesState sd;
         public Color color;
-        private bool selectionPlaced = false;
         public override void OnInitialize()
         {
             Instance = this;

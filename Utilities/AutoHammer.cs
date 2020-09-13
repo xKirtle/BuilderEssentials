@@ -5,15 +5,16 @@ namespace BuilderEssentials.Utilities
 {
     public static partial class Tools
     {
-        public static void ChangeSlope(ref int oldPosX, ref int oldPosY, ref Tile previousClickedTile, int selectedIndex)
+        public static void ChangeSlope(int slopeType)
         {
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY;
-            Tile tile = Main.tile[posX, posY];
+            Tile tile = Framing.GetTileSafely(posX, posY);
+            Tile tileClone = (Tile)tile.Clone();
 
             if (tile.type >= 0 && tile.active())
             {
-                switch (selectedIndex)
+                switch (slopeType)
                 {
                     case 0:
                         tile.halfBrick(false);
@@ -39,25 +40,19 @@ namespace BuilderEssentials.Utilities
                         tile.halfBrick(false);
                         tile.slope(0);
                         break;
+                    default:
+                        break;
                 }
 
-                WorldGen.SquareTileFrame(posX, posY, true);
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    NetMessage.SendTileSquare(-1, posX, posY, 1);
+                Tile tileAfter = Framing.GetTileSafely(posX, posY);
 
-                if (previousClickedTile != null)
-                {
-                    if (!previousClickedTile.HasSameSlope(tile) || (oldPosX != posX || oldPosY != posY))
-                        Main.PlaySound(SoundID.Dig);
-                }
-                else
+                if (tileClone.slope() != tileAfter.slope() || tileClone.halfBrick() != tileAfter.halfBrick())
                     Main.PlaySound(SoundID.Dig);
 
-                previousClickedTile = tile;
-                oldPosX = posX;
-                oldPosY = posY;
+                WorldGen.SquareTileFrame(posX, posY, false);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendTileSquare(-1, posX, posY, 1);
             }
         }
     }
-
 }
