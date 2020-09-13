@@ -33,7 +33,6 @@ namespace BuilderEssentials.Items
             item.useStyle = ItemUseStyleID.HoldingOut;
             item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
-            item.UseSound = SoundID.Item1;
             item.autoReuse = true;
             item.noMelee = true;
         }
