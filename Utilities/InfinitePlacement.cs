@@ -20,33 +20,44 @@ namespace BuilderEssentials.Utilities
             //Placement Anywhere
             if (Tools.PlacementAnywhere && !tile.active() && (oldPosX != i || oldPosY != j))
             {
-                Item selectedItem = Main.LocalPlayer.HeldItem;
-                WorldGen.PlaceTile(i, j, selectedItem.createTile, false, true, -1, selectedItem.placeStyle);
+                Item heldItem = Main.LocalPlayer.HeldItem;
+                WorldGen.PlaceTile(i, j, heldItem.createTile, false, true, -1, heldItem.placeStyle);
                 tile = Framing.GetTileSafely(i, j);
 
                 canPlace = false; //To make sure we don't call AutoReplaceStack on CanPlace and PlaceInWorld
-                Tools.AutoReplaceStack(selectedItem, false);
+                Tools.AutoReplaceStack(heldItem, false);
 
                 if (!Tools.InfinitePlacement)
                 {
-                    if (selectedItem.type == ItemID.LivingMahoganyWand || selectedItem.type == ItemID.LivingMahoganyLeafWand)
-                        Tools.CanReduceItemStack(ItemID.RichMahogany);
-                    else if (selectedItem.type == ItemID.LivingWoodWand || selectedItem.type == ItemID.LeafWand)
-                        Tools.CanReduceItemStack(ItemID.Wood);
-                    else if (selectedItem.type == ItemID.BoneWand)
-                        Tools.CanReduceItemStack(ItemID.Bone);
-                    else if (selectedItem.type == ItemID.HiveWand)
-                        Tools.CanReduceItemStack(ItemID.Hive);
-                    else if (selectedItem.type == ItemID.StaffofRegrowth) { } //Condition to make specific wands not removed
-                    else
+                    switch (heldItem.type)
                     {
-                        //Checks if tile was actually placed, since multi tiles were being reduced without actually being placed
-                        if (tile.type == selectedItem.createTile || tile.type == selectedItem.createWall)
-                        {
-                            selectedItem.stack--;
-                            oldPosX = i;
-                            oldPosY = j;
-                        }
+                        case ItemID.LivingMahoganyWand:
+                            Tools.CanReduceItemStack(ItemID.RichMahogany);
+                            break;
+                        case ItemID.LivingMahoganyLeafWand:
+                            goto case ItemID.LivingMahoganyWand;
+                        case ItemID.LivingWoodWand:
+                            Tools.CanReduceItemStack(ItemID.Wood);
+                            break;
+                        case ItemID.LeafWand:
+                            goto case ItemID.LivingWoodWand;
+                        case ItemID.BoneWand:
+                            Tools.CanReduceItemStack(ItemID.Bone);
+                            break;
+                        case ItemID.HiveWand:
+                            Tools.CanReduceItemStack(ItemID.Hive);
+                            break;
+                        case ItemID.StaffofRegrowth:
+                            break;
+                        default:
+                            //Checks if tile was actually placed, since multi tiles were being reduced without actually being placed
+                            if (tile.type == heldItem.createTile || tile.type == heldItem.createWall)
+                            {
+                                heldItem.stack--;
+                                oldPosX = i;
+                                oldPosY = j;
+                            }
+                            break;
                     }
                 }
 
@@ -54,7 +65,7 @@ namespace BuilderEssentials.Utilities
                     NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
 
                 canMirror = false;
-                Tools.MirrorPlacement(i, j, selectedItem.type);
+                Tools.MirrorPlacement(i, j, heldItem.type);
 
                 return true;
             }
@@ -78,16 +89,13 @@ namespace BuilderEssentials.Utilities
                 item.type == ItemID.LivingWoodWand || item.type == ItemID.StaffofRegrowth)
                     item.consumable = false;
 
-                if (canPlace) //avoid calling AutoReplaceStack twice if it has been called above
-                    Tools.AutoReplaceStack(item);
-                else
-                    canPlace = true;
+                //avoid calling AutoReplaceStack twice if it has been called above
+                if (canPlace) Tools.AutoReplaceStack(item);
+                else canPlace = true;
             }
 
-            if (canMirror)
-                Tools.MirrorPlacement(i, j, item.type);
-            else
-                canMirror = true;
+            if (canMirror) Tools.MirrorPlacement(i, j, item.type);
+            else canMirror = true;
 
             if (Tools.InfinitePlacement)
             {
@@ -96,8 +104,7 @@ namespace BuilderEssentials.Utilities
                 if (!modifiedItemsConsumable.Contains(item) && !item.Name.Contains("Unlimited") && !item.Name.Contains("Infinite"))
                     modifiedItemsConsumable.Add(item);
             }
-            else
-                base.PlaceInWorld(i, j, item);
+            else base.PlaceInWorld(i, j, item);
         }
     }
 
