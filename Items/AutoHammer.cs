@@ -1,6 +1,5 @@
 ﻿using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.Utilities;
-using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -31,8 +30,10 @@ namespace BuilderEssentials.Items
             item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;
+            toolRange = new Point16(8, 6);
         }
 
+        Point16 toolRange;
         int mouseRightTimer = 0;
         public override void HoldItem(Player player)
         {
@@ -48,16 +49,11 @@ namespace BuilderEssentials.Items
 
         public override bool CanUseItem(Player player)
         {
-            BuilderPlayer modPlayer = player.GetModPlayer<BuilderPlayer>();
             //Disabling vanilla hammer
             if (AutoHammerWheel.selectedIndex != -1)
             {
                 if (AutoHammerWheel.IsAutoHammerUIVisible) return false;
-                Point16 playerCenter = player.Center.ToTileCoordinates16();
-
-                //modded hammer happens here. range (8, 6)
-                if (modPlayer.infiniteRange || (Math.Abs(playerCenter.X - modPlayer.pointedTilePos.X) <= 8 && Math.Abs(playerCenter.Y - modPlayer.pointedTilePos.Y) <= 6))
-                    Tools.ChangeSlope(AutoHammerWheel.selectedIndex);
+                if (Tools.ToolHasRange(toolRange)) Tools.ChangeSlope(AutoHammerWheel.selectedIndex);
 
                 return false;
             }

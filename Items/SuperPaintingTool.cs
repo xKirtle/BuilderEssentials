@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using static Terraria.ModLoader.ModContent;
 
 namespace BuilderEssentials.Items
@@ -22,7 +23,7 @@ namespace BuilderEssentials.Items
         List<int> paints;
         bool foundModdedPaint;
         bool firstTimeOpeningUI = true;
-        int toolRange;
+        Point16 toolRange;
 
         public override void SetDefaults()
         {
@@ -41,7 +42,7 @@ namespace BuilderEssentials.Items
             item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
             item.autoReuse = true;
-            toolRange = 8;
+            toolRange = new Point16(8, 6);
         }
 
         public override Vector2? HoldoutOffset() => new Vector2(5, -8);
@@ -58,12 +59,9 @@ namespace BuilderEssentials.Items
                 }
 
                 if (Main.mouseRight && Tools.IsUIAvailable()
-                        && (!player.mouseInterface || (PaintWheel.PaintingUIOpen && PaintWheel.PaintWheelPanel.IsMouseHovering))
-                        && player.HeldItem.IsTheSameAs(item))
-                {
-                    if (++mouseRightTimer == 2)
-                        PaintWheel.PaintingUIOpen = !PaintWheel.PaintingUIOpen;
-                }
+                && (!player.mouseInterface || (PaintWheel.PaintingUIOpen && PaintWheel.PaintWheelPanel.IsMouseHovering))
+                && player.HeldItem.IsTheSameAs(item) && ++mouseRightTimer == 2)
+                    PaintWheel.PaintingUIOpen = !PaintWheel.PaintingUIOpen;
 
                 if (Main.mouseRightRelease)
                     mouseRightTimer = 0;

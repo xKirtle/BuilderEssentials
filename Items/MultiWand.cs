@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 
 namespace BuilderEssentials.Items
 {
@@ -11,8 +12,6 @@ namespace BuilderEssentials.Items
     {
         public override string Texture => "BuilderEssentials/Textures/Items/MultiWand";
         public override void SetStaticDefaults() => Tooltip.SetDefault("Contains all building wands!\nRight Click to open selection menu");
-
-        int toolRange;
 
         public override void SetDefaults()
         {
@@ -25,11 +24,12 @@ namespace BuilderEssentials.Items
             item.rare = ItemRarityID.Red;
             item.autoReuse = true;
             item.noMelee = false;
-            toolRange = 8;
+            toolRange = new Point16(8, 6);
         }
 
         public override Vector2? HoldoutOffset() => new Vector2(2, -9);
 
+        Point16 toolRange;
         int mouseRightTimer = 0;
         public override void UpdateInventory(Player player)
         {
@@ -42,12 +42,9 @@ namespace BuilderEssentials.Items
                 }
 
                 if (Main.mouseRight && Tools.IsUIAvailable()
-                        && (!player.mouseInterface || (MultiWandWheel.WandsWheelUIOpen && MultiWandWheel.MultiWandWheelPanel.IsMouseHovering))
-                        && player.HeldItem.IsTheSameAs(item))
-                {
-                    if (++mouseRightTimer == 2)
-                        MultiWandWheel.WandsWheelUIOpen = !MultiWandWheel.WandsWheelUIOpen;
-                }
+                && (!player.mouseInterface || (MultiWandWheel.WandsWheelUIOpen && MultiWandWheel.MultiWandWheelPanel.IsMouseHovering))
+                && player.HeldItem.IsTheSameAs(item) && ++mouseRightTimer == 2)
+                    MultiWandWheel.WandsWheelUIOpen = !MultiWandWheel.WandsWheelUIOpen;
 
                 if (Main.mouseRightRelease)
                     mouseRightTimer = 0;

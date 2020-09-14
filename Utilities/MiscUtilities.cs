@@ -1,8 +1,10 @@
 using BuilderEssentials.Items.Accessories;
 using BuilderEssentials.UI;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -72,11 +74,13 @@ namespace BuilderEssentials.Utilities
                 || Main.tile[posX - 1, posY].active() || Main.tile[posX, posY].wall != 0;
         }
 
-        public static bool ToolHasRange(float range)
+        public static bool ToolHasRange(Point16 range)
         {
-            Player player = Main.LocalPlayer;
-            Vector2 pointedCoord = new Vector2(Main.mouseX + Main.screenPosition.X, Main.mouseY + Main.screenPosition.Y);
-            return (float)Vector2.Distance(player.Center, pointedCoord) < range * 16;
+            //Player player = Main.LocalPlayer;
+            //Vector2 pointedCoord = new Vector2(Main.mouseX + Main.screenPosition.X, Main.mouseY + Main.screenPosition.Y);
+            //return (float)Vector2.Distance(player.Center, pointedCoord) < range * 16;
+            Point16 playerCenter = Main.LocalPlayer.Center.ToTileCoordinates16();
+            return modPlayer.infiniteRange || (Math.Abs(playerCenter.X - modPlayer.pointedTilePos.X) <= range.X && Math.Abs(playerCenter.Y - modPlayer.pointedTilePos.Y) <= range.Y);
         }
 
         public static bool UIPanelLogic(UIPanel UIPanel, ref bool UIOpen, ref bool UIVisible, bool closeWithInventory = true)
