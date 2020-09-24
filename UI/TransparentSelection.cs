@@ -1,14 +1,13 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.UI;
-using Terraria;
-using BuilderEssentials.Items;
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.UI;
+using static Terraria.ModLoader.ModContent;
+using BuilderEssentials.Items;
 using BuilderEssentials.Utilities;
 using BuilderEssentials.UI.ShapesDrawing;
-using Microsoft.Xna.Framework.Input;
-using static Terraria.ModLoader.ModContent;
-using Terraria.ModLoader;
 
 namespace BuilderEssentials.UI
 {
@@ -85,7 +84,7 @@ namespace BuilderEssentials.UI
         {
             //Selection
             //MirrorWand shapes should not be visible if we're using the shapes drawer
-            if (Main.LocalPlayer.HeldItem.type != ItemType<ShapesDrawer>() && ts.startSel != ts.endSel)
+            if (!ShapesMenu.SDEquipped && ts.startSel != ts.endSel)
             {
                 color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Blue
                 DrawRectangle((int)ts.startSel.X, (int)ts.startSel.Y, (int)ts.endSel.X, (int)ts.endSel.Y);

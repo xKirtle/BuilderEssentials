@@ -10,6 +10,7 @@ using static Terraria.ModLoader.ModContent;
 using static BuilderEssentials.Utilities.Tools;
 using BuilderEssentials.UI.ItemsUI.Wheels;
 using BuilderEssentials.UI;
+using BuilderEssentials.UI.ItemsUI;
 
 namespace BuilderEssentials
 {
@@ -50,6 +51,7 @@ namespace BuilderEssentials
                 pointedTilePos = new Vector2(Player.tileTargetX, Player.tileTargetY);
                 pointedTile = Main.tile[(int)pointedTilePos.X, (int)pointedTilePos.Y];
                 ShapesMenu.SDEquipped = false;
+                ImprovedRulerUI.IREquipped = false;
 
                 if (creativeWheelSelectedIndex.Contains(CreativeWheelItem.InfinityUpgrade.ToInt())
                 && !player.HasBuff(BuffType<Buffs.InfinitePlacementBuff>()))

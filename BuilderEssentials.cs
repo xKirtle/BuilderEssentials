@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.UI;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using BuilderEssentials.UI.ItemsUI;
 
 namespace BuilderEssentials
 {
@@ -37,9 +38,9 @@ namespace BuilderEssentials
             {
                 LoadTextures();
 
+                TransparentSelectionInterface = new UserInterface();
                 TransparentSelectionUI = new TransparentSelectionUI();
                 TransparentSelectionUI.Activate();
-                TransparentSelectionInterface = new UserInterface();
                 TransparentSelectionInterface.SetState(TransparentSelectionUI);
 
                 UserInterface = new UserInterface();
@@ -56,6 +57,11 @@ namespace BuilderEssentials
                 ShapesState = new ShapesState();
                 ShapesState.Activate();
                 ShapesInterface.SetState(ShapesState);
+
+                RulerInterface = new UserInterface();
+                RulerState = new ImprovedRulerUI();
+                RulerState.Activate();
+                RulerInterface.SetState(RulerState);
             }
         }
 
@@ -147,6 +153,8 @@ namespace BuilderEssentials
         internal static ShapesMenu ShapesMenu;
         internal static UserInterface ShapesInterface;
         internal static ShapesState ShapesState;
+        internal static UserInterface RulerInterface;
+        internal static ImprovedRulerUI RulerState;
         private GameTime _lastUpdateUiGameTime;
         public override void UpdateUI(GameTime gameTime)
         {
@@ -162,6 +170,9 @@ namespace BuilderEssentials
 
             if (ShapesInterface?.CurrentState != null)
                 ShapesInterface.Update(gameTime);
+
+            if (RulerInterface?.CurrentState != null)
+                RulerInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -181,10 +192,7 @@ namespace BuilderEssentials
                         return true;
                     },
                        InterfaceScaleType.Game));
-            }
 
-            if (interfaceLayer != -1)
-            {
                 layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
                     "Builder Essentials: ShapesSelection",
                     delegate
@@ -196,10 +204,7 @@ namespace BuilderEssentials
                         return true;
                     },
                        InterfaceScaleType.Game));
-            }
 
-            if (interfaceLayer != -1)
-            {
                 layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
                     "Builder Essentials: UserInterface",
                     delegate
@@ -207,6 +212,18 @@ namespace BuilderEssentials
                         if (_lastUpdateUiGameTime != null && UserInterface?.CurrentState != null)
                         {
                             UserInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                        }
+                        return true;
+                    },
+                       InterfaceScaleType.UI));
+
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
+                    "Builder Essentials: ImprovedRulerInterface",
+                    delegate
+                    {
+                        if (_lastUpdateUiGameTime != null && UserInterface?.CurrentState != null)
+                        {
+                            RulerInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
                         }
                         return true;
                     },

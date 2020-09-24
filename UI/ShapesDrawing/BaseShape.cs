@@ -1,13 +1,12 @@
-﻿using Terraria;
-using Terraria.UI;
+﻿using System;
 using Microsoft.Xna.Framework;
-using System;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.UI;
 using BuilderEssentials.Items;
 using BuilderEssentials.Utilities;
 using static BuilderEssentials.Utilities.Tools;
-using Terraria.ID;
-using IL.Terraria.World.Generation;
 
 namespace BuilderEssentials.UI.ShapesDrawing
 {

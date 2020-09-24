@@ -76,9 +76,6 @@ namespace BuilderEssentials.Utilities
 
         public static bool ToolHasRange(Point16 range)
         {
-            //Player player = Main.LocalPlayer;
-            //Vector2 pointedCoord = new Vector2(Main.mouseX + Main.screenPosition.X, Main.mouseY + Main.screenPosition.Y);
-            //return (float)Vector2.Distance(player.Center, pointedCoord) < range * 16;
             Point16 playerCenter = Main.LocalPlayer.Center.ToTileCoordinates16();
             return modPlayer.infiniteRange || (Math.Abs(playerCenter.X - modPlayer.pointedTilePos.X) <= range.X && Math.Abs(playerCenter.Y - modPlayer.pointedTilePos.Y) <= range.Y);
         }
