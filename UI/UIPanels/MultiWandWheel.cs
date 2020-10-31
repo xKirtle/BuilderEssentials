@@ -17,7 +17,7 @@ namespace BuilderEssentials.UI.UIPanels
         private int selectedIndex;
         private UIText hoverText;
 
-        public override void OnInitialize()
+        public MultiWandWheel()
         {
             Width.Set(width, 0);
             Height.Set(height, 0);
