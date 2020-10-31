@@ -27,8 +27,8 @@ namespace BuilderEssentials
             }
         }
 
-        internal UserInterface BaseUserInterface;
-        internal BaseUIState BaseUIState;
+        // internal UserInterface BaseUserInterface;
+        // internal BaseUIState BaseUIState;
         internal UserInterface ItemsUserInterface;
         internal ItemsUIState ItemsUIState;
         private GameTime lastUpdateUIGameTime;
@@ -52,7 +52,7 @@ namespace BuilderEssentials
                     {
                         if (lastUpdateUIGameTime != null)
                         {
-                            BaseUserInterface?.Draw(Main.spriteBatch, lastUpdateUIGameTime);
+                            //BaseUserInterface?.Draw(Main.spriteBatch, lastUpdateUIGameTime);
                             ItemsUserInterface?.Draw(Main.spriteBatch, lastUpdateUIGameTime);
                         }
 

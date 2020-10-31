@@ -26,7 +26,6 @@ namespace BuilderEssentials.UI.UIStates
         static void someInitMethod()
         {
             multiWandWheel = new MultiWandWheel();
-            multiWandWheel.Activate();
             Instance.Append(multiWandWheel);
         }
     }
