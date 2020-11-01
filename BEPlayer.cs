@@ -8,6 +8,7 @@ namespace BuilderEssentials
 {
     public class BEPlayer : ModPlayer
     {
+        //TODO: Make properties for infinite range, infinite placement
         public bool ValidCursorPos => Player.tileTargetX != 0 && Player.tileTargetY != 0;
 
         public Vector2 pointedCoord;
