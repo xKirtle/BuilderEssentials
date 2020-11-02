@@ -92,6 +92,17 @@ namespace BuilderEssentials.UI.Elements
             Height.Set(size.Y * Scale, 0);
         }
 
+        /// <summary>
+        /// Hides the element if visible or shows the element if not.
+        /// </summary>
+        public virtual void Toggle()
+        {
+            if (Visible)
+                Hide();
+            else
+                Show();
+        }
+
         #region Events
 
         public delegate void ElementEvent(CustomUIElement affectedElement);
