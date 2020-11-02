@@ -6,6 +6,7 @@ using Terraria.UI;
 using BuilderEssentials.UI.UIStates;
 using Microsoft.Xna.Framework;
 using Terraria.GameInput;
+using Terraria.Localization;
 
 namespace BuilderEssentials.Utilities
 {
@@ -15,7 +16,7 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             if (mp.PlacementAnywhere) return true;
-            
+
             int[] treeTypes =
             {
                 //[TAG 1.4] Implements new trees
@@ -47,7 +48,7 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             if (mp.InfiniteRange) return true;
-            
+
             Point playerCenter = Main.LocalPlayer.Center.ToTileCoordinates();
             //range = new Point(Main.screenWidth / 16, Main.screenHeight / 16);
 
@@ -59,7 +60,7 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             if (mp.InfinitePlacement) return true;
-            
+
             foreach (Item item in Main.LocalPlayer.inventory)
             {
                 if (item.type == itemType && item.stack >= 1)
@@ -182,6 +183,62 @@ namespace BuilderEssentials.Utilities
                    (!noFullscreenMap || !Main.mapFullscreen) &&
                    (!notShowingMouseIcon || !Main.HoveringOverAnNPC) &&
                    (!notShowingMouseIcon || !player.showItemIcon);
+        }
+
+        internal static void CreateRecipeGroup(int[] items, string text)
+        {
+            RecipeGroup recipeGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + text, items);
+            RecipeGroup.RegisterGroup("BuilderEssentials:" + text, recipeGroup);
+        }
+
+        internal static void ChangeSlope(int slopeType)
+        {
+            int i = Player.tileTargetX;
+            int j = Player.tileTargetY;
+            Tile tile = Framing.GetTileSafely(i, j);
+
+            if ((slopeType + 1 == tile.slope() && !tile.halfBrick()) ||
+                (slopeType == 4 && tile.halfBrick()) ||
+                (slopeType == 5 && tile.slope() == 0 && !tile.halfBrick()))
+                return;
+
+            if (tile.type >= 0 && tile.active())
+            {
+                switch (slopeType)
+                {
+                    case 0: //Bottom Right Slope
+                        tile.halfBrick(false);
+                        tile.slope(1);
+                        break;
+                    case 1: //Bottom Left Slope
+                        tile.halfBrick(false);
+                        tile.slope(2);
+                        break;
+                    case 2: //Top Right Slope
+                        tile.halfBrick(false);
+                        tile.slope(3);
+                        break;
+                    case 3: //Top Left Slope
+                        tile.halfBrick(false);
+                        tile.slope(4);
+                        break;
+                    case 4: //Half Tile
+                        tile.halfBrick(true);
+                        tile.slope(0);
+                        break;
+                    case 5: //Full Tile
+                        tile.halfBrick(false);
+                        tile.slope(0);
+                        break;
+                    default:
+                        break;
+                }
+
+                Main.PlaySound(SoundID.Dig);
+                WorldGen.SquareTileFrame(i, j, false);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendTileSquare(-1, i, j, 1);
+            }
         }
     }
 }

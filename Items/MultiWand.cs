@@ -104,10 +104,7 @@ namespace BuilderEssentials.Items
             if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) && HelperMethods.IsUIAvailable() &&
                 ++mouseRightTimer == 2)
             {
-                if (!ItemsUIState.multiWandWheel.Visible)
-                    ItemsUIState.multiWandWheel.Show();
-                else
-                    ItemsUIState.multiWandWheel.Hide();
+                ItemsUIState.multiWandWheel.Toggle();
             }
 
             if (Main.mouseRightRelease)
