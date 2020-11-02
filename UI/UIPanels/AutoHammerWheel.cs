@@ -9,16 +9,15 @@ using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIPanels
 {
-    public class MultiWandWheel : CustomUIPanel
+    public class AutoHammerWheel : CustomUIPanel
     {
         private const float width = 170f, height = 150;
         private const int elementsCount = 6;
         private UIImageButton[] elements;
         private bool elementHovered;
-        public int selectedIndex;
-        private UIText hoverText;
+        public int selectedIndex = -1;
 
-        public MultiWandWheel(float scale = 1f, float opacity = 1f) : base(scale, opacity)
+        public AutoHammerWheel(float scale = 1f, float opacity = 1f) : base(scale, opacity)
         {
             Width.Set(width, 0);
             Height.Set(height, 0);
@@ -29,7 +28,7 @@ namespace BuilderEssentials.UI.UIPanels
             BackgroundColor = Color.Transparent;
 
             //Initialize image buttons
-            string texturePath = "BuilderEssentials/Textures/UIElements/MultiWandWheel/WandWheel";
+            string texturePath = "BuilderEssentials/Textures/UIElements/AutoHammer/AH";
             elements = new UIImageButton[elementsCount];
             for (int i = 0; i < elementsCount; i++)
                 elements[i] = new UIImageButton(ModContent.GetTexture(texturePath + i));
@@ -49,11 +48,12 @@ namespace BuilderEssentials.UI.UIPanels
                 elements[i].Top.Set((float) y, 0);
                 elements[i].SetVisibility(.75f, .4f);
                 elements[i].OnClick += (__, _) => ElementOnClick(index);
-                elements[i].OnMouseOver += (__, _) => ElementOnMouseOver(index);
-                elements[i].OnMouseOut += (__, _) => ElementOnMouseOut();
+                elements[i].OnMouseOver += (__, _) => elementHovered = true;
+                elements[i].OnMouseOut += (__, _) => elementHovered = false;
             }
 
             //Correct display of previously toggled settings
+            if (selectedIndex != -1)
             elements[selectedIndex].SetVisibility(1f, 1f);
 
             //Append to the main panel
@@ -66,60 +66,22 @@ namespace BuilderEssentials.UI.UIPanels
             for (int i = 0; i < elementsCount; i++)
                 elements[i].SetVisibility(.75f, .4f);
 
-            elements[index].SetVisibility(1f, 1f);
-            selectedIndex = index;
-        }
-
-        private void ElementOnMouseOver(int index)
-        {
-            string text = "";
-            switch (index)
+            if (selectedIndex != index)
             {
-                case 0:
-                    text = "Places living wood (wood)";
-                    break;
-                case 1:
-                    text = "Places bones (bone)";
-                    break;
-                case 2:
-                    text = "Places leaves (wood)";
-                    break;
-                case 3:
-                    text = "Places Hives (hive)";
-                    break;
-                case 4:
-                    text = "Places living rich mahogany (rich mahogany)";
-                    break;
-                case 5:
-                    text = "Places rich mahogany leaves (rich mahogany)";
-                    break;
+                elements[index].SetVisibility(1f, 1f);
+                selectedIndex = index;
             }
-
-            elementHovered = true;
-            hoverText = new UIText(text, 1, false);
-            hoverText.Left.Set(Main.mouseX + 22 - Left.Pixels, 0);
-            hoverText.Top.Set(Main.mouseY + 22 - Top.Pixels, 0);
-            Append(hoverText);
-        }
-
-        private void ElementOnMouseOut()
-        {
-            elementHovered = false;
-            hoverText?.Remove();
+            else selectedIndex = -1;
         }
 
         public void Update()
         {
             if (IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = false;
-            
+
             if (!Visible) return;
             if (elementHovered)
-            {
                 Main.LocalPlayer.mouseInterface = true;
-                hoverText?.Left.Set(Main.mouseX + 22 - Left.Pixels, 0);
-                hoverText?.Top.Set(Main.mouseY + 22 - Top.Pixels, 0);
-            }
         }
 
         public override void Show()
@@ -131,7 +93,7 @@ namespace BuilderEssentials.UI.UIPanels
             offsetX = Main.mouseX + width / 2 > Main.screenWidth ? Main.screenWidth - width : offsetX;
             float offsetY = Main.mouseY - height / 2 > 0 ? Main.mouseY - height / 2 : 0;
             offsetY = Main.mouseY + height / 2 > Main.screenHeight ? Main.screenHeight - height : offsetY;
-            
+
             Left.Set(offsetX, 0);
             Top.Set(offsetY, 0);
         }

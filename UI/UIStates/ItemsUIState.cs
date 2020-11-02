@@ -11,19 +11,26 @@ namespace BuilderEssentials.UI.UIStates
     {
         public static ItemsUIState Instance;
         public static MultiWandWheel multiWandWheel;
+        public static AutoHammerWheel autoHammerWheel;
 
         public override void OnInitialize()
         {
             Instance = this;
+            
             multiWandWheel = new MultiWandWheel();
             Instance.Append(multiWandWheel);
             multiWandWheel.Hide();
+            
+            autoHammerWheel = new AutoHammerWheel();
+            Instance.Append(autoHammerWheel);
+            autoHammerWheel.Hide();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            multiWandWheel?.UpdateHoverText();
-        }
+            multiWandWheel?.Update();
+            autoHammerWheel?.Update();
+        }    
     }
 }
