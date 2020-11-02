@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.UI;
@@ -12,6 +13,9 @@ namespace BuilderEssentials.Utilities
     {
         internal static bool ValidTilePlacement(int i, int j)
         {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+            if (mp.PlacementAnywhere) return true;
+            
             int[] treeTypes =
             {
                 //[TAG 1.4] Implements new trees
@@ -28,26 +32,34 @@ namespace BuilderEssentials.Utilities
             Tile bottom = Framing.GetTileSafely(i, j + 1);
             Tile left = Framing.GetTileSafely(i - 1, j);
 
-            return !middle.active() || !Main.tileSolid[middle.type] &&
-                treeTypes.Contains(middle.type) &&
-                (
-                    (top.active() && Main.tileSolid[top.type]) ||
-                    (right.active() && Main.tileSolid[right.type]) ||
-                    (bottom.active() && Main.tileSolid[bottom.type]) ||
-                    (left.active() && Main.tileSolid[left.type]) ||
-                    middle.wall != 0
-                );
+            return (!middle.active() || !Main.tileSolid[middle.type]) &&
+                   !treeTypes.Contains(middle.type) &&
+                   (
+                       (top.active() && Main.tileSolid[top.type]) ||
+                       (right.active() && Main.tileSolid[right.type]) ||
+                       (bottom.active() && Main.tileSolid[bottom.type]) ||
+                       (left.active() && Main.tileSolid[left.type]) ||
+                       middle.wall != 0
+                   );
         }
 
-        internal static bool ToolHasRange(int range)
+        internal static bool ToolHasRange(Point range)
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
-            return Vector2.Distance(Main.LocalPlayer.Center, mp.pointedCoord) < range * 16 &&
-                   ValidTilePlacement((int) mp.pointedTileCoord.X, (int) mp.pointedTileCoord.Y);
+            if (mp.InfiniteRange) return true;
+            
+            Point playerCenter = Main.LocalPlayer.Center.ToTileCoordinates();
+            //range = new Point(Main.screenWidth / 16, Main.screenHeight / 16);
+
+            return Math.Abs(playerCenter.X - mp.PointedTileCoord.X) <= range.X &&
+                   Math.Abs(playerCenter.Y - mp.PointedTileCoord.Y) <= range.Y;
         }
 
         internal static bool CanReduceItemStack(int itemType, bool reduceStack = true)
         {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+            if (mp.InfinitePlacement) return true;
+            
             foreach (Item item in Main.LocalPlayer.inventory)
             {
                 if (item.type == itemType && item.stack >= 1)
