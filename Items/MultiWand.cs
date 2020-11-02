@@ -12,8 +12,7 @@ namespace BuilderEssentials.Items
 {
     public class MultiWand : ModItem
     {
-        private int baseRange = 8;
-        private int toolRange;
+        private Point toolRange;
         private bool canPlaceItems;
 
         private int[] wandMaterials =
@@ -52,6 +51,7 @@ namespace BuilderEssentials.Items
             item.rare = ItemRarityID.Red;
             item.autoReuse = true;
             item.noMelee = false;
+            toolRange = new Point(8, 8);
         }
 
         public override Vector2? HoldoutOffset() => new Vector2(2, -9);
@@ -61,36 +61,22 @@ namespace BuilderEssentials.Items
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
-                toolRange = baseRange; // or bigger if inf range?
-
-                if (HelperMethods.ToolHasRange(toolRange) &&
-                    (!Main.mouseLeft && !ItemsUIState.multiWandWheel.IsMouseHovering))
-                {
-                    canPlaceItems = true;
-                    player.showItemIcon = true;
-                    player.showItemIcon2 = item.type;
-                }
-                else if (!Main.mouseLeft)
-                {
-                    canPlaceItems = false;
-                    player.showItemIcon = false;
-                }
+                canPlaceItems = HelperMethods.ToolHasRange(toolRange);
+                player.showItemIcon = canPlaceItems && !ItemsUIState.multiWandWheel.IsMouseHovering;
+                player.showItemIcon2 = item.type;
             }
         }
 
         public override bool CanUseItem(Player player)
         {
-            BEPlayer mp = player.GetModPlayer<BEPlayer>();
             MultiWandWheel panel = ItemsUIState.multiWandWheel;
 
             if (player.altFunctionUse == 0 && canPlaceItems) //LMB
             {
-                //TODO: Fix items being placed midair?
-
                 int materialType = wandMaterials[panel.selectedIndex];
                 int tileType = wandPlacedTiles[panel.selectedIndex];
                 if (HelperMethods.ValidTilePlacement(Player.tileTargetX, Player.tileTargetY) &&
-                    HelperMethods.CanReduceItemStack(materialType, true)) //or inf placement
+                    HelperMethods.CanReduceItemStack(materialType, true))
                     HelperMethods.PlaceTile(Player.tileTargetX, Player.tileTargetY, HelperMethods.ItemTypes.Tile,
                         tileType);
             }
@@ -107,6 +93,7 @@ namespace BuilderEssentials.Items
         }
 
         private int mouseRightTimer = 0;
+
         public override void UpdateInventory(Player player)
         {
             base.UpdateInventory(player);
@@ -125,6 +112,20 @@ namespace BuilderEssentials.Items
 
             if (Main.mouseRightRelease)
                 mouseRightTimer = 0;
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.LivingWoodWand);
+            recipe.AddIngredient(ItemID.BoneWand);
+            recipe.AddIngredient(ItemID.LeafWand);
+            recipe.AddIngredient(ItemID.HiveWand);
+            recipe.AddIngredient(ItemID.LivingMahoganyWand);
+            recipe.AddIngredient(ItemID.LivingMahoganyLeafWand);
+            recipe.AddTile(TileID.TinkerersWorkbench);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }
