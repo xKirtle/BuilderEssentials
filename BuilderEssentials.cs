@@ -4,6 +4,7 @@ using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -60,6 +61,16 @@ namespace BuilderEssentials
                     },
                     InterfaceScaleType.UI));
             }
+        }
+
+        public override void AddRecipeGroups()
+        {
+            int[] woods =
+            {
+                ItemID.Wood, ItemID.RichMahogany, ItemID.Ebonwood, ItemID.Shadewood, ItemID.Pearlwood,
+                ItemID.BorealWood, ItemID.PalmWood, ItemID.DynastyWood, ItemID.SpookyWood
+            };
+            HelperMethods.CreateRecipeGroup(woods, "Woods");
         }
     }
 }
