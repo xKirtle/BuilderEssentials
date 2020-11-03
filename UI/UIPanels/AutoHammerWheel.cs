@@ -11,7 +11,7 @@ namespace BuilderEssentials.UI.UIPanels
 {
     public class AutoHammerWheel : CustomUIPanel
     {
-        private const float width = 170f, height = 150;
+        private const float width = 170f, height = 150f;
         private const int elementsCount = 6;
         private UIImageButton[] elements;
         private bool elementHovered;
@@ -36,12 +36,12 @@ namespace BuilderEssentials.UI.UIPanels
             //Define our Wheel (circle)
             const int radius = 60;
             const double angle = Math.PI / 3;
+            const int elementsSize = 44;
 
             for (int i = 0; i < elementsCount; i++)
             {
                 int index = i;
-                //The magic number 22f is half the width/height of the elements[i] Texture size (44x44 pixels)
-                Vector2 offset = new Vector2(width / 2 - 22f, height / 2 - 22f);
+                Vector2 offset = new Vector2(width - elementsSize, height - elementsSize) / 2;
                 double x = offset.X + (radius * Math.Cos(angle * (i + 3)));
                 double y = offset.Y - (radius * Math.Sin(angle * (i + 3)));
                 elements[i].Left.Set((float) x, 0);
