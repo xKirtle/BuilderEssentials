@@ -13,12 +13,13 @@ namespace BuilderEssentials.Items
     {
         private Point toolRange;
         private bool canHammerTiles;
-        
+
         public override string Texture => "BuilderEssentials/Textures/Items/AutoHammer";
+
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Better than a regular hammer!" +
-            "\nRight Click to open selection menu");
+                               "\nRight Click to open selection menu");
         }
 
         public override void SetDefaults()
@@ -36,13 +37,14 @@ namespace BuilderEssentials.Items
             item.UseSound = SoundID.Item1;
             toolRange = new Point(8, 8);
         }
-        
+
         public override void HoldItem(Player player)
         {
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
-                canHammerTiles = HelperMethods.ToolHasRange(toolRange);
+                canHammerTiles = HelperMethods.ToolHasRange(toolRange) &&
+                                 HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
                 player.showItemIcon = canHammerTiles && !ItemsUIState.autoHammerWheel.IsMouseHovering;
                 player.showItemIcon2 = item.type;
             }
@@ -57,7 +59,7 @@ namespace BuilderEssentials.Items
                 HelperMethods.ChangeSlope(panel.selectedIndex);
                 return false;
             }
-            
+
             return true;
         }
 
@@ -68,7 +70,7 @@ namespace BuilderEssentials.Items
             if (ItemsUIState.autoHammerWheel.Visible)
                 ItemsUIState.autoHammerWheel.Hide();
         }
-        
+
         private int mouseRightTimer = 0;
 
         public override void UpdateInventory(Player player)
@@ -78,7 +80,8 @@ namespace BuilderEssentials.Items
             if (player.HeldItem.IsNotTheSameAs(item) && ItemsUIState.autoHammerWheel.Visible)
                 ItemsUIState.autoHammerWheel.Hide();
 
-            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) && HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
+            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) && HelperMethods.IsUIAvailable() &&
+                ++mouseRightTimer == 2)
                 ItemsUIState.autoHammerWheel.Toggle();
 
             if (Main.mouseRightRelease)

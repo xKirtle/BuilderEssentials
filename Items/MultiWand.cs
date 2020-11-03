@@ -61,7 +61,8 @@ namespace BuilderEssentials.Items
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
-                canPlaceItems = HelperMethods.ToolHasRange(toolRange);
+                canPlaceItems = HelperMethods.ToolHasRange(toolRange) &&
+                                HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
                 player.showItemIcon = canPlaceItems && !ItemsUIState.multiWandWheel.IsMouseHovering;
                 player.showItemIcon2 = item.type;
             }
