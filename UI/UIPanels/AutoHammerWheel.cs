@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using BuilderEssentials.UI.Elements;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.ModLoader;
+using Terraria.GameContent.UI.Elements;
+using BuilderEssentials.UI.Elements;
 
 namespace BuilderEssentials.UI.UIPanels
 {

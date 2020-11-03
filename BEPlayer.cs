@@ -22,8 +22,14 @@ namespace BuilderEssentials
         {
             if (Main.netMode != NetmodeID.Server && ValidCursorPos)
             {
-                
+                InfiniteRange = true;
             }
+        }
+
+        public override void OnEnterWorld(Player player)
+        {
+            base.OnEnterWorld(player);
+            //Update UI Wheel selected indexes and stuff
         }
     }
 }

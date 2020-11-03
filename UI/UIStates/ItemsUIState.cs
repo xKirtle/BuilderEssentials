@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
@@ -37,6 +38,13 @@ namespace BuilderEssentials.UI.UIStates
             multiWandWheel?.Update();
             autoHammerWheel?.Update();
             paintWheel?.Update();
-        }    
+            
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            paintWheel?.UpdateColors();
+        }
     }
 }

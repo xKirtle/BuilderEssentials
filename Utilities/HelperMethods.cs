@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.UI;
-using BuilderEssentials.UI.UIStates;
-using Microsoft.Xna.Framework;
 using Terraria.GameInput;
 using Terraria.Localization;
+using BuilderEssentials.UI.UIStates;
 
 namespace BuilderEssentials.Utilities
 {
@@ -170,6 +170,7 @@ namespace BuilderEssentials.Utilities
             // if( !(!notShowingMouseIcon || !player.showItemIcon) ) { Main.NewText( "showItemIcon" ); }
             return (!notTabbedAway || Main.hasFocus) &&
                    (!gameNotPaused || !Main.gamePaused) &&
+                   (!gameNotPaused || !Main.ingameOptionsWindow) &&
                    (!mouseNotInUse || !player.mouseInterface) &&
                    (!keyboardNotInVanillaUI || !Main.drawingPlayerChat) &&
                    (!keyboardNotInVanillaUI || !Main.editSign) &&
