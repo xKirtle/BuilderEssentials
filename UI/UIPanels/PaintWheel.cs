@@ -122,8 +122,8 @@ namespace BuilderEssentials.UI.UIPanels
             for (int i = 0; i < 3; i++)
             {
                 int index = i;
-                double x = (width / 3) * i + 20f;
-                double y = (width / 2) + 10f;
+                double x = (width / 3) * i + 35f;
+                double y = (width / 2) + 15f;
 
                 toolElements[i].Left.Set((float) x - colorElementSize / 4, 0);
                 toolElements[i].Top.Set((float) y, 0);

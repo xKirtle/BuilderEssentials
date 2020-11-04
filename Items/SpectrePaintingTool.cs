@@ -117,5 +117,16 @@ namespace BuilderEssentials.Items
             if (Main.mouseRightRelease)
                 mouseRightTimer = 0;
         }
+        
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.SpectrePaintbrush);
+            recipe.AddIngredient(ItemID.SpectrePaintRoller);
+            recipe.AddIngredient(ItemID.SpectrePaintScraper);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+        }
     }
 }
