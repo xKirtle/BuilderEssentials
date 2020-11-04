@@ -13,7 +13,7 @@ namespace BuilderEssentials
 
         public Vector2 PointedCoord => Main.MouseWorld;
         public Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
-        public Tile PointedTile => Framing.GetTileSafely(PointedTileCoord);
+        public Tile PointedTile => Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         public bool InfiniteRange { get; set; }
         public bool InfinitePlacement { get; set; }
         public bool PlacementAnywhere { get; set; }
