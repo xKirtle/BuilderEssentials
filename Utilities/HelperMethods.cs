@@ -241,5 +241,82 @@ namespace BuilderEssentials.Utilities
                     NetMessage.SendTileSquare(-1, i, j, 1);
             }
         }
+
+        internal static int PaintItemTypeToIndex(int paintType)
+        {
+            //The outputed indexes are not the paint color byte values. For those just increment one.
+
+            //[TAG 1.4] Implements new paints and changes item types
+
+            if (paintType >= 1073 && paintType <= 1099)
+                return paintType - 1073;
+            else if (paintType >= 1966 && paintType <= 1968)
+                return paintType - 1939;
+
+            return -1; //it will never reach here
+        }
+
+        internal static int ColorByteToPaintItemType(byte color)
+        {
+            //[TAG 1.4] Implements new paints and changes item types
+
+            if (color >= 1 && color <= 27)
+                return (color - 1) + 1073;
+            else if (color >= 28 && color <= 30)
+                return (color - 1) + 1939;
+
+            return -1; //it will never reach here
+        }
+
+        internal static void PaintTileOrWall(byte color, int selectedTool)
+        {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+            if (color < 0 || color > 30 || selectedTool == 2) return;
+            bool needsSync = false;
+
+            if (selectedTool == 0 && mp.PointedTile.active() && mp.PointedTile.color() != color)
+            {
+                if (CanReduceItemStack(ColorByteToPaintItemType(color), true))
+                {
+                    mp.PointedTile.color(color);
+                    needsSync = true;
+                }
+            }
+            else if (selectedTool == 1 && mp.PointedTile.wall != 0 && mp.PointedTile.wallColor() != color)
+            {
+                if (CanReduceItemStack(ColorByteToPaintItemType(color), true))
+                {
+                    mp.PointedTile.wallColor(color);
+                    needsSync = true;
+                }
+            }
+
+            if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
+        }
+
+        internal static void ScrapPaint()
+        {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+            bool needsSync = false;
+
+            if (mp.PointedTile.color() != 0)
+            {
+                mp.PointedTile.color(0);
+                needsSync = true;
+            }
+
+            if (mp.PointedTile.wallColor() != 0)
+            {
+                mp.PointedTile.wallColor(0);
+                needsSync = true;
+            }
+
+            if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetMessage.SendData(MessageID.PaintTile, number: Player.tileTargetX, number2: Player.tileTargetY);
+                NetMessage.SendData(MessageID.PaintWall, number: Player.tileTargetX, number2: Player.tileTargetY);
+            }
+        }
     }
 }

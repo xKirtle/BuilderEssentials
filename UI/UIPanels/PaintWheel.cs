@@ -7,6 +7,7 @@ using Terraria.UI;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI.Elements;
 using BuilderEssentials.UI.Elements;
+using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials.UI.UIPanels
 {
@@ -174,8 +175,7 @@ namespace BuilderEssentials.UI.UIPanels
         private void UpdateCrossesOnColors()
         {
             EvaluateAvailableColorsInInventory();
-
-            //TODO: CLEAN CODE BELOW
+            
             for (int i = 0; i < noPaintOverlay.Length; i++)
             {
                 if (!colorAvailable[i])
@@ -207,7 +207,7 @@ namespace BuilderEssentials.UI.UIPanels
 
             //Convering paint item types to actual indexes
             for (int i = 0; i < paintInInventory.Count; i++)
-                foundIndexes[i] = PaintItemTypeToIndex(paintInInventory[i]);
+                foundIndexes[i] = HelperMethods.PaintItemTypeToIndex(paintInInventory[i]);
 
             //Reset all colors available
             for (int i = 0; i < colorAvailable.Length; i++)
@@ -216,19 +216,6 @@ namespace BuilderEssentials.UI.UIPanels
             //Update colors available
             foreach (int index in foundIndexes)
                 colorAvailable[index] = true;
-
-            //The outputed indexes are not the paint color byte values. For those just increment one.
-            int PaintItemTypeToIndex(int paintType)
-            {
-                //[TAG 1.4] Implements new paints and changes item types
-
-                if (paintType >= 1073 && paintType <= 1099)
-                    return paintType - 1073;
-                else if (paintType >= 1966 && paintType <= 1968)
-                    return paintType - 1939;
-                else
-                    return -1; //it will never reach here
-            }
         }
 
         public void UpdateColors()
@@ -245,6 +232,20 @@ namespace BuilderEssentials.UI.UIPanels
             if (!Visible) return;
             if (elementHovered)
                 Main.LocalPlayer.mouseInterface = true;
+        }
+        
+        public override void Show()
+        {
+            base.Show();
+
+            //Making sure the UI will stay within our screen
+            float offsetX = Main.mouseX - width / 2 > 0 ? Main.mouseX - width / 2 : 0;
+            offsetX = Main.mouseX + width / 2 > Main.screenWidth ? Main.screenWidth - width : offsetX;
+            float offsetY = Main.mouseY - height / 2 > 0 ? Main.mouseY - height / 2 : 0;
+            offsetY = Main.mouseY + height / 2 > Main.screenHeight ? Main.screenHeight - height : offsetY;
+            
+            Left.Set(offsetX, 0);
+            Top.Set(offsetY, 0);
         }
     }
 }
