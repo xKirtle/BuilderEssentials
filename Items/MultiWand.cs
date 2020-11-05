@@ -58,6 +58,8 @@ namespace BuilderEssentials.Items
 
         public override void HoldItem(Player player)
         {
+            if (player.whoAmI != Main.myPlayer) return;
+            
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
@@ -70,8 +72,9 @@ namespace BuilderEssentials.Items
 
         public override bool CanUseItem(Player player)
         {
+            if (player.whoAmI != Main.myPlayer) return true;
+            
             MultiWandWheel panel = ItemsUIState.multiWandWheel;
-
             if (player.altFunctionUse == 0 && canPlaceItems) //LMB
             {
                 int materialType = wandMaterials[panel.selectedIndex];
@@ -87,6 +90,8 @@ namespace BuilderEssentials.Items
 
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
+            if (Main.netMode != NetmodeID.MultiplayerClient) return;
+
             base.Update(ref gravity, ref maxFallSpeed);
             //Check if UI is Visible while item is dropped and close it if so.
             if (ItemsUIState.multiWandWheel.Visible)
@@ -97,6 +102,8 @@ namespace BuilderEssentials.Items
 
         public override void UpdateInventory(Player player)
         {
+            if (player.whoAmI != Main.myPlayer) return;
+
             base.UpdateInventory(player);
             //Check if UI is Visible while item is not the held one and close it if so.
             if (player.HeldItem.IsNotTheSameAs(item) && ItemsUIState.multiWandWheel.Visible)

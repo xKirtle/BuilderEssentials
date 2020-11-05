@@ -35,7 +35,7 @@ namespace BuilderEssentials.UI.UIPanels
             Height.Set(height, 0);
             Left.Set(Main.screenWidth / 2 - width, 0);
             Top.Set(Main.screenHeight / 2 - height, 0);
-            BorderColor = Color.Red;
+            BorderColor = Color.Transparent;
             BackgroundColor = Color.Transparent;
 
             string texturePath = "BuilderEssentials/Textures/UIElements/Paint/";
@@ -66,14 +66,17 @@ namespace BuilderEssentials.UI.UIPanels
                 Vector2 offset = new Vector2(width - colorElementSize, height - colorElementSize) / 2;
                 double x = offset.X - (radius * Math.Cos(angle * (i + .48)) * 0.95);
                 double y = offset.Y - (radius * Math.Sin(angle * (i + .48)));
+                
                 var left = new StyleDimension((float) x - colorElementSize / 4, 0);
                 var top = new StyleDimension((float) y + 40, 0);
                 colorElements[i].Left = noPaintOverlay[i].Left = left;
                 colorElements[i].Top = noPaintOverlay[i].Top = top;
+                
                 colorElements[i].SetVisibility(1f, 0.85f);
                 colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
                 colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
+                
                 Append(colorElements[i]);
                 Append(noPaintOverlay[i]);
             }
@@ -86,14 +89,17 @@ namespace BuilderEssentials.UI.UIPanels
                 Vector2 offset = new Vector2(width - colorElementSize, height - colorElementSize) / 2;
                 double x = offset.X + (radius * Math.Cos(angle * (i + .48)) * 1);
                 double y = offset.Y - (radius * Math.Sin(-angle * (i + .48)));
+                
                 var left = new StyleDimension((float) x - colorElementSize / 4, 0);
                 var top = new StyleDimension((float) y + 30, 0);
                 colorElements[i].Left = noPaintOverlay[i].Left = left;
                 colorElements[i].Top = noPaintOverlay[i].Top = top;
+                
                 colorElements[i].SetVisibility(1f, 0.85f);
                 colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
                 colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
+                
                 Append(colorElements[i]);
                 Append(noPaintOverlay[i]);
             }
@@ -107,14 +113,17 @@ namespace BuilderEssentials.UI.UIPanels
                 Vector2 offset = new Vector2(width - colorElementSize, height - colorElementSize) / 2;
                 double x = offset.X - (radius * Math.Cos(angle * (i + .50)) * 1.10);
                 double y = offset.Y + (radius * Math.Sin(-angle * (i + .50)) * 1.25);
+                
                 var left = new StyleDimension((float) x - colorElementSize / 4, 0);
                 var top = new StyleDimension((float) y + 50, 0);
                 colorElements[i].Left = noPaintOverlay[i].Left = left;
                 colorElements[i].Top = noPaintOverlay[i].Top = top;
+                
                 colorElements[i].SetVisibility(1f, 0.85f);
                 colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
                 colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
+                
                 Append(colorElements[i]);
                 Append(noPaintOverlay[i]);
             }
@@ -127,10 +136,12 @@ namespace BuilderEssentials.UI.UIPanels
 
                 toolElements[i].Left.Set((float) x - colorElementSize / 4, 0);
                 toolElements[i].Top.Set((float) y, 0);
+                
                 toolElements[i].SetVisibility(1f, .8f);
                 toolElements[i].OnMouseDown += (__, _) => ToolSelected(index);
                 toolElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 toolElements[i].OnMouseOut += (__, _) => elementHovered = false;
+                
                 Append(toolElements[i]);
             }
 

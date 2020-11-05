@@ -25,10 +25,12 @@ namespace BuilderEssentials.Items
 
         public override void SetDefaults()
         {
+            //TODO: Add item.tileBoost to the toolRange
             item.height = 44;
             item.width = 44;
             item.useTime = 1;
             item.useAnimation = 1;
+            item.useTurn = true;
             item.useStyle = ItemUseStyleID.HoldingOut;
             item.value = Item.buyPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
@@ -40,11 +42,9 @@ namespace BuilderEssentials.Items
 
         public override void HoldItem(Player player)
         {
-            BEPlayer mp = player.GetModPlayer<BEPlayer>();
-            int i = Player.tileTargetX;
-            int j = Player.tileTargetY;
-            Tile tile = Framing.GetTileSafely(i, j);
+            if (player.whoAmI != Main.myPlayer) return;
             
+            BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
                 canPaint = HelperMethods.ToolHasRange(toolRange) && ItemsUIState.paintWheel.colorIndex != -1 &&
@@ -71,6 +71,8 @@ namespace BuilderEssentials.Items
 
         public override bool CanUseItem(Player player)
         {
+            if (player.whoAmI != Main.myPlayer) return true;
+            
             if (!canPaint || ItemsUIState.paintWheel.toolIndex == 2 && !HelperMethods.ToolHasRange(toolRange)) return false;
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             byte selectedColor = (byte) (ItemsUIState.paintWheel.colorIndex + 1);
@@ -93,6 +95,8 @@ namespace BuilderEssentials.Items
 
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
+            if (Main.netMode != NetmodeID.MultiplayerClient) return;
+            
             base.Update(ref gravity, ref maxFallSpeed);
             //Check if UI is Visible while item is dropped and close it if so.
             if (ItemsUIState.paintWheel.Visible)
@@ -103,6 +107,8 @@ namespace BuilderEssentials.Items
 
         public override void UpdateInventory(Player player)
         {
+            if (player.whoAmI != Main.myPlayer) return;
+            
             base.UpdateInventory(player);
             //Check if UI is Visible while item is not the held one and close it if so.
             if (player.HeldItem.IsNotTheSameAs(item) && ItemsUIState.paintWheel.Visible)
