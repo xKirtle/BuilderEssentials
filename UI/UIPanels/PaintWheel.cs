@@ -22,6 +22,7 @@ namespace BuilderEssentials.UI.UIPanels
         private bool[] colorAvailable;
         private bool elementHovered;
         private int[] paints;
+        public bool infPaintBucket;
         public int colorIndex = -1;
         public int toolIndex;
 
@@ -155,7 +156,7 @@ namespace BuilderEssentials.UI.UIPanels
 
         private void ColorSelected(int index)
         {
-            if (!colorAvailable[index]) return;
+            if (!colorAvailable[index] && !infPaintBucket) return;
 
             for (int i = 0; i < colorElements.Length; i++)
                 colorElements[i].SetVisibility(1f, 0.85f);
@@ -189,7 +190,7 @@ namespace BuilderEssentials.UI.UIPanels
             
             for (int i = 0; i < noPaintOverlay.Length; i++)
             {
-                if (!colorAvailable[i])
+                if (!colorAvailable[i] && !infPaintBucket)
                 {
                     Append(noPaintOverlay[i]);
                     if (colorIndex == i)
@@ -243,6 +244,8 @@ namespace BuilderEssentials.UI.UIPanels
             if (!Visible) return;
             if (elementHovered)
                 Main.LocalPlayer.mouseInterface = true;
+
+            infPaintBucket = false;
         }
         
         public override void Show()

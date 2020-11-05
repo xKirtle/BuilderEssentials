@@ -1,5 +1,6 @@
 ﻿using BuilderEssentials.Utilities;
 using System.Collections.Generic;
+using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIStates;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -45,13 +46,14 @@ namespace BuilderEssentials.Items
             if (player.whoAmI != Main.myPlayer) return;
             
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
+            PaintWheel panel = ItemsUIState.paintWheel;
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
-                canPaint = HelperMethods.ToolHasRange(toolRange) && ItemsUIState.paintWheel.colorIndex != -1 &&
+                canPaint = HelperMethods.ToolHasRange(toolRange) && (panel.colorIndex != -1 || panel.toolIndex == 2) &&
                            HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
-                player.showItemIcon = canPaint && !ItemsUIState.paintWheel.IsMouseHovering;
-
-                switch (ItemsUIState.paintWheel.toolIndex)
+                player.showItemIcon = canPaint && !panel.IsMouseHovering;
+                
+                switch (panel.toolIndex)
                 {
                     case 0: //Paint tiles
                         if (mp.PointedTile.type >= 0 && mp.PointedTile.active())
@@ -62,7 +64,7 @@ namespace BuilderEssentials.Items
                             player.showItemIcon2 = ItemID.SpectrePaintRoller;
                         break;
                     case 2: //Scrap paint
-                        if (mp.PointedTile.color() != 0)
+                        if (mp.PointedTile.color() != 0 || mp.PointedTile.wallColor() != 0)
                             player.showItemIcon2 = ItemID.SpectrePaintScraper;
                         break;
                 }
@@ -71,19 +73,21 @@ namespace BuilderEssentials.Items
 
         public override bool CanUseItem(Player player)
         {
-            if (player.whoAmI != Main.myPlayer) return true;
+            if (player.whoAmI != Main.myPlayer) return false;
+            if ((!canPaint && ItemsUIState.paintWheel.toolIndex != 2) || !HelperMethods.ToolHasRange(toolRange)) return false;
             
-            if (!canPaint || ItemsUIState.paintWheel.toolIndex == 2 && !HelperMethods.ToolHasRange(toolRange)) return false;
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-            byte selectedColor = (byte) (ItemsUIState.paintWheel.colorIndex + 1);
+            PaintWheel panel = ItemsUIState.paintWheel;
+            byte selectedColor = (byte) (panel.colorIndex + 1);
+            bool infPaintBucket = panel.infPaintBucket;
             
-            switch (ItemsUIState.paintWheel.toolIndex)
+            switch (panel.toolIndex)
             {
                 case 0:
-                    HelperMethods.PaintTileOrWall(selectedColor, 0);
+                    HelperMethods.PaintTileOrWall(selectedColor, 0, infPaintBucket);
                     break;
                 case 1:
-                    HelperMethods.PaintTileOrWall(selectedColor, 1);
+                    HelperMethods.PaintTileOrWall(selectedColor, 1, infPaintBucket);
                     break;
                 case 2:
                     HelperMethods.ScrapPaint();

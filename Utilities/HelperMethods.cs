@@ -268,7 +268,7 @@ namespace BuilderEssentials.Utilities
             return -1; //it will never reach here
         }
 
-        internal static void PaintTileOrWall(byte color, int selectedTool)
+        internal static void PaintTileOrWall(byte color, int selectedTool, bool infinitePaint = false)
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             if (color < 0 || color > 30 || selectedTool == 2) return;
@@ -276,7 +276,7 @@ namespace BuilderEssentials.Utilities
 
             if (selectedTool == 0 && mp.PointedTile.active() && mp.PointedTile.color() != color)
             {
-                if (CanReduceItemStack(ColorByteToPaintItemType(color), true))
+                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), true))
                 {
                     mp.PointedTile.color(color);
                     needsSync = true;
@@ -284,7 +284,7 @@ namespace BuilderEssentials.Utilities
             }
             else if (selectedTool == 1 && mp.PointedTile.wall != 0 && mp.PointedTile.wallColor() != color)
             {
-                if (CanReduceItemStack(ColorByteToPaintItemType(color), true))
+                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), true))
                 {
                     mp.PointedTile.wallColor(color);
                     needsSync = true;

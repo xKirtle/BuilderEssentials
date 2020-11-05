@@ -22,7 +22,7 @@ namespace BuilderEssentials
         {
             if (Main.netMode != NetmodeID.Server && ValidCursorPos)
             {
-                InfiniteRange = true;
+                InfiniteRange = false;
             }
         }
 
