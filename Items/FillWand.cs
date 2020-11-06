@@ -72,7 +72,7 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer) return;
             
-            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) &&
+            if (Main.mouseRight && player.HeldItem == item &&
                 HelperMethods.IsUIAvailable(notShowingMouseIcon: false) && ++mouseRightTimer == 2)
             {
                 //Break Tiles

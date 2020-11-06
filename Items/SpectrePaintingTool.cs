@@ -43,31 +43,28 @@ namespace BuilderEssentials.Items
 
         public override void HoldItem(Player player)
         {
-            if (player.whoAmI != Main.myPlayer) return;
-
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-            PaintWheel panel = ItemsUIState.paintWheel;
-            if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
-            {
-                canPaint = HelperMethods.ToolHasRange(toolRange) && (panel.colorIndex != -1 || panel.toolIndex == 2) &&
-                           HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
-                player.showItemIcon = canPaint && !panel.IsMouseHovering;
+            if (player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server || !mp.ValidCursorPos) return;
 
-                switch (panel.toolIndex)
-                {
-                    case 0: //Paint tiles
-                        if (mp.PointedTile.type >= 0 && mp.PointedTile.active())
-                            player.showItemIcon2 = ItemID.SpectrePaintbrush;
-                        break;
-                    case 1: //Paint walls
-                        if (mp.PointedTile.type >= 0 && mp.PointedTile.wall > 0)
-                            player.showItemIcon2 = ItemID.SpectrePaintRoller;
-                        break;
-                    case 2: //Scrap paint
-                        if (mp.PointedTile.color() != 0 || mp.PointedTile.wallColor() != 0)
-                            player.showItemIcon2 = ItemID.SpectrePaintScraper;
-                        break;
-                }
+            PaintWheel panel = ItemsUIState.paintWheel;
+            canPaint = HelperMethods.ToolHasRange(toolRange) && (panel.colorIndex != -1 || panel.toolIndex == 2) &&
+                       HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
+            player.showItemIcon = canPaint && !panel.IsMouseHovering;
+
+            switch (panel.toolIndex)
+            {
+                case 0: //Paint tiles
+                    if (mp.PointedTile.type >= 0 && mp.PointedTile.active())
+                        player.showItemIcon2 = ItemID.SpectrePaintbrush;
+                    break;
+                case 1: //Paint walls
+                    if (mp.PointedTile.type >= 0 && mp.PointedTile.wall > 0)
+                        player.showItemIcon2 = ItemID.SpectrePaintRoller;
+                    break;
+                case 2: //Scrap paint
+                    if (mp.PointedTile.color() != 0 || mp.PointedTile.wallColor() != 0)
+                        player.showItemIcon2 = ItemID.SpectrePaintScraper;
+                    break;
             }
         }
 
@@ -104,8 +101,7 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer) return;
             
-            //Having two of the same item is breaking this
-            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) &&
+            if (Main.mouseRight && player.HeldItem == item &&
                 HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
                 ItemsUIState.paintWheel.Toggle();
 

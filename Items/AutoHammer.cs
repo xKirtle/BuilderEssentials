@@ -71,10 +71,9 @@ namespace BuilderEssentials.Items
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-
-            //Having two of the same item is breaking this
-            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) &&
-                HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
+            
+            if (Main.mouseRight && player.HeldItem == item &&
+                HelperMethods.IsUIAvailable() && ++mouseRightTimer == 4)
                 ItemsUIState.autoHammerWheel.Toggle();
 
             if (Main.mouseRightRelease)

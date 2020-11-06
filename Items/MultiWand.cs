@@ -90,8 +90,7 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer) return;
             
-            //Having two of the same item is breaking this
-            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) &&
+            if (Main.mouseRight && player.HeldItem == item &&
                 HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
                 ItemsUIState.multiWandWheel.Toggle();
 
