@@ -139,6 +139,19 @@ namespace BuilderEssentials.Utilities
             return Framing.GetTileSafely(i, j);
         }
 
+        internal static void RemoveTile(int i, int j, bool removeTile = true, bool removeWall = false,
+            bool fail = false, bool dropItem = true)
+        {
+            if (removeTile)
+                WorldGen.KillTile(i, j, fail, !dropItem);
+
+            if (removeWall)
+                WorldGen.KillWall(i, j, fail);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, i, j, 1);
+        }
+
         //Taken from https://github.com/hamstar0/tml-hamstarhelpers-mod/blob/master/HamstarHelpers/Helpers/UI/UIHelpers.cs#L59
         internal static bool IsUIAvailable(
             bool notTabbedAway = true,

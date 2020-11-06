@@ -21,7 +21,7 @@ namespace BuilderEssentials.Items
                 "Fills Holes" +
                 "\nLeft Click to place" +
                 "\nRigth Click to remove" +
-                "\nMiddle Click to select working tiles" +
+                "\nMiddle Click to select working tile" +
                 "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]"
             );
         }
@@ -44,8 +44,8 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
+            
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-
             player.showItemIcon = true;
 
             //Middle Mouse
@@ -54,32 +54,54 @@ namespace BuilderEssentials.Items
 
             if (selectedTileItemType != -1)
                 player.showItemIcon2 = selectedTileItemType;
+            
+            //Right Mouse
+            if (Main.mouseRight && player.HeldItem == item &&
+                HelperMethods.IsUIAvailable(notShowingMouseIcon: false))
+            {
+                Item customItem = new Item();
+                for (int i = 0; i < fillSelectionSize; i++)
+                {
+                    for (int j = 0; j < fillSelectionSize; j++)
+                    {
+                        int posX = Player.tileTargetX + j;
+                        int posY = Player.tileTargetY - i;
+                        Tile tile = Framing.GetTileSafely(posX, posY);
+                        customItem.SetDefaults(selectedTileItemType);
+
+                        if (tile.type == customItem.createTile)
+                            HelperMethods.RemoveTile(posX, posY, true, false);
+                        else if (tile.wall == customItem.createWall)
+                            HelperMethods.RemoveTile(posX, posY, false, true);
+                    }
+                }
+            }
         }
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 0) //LMB
+            for (int i = 0; i < fillSelectionSize; i++)
             {
-                //Place Tiles
+                for (int j = 0; j < fillSelectionSize; j++)
+                {
+                    int posX = Player.tileTargetX + j;
+                    int posY = Player.tileTargetY - i;
+                    Tile tile = Framing.GetTileSafely(posX, posY);
+
+                    if (selectedTileItemType != -1 && tile.type == 0 && !tile.active() &&
+                        HelperMethods.CanReduceItemStack(selectedTileItemType, true))
+                        HelperMethods.PlaceTile(posX, posY, selectedTileItemType);
+                }
             }
 
             return true;
         }
 
-        private int mouseRightTimer = 0;
-
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            
-            if (Main.mouseRight && player.HeldItem == item &&
-                HelperMethods.IsUIAvailable(notShowingMouseIcon: false) && ++mouseRightTimer == 2)
-            {
-                //Break Tiles
-            }
 
-            if (Main.mouseRightRelease)
-                mouseRightTimer = 0;
+            
         }
 
         public override void AddRecipes()
