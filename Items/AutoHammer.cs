@@ -1,11 +1,11 @@
-﻿using BuilderEssentials.UI.UIPanels;
-using BuilderEssentials.UI.UIStates;
-using BuilderEssentials.Utilities;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
+using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.UI.UIStates;
+using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials.Items
 {
@@ -41,7 +41,7 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            
+
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
@@ -55,9 +55,9 @@ namespace BuilderEssentials.Items
         public override bool CanUseItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return true;
-            
+
             AutoHammerWheel panel = ItemsUIState.autoHammerWheel;
-            if (player.altFunctionUse == 0 && canHammerTiles && panel.selectedIndex != -1)
+            if (canHammerTiles && panel.selectedIndex != -1)
             {
                 HelperMethods.ChangeSlope(panel.selectedIndex);
                 return false;
@@ -66,29 +66,15 @@ namespace BuilderEssentials.Items
             return true;
         }
 
-        public override void Update(ref float gravity, ref float maxFallSpeed)
-        {
-            if (Main.netMode != NetmodeID.MultiplayerClient) return;
-            
-            base.Update(ref gravity, ref maxFallSpeed);
-            //Check if UI is Visible while item is dropped and close it if so.
-            if (ItemsUIState.autoHammerWheel.Visible)
-                ItemsUIState.autoHammerWheel.Hide();
-        }
-
         private int mouseRightTimer = 0;
 
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            
-            base.UpdateInventory(player);
-            //Check if UI is Visible while item is not the held one and close it if so.
-            if (player.HeldItem.IsNotTheSameAs(item) && ItemsUIState.autoHammerWheel.Visible)
-                ItemsUIState.autoHammerWheel.Hide();
 
-            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) && HelperMethods.IsUIAvailable() &&
-                ++mouseRightTimer == 2)
+            //Having two of the same item is breaking this
+            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) &&
+                HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
                 ItemsUIState.autoHammerWheel.Toggle();
 
             if (Main.mouseRightRelease)

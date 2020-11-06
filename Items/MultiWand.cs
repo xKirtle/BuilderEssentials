@@ -1,12 +1,12 @@
-﻿using BuilderEssentials.UI.UIPanels;
-using BuilderEssentials.UI.UIStates;
-using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
-using Terraria.GameInput;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.GameInput;
+using Terraria.DataStructures;
 using BuilderEssentials.Utilities;
+using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.UI.UIStates;
 
 namespace BuilderEssentials.Items
 {
@@ -59,7 +59,7 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            
+
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
             {
@@ -72,30 +72,16 @@ namespace BuilderEssentials.Items
 
         public override bool CanUseItem(Player player)
         {
-            if (player.whoAmI != Main.myPlayer) return true;
-            
+            if (player.whoAmI != Main.myPlayer || !canPlaceItems) return false;
+
             MultiWandWheel panel = ItemsUIState.multiWandWheel;
-            if (player.altFunctionUse == 0 && canPlaceItems) //LMB
-            {
-                int materialType = wandMaterials[panel.selectedIndex];
-                int tileType = wandPlacedTiles[panel.selectedIndex];
-                if (HelperMethods.ValidTilePlacement(Player.tileTargetX, Player.tileTargetY) &&
-                    HelperMethods.CanReduceItemStack(materialType, true))
-                    HelperMethods.PlaceTile(Player.tileTargetX, Player.tileTargetY, HelperMethods.ItemTypes.Tile,
-                        tileType);
-            }
+            int materialType = wandMaterials[panel.selectedIndex];
+            int tileType = wandPlacedTiles[panel.selectedIndex];
+            if (HelperMethods.ValidTilePlacement(Player.tileTargetX, Player.tileTargetY) &&
+                HelperMethods.CanReduceItemStack(materialType, true))
+                HelperMethods.PlaceTile(Player.tileTargetX, Player.tileTargetY, HelperMethods.ItemTypes.Tile, tileType);
 
             return true;
-        }
-
-        public override void Update(ref float gravity, ref float maxFallSpeed)
-        {
-            if (Main.netMode != NetmodeID.MultiplayerClient) return;
-
-            base.Update(ref gravity, ref maxFallSpeed);
-            //Check if UI is Visible while item is dropped and close it if so.
-            if (ItemsUIState.multiWandWheel.Visible)
-                ItemsUIState.multiWandWheel.Hide();
         }
 
         private int mouseRightTimer = 0;
@@ -103,17 +89,11 @@ namespace BuilderEssentials.Items
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-
-            base.UpdateInventory(player);
-            //Check if UI is Visible while item is not the held one and close it if so.
-            if (player.HeldItem.IsNotTheSameAs(item) && ItemsUIState.multiWandWheel.Visible)
-                ItemsUIState.multiWandWheel.Hide();
-
-            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) && HelperMethods.IsUIAvailable() &&
-                ++mouseRightTimer == 2)
-            {
+            
+            //Having two of the same item is breaking this
+            if (Main.mouseRight && player.HeldItem.IsTheSameAs(item) &&
+                HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
                 ItemsUIState.multiWandWheel.Toggle();
-            }
 
             if (Main.mouseRightRelease)
                 mouseRightTimer = 0;

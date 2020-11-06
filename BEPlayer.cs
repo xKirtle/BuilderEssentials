@@ -18,14 +18,6 @@ namespace BuilderEssentials
         public bool InfinitePlacement { get; set; }
         public bool PlacementAnywhere { get; set; }
 
-        public override void PreUpdate()
-        {
-            if (Main.netMode != NetmodeID.Server && ValidCursorPos)
-            {
-                InfiniteRange = false;
-            }
-        }
-
         public override void OnEnterWorld(Player player)
         {
             base.OnEnterWorld(player);
