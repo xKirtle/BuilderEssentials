@@ -12,8 +12,13 @@ namespace BuilderEssentials
 {
     public class BuilderEssentials : Mod
     {
+        internal static ModHotKey IncreaseFillToolSize;
+        internal static ModHotKey DecreaseFillToolSize;
         public override void Load()
         {
+            IncreaseFillToolSize = RegisterHotKey("Increase Fill Tool Selection Size", "I");
+            DecreaseFillToolSize = RegisterHotKey("Decrease Fill Tool Selection Size", "O");
+            
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
                 // BaseUserInterface = new UserInterface();

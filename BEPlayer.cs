@@ -1,8 +1,10 @@
-﻿using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
+using BuilderEssentials.Items;
 
 namespace BuilderEssentials
 {
@@ -15,8 +17,17 @@ namespace BuilderEssentials
         public Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
         public Tile PointedTile => Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         public bool InfiniteRange { get; set; }
-        public bool InfinitePlacement { get; set; }
+        public bool InfinitePlacement { get; set; } = true;
         public bool PlacementAnywhere { get; set; }
+
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            if (BuilderEssentials.IncreaseFillToolSize.JustPressed && FillWand.fillSelectionSize < 6)
+                ++FillWand.fillSelectionSize;
+
+            if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
+                --FillWand.fillSelectionSize;
+        }
 
         public override void OnEnterWorld(Player player)
         {
