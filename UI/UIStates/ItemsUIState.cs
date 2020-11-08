@@ -14,6 +14,7 @@ namespace BuilderEssentials.UI.UIStates
         public static MultiWandWheel multiWandWheel;
         public static AutoHammerWheel autoHammerWheel;
         public static PaintWheel paintWheel;
+        public static FillWandSelection fillWandSelection;
 
         public override void OnInitialize()
         {
@@ -30,6 +31,10 @@ namespace BuilderEssentials.UI.UIStates
             paintWheel = new PaintWheel();
             Instance.Append(paintWheel);
             paintWheel.Hide();
+            
+            fillWandSelection = new FillWandSelection();
+            Instance.Append(fillWandSelection);
+            fillWandSelection.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -38,7 +43,6 @@ namespace BuilderEssentials.UI.UIStates
             multiWandWheel?.Update();
             autoHammerWheel?.Update();
             paintWheel?.Update();
-            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
