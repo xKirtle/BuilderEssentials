@@ -1,4 +1,6 @@
-﻿using BuilderEssentials.Utilities;
+﻿using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.UI.UIStates;
+using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -9,8 +11,7 @@ namespace BuilderEssentials.Items
     public class FillWand : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/FillWand";
-
-        //Move selTileItemType to UI?
+        
         public static int selectedTileItemType = -1;
         public static int fillSelectionSize = 3;
 
@@ -41,10 +42,16 @@ namespace BuilderEssentials.Items
 
         public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
 
+        private int mouseRightTimer = 0;
+
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            
+
+            if (!ItemsUIState.fillWandSelection.Visible)
+                ItemsUIState.fillWandSelection.Show();
+
+
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             player.showItemIcon = true;
 
@@ -54,10 +61,10 @@ namespace BuilderEssentials.Items
 
             if (selectedTileItemType != -1)
                 player.showItemIcon2 = selectedTileItemType;
-            
+
             //Right Mouse
             if (Main.mouseRight && player.HeldItem == item &&
-                HelperMethods.IsUIAvailable(notShowingMouseIcon: false))
+                HelperMethods.IsUIAvailable(notShowingMouseIcon: false) && ++mouseRightTimer == 9)
             {
                 Item customItem = new Item();
                 for (int i = 0; i < fillSelectionSize; i++)
@@ -76,10 +83,15 @@ namespace BuilderEssentials.Items
                     }
                 }
             }
+
+            if (Main.mouseRightRelease || mouseRightTimer == 9)
+                mouseRightTimer = 0;
         }
 
         public override bool CanUseItem(Player player)
         {
+            if (player.whoAmI != Main.myPlayer) return false;
+
             for (int i = 0; i < fillSelectionSize; i++)
             {
                 for (int j = 0; j < fillSelectionSize; j++)
@@ -95,13 +107,6 @@ namespace BuilderEssentials.Items
             }
 
             return true;
-        }
-
-        public override void UpdateInventory(Player player)
-        {
-            if (player.whoAmI != Main.myPlayer) return;
-
-            
         }
 
         public override void AddRecipes()

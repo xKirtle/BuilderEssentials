@@ -20,6 +20,10 @@ namespace BuilderEssentials.Items
             if (player.whoAmI == Main.myPlayer && 
                 player.HeldItem.type != ItemType<SpectrePaintingTool>() && ItemsUIState.paintWheel.Visible)
                 ItemsUIState.paintWheel.Hide();
+            
+            if (player.whoAmI == Main.myPlayer && 
+                player.HeldItem.type != ItemType<FillWand>() && ItemsUIState.fillWandSelection.Visible)
+                ItemsUIState.fillWandSelection.Hide();
         }
     }
 }
