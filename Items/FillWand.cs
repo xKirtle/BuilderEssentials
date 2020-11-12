@@ -11,7 +11,7 @@ namespace BuilderEssentials.Items
     public class FillWand : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/FillWand";
-        
+
         public static int selectedTileItemType = -1;
         public static int fillSelectionSize = 3;
 
@@ -63,7 +63,7 @@ namespace BuilderEssentials.Items
                 player.showItemIcon2 = selectedTileItemType;
 
             //Right Mouse
-            if (Main.mouseRight && player.HeldItem == item &&
+            if (Main.mouseRight && player.HeldItem == item && selectedTileItemType != -1 &&
                 HelperMethods.IsUIAvailable(notShowingMouseIcon: false) && ++mouseRightTimer == 9)
             {
                 Item customItem = new Item();
@@ -99,8 +99,11 @@ namespace BuilderEssentials.Items
                     int posX = Player.tileTargetX + j;
                     int posY = Player.tileTargetY - i;
                     Tile tile = Framing.GetTileSafely(posX, posY);
-
-                    if (selectedTileItemType != -1 && tile.type == 0 && !tile.active() &&
+                    
+                    HelperMethods.ItemTypes itemTypes = HelperMethods.WhatIsThisItem(selectedTileItemType);
+                    if (selectedTileItemType != -1 &&
+                        ((itemTypes == HelperMethods.ItemTypes.Tile && tile.type == 0) ||
+                         (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall == 0)) &&
                         HelperMethods.CanReduceItemStack(selectedTileItemType, true))
                         HelperMethods.PlaceTile(posX, posY, selectedTileItemType);
                 }
