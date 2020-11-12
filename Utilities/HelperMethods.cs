@@ -73,6 +73,9 @@ namespace BuilderEssentials.Utilities
             return false;
         }
 
+        internal static bool ValidTileCoordinates(int i, int j)
+            => i > 0 && i < Main.maxTilesX && j > 0 && j < Main.maxTilesY;
+
         internal enum ItemTypes
         {
             Air,
@@ -84,6 +87,9 @@ namespace BuilderEssentials.Utilities
 
         internal static ItemTypes WhatIsThisItem(int itemType)
         {
+            //Settint item defaults with -1 will throw an IOOB
+            if (itemType == -1) return ItemTypes.Air;
+
             Item item = new Item();
             item.SetDefaults(itemType);
 
@@ -97,6 +103,9 @@ namespace BuilderEssentials.Utilities
 
         internal static Tile PlaceTile(int i, int j, int itemType)
         {
+            if (itemType == -1 || !ValidTileCoordinates(i, j))
+                return new Tile();
+
             ItemTypes itemTypes = WhatIsThisItem(itemType);
             Item item = new Item();
             item.SetDefaults(itemType);
@@ -121,6 +130,9 @@ namespace BuilderEssentials.Utilities
 
         internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type)
         {
+            if (type == -1 || !ValidTileCoordinates(i, j))
+                return new Tile();
+
             switch (itemTypes)
             {
                 case ItemTypes.Air:
@@ -142,6 +154,8 @@ namespace BuilderEssentials.Utilities
         internal static void RemoveTile(int i, int j, bool removeTile = true, bool removeWall = false,
             bool fail = false, bool dropItem = true)
         {
+            if (!ValidTileCoordinates(i, j)) return;
+
             if (removeTile)
                 WorldGen.KillTile(i, j, fail, !dropItem);
 

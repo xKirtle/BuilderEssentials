@@ -5,13 +5,13 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using BuilderEssentials.Items;
+using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials
 {
     public class BEPlayer : ModPlayer
     {
-        public bool ValidCursorPos => Player.tileTargetX > 0 && Player.tileTargetX < Main.maxTilesX &&
-                                      Player.tileTargetY > 0 && Player.tileTargetY < Main.maxTilesY;
+        public bool ValidCursorPos => HelperMethods.ValidTileCoordinates(Player.tileTargetX, Player.tileTargetY);
 
         public Vector2 PointedCoord => Main.MouseWorld;
         public Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
