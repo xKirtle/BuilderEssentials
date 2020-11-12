@@ -28,16 +28,16 @@ namespace BuilderEssentials.Items.Placeable
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            // recipe.AddRecipeGroup("BuilderEssentials:Workbenches");
-            // recipe.AddRecipeGroup("BuilderEssentials:Furnaces");
-            // recipe.AddRecipeGroup("BuilderEssentials:Chairs");
-            // recipe.AddRecipeGroup("BuilderEssentials:Tables");
-            // recipe.AddRecipeGroup("BuilderEssentials:Anvils");
-            // recipe.AddRecipeGroup("BuilderEssentials:AlchemyStations");
-            // recipe.AddRecipeGroup("BuilderEssentials:Sinks");
+            recipe.AddRecipeGroup("BuilderEssentials:Workbench");
+            recipe.AddRecipeGroup("BuilderEssentials:Furnace");
+            recipe.AddRecipeGroup("BuilderEssentials:Chair");
+            recipe.AddRecipeGroup("BuilderEssentials:Table");
+            recipe.AddRecipeGroup("BuilderEssentials:Anvil");
+            recipe.AddRecipeGroup("BuilderEssentials:Bottle/Alchemy Item");
+            recipe.AddRecipeGroup("BuilderEssentials:Sink");
             recipe.AddIngredient(ItemID.Sawmill);
             recipe.AddIngredient(ItemID.Loom);
-            // recipe.AddRecipeGroup("BuilderEssentials:CookingPots");
+            recipe.AddRecipeGroup("BuilderEssentials:Cooking Pot");
             recipe.AddIngredient(ItemID.TinkerersWorkshop);
             recipe.AddIngredient(ItemID.ImbuingStation);
             recipe.AddIngredient(ItemID.DyeVat);

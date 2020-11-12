@@ -31,8 +31,7 @@ namespace BuilderEssentials.Items.Placeable
             recipe.AddIngredient(ItemID.Keg);
             recipe.AddIngredient(ItemID.BlendOMatic);
             recipe.AddIngredient(ItemID.MeatGrinder);
-            // recipe.AddRecipeGroup("BuilderEssentials:Campfires");
-
+            recipe.AddRecipeGroup("BuilderEssentials:Campfire");
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.SetResult(this);
             recipe.AddRecipe();

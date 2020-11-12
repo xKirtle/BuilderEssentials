@@ -84,7 +84,7 @@ namespace BuilderEssentials.Items
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ItemID.Pwnhammer);
-            recipe.AddRecipeGroup("BuilderEssentials:Woods", 200);
+            recipe.AddRecipeGroup("BuilderEssentials:Wood", 200);
             recipe.SetResult(this);
             recipe.AddRecipe();
         }

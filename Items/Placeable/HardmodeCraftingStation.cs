@@ -28,9 +28,9 @@ namespace BuilderEssentials.Items.Placeable
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            // recipe.AddRecipeGroup("BuilderEssentials:HardmodeAnvils");
-            // recipe.AddRecipeGroup("BuilderEssentials:Forge");
-            // recipe.AddRecipeGroup("BuilderEssentials:Bookcase");
+            recipe.AddRecipeGroup("BuilderEssentials:Hardmode Anvil");
+            recipe.AddRecipeGroup("BuilderEssentials:Forge");
+            recipe.AddRecipeGroup("BuilderEssentials:Bookcase");
             recipe.AddIngredient(ItemID.CrystalBall);
             recipe.AddIngredient(ItemID.Autohammer);
             recipe.AddIngredient(ItemID.LunarCraftingStation);
