@@ -12,7 +12,7 @@ namespace BuilderEssentials.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            ItemsUIState.paintWheel.Toggle();
+            Main.LocalPlayer.builderAccStatus[1] = 1;
         }
     }
 }

@@ -17,8 +17,13 @@ namespace BuilderEssentials
         public Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
         public Tile PointedTile => Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         public bool InfiniteRange { get; set; }
-        public bool InfinitePlacement { get; set; } = true;
+        public bool InfinitePlacement { get; set; }
         public bool PlacementAnywhere { get; set; }
+
+        public override void ResetEffects()
+        {
+            InfiniteRange = InfinitePlacement = PlacementAnywhere = false;
+        }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
@@ -27,6 +32,12 @@ namespace BuilderEssentials
 
             if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
                 --FillWand.fillSelectionSize;
+        }
+
+        public override void PostUpdateEquips()
+        {
+            Player.tileRangeX = InfiniteRange ? Main.screenWidth / 16 / 2 + 5 : 5;
+            Player.tileRangeY = InfiniteRange ? Main.screenHeight / 16 / 2 + 4 : 4;
         }
 
         public override void OnEnterWorld(Player player)
