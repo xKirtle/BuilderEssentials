@@ -1,10 +1,10 @@
-﻿using BuilderEssentials.UI.UIPanels;
-using BuilderEssentials.UI.UIStates;
-using BuilderEssentials.Utilities;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.UI.UIStates;
+using BuilderEssentials.Utilities;
 
 namespace BuilderEssentials.Items
 {

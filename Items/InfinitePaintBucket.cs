@@ -1,7 +1,7 @@
-﻿using BuilderEssentials.UI.UIStates;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using BuilderEssentials.UI.UIStates;
 
 namespace BuilderEssentials.Items
 {
