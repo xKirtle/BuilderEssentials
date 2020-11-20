@@ -16,13 +16,15 @@ namespace BuilderEssentials
         public Vector2 PointedCoord => Main.MouseWorld;
         public Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
         public Tile PointedTile => Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-        public bool InfiniteRange { get; set; }
+        public bool InfinitePlacementRange { get; set; }
+        public bool InfinitePlayerRange { get; set; }
+        public bool FastPlacement { get; set; }
         public bool InfinitePlacement { get; set; }
         public bool PlacementAnywhere { get; set; }
 
         public override void ResetEffects()
         {
-            InfiniteRange = InfinitePlacement = PlacementAnywhere = false;
+            InfinitePlacementRange = InfinitePlayerRange = FastPlacement = InfinitePlacement = PlacementAnywhere = false;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -36,8 +38,11 @@ namespace BuilderEssentials
 
         public override void PostUpdateEquips()
         {
-            Player.tileRangeX = InfiniteRange ? Main.screenWidth / 16 / 2 + 5 : 5;
-            Player.tileRangeY = InfiniteRange ? Main.screenHeight / 16 / 2 + 4 : 4;
+            Player.tileRangeX = InfinitePlayerRange ? Main.screenWidth / 16 / 2 + 5 : 5;
+            Player.tileRangeY = InfinitePlayerRange ? Main.screenHeight / 16 / 2 + 4 : 4;
+            player.blockRange = InfinitePlacementRange ? Main.screenWidth / 16 / 2 + 5 : 0;
+            player.wallSpeed = FastPlacement ? player.wallSpeed + 10 : 1;
+            player.tileSpeed = FastPlacement ? player.tileSpeed + 50 : 1;
         }
 
         public override void OnEnterWorld(Player player)

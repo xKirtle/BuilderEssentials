@@ -10,7 +10,7 @@ using BuilderEssentials.UI.UIStates;
 
 namespace BuilderEssentials.Utilities
 {
-    internal static partial class HelperMethods
+    public static partial class HelperMethods
     {
         internal static bool ValidTilePlacement(int i, int j)
         {
@@ -47,7 +47,7 @@ namespace BuilderEssentials.Utilities
         internal static bool ToolHasRange(Point range)
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
-            if (mp.InfiniteRange) return true;
+            if (mp.InfinitePlacementRange) return true;
 
             Point playerCenter = Main.LocalPlayer.Center.ToTileCoordinates();
             //range = new Point(Main.screenWidth / 16, Main.screenHeight / 16);
@@ -345,5 +345,18 @@ namespace BuilderEssentials.Utilities
                 NetMessage.SendData(MessageID.PaintWall, number: Player.tileTargetX, number2: Player.tileTargetY);
             }
         }
+
+        public enum WrenchUpgrade
+        {
+            FastPlacement,
+            InfPlacementRange,
+            InfPlayerRange,
+            PlacementAnywhere,
+            InfPlacement,
+
+            UpgradesCount
+        }
+
+        public static int ToInt(this WrenchUpgrade wrenchUpgrade) => (int) wrenchUpgrade;
     }
 }

@@ -4,10 +4,10 @@ using Terraria.ObjectData;
 
 namespace BuilderEssentials.Utilities
 {
-    internal static partial class HelperMethods
+    public static partial class HelperMethods
     {
         //Thanks Oli. B for the concept
-        public static int PickItem(Tile tile, bool organizeInventory = true)
+        internal static int PickItem(Tile tile, bool organizeInventory = true)
         {
             Player player = Main.LocalPlayer;
             Item item = new Item();
