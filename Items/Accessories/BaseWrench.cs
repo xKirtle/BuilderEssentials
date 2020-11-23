@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
@@ -14,6 +15,7 @@ namespace BuilderEssentials.Items.Accessories
     public abstract class BaseWrench : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/Wrench";
+        private TagCompound data;
         public List<bool> upgrades;
 
         public override void SetDefaults()
@@ -31,6 +33,8 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            //tooltips.RemoveAll(x => x.text != "");
+
             if (upgrades[0]) //Fast placement
                 tooltips.Add(new TooltipLine(mod, "Fast Placement", "Allows fast placement"));
             if (upgrades[1]) //Inf Placement Range
@@ -63,7 +67,7 @@ namespace BuilderEssentials.Items.Accessories
         {
             string text = "";
             upgrades.ForEach(x => text += (x.ToInt() + " "));
-            //Main.NewText(text);
+            Main.NewText(text);
         }
 
         public override void AddRecipes()
@@ -74,20 +78,93 @@ namespace BuilderEssentials.Items.Accessories
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
+
+            ModRecipe upgrade0 = new ModRecipe(mod);
+            upgrade0.AddIngredient(this);
+            upgrade0.AddIngredient(ItemID.Sapphire);
+            upgrade0.SetResult(this);
+            upgrade0.AddRecipe();
+
+            ModRecipe upgrade1 = new ModRecipe(mod);
+            upgrade1.AddIngredient(this);
+            upgrade1.AddIngredient(ItemID.Ruby);
+            upgrade1.SetResult(this);
+            upgrade1.AddRecipe();
+
+            ModRecipe upgrade2 = new ModRecipe(mod);
+            upgrade2.AddIngredient(this);
+            upgrade2.AddIngredient(ItemID.Emerald);
+            upgrade2.SetResult(this);
+            upgrade2.AddRecipe();
+
+            ModRecipe upgrade3 = new ModRecipe(mod);
+            upgrade3.AddIngredient(this);
+            upgrade3.AddIngredient(ItemID.Topaz);
+            upgrade3.SetResult(this);
+            upgrade3.AddRecipe();
+
+            ModRecipe upgrade4 = new ModRecipe(mod);
+            upgrade4.AddIngredient(this);
+            upgrade4.AddIngredient(ItemID.Amethyst);
+            upgrade4.SetResult(this);
+            upgrade4.AddRecipe();
+        }
+
+        public override void OnCraft(Recipe recipe)
+        {
+            switch (recipe.requiredItem[1].type)
+            {
+                case ItemID.Sapphire:
+                    SetUpgrade(WrenchUpgrade.FastPlacement, true);
+                    break;
+                case ItemID.Ruby:
+                    SetUpgrade(WrenchUpgrade.InfPlacementRange, true);
+                    break;
+                case ItemID.Emerald:
+                    SetUpgrade(WrenchUpgrade.InfPlayerRange, true);
+                    break;
+                case ItemID.Topaz:
+                    SetUpgrade(WrenchUpgrade.PlacementAnywhere, true);
+                    break;
+                case ItemID.Amethyst:
+                    SetUpgrade(WrenchUpgrade.InfPlacement, true);
+                    break;
+            }
+        }
+
+        public override ModItem Clone(Item item)
+        {
+            BaseWrench wrench = (BaseWrench) base.Clone(item);
+            wrench.upgrades = ((BaseWrench)this.item.modItem).upgrades;
+
+            return wrench;
         }
 
         public override TagCompound Save()
         {
-            return new TagCompound
+            data = new TagCompound
             {
                 {"upgrades", upgrades}
             };
+
+            return data;
         }
 
         public override void Load(TagCompound tag)
         {
-            upgrades = tag.Get<List<bool>>("upgrades");
+            if (tag.ContainsKey("upgrades"))
+                upgrades = tag.Get<List<bool>>("upgrades");
         }
+        
+        // public override ModItem Clone()
+        // {
+        //     FastWrench wrench = (FastWrench) base.Clone(item);
+        //     wrench.upgrades = data.Get<List<bool>>("upgrades");
+        //     return wrench;
+        // }
+
+        //do net code?
+        //https://github.com/tModLoader/tModLoader/blob/321a00a42ba89db68ec25ef3f57498df92a1b86f/ExampleMod/Items/ExampleCustomData.cs#L65
 
         public void SetUpgrade(WrenchUpgrade upgrade, bool state)
         {

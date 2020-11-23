@@ -1,4 +1,6 @@
-﻿using BuilderEssentials.UI.UIStates;
+﻿using BuilderEssentials.Items.Accessories;
+using BuilderEssentials.UI.UIStates;
+using BuilderEssentials.Utilities;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -12,7 +14,17 @@ namespace BuilderEssentials.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            Main.LocalPlayer.builderAccStatus[1] = 1;
+            //Main.LocalPlayer.builderAccStatus[1] = 1;
+
+            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FastWrench>())
+            {
+                FastWrench wrench = (FastWrench) ModContent.GetModItem(Main.LocalPlayer.HeldItem.type);
+                //wrench.upgrades[int.Parse(args[0])] = true;
+                // wrench.SetUpgrade((HelperMethods.WrenchUpgrade) int.Parse(args[0]),
+                //     !wrench.GetUpgrade((HelperMethods.WrenchUpgrade) int.Parse(args[0])));
+
+                //Main.NewText($"Value is {wrench.upgrades[int.Parse(args[0])]}");
+            }
         }
     }
 }
