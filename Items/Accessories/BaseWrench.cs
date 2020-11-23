@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using BuilderEssentials.Utilities;
 using static BuilderEssentials.Utilities.HelperMethods;
+using Terraria.Utilities;
 
 namespace BuilderEssentials.Items.Accessories
 {
@@ -26,7 +27,9 @@ namespace BuilderEssentials.Items.Accessories
             item.height = 48;
             item.value = Item.sellPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
-            upgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
+            if (upgrades == null) {
+                upgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
+            }
         }
 
         public override bool CloneNewInstances => true;
@@ -132,14 +135,6 @@ namespace BuilderEssentials.Items.Accessories
             }
         }
 
-        public override ModItem Clone(Item item)
-        {
-            BaseWrench wrench = (BaseWrench) base.Clone(item);
-            wrench.upgrades = ((BaseWrench)this.item.modItem).upgrades;
-
-            return wrench;
-        }
-
         public override TagCompound Save()
         {
             data = new TagCompound
@@ -155,13 +150,6 @@ namespace BuilderEssentials.Items.Accessories
             if (tag.ContainsKey("upgrades"))
                 upgrades = tag.Get<List<bool>>("upgrades");
         }
-        
-        // public override ModItem Clone()
-        // {
-        //     FastWrench wrench = (FastWrench) base.Clone(item);
-        //     wrench.upgrades = data.Get<List<bool>>("upgrades");
-        //     return wrench;
-        // }
 
         //do net code?
         //https://github.com/tModLoader/tModLoader/blob/321a00a42ba89db68ec25ef3f57498df92a1b86f/ExampleMod/Items/ExampleCustomData.cs#L65
