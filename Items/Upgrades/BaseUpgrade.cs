@@ -1,0 +1,49 @@
+﻿using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace BuilderEssentials.Items.Upgrades
+{
+    public class BaseUpgrade : ModItem
+    {
+        string ItemTexture = "BuilderEssentials/Textures/Items/Upgrades/Upgrade";
+        public override string Texture => ItemTexture + upgradeNumber;
+        private int upgradeNumber;
+        
+        public override void SetDefaults()
+        {
+            item.width = 38;
+            item.height = 38;
+            item.value = Item.sellPrice(0, 10, 0, 0);
+            item.rare = ItemRarityID.Red;
+        }
+
+        public BaseUpgrade() { }
+
+        public BaseUpgrade(int upgradeNumber)
+        {
+            this.upgradeNumber = upgradeNumber;
+        }
+
+        public override bool CloneNewInstances => true;
+
+        public override bool Autoload(ref string name)
+        {
+            string[] itemNames =
+            {
+                "FastPlacement", 
+                "InfinitePlacementRange", 
+                "InfinitePlayerRange", 
+                "PlacementAnywhere", 
+                "InfinitePlacement"
+            };
+            
+            for (int i = 0; i < 5; i++)
+                mod.AddItem(itemNames[i] + "Upgrade", new BaseUpgrade(i));
+
+            return false;
+        }
+
+        public int GetUpgradeNumber() => upgradeNumber;
+    }
+}
