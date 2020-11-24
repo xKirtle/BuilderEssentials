@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BuilderEssentials.Items.Upgrades;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
 using Terraria;
@@ -13,10 +14,9 @@ using Terraria.Utilities;
 
 namespace BuilderEssentials.Items.Accessories
 {
-    public abstract class BaseWrench : ModItem
+    public class BuildingWrench : ModItem
     {
-        public override string Texture => "BuilderEssentials/Textures/Items/Accessories/Wrench";
-        private TagCompound data;
+        public override string Texture => "BuilderEssentials/Textures/Items/Accessories/BuildingWrench";
         public List<bool> upgrades;
 
         public override void SetDefaults()
@@ -34,10 +34,15 @@ namespace BuilderEssentials.Items.Accessories
 
         public override bool CloneNewInstances => true;
 
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            if (player.whoAmI != Main.myPlayer) return;
+            UpdateUpgrades(player);
+        }
+        
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            //tooltips.RemoveAll(x => x.text != "");
-
+            //TODO: Remove the Material tooltip
             if (upgrades[0]) //Fast placement
                 tooltips.Add(new TooltipLine(mod, "Fast Placement", "Allows fast placement"));
             if (upgrades[1]) //Inf Placement Range
@@ -66,83 +71,27 @@ namespace BuilderEssentials.Items.Accessories
                 mp.InfinitePlacement = true;
         }
 
-        public override void UpdateInventory(Player player)
-        {
-            string text = "";
-            upgrades.ForEach(x => text += (x.ToInt() + " "));
-            Main.NewText(text);
-        }
-
-        public override void AddRecipes()
-        {
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.ExtendoGrip);
-            recipe.AddIngredient(ItemID.Toolbelt);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
-
-            ModRecipe upgrade0 = new ModRecipe(mod);
-            upgrade0.AddIngredient(this);
-            upgrade0.AddIngredient(ItemID.Sapphire);
-            upgrade0.SetResult(this);
-            upgrade0.AddRecipe();
-
-            ModRecipe upgrade1 = new ModRecipe(mod);
-            upgrade1.AddIngredient(this);
-            upgrade1.AddIngredient(ItemID.Ruby);
-            upgrade1.SetResult(this);
-            upgrade1.AddRecipe();
-
-            ModRecipe upgrade2 = new ModRecipe(mod);
-            upgrade2.AddIngredient(this);
-            upgrade2.AddIngredient(ItemID.Emerald);
-            upgrade2.SetResult(this);
-            upgrade2.AddRecipe();
-
-            ModRecipe upgrade3 = new ModRecipe(mod);
-            upgrade3.AddIngredient(this);
-            upgrade3.AddIngredient(ItemID.Topaz);
-            upgrade3.SetResult(this);
-            upgrade3.AddRecipe();
-
-            ModRecipe upgrade4 = new ModRecipe(mod);
-            upgrade4.AddIngredient(this);
-            upgrade4.AddIngredient(ItemID.Amethyst);
-            upgrade4.SetResult(this);
-            upgrade4.AddRecipe();
-        }
-
         public override void OnCraft(Recipe recipe)
         {
-            switch (recipe.requiredItem[1].type)
+            WrenchUpgrade[] upgrades = new[]
             {
-                case ItemID.Sapphire:
-                    SetUpgrade(WrenchUpgrade.FastPlacement, true);
-                    break;
-                case ItemID.Ruby:
-                    SetUpgrade(WrenchUpgrade.InfPlacementRange, true);
-                    break;
-                case ItemID.Emerald:
-                    SetUpgrade(WrenchUpgrade.InfPlayerRange, true);
-                    break;
-                case ItemID.Topaz:
-                    SetUpgrade(WrenchUpgrade.PlacementAnywhere, true);
-                    break;
-                case ItemID.Amethyst:
-                    SetUpgrade(WrenchUpgrade.InfPlacement, true);
-                    break;
-            }
+                WrenchUpgrade.FastPlacement, 
+                WrenchUpgrade.InfPlacementRange, 
+                WrenchUpgrade.InfPlayerRange,
+                WrenchUpgrade.PlacementAnywhere, 
+                WrenchUpgrade.InfPlacement
+            };
+            int upgradeIndex = ((BaseUpgrade) recipe.requiredItem[1].modItem).GetUpgradeNumber();
+            Main.NewText(upgradeIndex);
+            SetUpgrade(upgrades[upgradeIndex], true);
         }
 
         public override TagCompound Save()
         {
-            data = new TagCompound
+            return new TagCompound
             {
                 {"upgrades", upgrades}
             };
-
-            return data;
         }
 
         public override void Load(TagCompound tag)
@@ -151,7 +100,7 @@ namespace BuilderEssentials.Items.Accessories
                 upgrades = tag.Get<List<bool>>("upgrades");
         }
 
-        //do net code?
+        //TODO: Check if net code is needed for mp compatibility
         //https://github.com/tModLoader/tModLoader/blob/321a00a42ba89db68ec25ef3f57498df92a1b86f/ExampleMod/Items/ExampleCustomData.cs#L65
 
         public void SetUpgrade(WrenchUpgrade upgrade, bool state)
@@ -165,6 +114,34 @@ namespace BuilderEssentials.Items.Accessories
             if (upgrade.ToInt() < upgrades.Count && upgrade.ToInt() >= 0) return false;
 
             return upgrades[upgrade.ToInt()];
+        }
+        
+        public override void AddRecipes()
+        {
+            int[] upgradeItemTypes =
+            {
+                mod.GetItem("FastPlacementUpgrade").item.type,
+                mod.GetItem("InfinitePlacementRangeUpgrade").item.type,
+                mod.GetItem("InfinitePlayerRangeUpgrade").item.type,
+                mod.GetItem("PlacementAnywhereUpgrade").item.type,
+                mod.GetItem("InfinitePlacementUpgrade").item.type
+            };
+            
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.ExtendoGrip);
+            recipe.AddIngredient(ItemID.Toolbelt);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+
+            for (int i = 0; i < 5; i++)
+            {
+                ModRecipe upgrade = new ModRecipe(mod);
+                upgrade.AddIngredient(this);
+                upgrade.AddIngredient(upgradeItemTypes[i]);
+                upgrade.SetResult(this);
+                upgrade.AddRecipe();
+            }
         }
     }
 }
