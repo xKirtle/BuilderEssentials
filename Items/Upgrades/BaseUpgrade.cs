@@ -1,10 +1,11 @@
-﻿using Terraria;
+﻿using BuilderEssentials.Utilities;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials.Items.Upgrades
 {
-    public class BaseUpgrade : ModItem
+    public class WrenchItemUpgrade : ModItem
     {
         string ItemTexture = "BuilderEssentials/Textures/Items/Upgrades/Upgrade";
         public override string Texture => ItemTexture + upgradeNumber;
@@ -18,9 +19,9 @@ namespace BuilderEssentials.Items.Upgrades
             item.rare = ItemRarityID.Red;
         }
 
-        public BaseUpgrade() { }
+        public WrenchItemUpgrade() { }
 
-        public BaseUpgrade(int upgradeNumber)
+        public WrenchItemUpgrade(int upgradeNumber)
         {
             this.upgradeNumber = upgradeNumber;
         }
@@ -38,8 +39,8 @@ namespace BuilderEssentials.Items.Upgrades
                 "InfinitePlacement"
             };
             
-            for (int i = 0; i < 5; i++)
-                mod.AddItem(itemNames[i] + "Upgrade", new BaseUpgrade(i));
+            for (int i = 0; i < HelperMethods.WrenchUpgrade.UpgradesCount.ToInt(); i++)
+                mod.AddItem(itemNames[i] + "Upgrade", new WrenchItemUpgrade(i));
 
             return false;
         }

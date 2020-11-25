@@ -27,32 +27,43 @@ namespace BuilderEssentials.Items.Accessories
             item.height = 48;
             item.value = Item.sellPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
-            if (upgrades == null) {
-                upgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
-            }
+            if (upgrades == null) upgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
         }
 
         public override bool CloneNewInstances => true;
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            //TODO: Make Wrench do something on its own without upgrades?
             if (player.whoAmI != Main.myPlayer) return;
             UpdateUpgrades(player);
         }
-        
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            //TODO: Remove the Material tooltip
-            if (upgrades[0]) //Fast placement
-                tooltips.Add(new TooltipLine(mod, "Fast Placement", "Allows fast placement"));
-            if (upgrades[1]) //Inf Placement Range
-                tooltips.Add(new TooltipLine(mod, "Infinite Placement Range", "Allows infinite placement range"));
-            if (upgrades[2]) //Inf Player Range
-                tooltips.Add(new TooltipLine(mod, "Infinite Player Range", "Allows infinite player range"));
-            if (upgrades[3]) //Placement Anywhere
-                tooltips.Add(new TooltipLine(mod, "Placement Anywhere", "Allows tile placement anywhere on screen"));
-            if (upgrades[4]) //Inf Placement
-                tooltips.Add(new TooltipLine(mod, "Infinite Placement", "Allows infinite placement"));
+            string[] names =
+            {
+                "Fast Placement",
+                "Infinite Placement Range",
+                "Infinite Player Range",
+                "Placement Anywhere",
+                "Infinite Placement"
+            };
+
+            string[] tooltipText =
+            {
+                "Allows fast placement",
+                "Allows inifnite placement range",
+                "Allows infinite player range",
+                "Allows tile placement anywhere on screen",
+                "Allows infinite placement"
+            };
+
+            tooltips.Remove(tooltips.Find(x => x.Name == "Material"));
+
+            for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
+                if (upgrades[i])
+                    tooltips.Add(new TooltipLine(mod, names[i], tooltipText[i]));
         }
 
         public void UpdateUpgrades(Player player)
@@ -73,17 +84,8 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void OnCraft(Recipe recipe)
         {
-            WrenchUpgrade[] upgrades = new[]
-            {
-                WrenchUpgrade.FastPlacement, 
-                WrenchUpgrade.InfPlacementRange, 
-                WrenchUpgrade.InfPlayerRange,
-                WrenchUpgrade.PlacementAnywhere, 
-                WrenchUpgrade.InfPlacement
-            };
-            int upgradeIndex = ((BaseUpgrade) recipe.requiredItem[1].modItem).GetUpgradeNumber();
-            Main.NewText(upgradeIndex);
-            SetUpgrade(upgrades[upgradeIndex], true);
+            int upgradeIndex = ((WrenchItemUpgrade) recipe.requiredItem[1].modItem).GetUpgradeNumber();
+            SetUpgrade((WrenchUpgrade) upgradeIndex, true);
         }
 
         public override TagCompound Save()
@@ -100,8 +102,17 @@ namespace BuilderEssentials.Items.Accessories
                 upgrades = tag.Get<List<bool>>("upgrades");
         }
 
-        //TODO: Check if net code is needed for mp compatibility
-        //https://github.com/tModLoader/tModLoader/blob/321a00a42ba89db68ec25ef3f57498df92a1b86f/ExampleMod/Items/ExampleCustomData.cs#L65
+        public override void NetSend(BinaryWriter writer)
+        {
+            for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
+                writer.Write(upgrades[i]);
+        }
+
+        public override void NetRecieve(BinaryReader reader)
+        {
+            for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
+                upgrades[i] = reader.ReadBoolean();
+        }
 
         public void SetUpgrade(WrenchUpgrade upgrade, bool state)
         {
@@ -115,9 +126,16 @@ namespace BuilderEssentials.Items.Accessories
 
             return upgrades[upgrade.ToInt()];
         }
-        
+
         public override void AddRecipes()
         {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.ExtendoGrip);
+            recipe.AddIngredient(ItemID.Toolbelt);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+
             int[] upgradeItemTypes =
             {
                 mod.GetItem("FastPlacementUpgrade").item.type,
@@ -126,21 +144,14 @@ namespace BuilderEssentials.Items.Accessories
                 mod.GetItem("PlacementAnywhereUpgrade").item.type,
                 mod.GetItem("InfinitePlacementUpgrade").item.type
             };
-            
-            ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.ExtendoGrip);
-            recipe.AddIngredient(ItemID.Toolbelt);
-            recipe.AddTile(TileID.Anvils);
-            recipe.SetResult(this);
-            recipe.AddRecipe();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
             {
-                ModRecipe upgrade = new ModRecipe(mod);
-                upgrade.AddIngredient(this);
-                upgrade.AddIngredient(upgradeItemTypes[i]);
-                upgrade.SetResult(this);
-                upgrade.AddRecipe();
+                ModRecipe upgradeRecipe = new ModRecipe(mod);
+                upgradeRecipe.AddIngredient(this);
+                upgradeRecipe.AddIngredient(upgradeItemTypes[i]);
+                upgradeRecipe.SetResult(this);
+                upgradeRecipe.AddRecipe();
             }
         }
     }
