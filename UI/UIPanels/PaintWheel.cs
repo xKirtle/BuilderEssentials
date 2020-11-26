@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuilderEssentials.Items;
 using Terraria;
 using Terraria.UI;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI.Elements;
 using BuilderEssentials.UI.Elements;
 using BuilderEssentials.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BuilderEssentials.UI.UIPanels
 {
@@ -19,12 +21,17 @@ namespace BuilderEssentials.UI.UIPanels
         private CustomUIImage[] noPaintOverlay;
         private CustomUIImage colorOverlay;
         private CustomUIImage toolOverlay;
+        private Texture2D[] toolTextures;
         private bool[] colorAvailable;
         private bool elementHovered;
         private int[] paints;
         public bool infPaintBucket;
         public int colorIndex = -1;
         public int toolIndex;
+
+        //multiply tool index pos by isSpectre + index? 0-2 && 3-5 
+
+        //Public method to specify whether it's spectre opening the menu or not?
 
         public PaintWheel(float scale = 1f, float opacity = 1f)
         {
@@ -50,9 +57,13 @@ namespace BuilderEssentials.UI.UIPanels
                 noPaintOverlay[i] = new CustomUIImage(ModContent.GetTexture(texturePath + "NoPaint"), 1f);
             }
 
+            toolTextures = new Texture2D[6];
+            for (int i = 0; i < toolTextures.Length; i++)
+                toolTextures[i] = ModContent.GetTexture(texturePath + "Tool" + i);
+
             toolElements = new UIImageButton[3];
-            for (int i = 0; i < 3; i++)
-                toolElements[i] = new UIImageButton(ModContent.GetTexture(texturePath + "Tool" + i));
+            for (int i = 0; i < toolElements.Length; i++)
+                toolElements[i] = new UIImageButton(toolTextures[i]);
 
             colorOverlay = new CustomUIImage(ModContent.GetTexture(texturePath + "PaintSelected"), 1f);
             toolOverlay = new CustomUIImage(ModContent.GetTexture(texturePath + "ToolSelected"), 1f);
@@ -67,17 +78,17 @@ namespace BuilderEssentials.UI.UIPanels
                 Vector2 offset = new Vector2(width - colorElementSize, height - colorElementSize) / 2;
                 double x = offset.X - (radius * Math.Cos(angle * (i + .48)) * 0.95);
                 double y = offset.Y - (radius * Math.Sin(angle * (i + .48)));
-                
+
                 var left = new StyleDimension((float) x - colorElementSize / 4, 0);
                 var top = new StyleDimension((float) y + 40, 0);
                 colorElements[i].Left = noPaintOverlay[i].Left = left;
                 colorElements[i].Top = noPaintOverlay[i].Top = top;
-                
+
                 colorElements[i].SetVisibility(1f, 0.85f);
                 colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
                 colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
-                
+
                 Append(colorElements[i]);
                 Append(noPaintOverlay[i]);
             }
@@ -90,17 +101,17 @@ namespace BuilderEssentials.UI.UIPanels
                 Vector2 offset = new Vector2(width - colorElementSize, height - colorElementSize) / 2;
                 double x = offset.X + (radius * Math.Cos(angle * (i + .48)) * 1);
                 double y = offset.Y - (radius * Math.Sin(-angle * (i + .48)));
-                
+
                 var left = new StyleDimension((float) x - colorElementSize / 4, 0);
                 var top = new StyleDimension((float) y + 30, 0);
                 colorElements[i].Left = noPaintOverlay[i].Left = left;
                 colorElements[i].Top = noPaintOverlay[i].Top = top;
-                
+
                 colorElements[i].SetVisibility(1f, 0.85f);
                 colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
                 colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
-                
+
                 Append(colorElements[i]);
                 Append(noPaintOverlay[i]);
             }
@@ -114,22 +125,22 @@ namespace BuilderEssentials.UI.UIPanels
                 Vector2 offset = new Vector2(width - colorElementSize, height - colorElementSize) / 2;
                 double x = offset.X - (radius * Math.Cos(angle * (i + .50)) * 1.10);
                 double y = offset.Y + (radius * Math.Sin(-angle * (i + .50)) * 1.25);
-                
+
                 var left = new StyleDimension((float) x - colorElementSize / 4, 0);
                 var top = new StyleDimension((float) y + 50, 0);
                 colorElements[i].Left = noPaintOverlay[i].Left = left;
                 colorElements[i].Top = noPaintOverlay[i].Top = top;
-                
+
                 colorElements[i].SetVisibility(1f, 0.85f);
                 colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
                 colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
-                
+
                 Append(colorElements[i]);
                 Append(noPaintOverlay[i]);
             }
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < toolElements.Length; i++)
             {
                 int index = i;
                 double x = (width / 3) * i + 35f;
@@ -137,12 +148,12 @@ namespace BuilderEssentials.UI.UIPanels
 
                 toolElements[i].Left.Set((float) x - colorElementSize / 4, 0);
                 toolElements[i].Top.Set((float) y, 0);
-                
+
                 toolElements[i].SetVisibility(1f, .8f);
                 toolElements[i].OnMouseDown += (__, _) => ToolSelected(index);
                 toolElements[i].OnMouseOver += (__, _) => elementHovered = true;
                 toolElements[i].OnMouseOut += (__, _) => elementHovered = false;
-                
+
                 Append(toolElements[i]);
             }
 
@@ -151,6 +162,7 @@ namespace BuilderEssentials.UI.UIPanels
 
             toolOverlay.Left = toolElements[toolIndex].Left;
             toolOverlay.Top = toolElements[toolIndex].Top;
+            toolElements[toolIndex].SetVisibility(1f, 1f);
             Append(toolOverlay);
         }
 
@@ -187,7 +199,7 @@ namespace BuilderEssentials.UI.UIPanels
         private void UpdateCrossesOnColors()
         {
             EvaluateAvailableColorsInInventory();
-            
+
             for (int i = 0; i < noPaintOverlay.Length; i++)
             {
                 if (!colorAvailable[i] && !infPaintBucket)
@@ -238,16 +250,20 @@ namespace BuilderEssentials.UI.UIPanels
 
         public void Update()
         {
+            if (!Visible) return;
+            bool isSpectre = Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintingTool>();
+            for (int i = 0; i < toolElements.Length; i++)
+                toolElements[i].SetImage(toolTextures[isSpectre ? i + toolElements.Length : i]);
+
             if (IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = false;
 
-            if (!Visible) return;
             if (elementHovered)
                 Main.LocalPlayer.mouseInterface = true;
 
             infPaintBucket = false;
         }
-        
+
         public override void Show()
         {
             base.Show();
@@ -257,7 +273,7 @@ namespace BuilderEssentials.UI.UIPanels
             offsetX = Main.mouseX + width / 2 > Main.screenWidth ? Main.screenWidth - width : offsetX;
             float offsetY = Main.mouseY - height / 2 > 0 ? Main.mouseY - height / 2 : 0;
             offsetY = Main.mouseY + height / 2 > Main.screenHeight ? Main.screenHeight - height : offsetY;
-            
+
             Left.Set(offsetX, 0);
             Top.Set(offsetY, 0);
         }
