@@ -101,7 +101,6 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer) return;
             
-            //Add non spectre textures?
             if (Main.mouseRight && player.HeldItem == item &&
                 HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
                 ItemsUIState.paintWheel.Toggle();

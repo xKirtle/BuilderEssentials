@@ -72,31 +72,18 @@ namespace BuilderEssentials.UI.UIPanels
 
         private void ElementOnMouseOver(int index)
         {
-            string text = "";
-            switch (index)
+            string[] text =
             {
-                case 0:
-                    text = "Places living wood (wood)";
-                    break;
-                case 1:
-                    text = "Places bones (bone)";
-                    break;
-                case 2:
-                    text = "Places leaves (wood)";
-                    break;
-                case 3:
-                    text = "Places Hives (hive)";
-                    break;
-                case 4:
-                    text = "Places living rich mahogany (rich mahogany)";
-                    break;
-                case 5:
-                    text = "Places rich mahogany leaves (rich mahogany)";
-                    break;
-            }
+                "Places living wood (wood)", 
+                "Places bones (bone)", 
+                "Places leaves (wood)", 
+                "Places Hives (hive)",
+                "Places living rich mahogany (rich mahogany)", 
+                "Places rich mahogany leaves (rich mahogany)"
+            };
 
             elementHovered = true;
-            hoverText = new UIText(text, 1, false);
+            hoverText = new UIText(text[index], 1, false);
             hoverText.Left.Set(Main.mouseX + 22 - Left.Pixels, 0);
             hoverText.Top.Set(Main.mouseY + 22 - Top.Pixels, 0);
             Append(hoverText);
@@ -112,7 +99,7 @@ namespace BuilderEssentials.UI.UIPanels
         {
             if (IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = false;
-            
+
             if (!Visible) return;
             if (elementHovered)
             {
@@ -131,7 +118,7 @@ namespace BuilderEssentials.UI.UIPanels
             offsetX = Main.mouseX + width / 2 > Main.screenWidth ? Main.screenWidth - width : offsetX;
             float offsetY = Main.mouseY - height / 2 > 0 ? Main.mouseY - height / 2 : 0;
             offsetY = Main.mouseY + height / 2 > Main.screenHeight ? Main.screenHeight - height : offsetY;
-            
+
             Left.Set(offsetX, 0);
             Top.Set(offsetY, 0);
         }
