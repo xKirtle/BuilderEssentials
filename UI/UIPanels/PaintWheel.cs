@@ -172,7 +172,7 @@ namespace BuilderEssentials.UI.UIPanels
 
             for (int i = 0; i < colorElements.Length; i++)
                 colorElements[i].SetVisibility(1f, 0.85f);
-            if (colorOverlay.Visible) colorOverlay.Hide();
+            colorOverlay.Hide();
 
             if (colorIndex != index)
             {
@@ -208,7 +208,7 @@ namespace BuilderEssentials.UI.UIPanels
                     if (colorIndex == i)
                     {
                         colorElements[colorIndex].SetVisibility(1f, 0.85f);
-                        if (colorOverlay.Visible) colorOverlay.Hide();
+                        colorOverlay.Hide();
                         colorIndex = -1;
                     }
                 }

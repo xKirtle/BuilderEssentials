@@ -26,7 +26,7 @@ namespace BuilderEssentials.UI.Elements
         /// <summary>
         /// Get the current visibility state.
         /// </summary>
-        public bool Visible { get; private set; }
+        public bool Visible { get; private set; } = true;
 
         private UIElement _parent;
         private bool _initialized = false;
@@ -115,6 +115,8 @@ namespace BuilderEssentials.UI.Elements
         /// </summary>
         public virtual void Show()
         {
+            if (Visible) return;
+            
             Visible = true;
             _parent?.Append(this);
 
@@ -126,6 +128,8 @@ namespace BuilderEssentials.UI.Elements
         /// </summary>
         public virtual void Hide()
         {
+            if (!Visible) return;
+            
             Visible = false;
             _parent = Parent;
             Remove();

@@ -43,6 +43,9 @@ namespace BuilderEssentials
         public override void UpdateUI(GameTime gameTime)
         {
             lastUpdateUIGameTime = gameTime;
+            
+            if (UserInterfaceLogic1?.CurrentState != null)
+                UserInterfaceLogic1.Update(gameTime);
             if (UserInterfaceLogic4?.CurrentState != null)
                 UserInterfaceLogic4.Update(gameTime);
         }

@@ -12,7 +12,6 @@ namespace BuilderEssentials
     public class BEPlayer : ModPlayer
     {
         public bool ValidCursorPos => HelperMethods.ValidTileCoordinates(Player.tileTargetX, Player.tileTargetY);
-
         public Vector2 PointedCoord => Main.MouseWorld;
         public Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
         public Tile PointedTile => Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
@@ -24,7 +23,8 @@ namespace BuilderEssentials
 
         public override void ResetEffects()
         {
-            InfinitePlacementRange = InfinitePlayerRange = FastPlacement = InfinitePlacement = PlacementAnywhere = false;
+            InfinitePlacementRange = InfinitePlayerRange = FastPlacement 
+                = InfinitePlacement = PlacementAnywhere = false;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
