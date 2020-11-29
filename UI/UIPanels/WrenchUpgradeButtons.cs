@@ -47,7 +47,8 @@ namespace BuilderEssentials.UI.UIPanels
             "Infinite Placement Range",
             "Infinite Player Range",
             "Placement Anywhere",
-            "Infinite Placement"
+            "Infinite Placement",
+            "Infinite Pickup Range"
         };
 
         public void UpdateUpgrades(Player player, ref List<bool> upgrades, ref List<bool> unlockedUpgrades)
@@ -64,6 +65,8 @@ namespace BuilderEssentials.UI.UIPanels
                 mp.PlacementAnywhere = true;
             if (upgrades[4]) //Inf Placement
                 mp.InfinitePlacement = true;
+            if (upgrades[5]) //Inf Pickup Range
+                mp.InfinitePickupRange = true;
 
             //Updating UI upgrade values through the wrench
             for (int i = 0; i < upgrades.Count; i++)

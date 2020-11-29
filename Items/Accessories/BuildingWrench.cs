@@ -60,7 +60,8 @@ namespace BuilderEssentials.Items.Accessories
                 "Infinite Placement Range",
                 "Infinite Player Range",
                 "Placement Anywhere",
-                "Infinite Placement"
+                "Infinite Placement",
+                "Infinite Pickup Range"
             };
 
             string[] tooltipText =
@@ -69,7 +70,8 @@ namespace BuilderEssentials.Items.Accessories
                 "Allows inifnite placement range",
                 "Allows infinite player range",
                 "Allows tile placement anywhere on screen",
-                "Allows infinite placement"
+                "Allows infinite placement",
+                "Allows infinite pickup range"
             };
 
             tooltips.Remove(tooltips.Find(x => x.Name == "Material"));
@@ -150,7 +152,8 @@ namespace BuilderEssentials.Items.Accessories
                 mod.GetItem("InfinitePlacementRangeUpgrade").item.type,
                 mod.GetItem("InfinitePlayerRangeUpgrade").item.type,
                 mod.GetItem("PlacementAnywhereUpgrade").item.type,
-                mod.GetItem("InfinitePlacementUpgrade").item.type
+                mod.GetItem("InfinitePlacementUpgrade").item.type,
+                mod.GetItem("InfinitePickupRangeUpgrade").item.type
             };
 
             for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)

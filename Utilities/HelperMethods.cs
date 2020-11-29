@@ -353,6 +353,7 @@ namespace BuilderEssentials.Utilities
             InfPlayerRange,
             PlacementAnywhere,
             InfPlacement,
+            InfPickupRange,
 
             UpgradesCount
         }

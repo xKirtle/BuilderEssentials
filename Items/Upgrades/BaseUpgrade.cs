@@ -36,7 +36,8 @@ namespace BuilderEssentials.Items.Upgrades
                 "InfinitePlacementRange", 
                 "InfinitePlayerRange", 
                 "PlacementAnywhere", 
-                "InfinitePlacement"
+                "InfinitePlacement",
+                "InfinitePickupRange"
             };
             
             for (int i = 0; i < HelperMethods.WrenchUpgrade.UpgradesCount.ToInt(); i++)
