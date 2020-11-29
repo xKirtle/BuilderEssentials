@@ -46,7 +46,7 @@ namespace BuilderEssentials.Items
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server || !mp.ValidCursorPos) return;
 
-            PaintWheel panel = ItemsUIState.paintWheel;
+            PaintWheel panel = UIStateLogic1.paintWheel;
             canPaint = HelperMethods.ToolHasRange(toolRange) && (panel.colorIndex != -1 || panel.toolIndex == 2) &&
                        HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
             player.showItemIcon = canPaint && !panel.IsMouseHovering;
@@ -71,11 +71,11 @@ namespace BuilderEssentials.Items
         public override bool CanUseItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return false;
-            if ((!canPaint && ItemsUIState.paintWheel.toolIndex != 2) ||
+            if ((!canPaint && UIStateLogic1.paintWheel.toolIndex != 2) ||
                 !HelperMethods.ToolHasRange(toolRange)) return false;
 
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-            PaintWheel panel = ItemsUIState.paintWheel;
+            PaintWheel panel = UIStateLogic1.paintWheel;
             byte selectedColor = (byte) (panel.colorIndex + 1);
             bool infPaintBucket = panel.infPaintBucket;
 
@@ -103,7 +103,7 @@ namespace BuilderEssentials.Items
             
             if (Main.mouseRight && player.HeldItem == item &&
                 HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
-                ItemsUIState.paintWheel.Toggle();
+                UIStateLogic1.paintWheel.Toggle();
 
             if (Main.mouseRightRelease)
                 mouseRightTimer = 0;

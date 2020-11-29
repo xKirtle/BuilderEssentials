@@ -65,7 +65,7 @@ namespace BuilderEssentials.Items
             {
                 canPlaceItems = HelperMethods.ToolHasRange(toolRange) &&
                                 HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
-                player.showItemIcon = canPlaceItems && !ItemsUIState.multiWandWheel.IsMouseHovering;
+                player.showItemIcon = canPlaceItems && !UIStateLogic1.multiWandWheel.IsMouseHovering;
                 player.showItemIcon2 = item.type;
             }
         }
@@ -74,7 +74,7 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer || !canPlaceItems) return false;
 
-            MultiWandWheel panel = ItemsUIState.multiWandWheel;
+            MultiWandWheel panel = UIStateLogic1.multiWandWheel;
             int materialType = wandMaterials[panel.selectedIndex];
             int tileType = wandPlacedTiles[panel.selectedIndex];
             if (HelperMethods.ValidTilePlacement(Player.tileTargetX, Player.tileTargetY) &&
@@ -92,7 +92,7 @@ namespace BuilderEssentials.Items
             
             if (Main.mouseRight && player.HeldItem == item &&
                 HelperMethods.IsUIAvailable() && ++mouseRightTimer == 2)
-                ItemsUIState.multiWandWheel.Toggle();
+                UIStateLogic1.multiWandWheel.Toggle();
 
             if (Main.mouseRightRelease)
                 mouseRightTimer = 0;

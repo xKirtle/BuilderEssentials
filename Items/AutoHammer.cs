@@ -47,7 +47,7 @@ namespace BuilderEssentials.Items
             {
                 canHammerTiles = HelperMethods.ToolHasRange(toolRange) &&
                                  HelperMethods.IsUIAvailable(playerNotWieldingItem: false);
-                player.showItemIcon = canHammerTiles && !ItemsUIState.autoHammerWheel.IsMouseHovering;
+                player.showItemIcon = canHammerTiles && !UIStateLogic1.autoHammerWheel.IsMouseHovering;
                 player.showItemIcon2 = item.type;
             }
         }
@@ -56,7 +56,7 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer) return true;
 
-            AutoHammerWheel panel = ItemsUIState.autoHammerWheel;
+            AutoHammerWheel panel = UIStateLogic1.autoHammerWheel;
             if (canHammerTiles && panel.selectedIndex != -1)
             {
                 HelperMethods.ChangeSlope(panel.selectedIndex);
@@ -74,7 +74,7 @@ namespace BuilderEssentials.Items
             
             if (Main.mouseRight && player.HeldItem == item &&
                 HelperMethods.IsUIAvailable() && ++mouseRightTimer == 4)
-                ItemsUIState.autoHammerWheel.Toggle();
+                UIStateLogic1.autoHammerWheel.Toggle();
 
             if (Main.mouseRightRelease)
                 mouseRightTimer = 0;

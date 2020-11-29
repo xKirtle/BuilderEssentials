@@ -31,7 +31,7 @@ namespace BuilderEssentials.Items
             if (player.whoAmI != Main.myPlayer) return;
 
             base.UpdateInventory(player);
-            ItemsUIState.paintWheel.infPaintBucket = true;
+            UIStateLogic1.paintWheel.infPaintBucket = true;
         }
 
         public override void AddRecipes()

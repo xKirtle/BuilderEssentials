@@ -48,8 +48,8 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer) return;
 
-            if (!ItemsUIState.fillWandSelection.Visible)
-                ItemsUIState.fillWandSelection.Show();
+            if (!UIStateLogic1.fillWandSelection.Visible)
+                UIStateLogic1.fillWandSelection.Show();
 
 
             BEPlayer mp = player.GetModPlayer<BEPlayer>();

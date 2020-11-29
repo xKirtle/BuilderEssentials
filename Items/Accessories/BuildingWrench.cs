@@ -35,6 +35,7 @@ namespace BuilderEssentials.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             //TODO: Make Wrench do something on its own without upgrades?
+            //Add buttons to toggle upgrades above inventory
             if (player.whoAmI != Main.myPlayer) return;
             UpdateUpgrades(player);
         }

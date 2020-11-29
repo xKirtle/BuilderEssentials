@@ -8,14 +8,13 @@ using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIStates
 {
-    public class ItemsUIState : UIState
+    public class UIStateLogic1 : UIState
     {
-        public static ItemsUIState Instance;
+        public static UIStateLogic1 Instance;
         public static MultiWandWheel multiWandWheel;
         public static AutoHammerWheel autoHammerWheel;
         public static PaintWheel paintWheel;
         public static FillWandSelection fillWandSelection;
-        public static WrenchUpgradeButtons wrenchUpgrades;
 
         public override void OnInitialize()
         {
@@ -36,10 +35,6 @@ namespace BuilderEssentials.UI.UIStates
             fillWandSelection = new FillWandSelection();
             Instance.Append(fillWandSelection);
             fillWandSelection.Hide();
-            
-            wrenchUpgrades = new WrenchUpgradeButtons();
-            Instance.Append(wrenchUpgrades);
-            wrenchUpgrades.Show();
         }
 
         public override void Update(GameTime gameTime)
@@ -48,7 +43,6 @@ namespace BuilderEssentials.UI.UIStates
             multiWandWheel?.Update();
             autoHammerWheel?.Update();
             paintWheel?.Update();
-            wrenchUpgrades?.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

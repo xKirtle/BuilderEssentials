@@ -22,46 +22,58 @@ namespace BuilderEssentials
 
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
-                // BaseUserInterface = new UserInterface();
-                // BaseUIState = new BaseUIState();
-                // BaseUIState.Activate();
-                // BaseUserInterface.SetState(BaseUIState);
+                UserInterfaceLogic1 = new UserInterface();
+                UIStateLogic1 = new UIStateLogic1();
+                UIStateLogic1.Activate();
+                UserInterfaceLogic1.SetState(UIStateLogic1);
 
-                ItemsUserInterface = new UserInterface();
-                ItemsUIState = new ItemsUIState();
-                ItemsUIState.Activate();
-                ItemsUserInterface.SetState(ItemsUIState);
+                UserInterfaceLogic4 = new UserInterface();
+                UIStateLogic4 = new UIStateLogic4();
+                UIStateLogic4.Activate();
+                UserInterfaceLogic4.SetState(UIStateLogic4);
             }
         }
 
-        // internal UserInterface BaseUserInterface;
-        // internal BaseUIState BaseUIState;
-        internal UserInterface ItemsUserInterface;
-        internal ItemsUIState ItemsUIState;
+        internal UserInterface UserInterfaceLogic1;
+        internal UIStateLogic1 UIStateLogic1;
+        internal UserInterface UserInterfaceLogic4;
+        internal UIStateLogic4 UIStateLogic4;
         private GameTime lastUpdateUIGameTime;
 
         public override void UpdateUI(GameTime gameTime)
         {
             lastUpdateUIGameTime = gameTime;
-            if (ItemsUserInterface?.CurrentState != null)
-                ItemsUserInterface.Update(gameTime);
+            if (UserInterfaceLogic4?.CurrentState != null)
+                UserInterfaceLogic4.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             //https://github.com/tModLoader/tModLoader/wiki/Vanilla-Interface-layers-values
-            int interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 2"));
+            int interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 1"));
             if (interfaceLayer != -1)
             {
                 layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
-                    "Builder Essentials: UserInterface",
+                    "Builder Essentials: UserInterfaceLogic1",
                     delegate
                     {
                         if (lastUpdateUIGameTime != null)
-                        {
-                            //BaseUserInterface?.Draw(Main.spriteBatch, lastUpdateUIGameTime);
-                            ItemsUserInterface?.Draw(Main.spriteBatch, lastUpdateUIGameTime);
-                        }
+                            UserInterfaceLogic1?.Draw(Main.spriteBatch, lastUpdateUIGameTime);
+
+                        return true;
+                    },
+                    InterfaceScaleType.UI));
+            }
+            
+            interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 4"));
+            if (interfaceLayer != -1)
+            {
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
+                    "Builder Essentials: UserInterfaceLogic4",
+                    delegate
+                    {
+                        if (lastUpdateUIGameTime != null)
+                            UserInterfaceLogic4?.Draw(Main.spriteBatch, lastUpdateUIGameTime);
 
                         return true;
                     },
