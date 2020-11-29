@@ -53,7 +53,7 @@ namespace BuilderEssentials.UI.Elements
         /// <summary>
         /// Sets the UIElement drawing scale.
         /// </summary>
-        /// <param name="scale">Negative values will mirror the UIElement drawing by the x and y vertices</param>
+        /// <param name="scale">Negative values will mirror the UIElement drawing by the x and y vertices.</param>
         public virtual void SetScale(float scale)
         {
             Scale = scale;
@@ -61,9 +61,9 @@ namespace BuilderEssentials.UI.Elements
         }
 
         /// <summary>
-        /// Sets the UIElement drawing scale.
+        /// Sets the UIElement opacity.
         /// </summary>
-        /// <param name="opacity">Negative values will mirror the UIElement drawing by the x and y vertices</param>
+        /// <param name="opacity">The bigger the value, the more transparent it will seem.</param>
         public virtual void SetOpacity(float opacity)
         {
             Opacity = opacity;
@@ -72,8 +72,8 @@ namespace BuilderEssentials.UI.Elements
         /// <summary>
         /// Sets the UIElement width/height dimensions.
         /// </summary>
-        /// <param name="width">Width in pixels</param>
-        /// <param name="height">Height in pixels</param>
+        /// <param name="width">Width in pixels.</param>
+        /// <param name="height">Height in pixels.</param>
         public virtual void SetSize(float width, float height)
         {
             Size = new Vector2(width, height);
@@ -111,7 +111,7 @@ namespace BuilderEssentials.UI.Elements
         public event ElementEvent OnHide;
 
         /// <summary>
-        /// Makes the element render and re-enables all of its functionality
+        /// Makes the element render and re-enables all of its functionality.
         /// </summary>
         public virtual void Show()
         {
@@ -122,7 +122,7 @@ namespace BuilderEssentials.UI.Elements
         }
 
         /// <summary>
-        /// Makes the element not render and disables all of its functionality. (still takes up space)
+        /// Makes the element not render and disables all of its functionality.
         /// </summary>
         public virtual void Hide()
         {
