@@ -58,5 +58,14 @@ namespace BuilderEssentials.UI.Elements
         {
             Toggleable = isToggleable;
         }
+
+        /// <summary>
+        /// Used to manually modify the Toggled value. (Should not be used unless necessary)
+        /// </summary>
+        /// <param name="toggleValue">If true, UIelement is toggled on.</param>
+        public void SetToggled(bool toggleValue)
+        {
+            Toggled = toggleValue;
+        }
     }
 }

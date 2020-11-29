@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using BuilderEssentials.Items.Upgrades;
+using BuilderEssentials.UI.UIStates;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
 using Terraria;
@@ -35,9 +36,18 @@ namespace BuilderEssentials.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             //TODO: Make Wrench do something on its own without upgrades?
-            //Add buttons to toggle upgrades above inventory
             if (player.whoAmI != Main.myPlayer) return;
-            UpdateUpgrades(player);
+            BEPlayer mp = player.GetModPlayer<BEPlayer>();
+
+            UIStateLogic4.wrenchUpgrades.UpdateUpgrades(player, ref upgrades);
+            UIStateLogic4.wrenchUpgrades.Show();
+        }
+
+        public override void UpdateInventory(Player player)
+        {
+            if (player.whoAmI != Main.myPlayer) return;
+            BEPlayer mp = player.GetModPlayer<BEPlayer>();
+            UIStateLogic4.wrenchUpgrades.Hide();
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -65,22 +75,6 @@ namespace BuilderEssentials.Items.Accessories
             for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
                 if (upgrades[i])
                     tooltips.Add(new TooltipLine(mod, names[i], tooltipText[i]));
-        }
-
-        public void UpdateUpgrades(Player player)
-        {
-            BEPlayer mp = player.GetModPlayer<BEPlayer>();
-
-            if (upgrades[0]) //Fast placement
-                mp.FastPlacement = true;
-            if (upgrades[1]) //Inf Placement Range
-                mp.InfinitePlacementRange = true;
-            if (upgrades[2]) //Inf Player Range
-                mp.InfinitePlayerRange = true;
-            if (upgrades[3]) //Placement Anywhere
-                mp.PlacementAnywhere = true;
-            if (upgrades[4]) //Inf Placement
-                mp.InfinitePlacement = true;
         }
 
         public override void OnCraft(Recipe recipe)

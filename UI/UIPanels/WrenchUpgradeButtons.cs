@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using BuilderEssentials.UI.Elements;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,15 +35,23 @@ namespace BuilderEssentials.UI.UIPanels
                 int index = i;
                 CustomUIImageButton toggle = new CustomUIImageButton(OffTexture, 1f);
                 toggle.Left.Set(OffTexture.Width * i + 7f, 0);
-                toggle.Top.Set(2f, 0);
+                toggle.Top.Set(1f, 0);
                 toggle.SetToggleable(true);
-                toggle.OnMouseOver += (__, _) => { text = new UIText(names[index]); Append(text); };
-                toggle.OnMouseOut += (__, _) => { text?.Remove(); text = null; };
+                toggle.OnMouseOver += (__, _) =>
+                {
+                    text = new UIText(names[index]);
+                    Append(text);
+                };
+                toggle.OnMouseOut += (__, _) =>
+                {
+                    text?.Remove();
+                    text = null;
+                };
                 elements[i] = toggle;
                 Append(toggle);
             }
         }
-        
+
         string[] names =
         {
             "Fast Placement",
@@ -52,13 +61,43 @@ namespace BuilderEssentials.UI.UIPanels
             "Infinite Placement"
         };
 
+        public void UpdateUpgrades(Player player, ref List<bool> upgrades)
+        {
+            BEPlayer mp = player.GetModPlayer<BEPlayer>();
+
+            if (upgrades[0]) //Fast placement
+                mp.FastPlacement = true;
+            if (upgrades[1]) //Inf Placement Range
+                mp.InfinitePlacementRange = true;
+            if (upgrades[2]) //Inf Player Range
+                mp.InfinitePlayerRange = true;
+            if (upgrades[3]) //Placement Anywhere
+                mp.PlacementAnywhere = true;
+            if (upgrades[4]) //Inf Placement
+                mp.InfinitePlacement = true;
+
+            //Updating UI upgrade values through the wrench
+            for (int i = 0; i < upgrades.Count; i++)
+            {
+                if (!Visible) //Runs once before the wrench calls the Show() method
+                {
+                    elements[i].SetOpacity(upgrades[i] ? 1f : .45f);
+                    elements[i].SetToggled(upgrades[i]);
+                }
+            }
+
+            //Setting upgrade values through the UI
+            for (int i = 0; i < upgrades.Count; i++)
+                if (Visible) upgrades[i] = elements[i].Toggled;
+        }
+
         public void Update()
         {
             Left.Set(Main.playerInventory ? 115f : 40f, 0);
 
             if (text == null) return;
-            text.Left.Set(Main.mouseX + 22f - Width.Pixels / 2, 0);
-            text.Top.Set(Main.mouseY + 22f - Height.Pixels / 2, 0);
+            text.Left.Set(Main.mouseX + 22f - Left.Pixels, 0);
+            text.Top.Set(Main.mouseY + 22f - Top.Pixels / 2, 0);
         }
     }
 }
