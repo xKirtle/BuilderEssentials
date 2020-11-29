@@ -18,7 +18,7 @@ namespace BuilderEssentials.UI.UIStates
             
             wrenchUpgrades = new WrenchUpgradeButtons();
             Instance.Append(wrenchUpgrades);
-            wrenchUpgrades.Show();
+            wrenchUpgrades.Hide();
         }
 
         public override void Update(GameTime gameTime)

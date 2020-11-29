@@ -19,6 +19,7 @@ namespace BuilderEssentials.Items.Accessories
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/BuildingWrench";
         public List<bool> upgrades;
+        public List<bool> unlockedUpgrades;
 
         public override void SetDefaults()
         {
@@ -29,6 +30,7 @@ namespace BuilderEssentials.Items.Accessories
             item.value = Item.sellPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
             if (upgrades == null) upgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
+            if (unlockedUpgrades == null) unlockedUpgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
         }
 
         public override bool CloneNewInstances => true;
@@ -39,7 +41,7 @@ namespace BuilderEssentials.Items.Accessories
             if (player.whoAmI != Main.myPlayer) return;
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
 
-            UIStateLogic4.wrenchUpgrades.UpdateUpgrades(player, ref upgrades);
+            UIStateLogic4.wrenchUpgrades.UpdateUpgrades(player, ref upgrades, ref unlockedUpgrades);
             UIStateLogic4.wrenchUpgrades.Show();
         }
 
@@ -73,7 +75,7 @@ namespace BuilderEssentials.Items.Accessories
             tooltips.Remove(tooltips.Find(x => x.Name == "Material"));
 
             for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
-                if (upgrades[i])
+                if (unlockedUpgrades[i])
                     tooltips.Add(new TooltipLine(mod, names[i], tooltipText[i]));
         }
 
@@ -81,13 +83,15 @@ namespace BuilderEssentials.Items.Accessories
         {
             int upgradeIndex = ((WrenchItemUpgrade) recipe.requiredItem[1].modItem).GetUpgradeNumber();
             SetUpgrade((WrenchUpgrade) upgradeIndex, true);
+            unlockedUpgrades[upgradeIndex] = true;
         }
 
         public override TagCompound Save()
         {
             return new TagCompound
             {
-                {"upgrades", upgrades}
+                {"upgrades", upgrades},
+                {"unlockedUpgrades", unlockedUpgrades}
             };
         }
 
@@ -95,23 +99,32 @@ namespace BuilderEssentials.Items.Accessories
         {
             if (tag.ContainsKey("upgrades"))
                 upgrades = tag.Get<List<bool>>("upgrades");
+
+            if (tag.ContainsKey("unlockedUpgrades"))
+                unlockedUpgrades = tag.Get<List<bool>>("unlockedUpgrades");
         }
 
         public override void NetSend(BinaryWriter writer)
         {
             for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
+            {
                 writer.Write(upgrades[i]);
+                writer.Write(unlockedUpgrades[i]);
+            }
         }
 
         public override void NetRecieve(BinaryReader reader)
         {
             for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
+            {
                 upgrades[i] = reader.ReadBoolean();
+                unlockedUpgrades[i] = reader.ReadBoolean();
+            }
         }
 
         public void SetUpgrade(WrenchUpgrade upgrade, bool state)
         {
-            if (upgrade.ToInt() < upgrades.Count && upgrade.ToInt() >= 0)
+            if (upgrade.ToInt() < upgrades.Count && upgrade.ToInt() >= 0 && unlockedUpgrades[upgrade.ToInt()])
                 upgrades[upgrade.ToInt()] = state;
         }
 

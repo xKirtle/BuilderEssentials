@@ -12,9 +12,7 @@ namespace BuilderEssentials.UI.UIPanels
 {
     public class WrenchUpgradeButtons : CustomUIPanel
     {
-        private Texture2D OffTexture =
-            ModContent.GetTexture("BuilderEssentials/Textures/UIElements/Upgrades/ToggleOFF");
-
+        private Texture2D OffTexture = ModContent.GetTexture("BuilderEssentials/Textures/UIElements/Upgrades/ToggleOFF");
         private Texture2D OnTexture = ModContent.GetTexture("BuilderEssentials/Textures/UIElements/Upgrades/ToggleON");
         private CustomUIImageButton[] elements;
         private UIText text;
@@ -36,17 +34,8 @@ namespace BuilderEssentials.UI.UIPanels
                 CustomUIImageButton toggle = new CustomUIImageButton(OffTexture, 1f);
                 toggle.Left.Set(OffTexture.Width * i + 7f, 0);
                 toggle.Top.Set(1f, 0);
-                toggle.SetToggleable(true);
-                toggle.OnMouseOver += (__, _) =>
-                {
-                    text = new UIText(names[index]);
-                    Append(text);
-                };
-                toggle.OnMouseOut += (__, _) =>
-                {
-                    text?.Remove();
-                    text = null;
-                };
+                toggle.OnMouseOver += (__, _) => { text = new UIText(names[index]); Append(text); };
+                toggle.OnMouseOut += (__, _) => { text?.Remove(); text = null; };
                 elements[i] = toggle;
                 Append(toggle);
             }
@@ -61,7 +50,7 @@ namespace BuilderEssentials.UI.UIPanels
             "Infinite Placement"
         };
 
-        public void UpdateUpgrades(Player player, ref List<bool> upgrades)
+        public void UpdateUpgrades(Player player, ref List<bool> upgrades, ref List<bool> unlockedUpgrades)
         {
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
 
@@ -81,14 +70,17 @@ namespace BuilderEssentials.UI.UIPanels
             {
                 if (!Visible) //Runs once before the wrench calls the Show() method
                 {
-                    elements[i].SetOpacity(upgrades[i] ? 1f : .45f);
-                    elements[i].SetToggled(upgrades[i]);
+                    //Updating UI behaviour and leaving unlocked upgrades toggled
+                    elements[i].SetOpacity(unlockedUpgrades[i] ? 1f : .45f);
+                    elements[i].SetToggleable(unlockedUpgrades[i]);
+                    elements[i].SetToggled(unlockedUpgrades[i]);
                 }
             }
 
             //Setting upgrade values through the UI
             for (int i = 0; i < upgrades.Count; i++)
-                if (Visible) upgrades[i] = elements[i].Toggled;
+                if (Visible && unlockedUpgrades[i]) 
+                    upgrades[i] = elements[i].Toggled;
         }
 
         public void Update()
@@ -96,8 +88,8 @@ namespace BuilderEssentials.UI.UIPanels
             Left.Set(Main.playerInventory ? 115f : 40f, 0);
 
             if (text == null) return;
-            text.Left.Set(Main.mouseX + 22f - Left.Pixels, 0);
-            text.Top.Set(Main.mouseY + 22f - Top.Pixels / 2, 0);
+            text.Left.Set(Main.mouseX + 11f - Left.Pixels, 0);
+            text.Top.Set(Main.mouseY + 11f - Top.Pixels / 2, 0);
         }
     }
 }
