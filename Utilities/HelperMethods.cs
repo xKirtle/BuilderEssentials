@@ -47,7 +47,7 @@ namespace BuilderEssentials.Utilities
         internal static bool ToolHasRange(Point range)
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
-            if (mp.InfinitePlacementRange) return true;
+            if (mp.InfinitePlacementRange || mp.InfinitePlayerRange) return true;
 
             Point playerCenter = Main.LocalPlayer.Center.ToTileCoordinates();
             //range = new Point(Main.screenWidth / 16, Main.screenHeight / 16);
@@ -101,7 +101,7 @@ namespace BuilderEssentials.Utilities
                 return ItemTypes.Air;
         }
 
-        internal static Tile PlaceTile(int i, int j, int itemType)
+        internal static Tile PlaceTile(int i, int j, int itemType, bool forced = false)
         {
             if (itemType == -1 || !ValidTileCoordinates(i, j))
                 return new Tile();
@@ -115,7 +115,7 @@ namespace BuilderEssentials.Utilities
                 case ItemTypes.Air:
                     break;
                 case ItemTypes.Tile:
-                    WorldGen.PlaceTile(i, j, item.createTile, style: item.placeStyle);
+                    WorldGen.PlaceTile(i, j, item.createTile, forced: forced, style: item.placeStyle);
                     break;
                 case ItemTypes.Wall:
                     WorldGen.PlaceWall(i, j, item.createWall);
@@ -128,7 +128,7 @@ namespace BuilderEssentials.Utilities
             return Framing.GetTileSafely(i, j);
         }
 
-        internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type)
+        internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false)
         {
             if (type == -1 || !ValidTileCoordinates(i, j))
                 return new Tile();

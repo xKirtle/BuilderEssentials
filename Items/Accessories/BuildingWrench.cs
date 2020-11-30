@@ -99,6 +99,8 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void Load(TagCompound tag)
         {
+            //TODO: Lists are set to default when loading data
+            
             if (tag.ContainsKey("upgrades"))
                 upgrades = tag.Get<List<bool>>("upgrades");
 
@@ -164,6 +166,11 @@ namespace BuilderEssentials.Items.Accessories
                 upgradeRecipe.SetResult(this);
                 upgradeRecipe.AddRecipe();
             }
+            
+            //TODO: Come up with ugprades recipes
+            // recipe = new ModRecipe(mod);
+            // recipe.SetResult(upgradeItemTypes[0]);
+            // recipe.AddRecipe();
         }
     }
 }

@@ -68,11 +68,11 @@ namespace BuilderEssentials
                     InterfaceScaleType.UI));
             }
             
-            interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 4"));
+            interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Cursor"));
             if (interfaceLayer != -1)
             {
                 layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(
-                    "Builder Essentials: UserInterfaceLogic4",
+                    "Builder Essentials: BelowCursor",
                     delegate
                     {
                         if (lastUpdateUIGameTime != null)
