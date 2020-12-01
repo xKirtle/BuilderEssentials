@@ -18,7 +18,7 @@ namespace BuilderEssentials
         public bool InfinitePlacementRange { get; set; }
         public bool InfinitePlayerRange { get; set; }
         public bool FastPlacement { get; set; }
-        public bool InfinitePlacement { get; set; } //to be done
+        public bool InfinitePlacement { get; set; }
         public bool PlacementAnywhere { get; set; }
         public bool InfinitePickupRange { get; set; }
 
