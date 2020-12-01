@@ -30,7 +30,8 @@ namespace BuilderEssentials.Items.Accessories
             item.value = Item.sellPrice(0, 10, 0, 0);
             item.rare = ItemRarityID.Red;
             if (upgrades == null) upgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
-            if (unlockedUpgrades == null) unlockedUpgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
+            if (unlockedUpgrades == null)
+                unlockedUpgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
         }
 
         public override bool CloneNewInstances => true;
@@ -99,13 +100,8 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void Load(TagCompound tag)
         {
-            //TODO: Lists are set to default when loading data
-            
-            if (tag.ContainsKey("upgrades"))
-                upgrades = tag.Get<List<bool>>("upgrades");
-
-            if (tag.ContainsKey("unlockedUpgrades"))
-                unlockedUpgrades = tag.Get<List<bool>>("unlockedUpgrades");
+            upgrades = tag.Get<List<bool>>("upgrades");
+            unlockedUpgrades = tag.Get<List<bool>>("unlockedUpgrades");
         }
 
         public override void NetSend(BinaryWriter writer)
@@ -166,7 +162,7 @@ namespace BuilderEssentials.Items.Accessories
                 upgradeRecipe.SetResult(this);
                 upgradeRecipe.AddRecipe();
             }
-            
+
             //TODO: Come up with ugprades recipes
             // recipe = new ModRecipe(mod);
             // recipe.SetResult(upgradeItemTypes[0]);
