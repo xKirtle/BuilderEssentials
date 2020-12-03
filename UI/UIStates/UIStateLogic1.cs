@@ -19,15 +19,12 @@ namespace BuilderEssentials.UI.UIStates
         public static AutoHammerWheel autoHammerWheel;
         public static PaintWheel paintWheel;
         public static FillWandSelection fillWandSelection;
-
-        public static CoordsSelection mirrorWandCoords;
-        public static RectangleShape rectangleShape;
+        public static MirrorWandSelection mirrorWandSelection;
 
         public override void OnInitialize()
         {
             Instance = this;
-            mirrorWandCoords = new CoordsSelection(ModContent.ItemType<MirrorWand>());
-            
+
             multiWandWheel = new MultiWandWheel();
             Instance.Append(multiWandWheel);
             multiWandWheel.Hide();
@@ -44,9 +41,9 @@ namespace BuilderEssentials.UI.UIStates
             Instance.Append(fillWandSelection);
             fillWandSelection.Hide();
             
-            rectangleShape = new RectangleShape();
-            Instance.Append(rectangleShape);
-            rectangleShape.Show();
+            mirrorWandSelection = new MirrorWandSelection();
+            Instance.Append(mirrorWandSelection);
+            mirrorWandSelection.Show();
         }
 
         public override void Update(GameTime gameTime)
@@ -55,8 +52,6 @@ namespace BuilderEssentials.UI.UIStates
             multiWandWheel?.Update();
             autoHammerWheel?.Update();
             paintWheel?.Update();
-            
-            mirrorWandCoords?.UpdateCoords();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

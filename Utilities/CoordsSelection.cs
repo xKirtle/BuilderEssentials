@@ -3,8 +3,8 @@ using BuilderEssentials.UI.UIStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.UI;
+using Terraria.DataStructures;
 
 namespace BuilderEssentials.Utilities
 {
