@@ -62,15 +62,8 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
             int distanceY = (int) (cs.LMBEnd.Y - cs.LMBStart.Y);
             horizontalMirror = Math.Abs(distanceX) > Math.Abs(distanceY);
 
-            bool c2 = true;
-            if (selectedQuarter >= 2)
-            {
-                c2 = !c2;
-                selectedQuarter -= 2;
-            }
-
-            FixX(!Convert.ToBoolean(selectedQuarter));
-            FixY(c2);
+            FixX(!Convert.ToBoolean(selectedQuarter % 2));
+            FixY(selectedQuarter >= 2 ? false : true);
 
             wideMirror = cs.LMBEnd.X == cs.LMBStart.X - 1 || cs.LMBEnd.X == cs.LMBStart.X + 1 ||
                          cs.LMBEnd.Y == cs.LMBStart.Y - 1 || cs.LMBEnd.Y == cs.LMBStart.Y + 1;
