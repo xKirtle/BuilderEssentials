@@ -10,7 +10,6 @@ namespace BuilderEssentials.Utilities
 {
     public class CoordsSelection
     {
-        public static CoordsSelection Instance;
         public int itemType = -1;
         public bool shiftDown;
 
@@ -24,7 +23,6 @@ namespace BuilderEssentials.Utilities
 
         public CoordsSelection(int itemToWorkWith)
         {
-            Instance = this;
             itemType = itemToWorkWith;
             
             UIStateLogic1.Instance.OnRightMouseDown += OnRightMouseDown;
@@ -35,7 +33,7 @@ namespace BuilderEssentials.Utilities
 
         private void OnRightMouseDown(UIMouseEvent evt, UIElement listeningelement)
         {
-            //if (Main.LocalPlayer.HeldItem.type != itemType) return;
+            if (Main.LocalPlayer.HeldItem.type != itemType) return;
 
             RMBDown = true;
             RMBStart = RMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
@@ -48,7 +46,7 @@ namespace BuilderEssentials.Utilities
 
         private void OnOnMouseDown(UIMouseEvent evt, UIElement listeningelement)
         {
-            //if (Main.LocalPlayer.HeldItem.type != itemType) return;
+            if (Main.LocalPlayer.HeldItem.type != itemType) return;
 
             LMBDown = true;
             LMBStart = LMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
@@ -80,9 +78,11 @@ namespace BuilderEssentials.Utilities
                     RMBEnd.Y = RMBStart.Y - Math.Abs(distanceX);
             }
         }
-        
+
         public void UpdateCoords()
         {
+            if (Main.LocalPlayer.HeldItem.type != itemType) return;
+
             if (RMBDown)
                 RMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
@@ -90,6 +90,10 @@ namespace BuilderEssentials.Utilities
                 LMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
             shiftDown = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
+            if (shiftDown)
+                SquareCoords();
+
+            //Main.NewText($"[{RMBStart.X}/{RMBStart.Y}] / [{RMBEnd.X}/{RMBEnd.Y}]");
         }
     }
 }

@@ -1,9 +1,13 @@
-﻿using BuilderEssentials.UI.UIPanels;
+﻿using BuilderEssentials.Items;
+using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.UI.UIPanels.ShapesDrawing;
+using BuilderEssentials.Utilities;
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIStates
@@ -16,9 +20,13 @@ namespace BuilderEssentials.UI.UIStates
         public static PaintWheel paintWheel;
         public static FillWandSelection fillWandSelection;
 
+        public static CoordsSelection mirrorWandCoords;
+        public static RectangleShape rectangleShape;
+
         public override void OnInitialize()
         {
             Instance = this;
+            mirrorWandCoords = new CoordsSelection(ModContent.ItemType<MirrorWand>());
             
             multiWandWheel = new MultiWandWheel();
             Instance.Append(multiWandWheel);
@@ -35,6 +43,10 @@ namespace BuilderEssentials.UI.UIStates
             fillWandSelection = new FillWandSelection();
             Instance.Append(fillWandSelection);
             fillWandSelection.Hide();
+            
+            rectangleShape = new RectangleShape();
+            Instance.Append(rectangleShape);
+            rectangleShape.Show();
         }
 
         public override void Update(GameTime gameTime)
@@ -43,6 +55,8 @@ namespace BuilderEssentials.UI.UIStates
             multiWandWheel?.Update();
             autoHammerWheel?.Update();
             paintWheel?.Update();
+            
+            mirrorWandCoords?.UpdateCoords();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
