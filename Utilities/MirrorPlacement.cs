@@ -44,6 +44,7 @@ namespace BuilderEssentials.Utilities
                     tileOrigin = TileObjectData.GetTileData(tile).Origin;
                     tileSize = TileObjectData.GetTileData(tile).CoordinateFullWidth / 16;
 
+                    //Info through trial and error, not sure if it covers everything correctly
                     if (tileSize == 2 && (tileOrigin == new Point16(0, 0) || tileOrigin == new Point16(0, 1) ||
                         tileOrigin == new Point16(0, 2)) || tileOrigin == new Point16(0, 4) || tileOrigin == new Point16(1, 2))
                         correctionOrigin -= 1;

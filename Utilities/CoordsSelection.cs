@@ -90,10 +90,8 @@ namespace BuilderEssentials.Utilities
                 LMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
             shiftDown = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
-            if (shiftDown)
+            if (shiftDown && (RMBDown || LMBDown))
                 SquareCoords();
-
-            Main.NewText($"[{LMBStart.X}/{LMBStart.Y}] / [{LMBEnd.X}/{LMBEnd.Y}]");
         }
     }
 }
