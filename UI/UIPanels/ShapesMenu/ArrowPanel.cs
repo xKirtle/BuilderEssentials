@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.UI.Elements;
+using BuilderEssentials.UI.UIStates;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
@@ -16,11 +17,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             Top.Set(Main.screenHeight / 2, 0);
             BorderColor = Microsoft.Xna.Framework.Color.Transparent;
             BackgroundColor = Microsoft.Xna.Framework.Color.Transparent;
-            OnMouseDown += (__, _) =>
-            {
-                Hide();
-                //Show shapes menu
-            };
+            OnMouseDown += (__, _) => { Hide(); UIStateLogic1.menuPanel.Show(); };
 
             Texture2D texture = ModContent.GetTexture("BuilderEssentials/Textures/UIElements/ShapesMenu/ArrowPanel");
             CustomUIImage arrowPanelImg = new CustomUIImage(texture, 1f);

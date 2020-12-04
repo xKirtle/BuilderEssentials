@@ -22,6 +22,7 @@ namespace BuilderEssentials.UI.UIStates
         public static FillWandSelection fillWandSelection;
         public static MirrorWandSelection mirrorWandSelection;
         public static ArrowPanel arrowPanel;
+        public static MenuPanel menuPanel;
 
         public override void OnInitialize()
         {
@@ -45,11 +46,15 @@ namespace BuilderEssentials.UI.UIStates
             
             mirrorWandSelection = new MirrorWandSelection();
             Instance.Append(mirrorWandSelection);
-            mirrorWandSelection.Show();
+            mirrorWandSelection.Hide();
             
             arrowPanel = new ArrowPanel();
             Instance.Append(arrowPanel);
             arrowPanel.Show();
+            
+            menuPanel = new MenuPanel();
+            Instance.Append(menuPanel);
+            menuPanel.Hide();
         }
 
         public override void Update(GameTime gameTime)

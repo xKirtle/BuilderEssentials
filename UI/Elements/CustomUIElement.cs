@@ -16,13 +16,17 @@ namespace BuilderEssentials.UI.Elements
         /// <summary>
         /// Get the current opacity.
         /// </summary>
-        public float Opacity { get; private set; }
+        public float Opacity { get; private set; } = 0f;
 
         /// <summary>
-        /// Get the currect dimensions of the UI Element.
+        /// Get the currect dimensions of the UI Element. (Width and Height)
         /// </summary>
-        public Vector2 Size { get; private set; }
+        public Vector2 Size { get; private set; } = Vector2.Zero;
 
+        /// <summary>
+        /// Get the current offset dimensions of the UI Element. (Left and Top)
+        /// </summary>
+        public Vector2 Offset { get; private set; } = Vector2.Zero;
         /// <summary>
         /// Get the current visibility state.
         /// </summary>
@@ -30,8 +34,7 @@ namespace BuilderEssentials.UI.Elements
 
         private UIElement _parent;
         private bool _initialized = false;
-
-
+        
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -90,6 +93,29 @@ namespace BuilderEssentials.UI.Elements
             Size = size;
             Width.Set(size.X * Scale, 0);
             Height.Set(size.Y * Scale, 0);
+        }
+
+        /// <summary>
+        /// Sets the UIElement left/top offset dimensions.
+        /// </summary>
+        /// <param name="left">Left offset in pixels.</param>
+        /// <param name="top">Top offset in pixels.</param>
+        public virtual void SetOffset(float left, float top)
+        {
+            Offset = new Vector2(left, top);
+            Left.Set(left, 0);
+            Top.Set(top, 0);
+        }
+        
+        /// <summary>
+        /// Sets the UIElement left/top offset dimensions
+        /// </summary>
+        /// <param name="offset">A Vector2 where x: left and y: top.</param>
+        public virtual void SetOffset(Vector2 offset)
+        {
+            Offset = offset;
+            Left.Set(offset.X, 0);
+            Top.Set(offset.Y, 0);
         }
 
         /// <summary>
