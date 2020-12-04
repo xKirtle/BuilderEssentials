@@ -27,8 +27,8 @@ namespace BuilderEssentials.Utilities
             
             UIStateLogic1.Instance.OnRightMouseDown += OnRightMouseDown;
             UIStateLogic1.Instance.OnRightMouseUp += OnRightMouseUp;
-            UIStateLogic1.Instance.OnMouseDown += OnOnMouseDown;
-            UIStateLogic1.Instance.OnMouseUp += OnOnMouseUp;
+            UIStateLogic1.Instance.OnMouseDown += OnMouseDown;
+            UIStateLogic1.Instance.OnMouseUp += OnMouseUp;
         }
 
         private void OnRightMouseDown(UIMouseEvent evt, UIElement listeningelement)
@@ -44,7 +44,7 @@ namespace BuilderEssentials.Utilities
             RMBDown = false;
         }
 
-        private void OnOnMouseDown(UIMouseEvent evt, UIElement listeningelement)
+        private void OnMouseDown(UIMouseEvent evt, UIElement listeningelement)
         {
             if (Main.LocalPlayer.HeldItem.type != itemType) return;
 
@@ -52,7 +52,7 @@ namespace BuilderEssentials.Utilities
             LMBStart = LMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
         }
 
-        private void OnOnMouseUp(UIMouseEvent evt, UIElement listeningelement)
+        private void OnMouseUp(UIMouseEvent evt, UIElement listeningelement)
         {
             LMBDown = false;
         }
@@ -93,7 +93,7 @@ namespace BuilderEssentials.Utilities
             if (shiftDown)
                 SquareCoords();
 
-            //Main.NewText($"[{RMBStart.X}/{RMBStart.Y}] / [{RMBEnd.X}/{RMBEnd.Y}]");
+            Main.NewText($"[{LMBStart.X}/{LMBStart.Y}] / [{LMBEnd.X}/{LMBEnd.Y}]");
         }
     }
 }

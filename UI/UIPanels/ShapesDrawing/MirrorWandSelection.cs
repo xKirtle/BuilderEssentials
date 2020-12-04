@@ -11,17 +11,18 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
 {
     public class MirrorWandSelection : BaseShape
     {
-        private CoordsSelection cs;
-        private bool horizontalMirror;
-        private bool wideMirror;
-        private bool validMirrorPlacement;
+        public CoordsSelection cs;
+        public bool horizontalMirror;
+        public bool wideMirror;
+        public bool validMirrorPlacement;
+        public int selectedQuarter;
 
         public MirrorWandSelection()
         {
             cs = new CoordsSelection(ModContent.ItemType<MirrorWand>());
         }
 
-        private void FixX(bool left = true)
+        private void FixMirrorX(bool left = true)
         {
             if (left && !horizontalMirror && cs.LMBEnd.X < cs.LMBStart.X - 1)
                 cs.LMBEnd.X = cs.LMBStart.X - 1;
@@ -29,7 +30,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
                 cs.LMBEnd.X = cs.LMBStart.X + 1;
         }
 
-        private void FixY(bool top = true)
+        private void FixMirrorY(bool top = true)
         {
             if (top && horizontalMirror && cs.LMBEnd.Y < cs.LMBStart.Y - 1)
                 cs.LMBEnd.Y = cs.LMBStart.Y - 1;
@@ -46,7 +47,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
         
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Main.LocalPlayer.HeldItem.type != cs.itemType) return;
+            //TODO: Figure out a good way to know when to draw
 
             //Should I move this to Update()?
             cs.UpdateCoords();
@@ -56,14 +57,14 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
             PlotRectangle((int) cs.RMBStart.X, (int) cs.RMBStart.Y, (int) cs.RMBEnd.X, (int) cs.RMBEnd.Y);
 
             //Mirror
-            int selectedQuarter = SelectedQuarter((int) cs.LMBStart.X, (int) cs.LMBStart.Y, (int) cs.LMBEnd.X,
+            selectedQuarter = SelectedQuarter((int) cs.LMBStart.X, (int) cs.LMBStart.Y, (int) cs.LMBEnd.X,
                 (int) cs.LMBEnd.Y);
             int distanceX = (int) (cs.LMBEnd.X - cs.LMBStart.X);
             int distanceY = (int) (cs.LMBEnd.Y - cs.LMBStart.Y);
             horizontalMirror = Math.Abs(distanceX) > Math.Abs(distanceY);
 
-            FixX(!Convert.ToBoolean(selectedQuarter % 2));
-            FixY(selectedQuarter >= 2 ? false : true);
+            FixMirrorX(!Convert.ToBoolean(selectedQuarter % 2));
+            FixMirrorY(selectedQuarter >= 2 ? false : true);
 
             wideMirror = cs.LMBEnd.X == cs.LMBStart.X - 1 || cs.LMBEnd.X == cs.LMBStart.X + 1 ||
                          cs.LMBEnd.Y == cs.LMBStart.Y - 1 || cs.LMBEnd.Y == cs.LMBStart.Y + 1;

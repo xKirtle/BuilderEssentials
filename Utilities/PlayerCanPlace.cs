@@ -26,7 +26,7 @@ namespace BuilderEssentials.Utilities
 
         public override void PlaceInWorld(int i, int j, Item item)
         {
-            //Call mirror wand here
+            HelperMethods.MirrorPlacement(i, j, item.type);
             base.PlaceInWorld(i, j, item);
         }
     }
