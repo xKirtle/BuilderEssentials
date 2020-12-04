@@ -1,6 +1,7 @@
 ﻿using BuilderEssentials.Items;
 using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIPanels.ShapesDrawing;
+using BuilderEssentials.UI.UIPanels.ShapesMenu;
 using BuilderEssentials.Utilities;
 using Terraria.ID;
 using Terraria;
@@ -20,6 +21,7 @@ namespace BuilderEssentials.UI.UIStates
         public static PaintWheel paintWheel;
         public static FillWandSelection fillWandSelection;
         public static MirrorWandSelection mirrorWandSelection;
+        public static ArrowPanel arrowPanel;
 
         public override void OnInitialize()
         {
@@ -44,6 +46,10 @@ namespace BuilderEssentials.UI.UIStates
             mirrorWandSelection = new MirrorWandSelection();
             Instance.Append(mirrorWandSelection);
             mirrorWandSelection.Show();
+            
+            arrowPanel = new ArrowPanel();
+            Instance.Append(arrowPanel);
+            arrowPanel.Show();
         }
 
         public override void Update(GameTime gameTime)

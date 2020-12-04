@@ -11,7 +11,7 @@ namespace BuilderEssentials.UI.Elements
         /// <summary>
         /// Get the current drawing scale.
         /// </summary>
-        public float Scale { get; private set; }
+        public float Scale { get; private set; } = 1;
 
         /// <summary>
         /// Get the current opacity.
