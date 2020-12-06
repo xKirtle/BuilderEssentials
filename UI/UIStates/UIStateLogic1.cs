@@ -46,7 +46,7 @@ namespace BuilderEssentials.UI.UIStates
             
             mirrorWandSelection = new MirrorWandSelection();
             Instance.Append(mirrorWandSelection);
-            mirrorWandSelection.Hide();
+            mirrorWandSelection.Show();
             
             arrowPanel = new ArrowPanel();
             Instance.Append(arrowPanel);

@@ -39,12 +39,12 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
         }
 
         private bool IsMirrorAxisInsideSelection() =>
-            cs.LMBStart != cs.LMBEnd && 
+            cs.LMBStart != cs.LMBEnd &&
             HelperMethods.IsWithinRange(cs.LMBStart.X, cs.RMBStart.X, cs.RMBEnd.X) &&
-            HelperMethods.IsWithinRange(cs.LMBEnd.X, cs.RMBStart.X, cs.RMBEnd.X) && 
+            HelperMethods.IsWithinRange(cs.LMBEnd.X, cs.RMBStart.X, cs.RMBEnd.X) &&
             HelperMethods.IsWithinRange(cs.LMBStart.Y, cs.RMBStart.Y, cs.RMBEnd.Y) &&
             HelperMethods.IsWithinRange(cs.LMBEnd.Y, cs.RMBStart.Y, cs.RMBEnd.Y);
-        
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             //TODO: Figure out a good way to know when to draw
@@ -69,11 +69,11 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
             wideMirror = cs.LMBEnd.X == cs.LMBStart.X - 1 || cs.LMBEnd.X == cs.LMBStart.X + 1 ||
                          cs.LMBEnd.Y == cs.LMBStart.Y - 1 || cs.LMBEnd.Y == cs.LMBStart.Y + 1;
             validMirrorPlacement = IsMirrorAxisInsideSelection();
-            
+
             color = new Color(1f, 0f, 0f, .75f) * 0.8f; //Red
             if (validMirrorPlacement)
                 color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
-            
+
             PlotRectangle((int) cs.LMBStart.X, (int) cs.LMBStart.Y, (int) cs.LMBEnd.X, (int) cs.LMBEnd.Y);
         }
     }

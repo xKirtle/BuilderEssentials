@@ -21,6 +21,10 @@ namespace BuilderEssentials.Utilities
         public Vector2 LMBStart = Vector2.Zero;
         public Vector2 LMBEnd = Vector2.Zero;
 
+        public bool MMBDown;
+        public Vector2 MMBStart = Vector2.Zero;
+        public Vector2 MMBEnd = Vector2.Zero;
+
         public CoordsSelection(int itemToWorkWith)
         {
             itemType = itemToWorkWith;
@@ -29,6 +33,8 @@ namespace BuilderEssentials.Utilities
             UIStateLogic1.Instance.OnRightMouseUp += OnRightMouseUp;
             UIStateLogic1.Instance.OnMouseDown += OnMouseDown;
             UIStateLogic1.Instance.OnMouseUp += OnMouseUp;
+            UIStateLogic1.Instance.OnMiddleMouseDown += OnMiddleMouseDown;
+            UIStateLogic1.Instance.OnMiddleMouseUp += OnMiddleMouseUp;
         }
 
         private void OnRightMouseDown(UIMouseEvent evt, UIElement listeningelement)
@@ -55,6 +61,19 @@ namespace BuilderEssentials.Utilities
         private void OnMouseUp(UIMouseEvent evt, UIElement listeningelement)
         {
             LMBDown = false;
+        }
+        
+        private void OnMiddleMouseDown(UIMouseEvent evt, UIElement listeningelement)
+        {
+            if (Main.LocalPlayer.HeldItem.type != itemType) return;
+
+            MMBDown = true;
+            MMBStart = MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
+        }
+        
+        private void OnMiddleMouseUp(UIMouseEvent evt, UIElement listeningelement)
+        {
+            MMBDown = false;
         }
 
         public void SquareCoords()
@@ -88,6 +107,9 @@ namespace BuilderEssentials.Utilities
 
             if (LMBDown)
                 LMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
+            
+            if (MMBDown)
+                MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
             shiftDown = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
             if (shiftDown && (RMBDown || LMBDown))

@@ -7,6 +7,8 @@ using Terraria.UI;
 using Terraria.GameInput;
 using Terraria.Localization;
 using BuilderEssentials.UI.UIStates;
+using Terraria.Cinematics;
+using Terraria.ObjectData;
 
 namespace BuilderEssentials.Utilities
 {
@@ -110,6 +112,8 @@ namespace BuilderEssentials.Utilities
             Item item = new Item();
             item.SetDefaults(itemType);
 
+            //TODO: MAKE DIRECTIONAL TILES BE PLACED ACCORDING TO PLAYER DIRECTION
+            //TODO: CHECK FOR Main.tileCut[] and TileID.Sets.BreakableWhenPlacing[] to automatically break when placing
             switch (itemTypes)
             {
                 case ItemTypes.Air:
@@ -164,6 +168,8 @@ namespace BuilderEssentials.Utilities
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, i, j, 1);
+            
+            //TODO: MAKE ITEMS DROP IN MULTIPLAYER
         }
 
         //Taken from https://github.com/hamstar0/tml-hamstarhelpers-mod/blob/master/HamstarHelpers/Helpers/UI/UIHelpers.cs#L59

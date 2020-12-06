@@ -28,6 +28,19 @@ namespace BuilderEssentials.Items
 
             if (player.HeldItem.type != ItemType<FillWand>() && UIStateLogic1.fillWandSelection.Visible)
                 UIStateLogic1.fillWandSelection.Hide();
+
+            // if (player.HeldItem.type == ItemType<ShapesDrawer>() && UIStateLogic1.mirrorWandSelection.Visible)
+            // {
+            //     UIStateLogic1.mirrorWandSelection.Hide();
+            //     //ShapesDrawer.Show();
+            // }
+            //
+            // if (player.HeldItem.type == ItemType<MirrorWand>()) /*&& UIStateLogic1.shapesDrawerSelection.Visible)*/
+            // {
+            //     //UIStateLogic1.shapesDrawerSelection.Hide();
+            //     UIStateLogic1.mirrorWandSelection.Show();
+            // }
+            
         }
     }
 }
