@@ -1,6 +1,6 @@
 ﻿using BuilderEssentials.Items;
 using BuilderEssentials.UI.UIPanels;
-using BuilderEssentials.UI.UIPanels.ShapesDrawing;
+using BuilderEssentials.UI.UIPanels.ShapesDrawerUI;
 using BuilderEssentials.UI.UIPanels.ShapesMenu;
 using BuilderEssentials.Utilities;
 using Terraria.ID;
@@ -23,6 +23,7 @@ namespace BuilderEssentials.UI.UIStates
         public static MirrorWandSelection mirrorWandSelection;
         public static ArrowPanel arrowPanel;
         public static MenuPanel menuPanel;
+        public static ShapesDrawerSelection shapesDrawerSelection;
 
         public override void OnInitialize()
         {
@@ -55,6 +56,18 @@ namespace BuilderEssentials.UI.UIStates
             menuPanel = new MenuPanel();
             Instance.Append(menuPanel);
             menuPanel.Hide();
+            
+            shapesDrawerSelection = new ShapesDrawerSelection();
+            Instance.Append(shapesDrawerSelection);
+            shapesDrawerSelection.Show();
+
+            RectangleShape rectangleShape = new RectangleShape();
+            Instance.Append(rectangleShape);
+            rectangleShape.Show();
+            
+            EllipseShape ellipseShape = new EllipseShape();
+            Instance.Append(ellipseShape);
+            ellipseShape.Show();
         }
 
         public override void Update(GameTime gameTime)

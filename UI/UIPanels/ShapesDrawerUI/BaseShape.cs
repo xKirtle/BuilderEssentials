@@ -4,13 +4,16 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
+namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
 {
     public class BaseShape : CustomUIElement
     {
         public Color color;
+        public Color Blue = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
+        public Color Yellow = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f;
+        public Color Red = new Color(1f, 0f, 0f, .75f) * 0.8f;
 
-        public void DrawRectangle(int x, int y)
+        public virtual void DrawRectangle(int x, int y)
         {
             Texture2D texture = Main.extraTexture[2];
             Rectangle value = new Rectangle(0, 0, 16, 16);
@@ -44,7 +47,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
             }
         }
 
-        public void PlotRectangle(int x0, int y0, int x1, int y1)
+        public virtual void PlotRectangle(int x0, int y0, int x1, int y1)
         {
             if (x0 == x1 && y0 == y1)
                 return;

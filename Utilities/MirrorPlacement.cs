@@ -1,5 +1,5 @@
 ﻿using System;
-using BuilderEssentials.UI.UIPanels.ShapesDrawing;
+using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIStates;
 using Terraria;
 using Microsoft.Xna.Framework;

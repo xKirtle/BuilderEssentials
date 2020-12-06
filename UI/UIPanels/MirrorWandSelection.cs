@@ -1,5 +1,6 @@
 ﻿using System;
 using BuilderEssentials.Items;
+using BuilderEssentials.UI.UIPanels.ShapesDrawerUI;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
@@ -7,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
+namespace BuilderEssentials.UI.UIPanels
 {
     public class MirrorWandSelection : BaseShape
     {
@@ -53,7 +54,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
             cs.UpdateCoords();
 
             //Selection
-            color = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f; //Blue
+            color = Blue;
             PlotRectangle((int) cs.RMBStart.X, (int) cs.RMBStart.Y, (int) cs.RMBEnd.X, (int) cs.RMBEnd.Y);
 
             //Mirror
@@ -70,9 +71,9 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawing
                          cs.LMBEnd.Y == cs.LMBStart.Y - 1 || cs.LMBEnd.Y == cs.LMBStart.Y + 1;
             validMirrorPlacement = IsMirrorAxisInsideSelection();
 
-            color = new Color(1f, 0f, 0f, .75f) * 0.8f; //Red
+            color = Red;
             if (validMirrorPlacement)
-                color = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f; //Yellow
+                color = Yellow;
 
             PlotRectangle((int) cs.LMBStart.X, (int) cs.LMBStart.Y, (int) cs.LMBEnd.X, (int) cs.LMBEnd.Y);
         }
