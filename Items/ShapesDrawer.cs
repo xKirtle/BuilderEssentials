@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.Utilities;
+﻿using BuilderEssentials.UI.UIStates;
+using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -38,10 +39,13 @@ namespace BuilderEssentials.Items
 
         public override Vector2? HoldoutOffset() => new Vector2(2, -9);
 
+        public static bool LMBDown;
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-
+            
+            //Had to create this static variable since I couldn't use player.mouseInterface in the draw method
+            LMBDown = Main.mouseLeft && !player.mouseInterface;
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
 
             //Middle Mouse

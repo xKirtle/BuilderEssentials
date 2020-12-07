@@ -76,31 +76,32 @@ namespace BuilderEssentials.Utilities
             MMBDown = false;
         }
 
-        public void SquareCoords()
+        public void SquareCoords(ref Vector2 start, ref Vector2 end)
         {
-            int distanceX = (int) (RMBEnd.X - RMBStart.X);
-            int distanceY = (int) (RMBEnd.Y - RMBStart.Y);
+            int distanceX = (int) (end.X - start.X);
+            int distanceY = (int) (end.Y - start.Y);
 
             //Turning rectangles into a square
             if (Math.Abs(distanceX) < Math.Abs(distanceY)) //Horizontal
             {
                 if (distanceX > 0) //I. and IV. Quadrant
-                    RMBEnd.X = RMBStart.X + Math.Abs(distanceY);
+                    end.X = start.X + Math.Abs(distanceY);
                 else //II. and III. Quadrant
-                    RMBEnd.X = RMBStart.X - Math.Abs(distanceY);
+                    end.X = start.X - Math.Abs(distanceY);
             }
             else //Vertical
             {
                 if (distanceY > 0) //III. and IV. Quadrant
-                    RMBEnd.Y = RMBStart.Y + Math.Abs(distanceX);
+                    end.Y = start.Y + Math.Abs(distanceX);
                 else //I. and II. Quadrant
-                    RMBEnd.Y = RMBStart.Y - Math.Abs(distanceX);
+                    end.Y = start.Y - Math.Abs(distanceX);
             }
         }
 
         public void UpdateCoords()
         {
-            if (Main.LocalPlayer.HeldItem.type != itemType) return;
+            if (Main.LocalPlayer.HeldItem.type != itemType)
+            { RMBDown = LMBDown = MMBDown = false; return; }
 
             if (RMBDown)
                 RMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
@@ -112,8 +113,14 @@ namespace BuilderEssentials.Utilities
                 MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
             shiftDown = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
-            if (shiftDown && (RMBDown || LMBDown))
-                SquareCoords();
+            if (!shiftDown) return;
+            
+            if (RMBDown) 
+                SquareCoords(ref RMBStart, ref RMBEnd);
+            else if (LMBDown)
+                SquareCoords(ref LMBStart, ref LMBEnd);
+            else if (MMBDown)
+                SquareCoords(ref MMBStart, ref MMBEnd);
         }
     }
 }

@@ -4,6 +4,7 @@ using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 
 namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
 {
@@ -48,7 +49,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
                     DrawRectangle(x1, y1); //  IV. Quadrant
 
                 //Fill
-                if (cs.LMBDown && selected[2] && ShapesDrawer.selectedItemType != -1)
+                if (ShapesDrawer.LMBDown && selected[2] && ShapesDrawer.selectedItemType != -1)
                 {
                     //No half shape selected
                     if (noQuad)

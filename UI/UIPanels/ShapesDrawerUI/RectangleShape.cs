@@ -16,7 +16,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
             base.PlotRectangle(x0, y0, x1, y1);
 
             bool[] selected = UIStateLogic1.menuPanel.selected;
-            if (cs.LMBDown && selected[2] && ShapesDrawer.selectedItemType != -1)
+            if (ShapesDrawer.LMBDown && selected[2] && ShapesDrawer.selectedItemType != -1)
             {
                 if (y0 < y1)
                 {

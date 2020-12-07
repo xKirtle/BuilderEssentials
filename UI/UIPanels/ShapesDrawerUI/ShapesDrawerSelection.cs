@@ -2,8 +2,9 @@
 using BuilderEssentials.Items;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
-using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
 {
@@ -21,8 +22,9 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
         public override void DrawRectangle(int x, int y)
         {
             base.DrawRectangle(x, y);
-
-            if (cs.LMBDown && ShapesDrawer.selectedItemType != -1)
+            
+            //Can't call player.mouseInterface here because its value was not updated yet when doing draw code
+            if (ShapesDrawer.LMBDown && ShapesDrawer.selectedItemType != -1)
                 HelperMethods.PlaceTile(x, y, ShapesDrawer.selectedItemType);
         }
     }
