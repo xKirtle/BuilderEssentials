@@ -155,21 +155,38 @@ namespace BuilderEssentials.Utilities
             return Framing.GetTileSafely(i, j);
         }
 
-        internal static void RemoveTile(int i, int j, bool removeTile = true, bool removeWall = false,
-            bool fail = false, bool dropItem = true)
+        internal static void RemoveTile(int i, int j, bool removeTile = true, 
+            bool removeWall = false, bool dropItem = true, int itemToDrop = -1)
         {
             if (!ValidTileCoordinates(i, j)) return;
+            
+            int number = -1;
+            if (dropItem)
+            {
+                Tile tile = Framing.GetTileSafely(i, j);
+                
+                //Default behaviour, can be laggy if doing a lot of iterations since PickItem is costly
+                if (itemToDrop == -1)
+                    itemToDrop = HelperMethods.PickItem(tile, false);
+                
+                Item item = new Item();
+                item.SetDefaults(itemToDrop);
+                
+                if (itemToDrop != -1 && (item.createTile == tile.type || item.createWall == tile.type))
+                    number = Item.NewItem(i * 16, j * 16, 16, 16, itemToDrop, 1, false, -1, false, false);
+            }
 
             if (removeTile)
-                WorldGen.KillTile(i, j, fail, !dropItem);
+                WorldGen.KillTile(i, j, !dropItem);
 
             if (removeWall)
-                WorldGen.KillWall(i, j, fail);
+                WorldGen.KillWall(i, j);
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendTileSquare(-1, i, j, 1);
-            
-            //TODO: MAKE ITEMS DROP IN MULTIPLAYER
+            {
+                NetMessage.SendTileSquare(-1, i, j, 1); //syncs whether the tile is there or not
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 0f, 0f, 0f, 0, 0, 0);
+            }
         }
 
         //Taken from https://github.com/hamstar0/tml-hamstarhelpers-mod/blob/master/HamstarHelpers/Helpers/UI/UIHelpers.cs#L59
@@ -365,7 +382,7 @@ namespace BuilderEssentials.Utilities
         }
 
         public static int ToInt(this WrenchUpgrade wrenchUpgrade) => (int) wrenchUpgrade;
-        
+
         internal static bool IsWithinRange(float number, float value1, float value2, bool equal = false)
         {
             if (!equal)

@@ -77,9 +77,9 @@ namespace BuilderEssentials.Items
                         customItem.SetDefaults(selectedTileItemType);
 
                         if (tile.type == customItem.createTile)
-                            HelperMethods.RemoveTile(posX, posY, true, false);
+                            HelperMethods.RemoveTile(posX, posY, true, false, itemToDrop: selectedTileItemType);
                         else if (tile.wall == customItem.createWall)
-                            HelperMethods.RemoveTile(posX, posY, false, true);
+                            HelperMethods.RemoveTile(posX, posY, false, true, itemToDrop: selectedTileItemType);
                     }
                 }
             }

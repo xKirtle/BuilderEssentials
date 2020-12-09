@@ -10,8 +10,6 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
 {
     public class EllipseShape : ShapesDrawerSelection
     {
-        private bool[] selected = UIStateLogic1.menuPanel.selected;
-
         public void PlotEllipse(int x0, int y0, int x1, int y1)
         {
             bool[] selected = UIStateLogic1.menuPanel.selected;

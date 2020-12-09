@@ -9,8 +9,6 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
 {
     public class RectangleShape : ShapesDrawerSelection
     {
-        private bool[] selected = UIStateLogic1.menuPanel.selected;
-
         public override void PlotRectangle(int x0, int y0, int x1, int y1)
         {
             base.PlotRectangle(x0, y0, x1, y1);
