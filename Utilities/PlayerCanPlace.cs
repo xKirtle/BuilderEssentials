@@ -12,12 +12,13 @@ namespace BuilderEssentials.Utilities
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             Item heldItem = mp.player.HeldItem;
 
+            //TODO: Placement anywhere is placing on top stuff like mushrooms and not dropping them
             if (mp.PlacementAnywhere || mp.InfinitePlacement)
             {
                 Item item = new Item();
                 item.SetDefaults(heldItem.type);
                 HelperMethods.PlaceTile(i, j, heldItem.type);
-                HelperMethods.CanReduceItemStack(item.tileWand == -1 ? heldItem.type : heldItem.tileWand, true);
+                HelperMethods.CanReduceItemStack(item.tileWand == -1 ? heldItem.type : heldItem.tileWand, reduceStack: true);
                 PlaceInWorld(i, j, item);
 
                 return false;

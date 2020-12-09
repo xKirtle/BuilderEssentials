@@ -58,16 +58,21 @@ namespace BuilderEssentials.Utilities
                    Math.Abs(playerCenter.Y - mp.PointedTileCoord.Y) <= range.Y;
         }
 
-        internal static bool CanReduceItemStack(int itemType, bool reduceStack = true)
+        internal static bool CanReduceItemStack(int itemType, int amount = 1, bool reduceStack = true)
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             if (mp.InfinitePlacement) return true;
 
             foreach (Item item in Main.LocalPlayer.inventory)
             {
-                if (item.type == itemType && item.stack >= 1)
+                if (item.type == itemType && item.stack >= amount)
                 {
-                    if (reduceStack) --item.stack;
+                    if (reduceStack)
+                    {
+                        for (int i = 0; i < amount; i++)
+                            --item.stack;
+                    }
+
                     return true;
                 }
             }
@@ -103,7 +108,7 @@ namespace BuilderEssentials.Utilities
                 return ItemTypes.Air;
         }
 
-        internal static Tile PlaceTile(int i, int j, int itemType, bool forced = false)
+        internal static Tile PlaceTile(int i, int j, int itemType, bool forced = false, bool sync = true)
         {
             if (itemType == -1 || !ValidTileCoordinates(i, j))
                 return new Tile();
@@ -126,13 +131,14 @@ namespace BuilderEssentials.Utilities
                     break;
             }
 
-            if (Main.netMode == NetmodeID.MultiplayerClient)
+            if (sync && Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, i, j, 1);
 
             return Framing.GetTileSafely(i, j);
         }
 
-        internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false)
+        internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false,
+            bool sync = true)
         {
             if (type == -1 || !ValidTileCoordinates(i, j))
                 return new Tile();
@@ -149,31 +155,79 @@ namespace BuilderEssentials.Utilities
                     break;
             }
 
-            if (Main.netMode == NetmodeID.MultiplayerClient)
+            if (sync && Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, i, j, 1);
 
             return Framing.GetTileSafely(i, j);
         }
 
-        internal static void RemoveTile(int i, int j, bool removeTile = true, 
-            bool removeWall = false, bool dropItem = true, int itemToDrop = -1)
+        internal static void PlaceTilesInArea(int startX, int startY, int endX, int endY, int itemType,
+            bool forced = false)
+        {
+            //This whole method exists so I don't spam NetMessages to sync each tile individually but rather an area
+
+            if (!ValidTileCoordinates(startX, startY) || !ValidTileCoordinates(endX, endY)) return;
+
+            if (startX > endX)
+            {
+                int temp = startX;
+                startX = endX;
+                endX = temp;
+            }
+
+            if (startY > endY)
+            {
+                int temp = startY;
+                startY = endY;
+                endY = temp;
+            }
+
+            int horizontal = endX - startX;
+            int vertical = endY - startY;
+
+            for (int i = startX; i < startX + horizontal; i++)
+            for (int j = startY; j < startY + vertical; j++)
+            {
+                Tile tile = Framing.GetTileSafely(i, j);
+                HelperMethods.ItemTypes itemTypes = HelperMethods.WhatIsThisItem(itemType);
+
+                if (HelperMethods.CanReduceItemStack(itemType) &&
+                    (itemTypes == HelperMethods.ItemTypes.Tile && tile.type == 0) ||
+                    (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall == 0))
+                    PlaceTile(i, j, itemType, forced, false);
+            }
+
+            //Keeping syncSize an odd number since SendTileSquare as a bias towards up and left for even-numbers sizes
+            int syncSize = horizontal > vertical ? horizontal : vertical;
+            syncSize += 1 + (syncSize % 2);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, startX, startY, syncSize);
+        }
+
+        internal static void RemoveTile(int i, int j, bool removeTile = true,
+            bool removeWall = false, bool dropItem = true, int itemToDrop = -1, bool sync = true)
         {
             if (!ValidTileCoordinates(i, j)) return;
-            
+
             int number = -1;
             if (dropItem)
             {
                 Tile tile = Framing.GetTileSafely(i, j);
-                
+
                 //Default behaviour, can be laggy if doing a lot of iterations since PickItem is costly
                 if (itemToDrop == -1)
                     itemToDrop = HelperMethods.PickItem(tile, false);
-                
+
                 Item item = new Item();
                 item.SetDefaults(itemToDrop);
-                
-                if (itemToDrop != -1 && (item.createTile == tile.type || item.createWall == tile.type))
+
+                if (itemToDrop != -1 && (item.createTile == tile.type || item.createWall == tile.type) &&
+                    tile.active() && Main.netMode == NetmodeID.MultiplayerClient)
+                {
                     number = Item.NewItem(i * 16, j * 16, 16, 16, itemToDrop, 1, false, -1, false, false);
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 0f, 0f, 0f, 0, 0, 0);
+                }
             }
 
             if (removeTile)
@@ -182,11 +236,50 @@ namespace BuilderEssentials.Utilities
             if (removeWall)
                 WorldGen.KillWall(i, j);
 
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
+            if (sync && Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, i, j, 1); //syncs whether the tile is there or not
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 0f, 0f, 0f, 0, 0, 0);
+        }
+
+        internal static void RemoveTilesInArea(int startX, int startY, int endX, int endY, 
+            bool dropItem = true, int itemToDrop = -1)
+        {
+            //This whole method exists so I don't spam NetMessages to sync each tile individually but rather an area
+
+            if (startX > endX)
+            {
+                int temp = startX;
+                startX = endX;
+                endX = temp;
             }
+
+            if (startY > endY)
+            {
+                int temp = startY;
+                startY = endY;
+                endY = temp;
+            }
+
+            int horizontal = endX - startX;
+            int vertical = endY - startY;
+
+            for (int i = startX; i < startX + horizontal; i++)
+            for (int j = startY; j < startY + vertical; j++)
+            {
+                Tile tile = Framing.GetTileSafely(i, j);
+                Item item = new Item();
+                item.SetDefaults(itemToDrop);
+                
+                bool removeTile = tile.type == item.createTile;
+                bool removeWall = tile.wall == item.createWall;
+                RemoveTile(i, j, removeTile, removeWall, dropItem, itemToDrop, false);
+            }
+
+            //Keeping syncSize an odd number since SendTileSquare as a bias towards up and left for even-numbers sizes
+            int syncSize = horizontal > vertical ? horizontal : vertical;
+            syncSize += 1 + (syncSize % 2);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, startX, startY, syncSize);
         }
 
         //Taken from https://github.com/hamstar0/tml-hamstarhelpers-mod/blob/master/HamstarHelpers/Helpers/UI/UIHelpers.cs#L59
@@ -326,7 +419,7 @@ namespace BuilderEssentials.Utilities
 
             if (selectedTool == 0 && mp.PointedTile.active() && mp.PointedTile.color() != color)
             {
-                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), true))
+                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), reduceStack: true))
                 {
                     mp.PointedTile.color(color);
                     needsSync = true;
@@ -334,7 +427,7 @@ namespace BuilderEssentials.Utilities
             }
             else if (selectedTool == 1 && mp.PointedTile.wall != 0 && mp.PointedTile.wallColor() != color)
             {
-                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), true))
+                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), reduceStack: true))
                 {
                     mp.PointedTile.wallColor(color);
                     needsSync = true;

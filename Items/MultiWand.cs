@@ -78,7 +78,7 @@ namespace BuilderEssentials.Items
             int materialType = wandMaterials[panel.selectedIndex];
             int tileType = wandPlacedTiles[panel.selectedIndex];
             if (HelperMethods.ValidTilePlacement(Player.tileTargetX, Player.tileTargetY) &&
-                HelperMethods.CanReduceItemStack(materialType, true))
+                HelperMethods.CanReduceItemStack(materialType, reduceStack: true))
                 HelperMethods.PlaceTile(Player.tileTargetX, Player.tileTargetY, HelperMethods.ItemTypes.Tile, tileType);
 
             return true;
