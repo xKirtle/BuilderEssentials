@@ -108,11 +108,12 @@ namespace BuilderEssentials.Utilities
                 return ItemTypes.Air;
         }
 
-        internal static Tile PlaceTile(int i, int j, int itemType, bool forced = false, bool sync = true)
-            => PlaceTile(i, j, WhatIsThisItem(itemType), itemType, forced, sync);
+        internal static Tile PlaceTile(int i, int j, int itemType, bool forced = false, bool sync = true,
+            int placeStyle = -1)
+            => PlaceTile(i, j, WhatIsThisItem(itemType), itemType, forced, sync, placeStyle);
 
         internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false,
-            bool sync = true)
+            bool sync = true, int placeStyle = -1)
         {
             //TODO: MAKE DIRECTIONAL TILES BE PLACED ACCORDING TO PLAYER DIRECTION
 
@@ -132,12 +133,15 @@ namespace BuilderEssentials.Utilities
                 RemoveTile(i, j, dropItem: false);
 
             CanReduceItemStack(type); //We know it's true since it passed the condition above
+
             switch (itemTypes)
             {
                 case ItemTypes.Air:
                     break;
                 case ItemTypes.Tile:
-                    WorldGen.PlaceTile(i, j, item.createTile, forced: forced, style: item.placeStyle);
+                    if (placeStyle == -1)
+                        placeStyle = item.placeStyle;
+                    WorldGen.PlaceTile(i, j, item.createTile, forced: forced, style: placeStyle);
                     break;
                 case ItemTypes.Wall:
                     WorldGen.PlaceWall(i, j, item.createWall);
@@ -199,9 +203,10 @@ namespace BuilderEssentials.Utilities
                 //Default behaviour, can be laggy if doing a lot of iterations since PickItem is costly
                 if (itemToDrop == -1)
                     itemToDrop = HelperMethods.PickItem(tile, false);
-                
-                if (itemToDrop == -1) goto InvalidItemToDrop; //The selected tile doesn't have an associated item to spawn it 
-                
+
+                if (itemToDrop == -1)
+                    goto InvalidItemToDrop; //The selected tile doesn't have an associated item to spawn it 
+
                 Item item = new Item();
                 item.SetDefaults(itemToDrop);
 
@@ -264,6 +269,26 @@ namespace BuilderEssentials.Utilities
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, startX, startY, syncSize);
+        }
+
+        internal static void InvertTilePlacement(int i , int j)
+        {
+            //TODO: BE ABLE TO SOMEHOW CHANGE TILE PLACEMENTS TO ALTERNATE?
+            // Tile tile = Framing.GetTileSafely(i, j);
+            // TileObjectData data = TileObjectData.GetTileData(tile);
+            // if (data == null) return;
+            // tile.frameX = (short)(data.Width * 2);
+            // tile.frameY = (short) (data.Height * 2);
+            
+            // int style = 0;
+            // int alternate = 0;
+            // TileObjectData.GetTileInfo(tile, ref style, ref alternate);
+            //Main.NewText($"{style} / {alternate}"); //style is chair type, alternate 0 is left
+
+            //Main.NewText($"{tile.frameX} / {tile.frameY} / {tile.frameNumber()}");
+            
+            //-1 left
+            //1 right
         }
 
         //Taken from https://github.com/hamstar0/tml-hamstarhelpers-mod/blob/master/HamstarHelpers/Helpers/UI/UIHelpers.cs#L59

@@ -80,7 +80,8 @@ namespace BuilderEssentials.Items
             int tileType = wandPlacedTiles[panel.selectedIndex];
 
             if (HelperMethods.ValidTilePlacement(Player.tileTargetX, Player.tileTargetY) &&
-                (!tile.active() || tile.collisionType == -1) && HelperMethods.CanReduceItemStack(materialType, reduceStack: true))
+                (!tile.active() || tile.collisionType == -1) &&
+                HelperMethods.CanReduceItemStack(materialType, reduceStack: true))
             {
                 if (tile.collisionType == -1)
                     HelperMethods.RemoveTile(Player.tileTargetX, Player.tileTargetY, dropItem: true);
