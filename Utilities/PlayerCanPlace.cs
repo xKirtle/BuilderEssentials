@@ -17,7 +17,7 @@ namespace BuilderEssentials.Utilities
             {
                 Item item = new Item();
                 item.SetDefaults(heldItem.type);
-                HelperMethods.PlaceTile(i, j, heldItem.type);
+                HelperMethods.PlaceTile(i, j, heldItem.type, true);
                 HelperMethods.CanReduceItemStack(item.tileWand == -1 ? heldItem.type : heldItem.tileWand, reduceStack: true);
                 PlaceInWorld(i, j, item);
 

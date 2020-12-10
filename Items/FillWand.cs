@@ -55,7 +55,6 @@ namespace BuilderEssentials.Items
             if (!UIStateLogic1.fillWandSelection.Visible)
                 UIStateLogic1.fillWandSelection.Show();
 
-
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             player.showItemIcon = true;
 
@@ -64,7 +63,7 @@ namespace BuilderEssentials.Items
             {
                 TileObjectData data = TileObjectData.GetTileData(mp.PointedTile);
                 multiTileSelected = data != null;
-                
+
                 if (!multiTileSelected)
                     selectedTileItemType = HelperMethods.PickItem(mp.PointedTile, false);
                 else if (!oneTimeMessage)
@@ -90,7 +89,7 @@ namespace BuilderEssentials.Items
             if (Main.mouseRightRelease || mouseRightTimer == 9)
                 mouseRightTimer = 0;
         }
-        
+
         public override bool CanUseItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return false;
@@ -98,12 +97,12 @@ namespace BuilderEssentials.Items
             //UI is appended to the bottomLeft coord
             int posX = Player.tileTargetX;
             int posY = Player.tileTargetY - (fillSelectionSize - 1);
-            
+
             //PlaceTilesInArea handles stackReducing itself
             if (selectedTileItemType != -1)
                 HelperMethods.PlaceTilesInArea(posX, posY, posX + fillSelectionSize,
                     posY + fillSelectionSize, selectedTileItemType, true);
-            
+
             return true;
         }
 

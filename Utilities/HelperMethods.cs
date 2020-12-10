@@ -109,16 +109,29 @@ namespace BuilderEssentials.Utilities
         }
 
         internal static Tile PlaceTile(int i, int j, int itemType, bool forced = false, bool sync = true)
+            => PlaceTile(i, j, WhatIsThisItem(itemType), itemType, forced, sync);
+
+        internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false,
+            bool sync = true)
         {
-            if (itemType == -1 || !ValidTileCoordinates(i, j))
+            //TODO: MAKE DIRECTIONAL TILES BE PLACED ACCORDING TO PLAYER DIRECTION
+
+            if (type == 0 || !ValidTileCoordinates(i, j))
                 return new Tile();
 
-            ItemTypes itemTypes = WhatIsThisItem(itemType);
             Item item = new Item();
-            item.SetDefaults(itemType);
+            item.SetDefaults(type);
+            Tile tile = Framing.GetTileSafely(i, j);
 
-            //TODO: MAKE DIRECTIONAL TILES BE PLACED ACCORDING TO PLAYER DIRECTION
-            //TODO: CHECK FOR Main.tileCut[] and TileID.Sets.BreakableWhenPlacing[] to automatically break when placing
+            if ((itemTypes == HelperMethods.ItemTypes.Tile && tile.active() && tile.collisionType != -1) ||
+                (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall != 0) ||
+                !CanReduceItemStack(type, reduceStack: false))
+                return new Tile();
+
+            if (forced && Framing.GetTileSafely(i, j).collisionType == -1)
+                RemoveTile(i, j, dropItem: false);
+
+            CanReduceItemStack(type); //We know it's true since it passed the condition above
             switch (itemTypes)
             {
                 case ItemTypes.Air:
@@ -128,30 +141,6 @@ namespace BuilderEssentials.Utilities
                     break;
                 case ItemTypes.Wall:
                     WorldGen.PlaceWall(i, j, item.createWall);
-                    break;
-            }
-
-            if (sync && Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendTileSquare(-1, i, j, 1);
-
-            return Framing.GetTileSafely(i, j);
-        }
-
-        internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false,
-            bool sync = true)
-        {
-            if (type == -1 || !ValidTileCoordinates(i, j))
-                return new Tile();
-
-            switch (itemTypes)
-            {
-                case ItemTypes.Air:
-                    break;
-                case ItemTypes.Tile:
-                    WorldGen.PlaceTile(i, j, type);
-                    break;
-                case ItemTypes.Wall:
-                    WorldGen.PlaceWall(i, j, type);
                     break;
             }
 
@@ -187,15 +176,7 @@ namespace BuilderEssentials.Utilities
 
             for (int i = startX; i < startX + horizontal; i++)
             for (int j = startY; j < startY + vertical; j++)
-            {
-                Tile tile = Framing.GetTileSafely(i, j);
-                HelperMethods.ItemTypes itemTypes = HelperMethods.WhatIsThisItem(itemType);
-
-                if (HelperMethods.CanReduceItemStack(itemType) &&
-                    (itemTypes == HelperMethods.ItemTypes.Tile && tile.type == 0) ||
-                    (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall == 0))
-                    PlaceTile(i, j, itemType, forced, false);
-            }
+                PlaceTile(i, j, itemType, forced, false);
 
             //Keeping syncSize an odd number since SendTileSquare as a bias towards up and left for even-numbers sizes
             int syncSize = horizontal > vertical ? horizontal : vertical;
@@ -218,7 +199,9 @@ namespace BuilderEssentials.Utilities
                 //Default behaviour, can be laggy if doing a lot of iterations since PickItem is costly
                 if (itemToDrop == -1)
                     itemToDrop = HelperMethods.PickItem(tile, false);
-
+                
+                if (itemToDrop == -1) goto InvalidItemToDrop; //The selected tile doesn't have an associated item to spawn it 
+                
                 Item item = new Item();
                 item.SetDefaults(itemToDrop);
 
@@ -230,6 +213,7 @@ namespace BuilderEssentials.Utilities
                 }
             }
 
+            InvalidItemToDrop:
             if (removeTile)
                 WorldGen.KillTile(i, j, !dropItem);
 
@@ -240,7 +224,7 @@ namespace BuilderEssentials.Utilities
                 NetMessage.SendTileSquare(-1, i, j, 1); //syncs whether the tile is there or not
         }
 
-        internal static void RemoveTilesInArea(int startX, int startY, int endX, int endY, 
+        internal static void RemoveTilesInArea(int startX, int startY, int endX, int endY,
             bool dropItem = true, int itemToDrop = -1)
         {
             //This whole method exists so I don't spam NetMessages to sync each tile individually but rather an area
@@ -268,7 +252,7 @@ namespace BuilderEssentials.Utilities
                 Tile tile = Framing.GetTileSafely(i, j);
                 Item item = new Item();
                 item.SetDefaults(itemToDrop);
-                
+
                 bool removeTile = tile.type == item.createTile;
                 bool removeWall = tile.wall == item.createWall;
                 RemoveTile(i, j, removeTile, removeWall, dropItem, itemToDrop, false);
