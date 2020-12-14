@@ -26,7 +26,6 @@ namespace BuilderEssentials.Items
 
         public override void SetDefaults()
         {
-            //TODO: Add item.tileBoost to the toolRange
             item.height = 44;
             item.width = 44;
             item.useTime = 1;

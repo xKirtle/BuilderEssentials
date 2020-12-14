@@ -1,4 +1,6 @@
-﻿using On.Terraria.DataStructures;
+﻿using System.Linq;
+using Terraria.ID;
+using Terraria.DataStructures;
 using Terraria;
 using Terraria.Enums;
 using Terraria.ModLoader;
@@ -12,14 +14,14 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             Item heldItem = mp.player.HeldItem;
-
-            //TODO: Placement anywhere is placing on top stuff like mushrooms and not dropping them
+            
             if (mp.PlacementAnywhere || mp.InfinitePlacement)
             {
                 Item item = new Item();
                 item.SetDefaults(heldItem.type);
                 HelperMethods.PlaceTile(i, j, heldItem.type, true);
-                HelperMethods.CanReduceItemStack(item.tileWand == -1 ? heldItem.type : heldItem.tileWand, reduceStack: true);
+                HelperMethods.CanReduceItemStack(item.tileWand == -1 ? heldItem.type : heldItem.tileWand,
+                    reduceStack: true);
                 PlaceInWorld(i, j, item);
 
                 return false;
@@ -30,12 +32,31 @@ namespace BuilderEssentials.Utilities
 
         public override void PlaceInWorld(int i, int j, Item item)
         {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+
             HelperMethods.MirrorPlacement(i, j, item.type);
             base.PlaceInWorld(i, j, item);
 
-            //default placement assumes direction == -1
-            if (Main.LocalPlayer.direction == 1)
-                HelperMethods.InvertTilePlacement(i, j);
+            //---------------------------Does not work yet---------------------------
+            // //I'm hardcoding this since vanilla also hardcodes their shitty frameX changes
+            // int[] directionFraming = new int[]
+            // {
+            //     TileID.Chairs, TileID.Bathtubs, TileID.Beds, TileID.Mannequin, TileID.Womannequin
+            //     //+ any other tile that mirrors with player direction
+            // };
+            //
+            // if (directionFraming.Contains(item.createTile))
+            //     HelperMethods.ChangeTileFraming(i, j, Main.LocalPlayer.direction == 1);
+        }
+    }
+
+    public class PlacementAnywhereWall : GlobalWall
+    {
+        public override void PlaceInWorld(int i, int j, int type, Item item)
+        {
+            //TODO: Apply Inf Placement to walls
+            HelperMethods.MirrorPlacement(i, j, item.type);
+            //base.PlaceInWorld(i, j, type, item);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -8,6 +9,7 @@ using Terraria.GameInput;
 using Terraria.Localization;
 using BuilderEssentials.UI.UIStates;
 using Terraria.Cinematics;
+using Terraria.DataStructures;
 using Terraria.ObjectData;
 
 namespace BuilderEssentials.Utilities
@@ -128,8 +130,8 @@ namespace BuilderEssentials.Utilities
                 (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall != 0) ||
                 !CanReduceItemStack(type, reduceStack: false))
                 return new Tile();
-
-            if (forced && Framing.GetTileSafely(i, j).collisionType == -1)
+            
+            if (forced && tile.collisionType == -1 && tile.type != TileID.DemonAltar && tile.type != 21)
                 RemoveTile(i, j, dropItem: false);
 
             CanReduceItemStack(type); //We know it's true since it passed the condition above
@@ -150,6 +152,11 @@ namespace BuilderEssentials.Utilities
 
             if (sync && Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, i, j, 1);
+
+            //Attempts to mirror it in case there's a mirror wand selection
+            HelperMethods.MirrorPlacement(i, j, item.type);
+            
+            //TODO: Compensate for vanilla's wall auto placement?
 
             return Framing.GetTileSafely(i, j);
         }
@@ -251,10 +258,25 @@ namespace BuilderEssentials.Utilities
             int horizontal = endX - startX;
             int vertical = endY - startY;
 
+            List<Point16> multiTileCoords = new List<Point16>();
             for (int i = startX; i < startX + horizontal; i++)
             for (int j = startY; j < startY + vertical; j++)
             {
+                if (multiTileCoords.Contains(new Point16(i, j))) continue;
+
+                //Check if multitile, and if yes, add it to a list of blacklisted coords
                 Tile tile = Framing.GetTileSafely(i, j);
+                TileObjectData data = TileObjectData.GetTileData(tile);
+
+                //If data != null, is multi tile. Prevents more than one drop per multi tile
+                if (data != null)
+                {
+                    Point16 topLeft = new Point16(i, j) - data.Origin;
+                    for (int k = 0; k < data.CoordinateFullWidth / 18; k++)
+                    for (int l = 0; l < data.CoordinateFullHeight / 18; l++)
+                        multiTileCoords.Add(new Point16(k, l));
+                }
+                
                 Item item = new Item();
                 item.SetDefaults(itemToDrop);
 
@@ -271,24 +293,77 @@ namespace BuilderEssentials.Utilities
                 NetMessage.SendTileSquare(-1, startX, startY, syncSize);
         }
 
-        internal static void InvertTilePlacement(int i , int j)
+        internal static void ChangeTileFraming(int i, int j, bool alternate)
         {
-            //TODO: BE ABLE TO SOMEHOW CHANGE TILE PLACEMENTS TO ALTERNATE?
-            // Tile tile = Framing.GetTileSafely(i, j);
-            // TileObjectData data = TileObjectData.GetTileData(tile);
-            // if (data == null) return;
+            Tile tile = Framing.GetTileSafely(i, j);
+            TileObjectData data = TileObjectData.GetTileData(tile);
+            if (data == null || !alternate) return;
+
+            Vector2 topLeft = new Vector2(Player.tileTargetX, Player.tileTargetY) - data.Origin.ToVector2();
+            Vector2 bottomLeft = topLeft + new Vector2(0, data.CoordinateFullHeight / 18 - 1);
+
+            //l on bottom row is 0
+
+            //fila de baixo frameY = 18 + style * fullHeight l == 0
+            //fila de cima frameY = style * fullHeight l == 1
+
+            //difference between alternate and not is frameX
+
+            //if alternate, frameX + fullWidth
+
+            Main.NewText("---------Before Change---------");
+            printMultiTileInfo(topLeft, data);
+            Main.NewText("----------------------------");
+            
+            //bottomLeft to topRight
+            for (int k = 0; k < data.CoordinateFullWidth / 18 + 1; k++)
+            {
+                for (int l = data.CoordinateFullHeight / 18 + 1; l > 1; l--)
+                {
+                    Tile tempTile = Framing.GetTileSafely((int) (bottomLeft.X + k), (int) (bottomLeft.Y - l));
+                    tempTile.frameX = (short) (18 * k);
+                    tempTile.frameY = (short) (data.CoordinateFullWidth + TileObjectData.GetTileStyle(tempTile) * 36 + (18 * ((l + 1) % 2)));
+                }
+            }
+            
+            Main.NewText("---------After Change---------");
+            printMultiTileInfo(topLeft, data);
+            Main.NewText("---------------------------");
+
+            Main.NewText("Style: " + TileObjectData.GetTileStyle(tile));
+
+            //------------------------------------------------------------
             // tile.frameX = (short)(data.Width * 2);
             // tile.frameY = (short) (data.Height * 2);
-            
+
             // int style = 0;
             // int alternate = 0;
             // TileObjectData.GetTileInfo(tile, ref style, ref alternate);
             //Main.NewText($"{style} / {alternate}"); //style is chair type, alternate 0 is left
 
-            //Main.NewText($"{tile.frameX} / {tile.frameY} / {tile.frameNumber()}");
-            
+            //frame Y 18 * i -> starting at bottom
+            //frame X is 18 * fullWidth + 18 * i -> starting at left
+
+            // Main.NewText($"{tile.frameX} / {tile.frameY} / {tile.frameNumber()}");
+            // Main.NewText($"{tile2.frameX} / {tile2.frameY} / {tile2.frameNumber()}");
+
             //-1 left
             //1 right
+
+            void printMultiTileInfo(Vector2 _topLeft, TileObjectData _data)
+            {
+                for (int l = 0; l < _data.CoordinateFullHeight / 18; l++)
+                {
+                    string tempText = "";
+                    for (int k = 0; k < _data.CoordinateFullWidth / 18; k++)
+                    {
+                        Tile tempTile = Framing.GetTileSafely((int) (_topLeft.X + k), (int) (_topLeft.Y + l));
+                        tempText += $"[{tempTile.frameX}/{tempTile.frameY}] ";
+                    }
+
+                    Main.NewText(tempText);
+                }
+            }
         }
 
         //Taken from https://github.com/hamstar0/tml-hamstarhelpers-mod/blob/master/HamstarHelpers/Helpers/UI/UIHelpers.cs#L59

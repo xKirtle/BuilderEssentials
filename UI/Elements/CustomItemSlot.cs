@@ -33,8 +33,6 @@ namespace BuilderEssentials.UI.Elements
         /// </summary>
         public event ElementEvent OnItemRemoved;
 
-        //TODO: Implement mouse hover stats display like vanilla itemSlot?
-
         /// <summary></summary>
         /// <param name="scale">ItemSlot's drawing scale</param>
         /// <param name="itemType">ItemSlot's Item type</param>
