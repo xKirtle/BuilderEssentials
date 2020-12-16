@@ -130,7 +130,7 @@ namespace BuilderEssentials.Utilities
                 (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall != 0) ||
                 !CanReduceItemStack(type, reduceStack: false))
                 return new Tile();
-            
+
             if (forced && tile.collisionType == -1 && tile.type != TileID.DemonAltar && tile.type != 21)
                 RemoveTile(i, j, dropItem: false);
 
@@ -155,7 +155,7 @@ namespace BuilderEssentials.Utilities
 
             //Attempts to mirror it in case there's a mirror wand selection
             HelperMethods.MirrorPlacement(i, j, item.type);
-            
+
             //TODO: Compensate for vanilla's wall auto placement?
 
             return Framing.GetTileSafely(i, j);
@@ -276,7 +276,7 @@ namespace BuilderEssentials.Utilities
                     for (int l = 0; l < data.CoordinateFullHeight / 18; l++)
                         multiTileCoords.Add(new Point16(k, l));
                 }
-                
+
                 Item item = new Item();
                 item.SetDefaults(itemToDrop);
 
@@ -295,6 +295,7 @@ namespace BuilderEssentials.Utilities
 
         internal static void ChangeTileFraming(int i, int j, bool alternate)
         {
+            if (!ValidTileCoordinates(i, j)) return;
             Tile tile = Framing.GetTileSafely(i, j);
             TileObjectData data = TileObjectData.GetTileData(tile);
             if (data == null || !alternate) return;
@@ -302,67 +303,69 @@ namespace BuilderEssentials.Utilities
             Vector2 topLeft = new Vector2(Player.tileTargetX, Player.tileTargetY) - data.Origin.ToVector2();
             Vector2 bottomLeft = topLeft + new Vector2(0, data.CoordinateFullHeight / 18 - 1);
 
-            //l on bottom row is 0
+            // frameX = magicNumber * style
+            // frameY = (direction == 1 ? 18 * fullHeight/18 : 0) + 18 * linha
 
-            //fila de baixo frameY = 18 + style * fullHeight l == 0
-            //fila de cima frameY = style * fullHeight l == 1
 
-            //difference between alternate and not is frameX
-
-            //if alternate, frameX + fullWidth
-
-            Main.NewText("---------Before Change---------");
-            printMultiTileInfo(topLeft, data);
-            Main.NewText("----------------------------");
-            
-            //bottomLeft to topRight
-            for (int k = 0; k < data.CoordinateFullWidth / 18 + 1; k++)
+            int fullWidth = data.CoordinateFullWidth / 18;
+            int fullHeight = data.CoordinateFullHeight / 18;
+            int style = TileObjectData.GetTileStyle(tile);
+            int magicNumber = 54;
+            for (int k = 0; k < fullWidth; k++)
             {
-                for (int l = data.CoordinateFullHeight / 18 + 1; l > 1; l--)
+                for (int l = 0; l < fullHeight; l++)
                 {
-                    Tile tempTile = Framing.GetTileSafely((int) (bottomLeft.X + k), (int) (bottomLeft.Y - l));
-                    tempTile.frameX = (short) (18 * k);
-                    tempTile.frameY = (short) (data.CoordinateFullWidth + TileObjectData.GetTileStyle(tempTile) * 36 + (18 * ((l + 1) % 2)));
+                    //5x4 not working very well since their direction is inverted?
+                    Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
+                    tempTile.frameX = (short)(18 * fullWidth + 18 * k); //don't include first 18 if facing left
+                    tempTile.frameY = (short) (magicNumber * style + l * 18);
+                    Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
                 }
             }
             
-            Main.NewText("---------After Change---------");
-            printMultiTileInfo(topLeft, data);
-            Main.NewText("---------------------------");
+            //WORKS FOR CHAIRS
+            // for (int k = 0; k < fullWidth; k++)
+            // {
+            //     for (int l = 0; l < fullHeight; l++)
+            //     {
+            //         Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
+            //         tempTile.frameX = (short)(18 + 18 * k); //don't include first 18 if facing left
+            //         tempTile.frameY = (short) (magicNumnber * style + l * 18);
+            //         Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
+            //     }
+            // }
+            
+            //WORKS FOR MANNEQUINS
+            // for (int k = 0; k < fullWidth; k++)
+            // {
+            //     for (int l = 0; l < fullHeight; l++)
+            //     {
+            //         Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
+            //         tempTile.frameX = (short)(18 * fullWidth + 18 * k); //don't include first 18 if facing left
+            //         tempTile.frameY = (short) (magicNumber * style + l * 18);
+            //         Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
+            //     }
+            // }
+            
+            // Main.NewText("---------After Change---------");
+            // HelperMethods.printMultiTileInfo(topLeft, data);
+            // Main.NewText("---------------------------");
+            //
+            // Main.NewText("Style: " + TileObjectData.GetTileStyle(tile));
+        }
 
-            Main.NewText("Style: " + TileObjectData.GetTileStyle(tile));
-
-            //------------------------------------------------------------
-            // tile.frameX = (short)(data.Width * 2);
-            // tile.frameY = (short) (data.Height * 2);
-
-            // int style = 0;
-            // int alternate = 0;
-            // TileObjectData.GetTileInfo(tile, ref style, ref alternate);
-            //Main.NewText($"{style} / {alternate}"); //style is chair type, alternate 0 is left
-
-            //frame Y 18 * i -> starting at bottom
-            //frame X is 18 * fullWidth + 18 * i -> starting at left
-
-            // Main.NewText($"{tile.frameX} / {tile.frameY} / {tile.frameNumber()}");
-            // Main.NewText($"{tile2.frameX} / {tile2.frameY} / {tile2.frameNumber()}");
-
-            //-1 left
-            //1 right
-
-            void printMultiTileInfo(Vector2 _topLeft, TileObjectData _data)
+        internal static void printMultiTileInfo(Vector2 _topLeft, TileObjectData _data)
+        {
+            for (int l = 0; l < _data.CoordinateFullHeight / 18; l++)
             {
-                for (int l = 0; l < _data.CoordinateFullHeight / 18; l++)
+                string tempText = "";
+                for (int k = 0; k < _data.CoordinateFullWidth / 18; k++)
                 {
-                    string tempText = "";
-                    for (int k = 0; k < _data.CoordinateFullWidth / 18; k++)
-                    {
-                        Tile tempTile = Framing.GetTileSafely((int) (_topLeft.X + k), (int) (_topLeft.Y + l));
-                        tempText += $"[{tempTile.frameX}/{tempTile.frameY}] ";
-                    }
-
-                    Main.NewText(tempText);
+                    Tile tempTile = Framing.GetTileSafely((int) (_topLeft.X + k), (int) (_topLeft.Y + l));
+                    tempText += $"[{tempTile.frameX}/{tempTile.frameY}] ";
                 }
+
+                Main.NewText(tempText);
             }
         }
 

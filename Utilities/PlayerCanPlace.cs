@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria;
@@ -38,15 +39,31 @@ namespace BuilderEssentials.Utilities
             base.PlaceInWorld(i, j, item);
 
             //---------------------------Does not work yet---------------------------
-            // //I'm hardcoding this since vanilla also hardcodes their shitty frameX changes
-            // int[] directionFraming = new int[]
-            // {
-            //     TileID.Chairs, TileID.Bathtubs, TileID.Beds, TileID.Mannequin, TileID.Womannequin
-            //     //+ any other tile that mirrors with player direction
-            // };
-            //
-            // if (directionFraming.Contains(item.createTile))
-            //     HelperMethods.ChangeTileFraming(i, j, Main.LocalPlayer.direction == 1);
+            //I'm hardcoding this since vanilla also hardcodes their shitty frameX changes
+            int[] directionFraming = new int[]
+            {
+                TileID.Chairs, TileID.Bathtubs, TileID.Beds, TileID.Mannequin, TileID.Womannequin
+                //+ any other tile that mirrors with player direction
+            };
+
+
+            Tile tile = Framing.GetTileSafely(i, j);
+            TileObjectData data = TileObjectData.GetTileData(tile);
+            Vector2 topLeft = new Vector2(Player.tileTargetX, Player.tileTargetY) - data.Origin.ToVector2();
+            Main.NewText("---------Before Change---------");
+            HelperMethods.printMultiTileInfo(topLeft, data);
+            Main.NewText("---------------------------");
+            
+            Main.NewText(TileObjectData.GetTileStyle(tile));
+
+            if (directionFraming.Contains(item.createTile))
+            {
+                bool alternate = Main.LocalPlayer.direction == 1;
+                if (item.createTile == TileID.Bathtubs || item.createTile == TileID.Beds)
+                    alternate = !alternate;
+                
+                HelperMethods.ChangeTileFraming(i, j, alternate);
+            }
         }
     }
 
