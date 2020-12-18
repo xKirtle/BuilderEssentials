@@ -38,7 +38,6 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            //TODO: Make Wrench do something on its own without upgrades?
             if (player.whoAmI != Main.myPlayer) return;
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
 
@@ -77,6 +76,9 @@ namespace BuilderEssentials.Items.Accessories
 
             tooltips.Remove(tooltips.Find(x => x.Name == "Material"));
 
+            if (unlockedUpgrades.All(x => x == false))
+                tooltips.Add(new TooltipLine(mod, "No Upgrades Added", "Add upgrades to make use of this wrench!"));
+            
             for (int i = 0; i < WrenchUpgrade.UpgradesCount.ToInt(); i++)
                 if (unlockedUpgrades[i])
                     tooltips.Add(new TooltipLine(mod, names[i], tooltipText[i]));
@@ -138,6 +140,13 @@ namespace BuilderEssentials.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.LeadBar, 6);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
+            
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.IronBar, 6);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
