@@ -298,32 +298,50 @@ namespace BuilderEssentials.Utilities
             if (!ValidTileCoordinates(i, j)) return;
             Tile tile = Framing.GetTileSafely(i, j);
             TileObjectData data = TileObjectData.GetTileData(tile);
-            if (data == null || !alternate) return;
+            int[] directionFraming = new int[]
+            { TileID.Chairs, TileID.Bathtubs, TileID.Beds, TileID.Mannequin, TileID.Womannequin };
+            if (!directionFraming.Contains(tile.type) || data == null) return;
 
             Vector2 topLeft = new Vector2(Player.tileTargetX, Player.tileTargetY) - data.Origin.ToVector2();
             Vector2 bottomLeft = topLeft + new Vector2(0, data.CoordinateFullHeight / 18 - 1);
 
-            // frameX = magicNumber * style
-            // frameY = (direction == 1 ? 18 * fullHeight/18 : 0) + 18 * linha
-
-
             int fullWidth = data.CoordinateFullWidth / 18;
             int fullHeight = data.CoordinateFullHeight / 18;
             int style = TileObjectData.GetTileStyle(tile);
-            int magicNumber = 54;
+            
+            int magicNumber = 0;
+            if (tile.type == TileID.Beds || tile.type == TileID.Bathtubs)
+                magicNumber = 36;
+            else if (tile.type == TileID.Mannequin || tile.type == TileID.Womannequin)
+                magicNumber = 54;
+            else if (tile.type == TileID.Chairs)
+                magicNumber = 40;
+            
             for (int k = 0; k < fullWidth; k++)
             {
                 for (int l = 0; l < fullHeight; l++)
                 {
-                    //5x4 not working very well since their direction is inverted?
                     Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
-                    tempTile.frameX = (short)(18 * fullWidth + 18 * k); //don't include first 18 if facing left
+                    tempTile.frameX = (short) (18 * fullWidth * Convert.ToInt32(alternate) + 18 * k); //Bool to int conversion returns 0 if alternate == true
                     tempTile.frameY = (short) (magicNumber * style + l * 18);
                     Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
                 }
             }
             
-            //WORKS FOR CHAIRS
+            //-----------------------------WORKING STUFF BELOW---------------------------------
+            //WORKS FOR BEDS AND BATHTUBS (36)
+            // for (int k = 0; k < fullWidth; k++)
+            // {
+            //     for (int l = 0; l < fullHeight; l++)
+            //     {
+            //         Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
+            //         tempTile.frameX = (short) (18 * fullWidth * 0 + 18 * k); //0 could be the !alternate value
+            //         tempTile.frameY = (short) (magicNumber * style + l * 18);
+            //         Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
+            //     }
+            // }
+            
+            //WORKS FOR CHAIRS (40)
             // for (int k = 0; k < fullWidth; k++)
             // {
             //     for (int l = 0; l < fullHeight; l++)
@@ -335,7 +353,7 @@ namespace BuilderEssentials.Utilities
             //     }
             // }
             
-            //WORKS FOR MANNEQUINS
+            //WORKS FOR MANNEQUINS (54)
             // for (int k = 0; k < fullWidth; k++)
             // {
             //     for (int l = 0; l < fullHeight; l++)
@@ -346,12 +364,6 @@ namespace BuilderEssentials.Utilities
             //         Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
             //     }
             // }
-            
-            // Main.NewText("---------After Change---------");
-            // HelperMethods.printMultiTileInfo(topLeft, data);
-            // Main.NewText("---------------------------");
-            //
-            // Main.NewText("Style: " + TileObjectData.GetTileStyle(tile));
         }
 
         internal static void printMultiTileInfo(Vector2 _topLeft, TileObjectData _data)
