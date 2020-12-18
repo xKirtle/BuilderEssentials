@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuilderEssentials.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -64,21 +65,22 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             if (mp.InfinitePlacement) return true;
+            
+            bool reducingWand = MultiWand.wandTypes.Contains(itemType);
+            int materialType = reducingWand ? MultiWand.wandMaterials[Array.IndexOf(MultiWand.wandTypes, itemType)] : 0;
 
             foreach (Item item in Main.LocalPlayer.inventory)
             {
-                if (item.type == itemType && item.stack >= amount)
+                if ((!reducingWand && item.type == itemType && item.stack >= amount) ||
+                    (reducingWand && item.type == materialType && item.stack >= amount))
                 {
                     if (reduceStack)
-                    {
-                        for (int i = 0; i < amount; i++)
-                            --item.stack;
-                    }
-
+                        item.stack -= amount;
+                    
                     return true;
                 }
             }
-
+            
             return false;
         }
 
@@ -285,7 +287,7 @@ namespace BuilderEssentials.Utilities
                 RemoveTile(i, j, removeTile, removeWall, dropItem, itemToDrop, false);
             }
 
-            //Keeping syncSize an odd number since SendTileSquare as a bias towards up and left for even-numbers sizes
+            //Keeping syncSize an odd number since SendTileSquare has a bias towards up and left for even-numbers sizes
             int syncSize = horizontal > vertical ? horizontal : vertical;
             syncSize += 1 + (syncSize % 2);
 

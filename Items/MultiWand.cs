@@ -15,7 +15,17 @@ namespace BuilderEssentials.Items
         private Point toolRange;
         private bool canPlaceItems;
 
-        private int[] wandMaterials =
+        public static int[] wandTypes = new int[]
+        {
+            ItemID.LivingWoodWand, 
+            ItemID.BoneWand, 
+            ItemID.LeafWand, 
+            ItemID.HiveWand, 
+            ItemID.LivingMahoganyWand, 
+            ItemID.LivingMahoganyLeafWand
+        };
+        
+        public static int[] wandMaterials =
         {
             ItemID.Wood,
             ItemID.Bone,
@@ -25,7 +35,7 @@ namespace BuilderEssentials.Items
             ItemID.RichMahogany
         };
 
-        private int[] wandPlacedTiles =
+        public static int[] wandPlacedTiles =
         {
             TileID.LivingWood,
             TileID.BoneBlock,

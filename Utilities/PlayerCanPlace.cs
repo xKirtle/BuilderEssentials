@@ -15,16 +15,14 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             Item heldItem = mp.player.HeldItem;
-            
-            if (mp.PlacementAnywhere || mp.InfinitePlacement)
-            {
-                Item item = new Item();
-                item.SetDefaults(heldItem.type);
-                HelperMethods.PlaceTile(i, j, heldItem.type, true);
-                HelperMethods.CanReduceItemStack(item.tileWand == -1 ? heldItem.type : heldItem.tileWand,
-                    reduceStack: true);
-                PlaceInWorld(i, j, item);
 
+            if (HelperMethods.ValidTilePlacement(i, j) || mp.InfinitePlacement)
+            {
+                if (mp.InfinitePlacement && !HelperMethods.ValidTilePlacement(i, j))
+                    return false;
+                
+                HelperMethods.PlaceTile(i, j, heldItem.type, true);
+                PlaceInWorld(i, j, heldItem);
                 return false;
             }
 
@@ -36,9 +34,9 @@ namespace BuilderEssentials.Utilities
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
 
             HelperMethods.MirrorPlacement(i, j, item.type);
-            base.PlaceInWorld(i, j, item);
 
-            //---------------------------Does not work yet---------------------------
+            if (!mp.PlacementAnywhere) return;
+
             //I'm hardcoding this since vanilla also hardcodes their shitty frameX changes
             int[] directionFraming = new int[]
             {
@@ -48,7 +46,6 @@ namespace BuilderEssentials.Utilities
 
             Tile tile = Framing.GetTileSafely(i, j);
             TileObjectData data = TileObjectData.GetTileData(tile);
-            Vector2 topLeft = new Vector2(Player.tileTargetX, Player.tileTargetY) - data.Origin.ToVector2();
 
             if (directionFraming.Contains(item.createTile))
                 HelperMethods.ChangeTileFraming(i, j, Main.LocalPlayer.direction == 1);
@@ -59,7 +56,7 @@ namespace BuilderEssentials.Utilities
     {
         public override void PlaceInWorld(int i, int j, int type, Item item)
         {
-            //TODO: Apply Inf Placement to walls
+            //item.consumable = !Main.LocalPlayer.GetModPlayer<BEPlayer>().InfinitePlacement;
             HelperMethods.MirrorPlacement(i, j, item.type);
             //base.PlaceInWorld(i, j, type, item);
         }
