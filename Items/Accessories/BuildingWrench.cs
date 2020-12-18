@@ -138,8 +138,6 @@ namespace BuilderEssentials.Items.Accessories
         public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ItemID.ExtendoGrip);
-            recipe.AddIngredient(ItemID.Toolbelt);
             recipe.AddTile(TileID.Anvils);
             recipe.SetResult(this);
             recipe.AddRecipe();
@@ -162,11 +160,60 @@ namespace BuilderEssentials.Items.Accessories
                 upgradeRecipe.SetResult(this);
                 upgradeRecipe.AddRecipe();
             }
-
-            //TODO: Come up with ugprades recipes
-            // recipe = new ModRecipe(mod);
-            // recipe.SetResult(upgradeItemTypes[0]);
-            // recipe.AddRecipe();
+            
+            //Recipes probably aren't very balanced
+            
+            //Fast Placement
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.BrickLayer);
+            recipe.AddIngredient(ItemID.PortableCementMixer);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(upgradeItemTypes[0]);
+            recipe.AddRecipe();
+            
+            //Infinite Placement Range
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.ExtendoGrip);
+            recipe.AddIngredient(ItemID.Toolbelt);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(upgradeItemTypes[1]);
+            recipe.AddRecipe();
+            
+            //Infinite Player Range (should be much harder and late game)
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.SoulofMight, 15);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.SetResult(upgradeItemTypes[2]);
+            recipe.AddRecipe();
+            
+            //Placement Anywhere (Late Pre HM or Early HM)
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.Pwnhammer);
+            recipe.AddIngredient(ItemID.BuilderPotion, 5);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(upgradeItemTypes[3]);
+            recipe.AddRecipe();
+            
+            //Infinite Placement (Mid HM)
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.TempleKey, 3);
+            recipe.AddIngredient(ItemID.LihzahrdPowerCell, 5);
+            recipe.AddTile(TileID.AdamantiteForge);
+            recipe.SetResult(upgradeItemTypes[4]);
+            recipe.AddRecipe();
+            
+            //Infinite Pickup Range (Mid Pre HM)
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.DemoniteOre, 20);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(upgradeItemTypes[5]);
+            recipe.AddRecipe();
+            
+            recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.CrimtaneOre, 20);
+            recipe.AddTile(TileID.Anvils);
+            recipe.SetResult(upgradeItemTypes[5]);
+            recipe.AddRecipe();
         }
     }
 }
