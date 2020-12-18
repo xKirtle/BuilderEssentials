@@ -62,7 +62,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
                 PlotLine(x1, y0 + direction, x1, y1 - direction); //right
             }
         }
-        
+
         public int SelectedQuarter(int x0, int y0, int x1, int y1)
         {
             //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;

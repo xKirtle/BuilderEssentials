@@ -68,6 +68,10 @@ namespace BuilderEssentials.UI.UIStates
             EllipseShape ellipseShape = new EllipseShape();
             Instance.Append(ellipseShape);
             ellipseShape.Show();
+
+            BezierCurve bezierCurve = new BezierCurve();
+            Instance.Append(bezierCurve);
+            bezierCurve.Show();
         }
 
         public override void Update(GameTime gameTime)
