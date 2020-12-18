@@ -119,8 +119,6 @@ namespace BuilderEssentials.Utilities
         internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false,
             bool sync = true, int placeStyle = -1)
         {
-            //TODO: MAKE DIRECTIONAL TILES BE PLACED ACCORDING TO PLAYER DIRECTION
-
             if (type == 0 || !ValidTileCoordinates(i, j))
                 return new Tile();
 
@@ -297,7 +295,7 @@ namespace BuilderEssentials.Utilities
 
         internal static void ChangeTileFraming(int i, int j, bool alternate)
         {
-            //TODO: Statues are moving one tile to the right?
+            //TODO: Statues are moving one tile to the right
             
             if (!ValidTileCoordinates(i, j)) return;
             Tile tile = Framing.GetTileSafely(i, j);

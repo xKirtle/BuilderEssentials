@@ -33,9 +33,7 @@ namespace BuilderEssentials.Utilities
         public override void PlaceInWorld(int i, int j, Item item)
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
-
             HelperMethods.MirrorPlacement(i, j, item.type);
-
             if (!mp.PlacementAnywhere) return;
 
             //I'm hardcoding this since vanilla also hardcodes their shitty frameX changes

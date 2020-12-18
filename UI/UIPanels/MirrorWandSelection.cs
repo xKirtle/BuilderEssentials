@@ -48,8 +48,6 @@ namespace BuilderEssentials.UI.UIPanels
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //TODO: Figure out a good way to know when to draw
-
             //Should I move this to Update()?
             cs.UpdateCoords();
 
