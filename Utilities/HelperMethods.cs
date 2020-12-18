@@ -295,16 +295,17 @@ namespace BuilderEssentials.Utilities
 
         internal static void ChangeTileFraming(int i, int j, bool alternate)
         {
+            //TODO: Statues are moving one tile to the right?
+            
             if (!ValidTileCoordinates(i, j)) return;
             Tile tile = Framing.GetTileSafely(i, j);
             TileObjectData data = TileObjectData.GetTileData(tile);
+            
             int[] directionFraming = new int[]
             { TileID.Chairs, TileID.Bathtubs, TileID.Beds, TileID.Mannequin, TileID.Womannequin };
             if (!directionFraming.Contains(tile.type) || data == null) return;
 
             Vector2 topLeft = new Vector2(Player.tileTargetX, Player.tileTargetY) - data.Origin.ToVector2();
-            Vector2 bottomLeft = topLeft + new Vector2(0, data.CoordinateFullHeight / 18 - 1);
-
             int fullWidth = data.CoordinateFullWidth / 18;
             int fullHeight = data.CoordinateFullHeight / 18;
             int style = TileObjectData.GetTileStyle(tile);
@@ -322,62 +323,10 @@ namespace BuilderEssentials.Utilities
                 for (int l = 0; l < fullHeight; l++)
                 {
                     Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
-                    tempTile.frameX = (short) (18 * fullWidth * Convert.ToInt32(alternate) + 18 * k); //Bool to int conversion returns 0 if alternate == true
+                    tempTile.frameX = (short) (18 * fullWidth * Convert.ToInt32(alternate) + 18 * k);
                     tempTile.frameY = (short) (magicNumber * style + l * 18);
                     Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
                 }
-            }
-            
-            //-----------------------------WORKING STUFF BELOW---------------------------------
-            //WORKS FOR BEDS AND BATHTUBS (36)
-            // for (int k = 0; k < fullWidth; k++)
-            // {
-            //     for (int l = 0; l < fullHeight; l++)
-            //     {
-            //         Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
-            //         tempTile.frameX = (short) (18 * fullWidth * 0 + 18 * k); //0 could be the !alternate value
-            //         tempTile.frameY = (short) (magicNumber * style + l * 18);
-            //         Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
-            //     }
-            // }
-            
-            //WORKS FOR CHAIRS (40)
-            // for (int k = 0; k < fullWidth; k++)
-            // {
-            //     for (int l = 0; l < fullHeight; l++)
-            //     {
-            //         Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
-            //         tempTile.frameX = (short)(18 + 18 * k); //don't include first 18 if facing left
-            //         tempTile.frameY = (short) (magicNumnber * style + l * 18);
-            //         Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
-            //     }
-            // }
-            
-            //WORKS FOR MANNEQUINS (54)
-            // for (int k = 0; k < fullWidth; k++)
-            // {
-            //     for (int l = 0; l < fullHeight; l++)
-            //     {
-            //         Tile tempTile = Framing.GetTileSafely((int) (topLeft.X + k), (int) (topLeft.Y + l));
-            //         tempTile.frameX = (short)(18 * fullWidth + 18 * k); //don't include first 18 if facing left
-            //         tempTile.frameY = (short) (magicNumber * style + l * 18);
-            //         Main.tile[(int) (topLeft.X + k), (int) (topLeft.Y + l)] = tempTile;
-            //     }
-            // }
-        }
-
-        internal static void printMultiTileInfo(Vector2 _topLeft, TileObjectData _data)
-        {
-            for (int l = 0; l < _data.CoordinateFullHeight / 18; l++)
-            {
-                string tempText = "";
-                for (int k = 0; k < _data.CoordinateFullWidth / 18; k++)
-                {
-                    Tile tempTile = Framing.GetTileSafely((int) (_topLeft.X + k), (int) (_topLeft.Y + l));
-                    tempText += $"[{tempTile.frameX}/{tempTile.frameY}] ";
-                }
-
-                Main.NewText(tempText);
             }
         }
 
