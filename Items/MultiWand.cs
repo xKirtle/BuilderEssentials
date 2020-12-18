@@ -15,7 +15,7 @@ namespace BuilderEssentials.Items
         private Point toolRange;
         private bool canPlaceItems;
 
-        public static int[] wandTypes = new int[]
+        public static int[] wandTypes =
         {
             ItemID.LivingWoodWand, 
             ItemID.BoneWand, 

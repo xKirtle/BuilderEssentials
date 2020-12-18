@@ -39,7 +39,6 @@ namespace BuilderEssentials
 
         public override void PostUpdateEquips()
         {
-            //TODO: tileRangeX/Y does not work for wall placements
             Player.tileRangeX = InfinitePlayerRange ? Main.screenWidth / 16 / 2 + 5 : 5;
             Player.tileRangeY = InfinitePlayerRange ? Main.screenHeight / 16 / 2 + 4 : 4;
             player.blockRange = InfinitePlacementRange ? Main.screenWidth / 16 / 2 + 5 : 0;
