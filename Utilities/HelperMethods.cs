@@ -65,9 +65,19 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             if (mp.InfinitePlacement) return true;
-            
+
             bool reducingWand = MultiWand.wandTypes.Contains(itemType);
             int materialType = reducingWand ? MultiWand.wandMaterials[Array.IndexOf(MultiWand.wandTypes, itemType)] : 0;
+
+            //Checking heldItem first before looping through the inventory
+            if (!reducingWand &&
+                Main.LocalPlayer.HeldItem.type == itemType &&
+                Main.LocalPlayer.HeldItem.stack >= amount)
+            {
+                if (reduceStack)
+                    Main.LocalPlayer.HeldItem.stack -= amount;
+                return true;
+            }
 
             foreach (Item item in Main.LocalPlayer.inventory)
             {
@@ -76,11 +86,11 @@ namespace BuilderEssentials.Utilities
                 {
                     if (reduceStack)
                         item.stack -= amount;
-                    
+
                     return true;
                 }
             }
-            
+
             return false;
         }
 
@@ -296,20 +306,20 @@ namespace BuilderEssentials.Utilities
         internal static void ChangeTileFraming(int i, int j, bool alternate)
         {
             //TODO: Statues are moving one tile to the right
-            
+
             if (!ValidTileCoordinates(i, j)) return;
             Tile tile = Framing.GetTileSafely(i, j);
             TileObjectData data = TileObjectData.GetTileData(tile);
-            
+
             int[] directionFraming = new int[]
-            { TileID.Chairs, TileID.Bathtubs, TileID.Beds, TileID.Mannequin, TileID.Womannequin };
+                {TileID.Chairs, TileID.Bathtubs, TileID.Beds, TileID.Mannequin, TileID.Womannequin};
             if (!directionFraming.Contains(tile.type) || data == null) return;
 
             Vector2 topLeft = new Vector2(Player.tileTargetX, Player.tileTargetY) - data.Origin.ToVector2();
             int fullWidth = data.CoordinateFullWidth / 18;
             int fullHeight = data.CoordinateFullHeight / 18;
             int style = TileObjectData.GetTileStyle(tile);
-            
+
             int magicNumber = 0;
             if (tile.type == TileID.Beds || tile.type == TileID.Bathtubs)
                 magicNumber = 36;
@@ -317,7 +327,7 @@ namespace BuilderEssentials.Utilities
                 magicNumber = 54;
             else if (tile.type == TileID.Chairs)
                 magicNumber = 40;
-            
+
             for (int k = 0; k < fullWidth; k++)
             {
                 for (int l = 0; l < fullHeight; l++)
@@ -531,7 +541,7 @@ namespace BuilderEssentials.Utilities
             else
                 return (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
         }
-        
+
         internal static float X(float t, float x0, float x1, float x2)
         {
             return (float) (

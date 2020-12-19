@@ -15,13 +15,9 @@ namespace BuilderEssentials.Utilities
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             Item heldItem = mp.player.HeldItem;
-
-            //TODO: FIX THESE 2 IF CONDITIONS (REMOVING FROM THE WRONG STACK WHEN PLACING ITEMS);
-            if (HelperMethods.ValidTilePlacement(i, j) || mp.InfinitePlacement)
+            
+            if ((mp.PlacementAnywhere || mp.InfinitePlacement) && HelperMethods.ValidTilePlacement(i, j))
             {
-                if (mp.InfinitePlacement && !HelperMethods.ValidTilePlacement(i, j))
-                    return false;
-                
                 HelperMethods.PlaceTile(i, j, heldItem.type, true);
                 PlaceInWorld(i, j, heldItem);
                 return false;
@@ -57,7 +53,6 @@ namespace BuilderEssentials.Utilities
         {
             item.consumable = !Main.LocalPlayer.GetModPlayer<BEPlayer>().InfinitePlacement;
             HelperMethods.MirrorPlacement(i, j, item.type);
-            //base.PlaceInWorld(i, j, type, item);
         }
     }
 }
