@@ -98,7 +98,7 @@ namespace BuilderEssentials.Utilities
             }
         }
 
-        public void UpdateCoords()
+        public void UpdateCoords(bool bezierSelection = false)
         {
             if (Main.LocalPlayer.HeldItem.type != itemType)
             { RMBDown = LMBDown = MMBDown = false; return; }
@@ -112,6 +112,9 @@ namespace BuilderEssentials.Utilities
             if (MMBDown)
                 MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
+            if (bezierSelection && LMBDown && LMBStart != RMBEnd)
+                RMBEnd = LMBStart;
+            
             shiftDown = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
             if (!shiftDown) return;
             
