@@ -5,6 +5,7 @@ using BuilderEssentials.Items;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -33,6 +34,9 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
         
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //Prevents drawing and coord updates if Improved Ruler is not equipped
+            if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().ImprovedRulerEquipped) return;
+            
             cs.UpdateCoords(true);
             color = Blue;
             

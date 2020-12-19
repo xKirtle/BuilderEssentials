@@ -22,10 +22,13 @@ namespace BuilderEssentials
         public bool PlacementAnywhere { get; set; }
         public bool InfinitePickupRange { get; set; }
 
+        public bool ImprovedRulerEquipped;
+
         public override void ResetEffects()
         {
-            InfinitePlacementRange = InfinitePlayerRange = FastPlacement 
-                = InfinitePlacement = PlacementAnywhere = InfinitePickupRange = false;
+            InfinitePlacementRange = InfinitePlayerRange = FastPlacement
+                = InfinitePlacement = PlacementAnywhere = InfinitePickupRange 
+                    = ImprovedRulerEquipped = false;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -44,7 +47,8 @@ namespace BuilderEssentials
             player.blockRange = InfinitePlacementRange ? Main.screenWidth / 16 / 2 + 5 : 0;
             player.wallSpeed = FastPlacement ? player.wallSpeed + 10 : 1;
             player.tileSpeed = FastPlacement ? player.tileSpeed + 50 : 1;
-            Player.defaultItemGrabRange = InfinitePickupRange ? 1000000 : 38; //I have no idea how much it should be so that should suffice??
+            Player.defaultItemGrabRange =
+                InfinitePickupRange ? 1000000 : 38; //I have no idea how much it should be so that should suffice??
         }
 
         public override void OnEnterWorld(Player player)
