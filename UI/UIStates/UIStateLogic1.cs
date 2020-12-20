@@ -13,7 +13,7 @@ using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIStates
 {
-    public class UIStateLogic1 : UIState
+    public class UIStateLogic1 : UIState, ILoadable
     {
         public static UIStateLogic1 Instance;
         public static MultiWandWheel multiWandWheel;
@@ -91,19 +91,20 @@ namespace BuilderEssentials.UI.UIStates
             paintWheel?.UpdateColors();
         }
 
-        // public void Unload()
-        // {
-        //     multiWandWheel = null;
-        //     autoHammerWheel = null;
-        //     paintWheel = null;
-        //     fillWandSelection = null;
-        //     mirrorWandSelection = null;
-        //     arrowPanel = null;
-        //     menuPanel = null;
-        //     shapesDrawerSelection = null;
-        //     rectangleShape = null;
-        //     ellipseShape = null;
-        //     bezierCurve = null;
-        // }
+        public void Unload()
+        {
+            Instance = null;
+            multiWandWheel = null;
+            autoHammerWheel = null;
+            paintWheel = null;
+            fillWandSelection = null;
+            mirrorWandSelection = null;
+            arrowPanel = null;
+            menuPanel = null;
+            shapesDrawerSelection = null;
+            rectangleShape = null;
+            ellipseShape = null;
+            bezierCurve = null;
+        }
     }
 }

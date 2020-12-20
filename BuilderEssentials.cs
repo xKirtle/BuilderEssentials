@@ -17,6 +17,7 @@ namespace BuilderEssentials
 {
     public class BuilderEssentials : Mod
     {
+        internal static List<ILoadable> instances;
         internal static ModHotKey IncreaseFillToolSize;
         internal static ModHotKey DecreaseFillToolSize;
 
@@ -37,21 +38,20 @@ namespace BuilderEssentials
                 UIStateLogic4.Activate();
                 UserInterfaceLogic4.SetState(UIStateLogic4);
             }
-        }
 
+            instances = Code.GetTypes()
+                .Where(t => !t.IsInterface && typeof(ILoadable).IsAssignableFrom(t))
+                .Select(t => (ILoadable) Activator.CreateInstance(t))
+                .ToList();
+        }
+        
         public override void Unload()
         {
-            //TODO: UNLOAD ALL STATIC STUFF
-            
-            // var type = typeof(ILoadable);
-            // var types = AppDomain.CurrentDomain.GetAssemblies()
-            //     .SelectMany(s => s.GetTypes())
-            //     .Where(p => type.IsAssignableFrom(p));
-            //
-            // foreach (var t in types)
-            // {
-            //
-            // }
+            foreach (ILoadable t in instances)
+                t.Unload();
+
+            IncreaseFillToolSize = DecreaseFillToolSize = null;
+            instances = null;
         }
 
         internal UserInterface UserInterfaceLogic1;

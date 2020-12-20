@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.Utilities;
 using Terraria.ID;
 using Terraria;
 using Microsoft.Xna.Framework;
@@ -8,7 +9,7 @@ using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIStates
 {
-    public class UIStateLogic4 : UIState
+    public class UIStateLogic4 : UIState, ILoadable
     {
         public static UIStateLogic4 Instance;
         public static WrenchUpgradeButtons wrenchUpgrades;
@@ -25,6 +26,12 @@ namespace BuilderEssentials.UI.UIStates
         {
             base.Update(gameTime);
             wrenchUpgrades?.Update();
+        }
+
+        public void Unload()
+        {
+            Instance = null;
+            wrenchUpgrades = null;
         }
     }
 }

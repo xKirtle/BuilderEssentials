@@ -28,18 +28,18 @@ namespace BuilderEssentials.Items.Upgrades
 
         public override bool CloneNewInstances => true;
 
+        string[] itemNames =
+        {
+            "FastPlacement", 
+            "InfinitePlacementRange", 
+            "InfinitePlayerRange", 
+            "PlacementAnywhere", 
+            "InfinitePlacement",
+            "InfinitePickupRange"
+        };
+        
         public override bool Autoload(ref string name)
         {
-            string[] itemNames =
-            {
-                "FastPlacement", 
-                "InfinitePlacementRange", 
-                "InfinitePlayerRange", 
-                "PlacementAnywhere", 
-                "InfinitePlacement",
-                "InfinitePickupRange"
-            };
-            
             for (int i = 0; i < HelperMethods.WrenchUpgrade.UpgradesCount.ToInt(); i++)
                 mod.AddItem(itemNames[i] + "Upgrade", new WrenchItemUpgrade(i));
 
