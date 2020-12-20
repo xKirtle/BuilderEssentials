@@ -206,7 +206,8 @@ namespace BuilderEssentials.UI.UIPanels
             {
                 if (!colorAvailable[i] && !mp.infinitePaintBucketEquipped)
                 {
-                    Append(noPaintOverlay[i]);
+                    //Append(noPaintOverlay[i]);
+                    noPaintOverlay[i].Show();
                     if (colorIndex == i)
                     {
                         colorElements[colorIndex].SetVisibility(1f, 0.85f);
@@ -214,7 +215,11 @@ namespace BuilderEssentials.UI.UIPanels
                         colorIndex = -1;
                     }
                 }
-                else noPaintOverlay[i].Hide();
+                else if (colorAvailable[i] || mp.infinitePaintBucketEquipped)
+                {
+                    colorAvailable[i] = true;
+                    noPaintOverlay[i].Hide();
+                }
             }
         }
 
