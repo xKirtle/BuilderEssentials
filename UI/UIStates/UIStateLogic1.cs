@@ -24,6 +24,9 @@ namespace BuilderEssentials.UI.UIStates
         public static ArrowPanel arrowPanel;
         public static MenuPanel menuPanel;
         public static ShapesDrawerSelection shapesDrawerSelection;
+        public static RectangleShape rectangleShape;
+        public static EllipseShape ellipseShape;
+        public static BezierCurve bezierCurve;
 
         public override void OnInitialize()
         {
@@ -61,15 +64,15 @@ namespace BuilderEssentials.UI.UIStates
             Instance.Append(shapesDrawerSelection);
             shapesDrawerSelection.Show();
 
-            RectangleShape rectangleShape = new RectangleShape();
+            rectangleShape = new RectangleShape();
             Instance.Append(rectangleShape);
             rectangleShape.Show();
             
-            EllipseShape ellipseShape = new EllipseShape();
+            ellipseShape = new EllipseShape();
             Instance.Append(ellipseShape);
             ellipseShape.Show();
 
-            BezierCurve bezierCurve = new BezierCurve();
+            bezierCurve = new BezierCurve();
             Instance.Append(bezierCurve);
             bezierCurve.Show();
         }
@@ -87,5 +90,20 @@ namespace BuilderEssentials.UI.UIStates
             base.Draw(spriteBatch);
             paintWheel?.UpdateColors();
         }
+
+        // public void Unload()
+        // {
+        //     multiWandWheel = null;
+        //     autoHammerWheel = null;
+        //     paintWheel = null;
+        //     fillWandSelection = null;
+        //     mirrorWandSelection = null;
+        //     arrowPanel = null;
+        //     menuPanel = null;
+        //     shapesDrawerSelection = null;
+        //     rectangleShape = null;
+        //     ellipseShape = null;
+        //     bezierCurve = null;
+        // }
     }
 }
