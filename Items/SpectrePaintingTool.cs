@@ -32,7 +32,7 @@ namespace BuilderEssentials.Items
             item.useAnimation = 1;
             item.useTurn = true;
             item.useStyle = ItemUseStyleID.HoldingOut;
-            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.value = Item.buyPrice(0, 0, 80, 0);
             item.rare = ItemRarityID.Red;
             item.autoReuse = true;
             toolRange = new Point(8, 8);
@@ -76,7 +76,7 @@ namespace BuilderEssentials.Items
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             PaintWheel panel = UIStateLogic1.paintWheel;
             byte selectedColor = (byte) (panel.colorIndex + 1);
-            bool infPaintBucket = panel.infPaintBucket;
+            bool infPaintBucket = mp.infinitePaintBucketEquipped;
 
             switch (panel.toolIndex)
             {

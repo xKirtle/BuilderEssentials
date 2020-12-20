@@ -15,9 +15,9 @@ namespace BuilderEssentials.Items.Upgrades
         {
             item.width = 38;
             item.height = 38;
-            item.value = Item.sellPrice(0, 10, 0, 0);
+            item.value = Item.sellPrice(0, 0, 0, 0);
             item.rare = ItemRarityID.Red;
-        }
+        }    
 
         public WrenchItemUpgrade() { }
 

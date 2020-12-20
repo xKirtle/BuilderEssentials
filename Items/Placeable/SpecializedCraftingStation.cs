@@ -1,4 +1,5 @@
-﻿using Terraria.ID;
+﻿using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 
@@ -20,7 +21,7 @@ namespace BuilderEssentials.Items.Placeable
             item.useTime = 10;
             item.useStyle = ItemUseStyleID.SwingThrow;
             item.consumable = true;
-            item.value = 150;
+            item.value = Item.sellPrice(0, 5, 0, 0);
             item.createTile = TileType<Tiles.SpecializedCraftingStation>();
             item.rare = ItemRarityID.Red;
         }

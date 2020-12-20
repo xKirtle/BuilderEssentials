@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BuilderEssentials.UI.UIPanels
 {
+    //TODO: Paint wheel is not updating red crosses correctly, specifically after having a color, dropping it out and picking it back up
     public class PaintWheel : CustomUIPanel
     {
         private const float width = 430f, height = 340f;
@@ -25,7 +26,6 @@ namespace BuilderEssentials.UI.UIPanels
         private bool[] colorAvailable;
         private bool elementHovered;
         private int[] paints;
-        public bool infPaintBucket;
         public int colorIndex = -1;
         public int toolIndex;
 
@@ -168,7 +168,8 @@ namespace BuilderEssentials.UI.UIPanels
 
         private void ColorSelected(int index)
         {
-            if (!colorAvailable[index] && !infPaintBucket) return;
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+            if (!colorAvailable[index] && !mp.infinitePaintBucketEquipped) return;
 
             for (int i = 0; i < colorElements.Length; i++)
                 colorElements[i].SetVisibility(1f, 0.85f);
@@ -198,11 +199,12 @@ namespace BuilderEssentials.UI.UIPanels
 
         private void UpdateCrossesOnColors()
         {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
             EvaluateAvailableColorsInInventory();
 
             for (int i = 0; i < noPaintOverlay.Length; i++)
             {
-                if (!colorAvailable[i] && !infPaintBucket)
+                if (!colorAvailable[i] && !mp.infinitePaintBucketEquipped)
                 {
                     Append(noPaintOverlay[i]);
                     if (colorIndex == i)
@@ -260,8 +262,6 @@ namespace BuilderEssentials.UI.UIPanels
 
             if (elementHovered)
                 Main.LocalPlayer.mouseInterface = true;
-
-            infPaintBucket = false;
         }
 
         public override void Show()

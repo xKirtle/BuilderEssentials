@@ -21,14 +21,23 @@ namespace BuilderEssentials.Items.Accessories
             item.vanity = false;
             item.width = 42;
             item.height = 42;
-            item.value = Item.sellPrice(0, 10, 0, 0);
+            item.value = Item.sellPrice(0, 0, 10, 0);
             item.rare = ItemRarityID.Red;
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            player.GetModPlayer<BEPlayer>().ImprovedRulerEquipped = true;
+            player.GetModPlayer<BEPlayer>().improvedRulerEquipped = true;
+        }
+
+        public override void AddRecipes()
+        {
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ItemID.Ruler);
+            recipe.AddTile(TileID.TinkerersWorkbench);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }

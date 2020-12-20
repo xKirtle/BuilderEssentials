@@ -22,13 +22,14 @@ namespace BuilderEssentials
         public bool PlacementAnywhere { get; set; }
         public bool InfinitePickupRange { get; set; }
 
-        public bool ImprovedRulerEquipped;
-
+        public bool improvedRulerEquipped;
+        public bool infinitePaintBucketEquipped;
+        
         public override void ResetEffects()
         {
             InfinitePlacementRange = InfinitePlayerRange = FastPlacement
                 = InfinitePlacement = PlacementAnywhere = InfinitePickupRange 
-                    = ImprovedRulerEquipped = false;
+                    = improvedRulerEquipped = infinitePaintBucketEquipped = false;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)

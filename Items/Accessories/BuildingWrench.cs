@@ -17,6 +17,7 @@ namespace BuilderEssentials.Items.Accessories
 {
     public class BuildingWrench : ModItem
     {
+        //TODO: SAVE ENABLED UPGRADES
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/BuildingWrench";
         public List<bool> upgrades;
         public List<bool> unlockedUpgrades;
@@ -27,7 +28,7 @@ namespace BuilderEssentials.Items.Accessories
             item.vanity = false;
             item.width = 48;
             item.height = 48;
-            item.value = Item.sellPrice(0, 10, 0, 0);
+            item.value = Item.sellPrice(0, 0, 20, 0);
             item.rare = ItemRarityID.Red;
             if (upgrades == null) upgrades = Enumerable.Repeat(false, WrenchUpgrade.UpgradesCount.ToInt()).ToList();
             if (unlockedUpgrades == null)

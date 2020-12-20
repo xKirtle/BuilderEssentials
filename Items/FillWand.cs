@@ -38,7 +38,7 @@ namespace BuilderEssentials.Items
             item.useTime = 10;
             item.useAnimation = 10;
             item.useStyle = ItemUseStyleID.HoldingOut;
-            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.value = Item.buyPrice(0, 1, 40, 0);
             item.rare = ItemRarityID.Red;
             item.autoReuse = true;
             item.noMelee = true;

@@ -35,7 +35,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Prevents drawing and coord updates if Improved Ruler is not equipped
-            if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().ImprovedRulerEquipped) return;
+            if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().improvedRulerEquipped) return;
             
             cs.UpdateCoords(true);
             color = Blue;

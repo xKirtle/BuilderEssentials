@@ -16,7 +16,7 @@ namespace BuilderEssentials.Items
             item.width = 18;
             item.useTime = 1;
             item.useAnimation = 10;
-            item.value = Item.buyPrice(0, 10, 0, 0);
+            item.value = Item.buyPrice(0, 3, 0, 0);
             item.rare = ItemRarityID.Red;
             item.UseSound = SoundID.Item1;
             item.autoReuse = false;
@@ -31,7 +31,7 @@ namespace BuilderEssentials.Items
             if (player.whoAmI != Main.myPlayer) return;
 
             base.UpdateInventory(player);
-            UIStateLogic1.paintWheel.infPaintBucket = true;
+            player.GetModPlayer<BEPlayer>().infinitePaintBucketEquipped = true;
         }
 
         public override void AddRecipes()

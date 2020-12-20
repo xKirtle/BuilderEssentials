@@ -212,7 +212,6 @@ namespace BuilderEssentials.Utilities
         {
             if (!ValidTileCoordinates(i, j)) return;
 
-            int number = -1;
             if (dropItem)
             {
                 Tile tile = Framing.GetTileSafely(i, j);
@@ -230,7 +229,7 @@ namespace BuilderEssentials.Utilities
                 if (itemToDrop != -1 && (item.createTile == tile.type || item.createWall == tile.type) &&
                     tile.active() && Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    number = Item.NewItem(i * 16, j * 16, 16, 16, itemToDrop, 1, false, -1, false, false);
+                    int number = Item.NewItem(i * 16, j * 16, 16, 16, itemToDrop, 1, false, -1, false, false);
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 0f, 0f, 0f, 0, 0, 0);
                 }
             }
@@ -281,7 +280,6 @@ namespace BuilderEssentials.Utilities
                 //If data != null, is multi tile. Prevents more than one drop per multi tile
                 if (data != null)
                 {
-                    Point16 topLeft = new Point16(i, j) - data.Origin;
                     for (int k = 0; k < data.CoordinateFullWidth / 18; k++)
                     for (int l = 0; l < data.CoordinateFullHeight / 18; l++)
                         multiTileCoords.Add(new Point16(k, l));

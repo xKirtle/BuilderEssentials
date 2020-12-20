@@ -1,7 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
+using Mono.CompilerServices.SymbolWriter;
+using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -34,6 +39,21 @@ namespace BuilderEssentials
             }
         }
 
+        public override void Unload()
+        {
+            //TODO: UNLOAD ALL STATIC STUFF
+            
+            // var type = typeof(ILoadable);
+            // var types = AppDomain.CurrentDomain.GetAssemblies()
+            //     .SelectMany(s => s.GetTypes())
+            //     .Where(p => type.IsAssignableFrom(p));
+            //
+            // foreach (var t in types)
+            // {
+            //
+            // }
+        }
+
         internal UserInterface UserInterfaceLogic1;
         internal UIStateLogic1 UIStateLogic1;
         internal UserInterface UserInterfaceLogic4;
@@ -43,7 +63,7 @@ namespace BuilderEssentials
         public override void UpdateUI(GameTime gameTime)
         {
             lastUpdateUIGameTime = gameTime;
-            
+
             if (UserInterfaceLogic1?.CurrentState != null)
                 UserInterfaceLogic1.Update(gameTime);
             if (UserInterfaceLogic4?.CurrentState != null)
@@ -67,7 +87,7 @@ namespace BuilderEssentials
                     },
                     InterfaceScaleType.UI));
             }
-            
+
             interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Cursor"));
             if (interfaceLayer != -1)
             {
@@ -143,7 +163,7 @@ namespace BuilderEssentials
 
             int[] hardmodeAnvils = {ItemID.MythrilAnvil, ItemID.OrichalcumAnvil};
             HelperMethods.CreateRecipeGroup(hardmodeAnvils, "Hardmode Anvil");
-            
+
             int[] alchemy =
             {
                 ItemID.Bottle, ItemID.PinkVase, ItemID.PinkDungeonVase, ItemID.Mug,
