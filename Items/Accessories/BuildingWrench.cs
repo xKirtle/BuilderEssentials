@@ -17,7 +17,6 @@ namespace BuilderEssentials.Items.Accessories
 {
     public class BuildingWrench : ModItem
     {
-        //TODO: SAVE ENABLED UPGRADES
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/BuildingWrench";
         public List<bool> upgrades;
         public List<bool> unlockedUpgrades;
@@ -40,8 +39,6 @@ namespace BuilderEssentials.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            BEPlayer mp = player.GetModPlayer<BEPlayer>();
-
             UIStateLogic4.wrenchUpgrades.UpdateUpgrades(player, ref upgrades, ref unlockedUpgrades);
             UIStateLogic4.wrenchUpgrades.Show();
         }
@@ -49,7 +46,6 @@ namespace BuilderEssentials.Items.Accessories
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            BEPlayer mp = player.GetModPlayer<BEPlayer>();
             UIStateLogic4.wrenchUpgrades.Hide();
         }
 
