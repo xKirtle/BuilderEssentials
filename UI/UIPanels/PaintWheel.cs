@@ -13,7 +13,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BuilderEssentials.UI.UIPanels
 {
-    //TODO: Paint wheel is not updating red crosses correctly, specifically after having a color, dropping it out and picking it back up
     public class PaintWheel : CustomUIPanel
     {
         private const float width = 430f, height = 340f;
@@ -28,10 +27,6 @@ namespace BuilderEssentials.UI.UIPanels
         private int[] paints;
         public int colorIndex = -1;
         public int toolIndex;
-
-        //multiply tool index pos by isSpectre + index? 0-2 && 3-5 
-
-        //Public method to specify whether it's spectre opening the menu or not?
 
         public PaintWheel(float scale = 1f, float opacity = 1f)
         {
