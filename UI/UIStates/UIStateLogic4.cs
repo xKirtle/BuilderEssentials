@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.UI.UIPanels.ShapesMenu;
 using BuilderEssentials.Utilities;
 using Terraria.ID;
 using Terraria;
@@ -13,6 +14,8 @@ namespace BuilderEssentials.UI.UIStates
     {
         public static UIStateLogic4 Instance;
         public static WrenchUpgradeButtons wrenchUpgrades;
+        public static ArrowPanel arrowPanel;
+        public static MenuPanel menuPanel;
         public override void OnInitialize()
         {
             Instance = this;
@@ -20,6 +23,14 @@ namespace BuilderEssentials.UI.UIStates
             wrenchUpgrades = new WrenchUpgradeButtons();
             Instance.Append(wrenchUpgrades);
             wrenchUpgrades.Hide();
+            
+            arrowPanel = new ArrowPanel();
+            Instance.Append(arrowPanel);
+            arrowPanel.Hide();
+            
+            menuPanel = new MenuPanel();
+            Instance.Append(menuPanel);
+            menuPanel.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -32,6 +43,8 @@ namespace BuilderEssentials.UI.UIStates
         {
             Instance = null;
             wrenchUpgrades = null;
+            arrowPanel = null;
+            menuPanel = null;
         }
     }
 }

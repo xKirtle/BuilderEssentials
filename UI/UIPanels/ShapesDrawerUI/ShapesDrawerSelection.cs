@@ -16,7 +16,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
         public ShapesDrawerSelection()
         {
             cs = new CoordsSelection(ModContent.ItemType<ShapesDrawer>());
-            selected = UIStateLogic1.menuPanel.selected;
+            selected = UIStateLogic4.menuPanel.selected;
         }
 
         public override void DrawRectangle(int x, int y)

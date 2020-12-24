@@ -31,7 +31,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             CustomUIImage closeCross = new CustomUIImage(closeCrossTexture, 1f);
             closeCross.SetSize(19f, 19f);
             closeCross.SetOffset(MenuWidth - 35f, -7f);
-            closeCross.OnMouseDown += (__, _) => { Hide(); UIStateLogic1.arrowPanel.Show(); };
+            closeCross.OnMouseDown += (__, _) => { Hide(); UIStateLogic4.arrowPanel.Show(); };
             Append(closeCross);
 
 

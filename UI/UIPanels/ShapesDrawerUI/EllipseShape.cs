@@ -12,7 +12,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesDrawerUI
     {
         public void PlotEllipse(int x0, int y0, int x1, int y1)
         {
-            bool[] selected = UIStateLogic1.menuPanel.selected;
+            bool[] selected = UIStateLogic4.menuPanel.selected;
             bool quadOne = (selected[4] && selected[5]) || (selected[3] && !selected[5]);
             bool quadTwo = (selected[4] && !selected[5]) || (selected[3] && !selected[5]);
             bool quadThree = (selected[3] && selected[5]) || (selected[4] && !selected[5]);

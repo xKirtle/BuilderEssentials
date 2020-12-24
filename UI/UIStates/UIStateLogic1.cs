@@ -21,8 +21,6 @@ namespace BuilderEssentials.UI.UIStates
         public static PaintWheel paintWheel;
         public static FillWandSelection fillWandSelection;
         public static MirrorWandSelection mirrorWandSelection;
-        public static ArrowPanel arrowPanel;
-        public static MenuPanel menuPanel;
         public static ShapesDrawerSelection shapesDrawerSelection;
         public static RectangleShape rectangleShape;
         public static EllipseShape ellipseShape;
@@ -51,15 +49,7 @@ namespace BuilderEssentials.UI.UIStates
             mirrorWandSelection = new MirrorWandSelection();
             Instance.Append(mirrorWandSelection);
             mirrorWandSelection.Show();
-            
-            arrowPanel = new ArrowPanel();
-            Instance.Append(arrowPanel);
-            arrowPanel.Show();
-            
-            menuPanel = new MenuPanel();
-            Instance.Append(menuPanel);
-            menuPanel.Hide();
-            
+
             shapesDrawerSelection = new ShapesDrawerSelection();
             Instance.Append(shapesDrawerSelection);
             shapesDrawerSelection.Show();
@@ -99,8 +89,6 @@ namespace BuilderEssentials.UI.UIStates
             paintWheel = null;
             fillWandSelection = null;
             mirrorWandSelection = null;
-            arrowPanel = null;
-            menuPanel = null;
             shapesDrawerSelection = null;
             rectangleShape = null;
             ellipseShape = null;

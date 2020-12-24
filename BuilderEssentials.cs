@@ -28,15 +28,15 @@ namespace BuilderEssentials
 
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
-                UserInterfaceLogic1 = new UserInterface();
-                UIStateLogic1 = new UIStateLogic1();
-                UIStateLogic1.Activate();
-                UserInterfaceLogic1.SetState(UIStateLogic1);
-
                 UserInterfaceLogic4 = new UserInterface();
                 UIStateLogic4 = new UIStateLogic4();
                 UIStateLogic4.Activate();
                 UserInterfaceLogic4.SetState(UIStateLogic4);
+                
+                UserInterfaceLogic1 = new UserInterface();
+                UIStateLogic1 = new UIStateLogic1();
+                UIStateLogic1.Activate();
+                UserInterfaceLogic1.SetState(UIStateLogic1);
             }
 
             instances = Code.GetTypes()
@@ -85,7 +85,7 @@ namespace BuilderEssentials
 
                         return true;
                     },
-                    InterfaceScaleType.UI));
+                    InterfaceScaleType.Game));
             }
 
             interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Cursor"));

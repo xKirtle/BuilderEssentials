@@ -1,5 +1,7 @@
-﻿using BuilderEssentials.UI.Elements;
+﻿using System;
+using BuilderEssentials.UI.Elements;
 using BuilderEssentials.UI.UIStates;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
@@ -9,7 +11,8 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
     public class ArrowPanel : CustomUIPanel
     {
         private const float ArrowWidth = 30f, ArrowHeight = 44f;
-
+        private CustomUIImage arrowPanelImg;
+        
         public ArrowPanel()
         {
             SetSize(ArrowWidth, ArrowHeight);
@@ -17,10 +20,10 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             Top.Set(Main.screenHeight / 2, 0);
             BorderColor = Microsoft.Xna.Framework.Color.Transparent;
             BackgroundColor = Microsoft.Xna.Framework.Color.Transparent;
-            OnMouseDown += (__, _) => { Hide(); UIStateLogic1.menuPanel.Show(); };
+            OnMouseDown += (__, _) => { Hide(); UIStateLogic4.menuPanel.Show(); };
 
             Texture2D texture = ModContent.GetTexture("BuilderEssentials/Textures/UIElements/ShapesMenu/ArrowPanel");
-            CustomUIImage arrowPanelImg = new CustomUIImage(texture, 1f);
+            arrowPanelImg = new CustomUIImage(texture, 1f);
             arrowPanelImg.Width.Set(texture.Width, 0);
             arrowPanelImg.Height.Set(texture.Height, 0);
             arrowPanelImg.Left.Set(3f, 0);

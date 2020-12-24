@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.ModContent;
 using static BuilderEssentials.UI.UIStates.UIStateLogic1;
+using static BuilderEssentials.UI.UIStates.UIStateLogic4;
 
 namespace BuilderEssentials.Items
 {
