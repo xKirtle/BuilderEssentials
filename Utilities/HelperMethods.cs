@@ -136,6 +136,9 @@ namespace BuilderEssentials.Utilities
             item.SetDefaults(type);
             Tile tile = Framing.GetTileSafely(i, j);
 
+            TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
+            if (data != null) return PlaceMultiTile(i, j, type, forced, sync, placeStyle);
+
             if ((itemTypes == HelperMethods.ItemTypes.Tile && tile.active() && tile.collisionType != -1) ||
                 (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall != 0) ||
                 !CanReduceItemStack(type, reduceStack: false))
@@ -166,7 +169,51 @@ namespace BuilderEssentials.Utilities
             //Attempts to mirror it in case there's a mirror wand selection
             HelperMethods.MirrorPlacement(i, j, item.type);
 
-            //TODO: Compensate for vanilla's wall auto placement?
+            //TODO: Compensate for vanilla's wall auto placement? (might want to make a separate PlaceWall for that) 
+
+            return Framing.GetTileSafely(i, j);
+        }
+
+        internal static Tile PlaceMultiTile(int i, int j, int itemType, bool forced = false, bool sync = true,
+            int placeStyle = -1)
+        {
+            Item item = new Item();
+            item.SetDefaults(itemType);
+            TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
+
+            Vector2 topLeft = new Vector2(i, j) - data.Origin.ToVector2();
+            int tileWidth = data.CoordinateFullWidth / 18;
+            int tileHeight = data.CoordinateFullHeight / 18;
+
+            if (!CanReduceItemStack(itemType, reduceStack: false))
+                return new Tile();
+            
+            for (int k = 0; k < tileWidth; k++)
+            for (int l = 0; l < tileHeight; l++)
+            {
+                Tile tempTile = Framing.GetTileSafely((int) topLeft.X + k, (int) topLeft.Y + l);
+                if (tempTile.active())
+                    return new Tile();
+            }
+
+            if (forced)
+            {
+                for (int k = 0; k < tileWidth; k++)
+                for (int l = 0; l < tileHeight; l++)
+                {
+                    Tile tempTile = Framing.GetTileSafely((int) topLeft.X + k, (int) topLeft.Y + l);
+                    if (tempTile.collisionType == -1 && tempTile.type != TileID.DemonAltar && tempTile.type != 21)
+                        RemoveTile(i, j, dropItem: false);
+                }
+            }
+
+            if (placeStyle == -1)
+                placeStyle = item.placeStyle;
+            WorldGen.PlaceTile(i, j, item.createTile, forced: forced, style: placeStyle);
+            CanReduceItemStack(itemType);
+            
+            if (sync && Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, i, j, 1);
 
             return Framing.GetTileSafely(i, j);
         }
