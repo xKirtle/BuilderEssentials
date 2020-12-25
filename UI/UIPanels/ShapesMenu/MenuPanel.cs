@@ -105,5 +105,11 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
                 elements[tempIndex].SetImage(ModContent.GetTexture(texture));
             }
         }
+        
+        public override void Update(GameTime gameTime)
+        {
+            //Fixing UI Scale positioning
+            Top.Set((Main.screenHeight - MenuHeight) / 2, 0);
+        }
     }
 }

@@ -21,10 +21,8 @@ namespace BuilderEssentials.UI.UIPanels
 
         public WrenchUpgradeButtons()
         {
-            Width.Set(90f, 0);
-            Height.Set(20f, 0);
-            Left.Set(40f, 0);
-            Top.Set(3f, 0);
+            SetSize(90f, 20f);
+            SetOffset(40f, 3f);
             BackgroundColor = Microsoft.Xna.Framework.Color.Transparent;
             BorderColor = Microsoft.Xna.Framework.Color.Transparent;
             SetPadding(0);

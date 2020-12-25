@@ -5,8 +5,6 @@ using System.Reflection;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
-using Mono.CompilerServices.SymbolWriter;
-using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
