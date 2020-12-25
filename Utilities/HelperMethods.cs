@@ -211,9 +211,15 @@ namespace BuilderEssentials.Utilities
                 placeStyle = item.placeStyle;
             WorldGen.PlaceTile(i, j, item.createTile, forced: forced, style: placeStyle);
             CanReduceItemStack(itemType);
-            
+
             if (sync && Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendTileSquare(-1, i, j, 1);
+            {
+                //Keeping syncSize an odd number since SendTileSquare as a bias towards up and left for even-numbers sizes
+                int syncSize = tileWidth > tileHeight ? tileWidth : tileHeight;
+                syncSize += 1 + (syncSize % 2);
+                
+                NetMessage.SendTileSquare(-1, (int)topLeft.X, (int)topLeft.Y, syncSize);
+            }
 
             return Framing.GetTileSafely(i, j);
         }
