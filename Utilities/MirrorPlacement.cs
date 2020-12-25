@@ -34,11 +34,14 @@ namespace BuilderEssentials.Utilities
             Point16 tileOrigin;
             int tileSize;
             
+            Tile tile = Framing.GetTileSafely(i, j);
+            TileObjectData data = TileObjectData.GetTileData(tile);
+            
+            //REMOVING MIRROR WAND'S MULTI TILE SUPPORT TEMPORARILY
+            if (data != null) return;
+            
             if (WhatIsThisItem(itemType) == ItemTypes.Tile)
             {
-                Tile tile = Framing.GetTileSafely(i, j);
-                TileObjectData data = TileObjectData.GetTileData(tile);
-
                 if (data != null)
                 {
                     tileOrigin = TileObjectData.GetTileData(tile).Origin;
@@ -80,7 +83,7 @@ namespace BuilderEssentials.Utilities
             {
                 float distanceToMirror = start.Y - j > end.Y - j ? start.Y - j : end.Y - j;
 
-                float newPosY = end.Y; /*no correction needed*/
+                float newPosY = end.Y; //no correction needed
                 newPosY += distanceToMirror < 0 ? -Math.Abs(distanceToMirror) : Math.Abs(distanceToMirror);
                 if (ms.wideMirror && TopBottom) newPosY -= 1;
                 else if (ms.wideMirror && BottomTop) newPosY += 1;

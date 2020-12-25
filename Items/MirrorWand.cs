@@ -17,7 +17,8 @@ namespace BuilderEssentials.Items
                                "\nRight Click to make a selection area" +
                                "\nLeft Click to make a mirror axis" +
                                "\n[c/FF0000:This is a work in progress and]" +
-                               "\n[c/FF0000:might not work for all multi tiles]");
+                               "\n[c/FF0000:does not support multi tiles yet]");
+                               //"\n[c/FF0000:might not work for all multi tiles]");
         }
         public override void SetDefaults()
         {
