@@ -129,7 +129,7 @@ namespace BuilderEssentials.Utilities
         internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int type, bool forced = false,
             bool sync = true, int placeStyle = -1)
         {
-            if (type == 0 || !ValidTileCoordinates(i, j))
+            if (type == 0 || !ValidTileCoordinates(i, j) || Framing.GetTileSafely(i, j).active())
                 return new Tile();
 
             Item item = new Item();
