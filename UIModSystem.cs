@@ -45,6 +45,9 @@ namespace BuilderEssentials
             lastUpdateUiGameTime = gameTime;
             if (BaseUserInterface?.CurrentState != null)
                 BaseUserInterface.Update(gameTime);
+            
+            if (SecUserInterface?.CurrentState != null)
+                SecUserInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -70,7 +73,7 @@ namespace BuilderEssentials
                 layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer("Builder Essentials: BelowCursor",
                     delegate
                     {
-                        if (lastUpdateUiGameTime != null)
+                        if (lastUpdateUiGameTime != null && SecUserInterface?.CurrentState != null)
                             SecUserInterface?.Draw(Main.spriteBatch, lastUpdateUiGameTime);
 
                         return true;

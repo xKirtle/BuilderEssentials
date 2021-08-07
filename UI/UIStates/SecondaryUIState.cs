@@ -6,23 +6,23 @@ using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIStates
 {
-    public class SecondaryUIState : UIState, ILoadable
+    internal class SecondaryUIState : UIState, ILoadable
     {
         public static SecondaryUIState Instance;
-        public static ArrowPanel ArrowPanel;
-        public static MenuPanel MenuPanel;
+        public ArrowPanel arrowPanel;
+        public MenuPanel menuPanel;
         public override void OnInitialize()
         {
             base.OnInitialize();
             Instance = this;
 
-            ArrowPanel = new ArrowPanel();
-            Instance.Append(ArrowPanel);
-            //ArrowPanel.Hide();
-
-            MenuPanel = new MenuPanel();
-            Instance.Append(MenuPanel);
-            MenuPanel.Hide();
+            arrowPanel = new ArrowPanel();
+            Append(arrowPanel);
+            arrowPanel.Show();
+            
+            menuPanel = new MenuPanel();
+            Append(menuPanel);
+            menuPanel.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -43,8 +43,8 @@ namespace BuilderEssentials.UI.UIStates
         public void Unload()
         {
             Instance = null;
-            ArrowPanel = null;
-            MenuPanel = null;
+            arrowPanel = null;
+            menuPanel = null;
         }
     }
 }
