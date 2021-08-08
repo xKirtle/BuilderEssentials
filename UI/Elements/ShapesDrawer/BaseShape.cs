@@ -71,24 +71,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             }
         }
 
-        internal int SelectedQuarter(int x0, int y0, int x1, int y1)
-        {
-            //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
-            int selectedQuarter = -1;
-
-            if (x0 <= x1 && y0 <= y1)
-                selectedQuarter = 3;
-            else if (x0 <= x1 && y0 >= y1)
-                selectedQuarter = 1;
-            else if (x0 >= x1 && y0 >= y1)
-                selectedQuarter = 0;
-            else if (x0 >= x1 && y0 <= y1)
-                selectedQuarter = 2;
-
-            return selectedQuarter;
-        }
-
-        public void Update()
+        internal void Update()
         {
             selected = SecondaryUIState.Instance.menuPanel?.selected;
         }

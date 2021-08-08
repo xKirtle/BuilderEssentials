@@ -4,13 +4,13 @@ using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
+using Terraria.UI;
 
 namespace BuilderEssentials.UI.Elements.ShapesDrawer
 {
     internal class BezierCurve : BaseShape
     {
-        public CoordsSelection cs;
-        public void DrawQuadraticBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint)
+        public void DrawBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint)
         {
             List<Vector2> points = new List<Vector2>();
             for (float t = 0.0f; t < 1.0f; t += dt)
@@ -22,7 +22,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 PlotLine((int)points[i].X, (int)points[i].Y, (int)points[i+1].X, (int)points[i+1].Y);
         }
 
-        public void DrawCubicBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2, Vector2 endPoint)
+        public void DrawBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2, Vector2 endPoint)
         {
             List<Vector2> points = new List<Vector2>();
             for (float t = 0.0f; t < 1.0; t += dt)
@@ -34,21 +34,21 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 PlotLine((int)points[i].X, (int)points[i].Y, (int)points[i+1].X, (int)points[i+1].Y);
         }
 
-        public BezierCurve()
+        public BezierCurve(int itemType, UIState uiState)
         {
-            cs = new CoordsSelection(ItemID.None, BaseUIState.Instance);
+            cs = new CoordsSelection(itemType, uiState);
+            color = Blue;
         }
         
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Prevents drawing and coord updates if Improved Ruler is not equipped
            // if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().improvedRulerEquipped) return;
-            
+
+           color = Blue;
             cs.UpdateCoords(true);
-            color = Blue;
-            
             if (cs.LMBStart != cs.LMBEnd) //&& ImprovedRuler is equipped
-                DrawQuadraticBezier(0.5f, cs.LMBStart, cs.RMBEnd, cs.LMBEnd);
+                DrawBezier(0.5f, cs.LMBStart, cs.RMBEnd, cs.LMBEnd);
         }
     }
 }

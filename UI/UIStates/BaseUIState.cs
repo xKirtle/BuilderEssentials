@@ -11,6 +11,8 @@ namespace BuilderEssentials.UI.UIStates
     {
         public static BaseUIState Instance;
         public RectangleShape rectangleShape;
+        public EllipseShape ellipseShape;
+        public BezierCurve bezierCurve;
         public override void OnInitialize()
         {
             Instance = this;
@@ -19,12 +21,21 @@ namespace BuilderEssentials.UI.UIStates
             rectangleShape = new RectangleShape(ItemID.None, this);
             Append(rectangleShape);
             rectangleShape.Show();
+
+            ellipseShape = new EllipseShape(ItemID.None, this);
+            Append(ellipseShape);
+            ellipseShape.Show();
+
+            // bezierCurve = new BezierCurve(ItemID.None, this);
+            // Append(bezierCurve);
+            // bezierCurve.Show();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             rectangleShape?.Update();
+            ellipseShape?.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
