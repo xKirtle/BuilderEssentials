@@ -54,22 +54,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 }
             }
         }
-        internal virtual void PlotRectangle(int x0, int y0, int x1, int y1)
-        {
-            //TODO: Fix lower size rectangles having squares on top of each other
-            if (x0 == x1 && y0 == y1)
-                return;
-            else if (x0 == x1 || y0 == y1)
-                PlotLine(x0, y0, x1, y1);
-            else
-            {
-                int direction = y0 < y1 ? 1 : -1;
-                PlotLine(x0, y0, x1, y0); // top
-                PlotLine(x0, y1, x1, y1); // bottom
-                PlotLine(x0, y0 + direction, x0, y1 - direction); //left
-                PlotLine(x1, y0 + direction, x1, y1 - direction); //right
-            }
-        }
 
         internal void Update()
         {

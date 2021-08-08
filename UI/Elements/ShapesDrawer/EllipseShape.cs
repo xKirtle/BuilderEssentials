@@ -24,6 +24,11 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         //Adapted from http://members.chello.at/easyfilter/bresenham.html
         public void PlotEllipse(int x0, int y0, int x1, int y1, bool fill = false)
         {
+            int initialY0 = y0;
+            int initialY1 = y1;
+            int initialX0 = x0;
+            int initialX1 = x1;
+            
             bool allQuads = !selected[3] && !selected[4];
             bool quadOne, quadTwo, quadThree, quadFour;
             quadOne = quadTwo = quadThree = quadFour = false;
@@ -44,11 +49,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 if (quadOne && quadTwo)
                     y0 = y0 - Math.Abs(y1 - y0);
             }
-            
-            int initialY0 = y0;
-            int initialY1 = y1;
-            int initialX0 = x0;
-            int initialX1 = x1;
 
             int a = Math.Abs(x1-x0), b = Math.Abs(y1-y0), b1 = b&1; /* values of diameter */
             long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a; /* error increment */
@@ -60,11 +60,35 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             a *= 8*a; b1 = 8*b*b;
 
             do {
-                if (fill)
+                if (fill && cs.LMBDown)
                 {
-                    //Fill throughout the y axis
-                    PlotLine(x0, y0, x0, y1);
-                    PlotLine(x1, y0, x1, y1);
+                    if (allQuads)
+                    {
+                        PlotLine(x0, y0, x0, y1);
+                        PlotLine(x1, y0, x1, y1);
+                    }
+                    else if (selected[3])
+                    {
+                        int tempY = !selected[5] ? y0 : y1;
+                        bool condition = !selected[5] ? tempY < y1 : tempY > y1;
+
+                        do
+                        {
+                            PlotLine(x0, tempY, x1, tempY);
+                            tempY += condition ? 1 : -1;
+                        } while (condition);
+                    }
+                    else if (selected[4])
+                    {
+                        int tempX = !selected[5] ? x0 : x1;
+                        bool condition = !selected[5] ? tempX > x1 : tempX < x1;
+
+                        do
+                        {
+                            PlotLine(tempX, y0, tempX, y1);
+                            tempX += condition ? -1 : 1;
+                        } while (condition);
+                    }
                 }
                 else
                 {
@@ -90,26 +114,29 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 DrawRectangle(x1+1, y1--); 
             }
 
-            if (fill) return;
+            if (fill && cs.LMBDown) return;
             
             //Draw line in axis if ellipse has a center in the X/Y axis
-            color = Blue * 0.4f;
-            int horDist = Math.Abs((int) (cs.RMBEnd.X - cs.RMBStart.X));
-            int verDist = Math.Abs((int) (cs.RMBEnd.Y - cs.RMBStart.Y));
-            int quad = cs.SelectedQuad((int) cs.RMBStart.X, (int) cs.RMBStart.Y, (int) cs.RMBEnd.X, (int) cs.RMBEnd.Y);
+            Color tempColor = color;
+            color = tempColor * 0.4f;
+            int horDist = Math.Abs((int) (initialX1 - initialX0));
+            int verDist = Math.Abs((int) (initialY1 - initialY0));
+            int quad = cs.SelectedQuad((int) initialX0, (int) initialY0, (int) initialX1, (int) initialY1);
 
-            if (horDist % 2 == 0 && (selected[3] || (!selected[3] && !selected[4])) && horDist > 3) //Vertical line
+            //Vertical line
+            if (horDist % 2 == 0 && (selected[3] || (!selected[3] && !selected[4])) && horDist > 3)
             {
-                int fixedX = (int) (cs.RMBStart.X + (quad == 0 || quad == 2 ? - horDist / 2 : + horDist / 2));
-                PlotLine(fixedX, (int) cs.RMBStart.Y, fixedX, (int) cs.RMBEnd.Y);
+                int fixedX = (int) (initialX0 + (quad == 0 || quad == 2 ? - horDist / 2 : + horDist / 2));
+                PlotLine(fixedX, (int) initialY0, fixedX, (int) initialY1);
             }
 
-            if (verDist % 2 == 0 && (selected[4] || (!selected[3] && !selected[4])) && verDist > 3) //Horizontal line
+            //Horizontal line
+            if (verDist % 2 == 0 && (selected[4] || (!selected[3] && !selected[4])) && verDist > 3)
             {
-                int fixedY = (int) (cs.RMBStart.Y + (quad == 2 || quad == 3 ? + verDist / 2 : - verDist / 2));
-                PlotLine((int) (cs.RMBStart.X), fixedY, (int) (cs.RMBEnd.X), fixedY);
+                int fixedY = (int) (initialY0 + (quad == 2 || quad == 3 ? + verDist / 2 : - verDist / 2));
+                PlotLine((int) (initialX0), fixedY, (int) (initialX1), fixedY);
             }
-            color = Blue;
+            color = tempColor;
         }
 
         internal void FixMirrorHalfShapesCoords()
@@ -196,7 +223,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             color = selected[2] ? Yellow : Blue;
             if (cs.RMBStart != cs.RMBEnd)
-                PlotEllipse((int) cs.RMBStart.X, (int) cs.RMBStart.Y, (int) cs.RMBEnd.X, (int) cs.RMBEnd.Y, selected[2]);
+                PlotEllipse((int) cs.RMBStart.X, (int) cs.RMBStart.Y, (int) cs.RMBEnd.X, (int) cs.RMBEnd.Y, 
+                    selected[2] && CanPlaceTiles(Main.LocalPlayer.HeldItem.type));
         }
     }
 }
