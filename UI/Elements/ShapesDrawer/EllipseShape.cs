@@ -60,49 +60,16 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             a *= 8*a; b1 = 8*b*b;
 
             do {
-                if (fill && cs.LMBDown)
-                {
-                    if (allQuads)
-                    {
-                        PlotLine(x0, y0, x0, y1);
-                        PlotLine(x1, y0, x1, y1);
-                    }
-                    else if (selected[3])
-                    {
-                        int tempY = !selected[5] ? y0 : y1;
-                        bool condition = !selected[5] ? tempY < y1 : tempY > y1;
+                if (allQuads || quadOne)
+                    DrawRectangle(x1, y0); /*   I. Quadrant */
+                if (allQuads || quadTwo)
+                    DrawRectangle(x0, y0); /*  II. Quadrant */
+                if (allQuads || quadThree)
+                    DrawRectangle(x0, y1); /* III. Quadrant */
+                if (allQuads || quadFour)
+                    DrawRectangle(x1, y1); /*  IV. Quadrant */
 
-                        do
-                        {
-                            PlotLine(x0, tempY, x1, tempY);
-                            tempY += condition ? 1 : -1;
-                        } while (condition);
-                    }
-                    else if (selected[4])
-                    {
-                        int tempX = !selected[5] ? x0 : x1;
-                        bool condition = !selected[5] ? tempX > x1 : tempX < x1;
-
-                        do
-                        {
-                            PlotLine(tempX, y0, tempX, y1);
-                            tempX += condition ? -1 : 1;
-                        } while (condition);
-                    }
-                }
-                else
-                {
-                    if (allQuads || quadOne)
-                        DrawRectangle(x1, y0); /*   I. Quadrant */
-                    if (allQuads || quadTwo)
-                        DrawRectangle(x0, y0); /*  II. Quadrant */
-                    if (allQuads || quadThree)
-                        DrawRectangle(x0, y1); /* III. Quadrant */
-                    if (allQuads || quadFour)
-                        DrawRectangle(x1, y1); /*  IV. Quadrant */
-                }
-
-                e2 = 2*err;
+                    e2 = 2*err;
                 if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */ 
                 if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
             } while (x0 <= x1);
@@ -114,8 +81,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 DrawRectangle(x1+1, y1--); 
             }
 
-            if (fill && cs.LMBDown) return;
-            
             //Draw line in axis if ellipse has a center in the X/Y axis
             Color tempColor = color;
             color = tempColor * 0.4f;

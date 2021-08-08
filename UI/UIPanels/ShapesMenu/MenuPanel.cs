@@ -11,6 +11,9 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
 {
     internal class MenuPanel : CustomUIPanel
     {
+        //TODO: Change shapes menu assets.
+        //When selected, only borders should be yellow and when fill is enabled, shapes borders should then become yellow
+
         private const string texturePath = "BuilderEssentials/Textures/UIElements/ShapesMenu/";
         private const float MenuWidth = 213f, MenuHeight = 167f;
         public bool[] selected;
