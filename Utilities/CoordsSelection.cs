@@ -75,7 +75,7 @@ namespace BuilderEssentials.Utilities
             MMBDown = false;
         }
 
-        public void SquareCoords(ref Vector2 start, ref Vector2 end)
+        internal void SquareCoords(ref Vector2 start, ref Vector2 end)
         {
             int distanceX = (int) (end.X - start.X);
             int distanceY = (int) (end.Y - start.Y);
@@ -97,7 +97,45 @@ namespace BuilderEssentials.Utilities
             }
         }
 
-        public void UpdateCoords(bool bezierSelection = false)
+        internal void MirrorCoords(ref Vector2 start, ref Vector2 end)
+        {
+            MirrorCoordsHorizontally(ref start, ref end);
+            MirrorCoordsVertically(ref start, ref end);
+        }
+        
+        internal void MirrorCoordsHorizontally(ref Vector2 start, ref Vector2 end)
+        {
+            Vector2 temp = start;
+            start.X = end.X;
+            end.X = temp.X;
+        }
+        
+        internal void MirrorCoordsVertically(ref Vector2 start, ref Vector2 end)
+        {
+            Vector2 temp = start;
+            start.Y = end.Y;
+            end.Y = temp.Y;
+        }
+
+        /// <summary>0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight</summary>
+        internal int SelectedQuad(int x0, int y0, int x1, int y1)
+        {
+            //0:TopLeft; 1:TopRight; 2:BottomLeft; 3:BottomRight;
+            int selectedQuarter = -1;
+
+            if (x0 <= x1 && y0 <= y1)
+                selectedQuarter = 3;
+            else if (x0 <= x1 && y0 >= y1)
+                selectedQuarter = 1;
+            else if (x0 >= x1 && y0 >= y1)
+                selectedQuarter = 0;
+            else if (x0 >= x1 && y0 <= y1)
+                selectedQuarter = 2;
+
+            return selectedQuarter;
+        }
+
+        internal void UpdateCoords(bool bezierSelection = false)
         {
             if (Main.LocalPlayer.HeldItem.type != itemType)
             { RMBDown = LMBDown = MMBDown = false; return; }

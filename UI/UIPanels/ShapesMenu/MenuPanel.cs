@@ -81,17 +81,21 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
                 selected[1] = false;
             else if (index == 1)
                 selected[0] = false;
-            
+
             //Disable half shapes if ellipse is disabled
             if (!selected[0])
                 selected[3] = selected[4] = false;
-            
+
             //if ellipse is enabled and index clicked was a half shape, disable the other half shape
             if (selected[0] && (index == 3 || index == 4))
                 selected[index == 3 ? 4 : 3] = false;
             
             //Update buttons based on selected[]
             SetUIImage(index);
+            
+            //Update CoordinateSelection
+            if (selected[0] && (index == 3 || index == 4 || index == 5))
+                BaseUIState.Instance.ellipseShape.FixMirrorHalfShapesCoords();
         }
         
         void SetUIImage(int clickedIndex, bool updateAll = true)
