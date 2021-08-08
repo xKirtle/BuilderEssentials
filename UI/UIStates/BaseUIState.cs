@@ -52,6 +52,8 @@ namespace BuilderEssentials.UI.UIStates
         {
             Instance = null;
             rectangleShape = null;
+            ellipseShape = null;
+            bezierCurve = null;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Terraria;
 
 namespace BuilderEssentials.Utilities
 {
@@ -57,5 +58,8 @@ namespace BuilderEssentials.Utilities
             float y = Y(t, startPoint.Y, controlPoint.Y, controlPoint2.Y, endPoint.Y);
             return new Vector2(x, y);
         }
+        
+        internal static bool ValidTileCoordinates(int i, int j)
+            => i > 0 && i < Main.maxTilesX && j > 0 && j < Main.maxTilesY;
     }
 }
