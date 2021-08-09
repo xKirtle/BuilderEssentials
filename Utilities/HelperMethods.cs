@@ -1,4 +1,5 @@
 ﻿using System;
+using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Terraria;
 
@@ -61,5 +62,11 @@ namespace BuilderEssentials.Utilities
         
         internal static bool ValidTileCoordinates(int i, int j)
             => i > 0 && i < Main.maxTilesX && j > 0 && j < Main.maxTilesY;
+        
+        internal static void CreateRecipeGroup(int[] items, string text)
+        {
+            RecipeGroup recipeGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + text, items);
+            RecipeGroup.RegisterGroup("BuilderEssentials:" + text, recipeGroup);
+        }
     }
 }
