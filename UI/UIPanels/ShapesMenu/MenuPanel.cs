@@ -1,5 +1,6 @@
 ﻿using BuilderEssentials.UI.Elements;
 using BuilderEssentials.UI.UIStates;
+using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -28,7 +29,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             BorderColor = Microsoft.Xna.Framework.Color.Transparent;
             BackgroundColor = Microsoft.Xna.Framework.Color.Transparent;
 
-            Asset<Texture2D> backgroundTexture = ModContent.Request<Texture2D>(texturePath + "Background", AssetRequestMode.ImmediateLoad);
+            Asset<Texture2D> backgroundTexture = HelperMethods.RequestTexture(texturePath + "Background");
             UIImage background = new UIImage(backgroundTexture);
             background.Width.Set(0f, 0);
             background.Height.Set(0f, 0);
@@ -36,7 +37,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             background.Top.Set(-12f, 0);
             Append(background);
 
-            Asset<Texture2D> closeCrossTexture = ModContent.Request<Texture2D>(texturePath + "CloseCross", AssetRequestMode.ImmediateLoad);
+            Asset<Texture2D> closeCrossTexture = HelperMethods.RequestTexture(texturePath + "CloseCross");
             UIImage closeCross = new UIImage(closeCrossTexture);
             closeCross.Width.Set(19f, 0);
             closeCross.Height.Set(19f, 0);
@@ -54,8 +55,9 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
                 {
                     int row = i;
                     int column = j;
+                    //TODO: FIX THIS
                     //I have no idea why the texture names start at 1 instead of 0 but I'm too lazy to fix that
-                    Asset<Texture2D> tempButtonTexture = ModContent.Request<Texture2D>(texturePath + $"SM{(column + 1) + 3 * row}", AssetRequestMode.ImmediateLoad);
+                    Asset<Texture2D> tempButtonTexture = HelperMethods.RequestTexture(texturePath + $"SM{(column + 1) + 3 * row}");
                     UIImage tempButton = new UIImage(tempButtonTexture);
                     tempButton.Width.Set(54f, 0);
                     tempButton.Height.Set(54f, 0);
@@ -68,8 +70,8 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             }
             
             //Updating the disabled half shapes sprites
-            elements[3].SetImage(ModContent.Request<Texture2D>(texturePath + "SMDisabled4", AssetRequestMode.ImmediateLoad));
-            elements[4].SetImage(ModContent.Request<Texture2D>(texturePath + "SMDisabled5", AssetRequestMode.ImmediateLoad));
+            elements[3].SetImage(HelperMethods.RequestTexture(texturePath + "SMDisabled4"));
+            elements[4].SetImage(HelperMethods.RequestTexture(texturePath + "SMDisabled5"));
             
             //Updating all sprites based on selected[]. index doesn't matter
             SetUIImage(0);
@@ -119,7 +121,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
                     texture += "Disabled";
                 texture += $"{tempIndex + 1}";
 
-                elements[tempIndex].SetImage(ModContent.Request<Texture2D>(texture, AssetRequestMode.ImmediateLoad));
+                elements[tempIndex].SetImage(HelperMethods.RequestTexture(texture));
             }
         }
         
