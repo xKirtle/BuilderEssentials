@@ -22,7 +22,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             Top.Set(Main.screenHeight / 2, 0);
             BorderColor = Microsoft.Xna.Framework.Color.Transparent;
             BackgroundColor = Microsoft.Xna.Framework.Color.Transparent;
-            OnMouseDown += (__, _) => { Hide(); SecondaryUIState.Instance.menuPanel.Show(); };
+            OnMouseDown += (__, _) => { Hide(); UIUIState.Instance.menuPanel.Show(); };
 
             Asset<Texture2D> texture = ModContent.Request<Texture2D>("BuilderEssentials/Textures/UIElements/ShapesMenu/ArrowPanel", AssetRequestMode.ImmediateLoad);
             UIImage arrowPanelImg = new UIImage(texture);

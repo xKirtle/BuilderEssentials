@@ -42,7 +42,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             closeCross.Height.Set(19f, 0);
             closeCross.Left.Set(MenuWidth - 35f, 0);
             closeCross.Top.Set(-7f, 0);
-            closeCross.OnMouseDown += (__, _) => { Hide(); SecondaryUIState.Instance.arrowPanel.Show(); };
+            closeCross.OnMouseDown += (__, _) => { Hide(); UIUIState.Instance.arrowPanel.Show(); };
             Append(closeCross);
 
 
@@ -98,7 +98,7 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             
             //Update CoordinateSelection
             if (selected[0] && (index == 3 || index == 4 || index == 5))
-                BaseUIState.Instance.ellipseShape.FixMirrorHalfShapesCoords();
+                GameUIState.Instance.ellipseShape.FixMirrorHalfShapesCoords();
         }
         
         void SetUIImage(int clickedIndex, bool updateAll = true)

@@ -57,7 +57,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
         internal void Update()
         {
-            selected = SecondaryUIState.Instance.menuPanel?.selected;
+            selected = UIUIState.Instance.menuPanel?.selected;
         }
     }
 }

@@ -6,9 +6,9 @@ using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIStates
 {
-    internal class SecondaryUIState : UIState, ILoadable
+    internal class UIUIState : UIState, ILoadable
     {
-        public static SecondaryUIState Instance;
+        public static UIUIState Instance;
         public ArrowPanel arrowPanel;
         public MenuPanel menuPanel;
         public override void OnInitialize()

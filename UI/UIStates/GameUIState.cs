@@ -7,9 +7,9 @@ using Terraria.UI;
 
 namespace BuilderEssentials.UI.UIStates
 {
-    internal class BaseUIState : UIState, ILoadable
+    internal class GameUIState : UIState, ILoadable
     {
-        public static BaseUIState Instance;
+        public static GameUIState Instance;
         public RectangleShape rectangleShape;
         public EllipseShape ellipseShape;
         public BezierCurve bezierCurve;

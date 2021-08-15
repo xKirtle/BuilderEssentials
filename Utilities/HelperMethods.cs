@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.UI;
 
 namespace BuilderEssentials.Utilities
 {
@@ -32,41 +34,62 @@ namespace BuilderEssentials.Utilities
             float y = Y(t, startPoint.Y, controlPoint.Y, endPoint.Y);
             return new Vector2(x, y);
         }
-        
+
         //Cubic bezier
         internal static float X(float t, float x0, float x1, float x2, float x3)
         {
-            return (float)(
+            return (float) (
                 x0 * Math.Pow((1 - t), 3) +
                 x1 * 3 * t * Math.Pow((1 - t), 2) +
                 x2 * 3 * Math.Pow(t, 2) * (1 - t) +
                 x3 * Math.Pow(t, 3)
             );
         }
+
         internal static float Y(float t, float y0, float y1, float y2, float y3)
         {
-            return (float)(
+            return (float) (
                 y0 * Math.Pow((1 - t), 3) +
                 y1 * 3 * t * Math.Pow((1 - t), 2) +
                 y2 * 3 * Math.Pow(t, 2) * (1 - t) +
                 y3 * Math.Pow(t, 3)
             );
         }
-        
-        internal static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2, Vector2 endPoint, float t)
+
+        internal static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2,
+            Vector2 endPoint, float t)
         {
             float x = X(t, startPoint.X, controlPoint.X, controlPoint2.X, endPoint.X);
             float y = Y(t, startPoint.Y, controlPoint.Y, controlPoint2.Y, endPoint.Y);
             return new Vector2(x, y);
         }
-        
+
         internal static bool ValidTileCoordinates(int i, int j)
             => i > 0 && i < Main.maxTilesX && j > 0 && j < Main.maxTilesY;
-        
+
         internal static void CreateRecipeGroup(int[] items, string text)
         {
             RecipeGroup recipeGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + text, items);
             RecipeGroup.RegisterGroup("BuilderEssentials:" + text, recipeGroup);
+        }
+
+
+        internal static void InsertInterfaceLayer(ref List<GameInterfaceLayer> layers, string layerToInsert, string layerName,
+            GameTime gameTime, UserInterface userInterface, InterfaceScaleType scaleType)
+        {
+            int interfaceLayer = layers.FindIndex(layer => layer.Name.Equals(layerToInsert));
+            if (interfaceLayer != -1)
+            {
+                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer(layerName,
+                    delegate
+                    {
+                        if (gameTime != null && userInterface?.CurrentState != null)
+                            userInterface.Draw(Main.spriteBatch, gameTime);
+
+                        return true;
+                    },
+                    scaleType));
+            }
         }
     }
 }

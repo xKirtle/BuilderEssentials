@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BuilderEssentials.UI.UIStates;
+using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -11,75 +12,53 @@ namespace BuilderEssentials
     public class UIModSystem : ModSystem
     {
         private GameTime lastUpdateUiGameTime;
-        internal static UserInterface BaseUserInterface;
-        internal static BaseUIState BaseUIState;
-        internal static UserInterface SecUserInterface;
-        internal static SecondaryUIState SecUIState;
+        internal static UserInterface GameUserInterface;
+        internal static GameUIState GameUIState;
+        internal static UserInterface UIUserInterface;
+        internal static UIUIState UIUIState;
         
         public override void Load()
         {
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
-                BaseUIState = new BaseUIState();
-                BaseUIState.Activate();
-                BaseUserInterface = new UserInterface();
-                BaseUserInterface.SetState(BaseUIState);
+                GameUIState = new GameUIState();
+                GameUIState.Activate();
+                GameUserInterface = new UserInterface();
+                GameUserInterface.SetState(GameUIState);
 
-                SecUIState = new SecondaryUIState();
-                SecUIState.Activate();
-                SecUserInterface = new UserInterface();
-                SecUserInterface.SetState(SecUIState);
+                UIUIState = new UIUIState();
+                UIUIState.Activate();
+                UIUserInterface = new UserInterface();
+                UIUserInterface.SetState(UIUIState);
             }
         }
 
         public override void Unload()
         {
-            BaseUserInterface = null;
-            BaseUIState = null;
-            SecUserInterface = null;
-            SecUIState = null;
+            GameUserInterface = null;
+            GameUIState = null;
+            UIUserInterface = null;
+            UIUIState = null;
         }
         
         public override void UpdateUI(GameTime gameTime)
         {
             lastUpdateUiGameTime = gameTime;
-            if (BaseUserInterface?.CurrentState != null)
-                BaseUserInterface.Update(gameTime);
+            if (GameUserInterface?.CurrentState != null)
+                GameUserInterface.Update(gameTime);
             
-            if (SecUserInterface?.CurrentState != null)
-                SecUserInterface.Update(gameTime);
+            if (UIUserInterface?.CurrentState != null)
+                UIUserInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             //https://github.com/tModLoader/tModLoader/wiki/Vanilla-Interface-layers-values
-            int interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 1"));
-            if (interfaceLayer != -1)
-            {
-                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer("Loadouts: Base UI",
-                    delegate
-                    {
-                        if (lastUpdateUiGameTime != null && BaseUserInterface?.CurrentState != null)
-                            BaseUserInterface.Draw(Main.spriteBatch, lastUpdateUiGameTime);
+            HelperMethods.InsertInterfaceLayer(ref layers, "Vanilla: Interface Logic 1", "Builder Essentials: Logic 1", 
+                lastUpdateUiGameTime, GameUserInterface, InterfaceScaleType.Game);
 
-                        return true;
-                    },
-                    InterfaceScaleType.Game));
-            }
-            
-            interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Cursor"));
-            if (interfaceLayer != -1)
-            {
-                layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer("Builder Essentials: BelowCursor",
-                    delegate
-                    {
-                        if (lastUpdateUiGameTime != null && SecUserInterface?.CurrentState != null)
-                            SecUserInterface?.Draw(Main.spriteBatch, lastUpdateUiGameTime);
-
-                        return true;
-                    },
-                    InterfaceScaleType.UI));
-            }
+            HelperMethods.InsertInterfaceLayer(ref layers, "Vanilla: Cursor", "Builder Essentials: Below Cursor",
+                lastUpdateUiGameTime, UIUserInterface, InterfaceScaleType.UI);
         }
     }
 }
