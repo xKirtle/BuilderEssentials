@@ -28,17 +28,17 @@ namespace BuilderEssentials
                 PlacementAnywhere = InfinitePickupRange = 
                     improvedRulerEquipped = infinitePaintBucketEquipped = false;
         }
-        
+
         public override void PostUpdateEquips()
         {
-            //TODO: Check tile/block Range values
-            Player.tileRangeX = InfinitePlayerRange ? Main.screenWidth / 16 / 2 + 5 : 5;
-            Player.tileRangeY = InfinitePlayerRange ? Main.screenHeight / 16 / 2 + 4 : 4;
-            Player.blockRange = InfinitePlayerRange ? Main.screenWidth / 16 / 2 + 5 : 0;
+            HelperMethods.SetPlayerRange(5, 4, 0);
+            if (InfinitePlayerRange)
+                HelperMethods.SetPlayerRange(Main.screenWidth / 16 / 2 + 5, 
+                    Main.screenHeight / 16 / 2 + 4, Main.screenWidth / 16 / 2 + 5);
             Player.wallSpeed = FastPlacement ? Player.wallSpeed + 10 : 1;
             Player.tileSpeed = FastPlacement ? Player.tileSpeed + 50 : 1;
             Player.defaultItemGrabRange = //I have no idea how much it should be so that should be enough??
-                InfinitePickupRange ? (int)Math.Pow(Math.Max(Main.maxTilesX, Main.maxTilesY), 2) : 42; 
+                InfinitePickupRange ? (int) Math.Pow(Math.Max(Main.maxTilesX, Main.maxTilesY), 2) : 42;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
