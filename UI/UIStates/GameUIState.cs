@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.UI.Elements.ShapesDrawer;
+using BuilderEssentials.UI.UIPanels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ID;
@@ -13,6 +14,7 @@ namespace BuilderEssentials.UI.UIStates
         public RectangleShape rectangleShape;
         public EllipseShape ellipseShape;
         public BezierCurve bezierCurve;
+        public AutoHammerWheel autoHammerWheel;
         public override void OnInitialize()
         {
             Instance = this;
@@ -29,6 +31,10 @@ namespace BuilderEssentials.UI.UIStates
             // bezierCurve = new BezierCurve(ItemID.None, this);
             // Append(bezierCurve);
             // bezierCurve.Show();
+
+            autoHammerWheel = new AutoHammerWheel();
+            Append(autoHammerWheel);
+            autoHammerWheel.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -36,6 +42,7 @@ namespace BuilderEssentials.UI.UIStates
             base.Update(gameTime);
             rectangleShape?.Update();
             ellipseShape?.Update();
+            autoHammerWheel?.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -54,6 +61,7 @@ namespace BuilderEssentials.UI.UIStates
             rectangleShape = null;
             ellipseShape = null;
             bezierCurve = null;
+            autoHammerWheel = null;
         }
     }
 }
