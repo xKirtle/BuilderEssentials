@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.UI.UIPanels.ShapesMenu;
+﻿using BuilderEssentials.UI.UIPanels;
+using BuilderEssentials.UI.UIPanels.ShapesMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
@@ -11,6 +12,7 @@ namespace BuilderEssentials.UI.UIStates
         public static UIUIState Instance;
         public ArrowPanel arrowPanel;
         public MenuPanel menuPanel;
+        public AutoHammerWheel autoHammerWheel;
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -23,11 +25,16 @@ namespace BuilderEssentials.UI.UIStates
             menuPanel = new MenuPanel();
             Append(menuPanel);
             menuPanel.Hide();
+            
+            autoHammerWheel = new AutoHammerWheel();
+            Append(autoHammerWheel);
+            autoHammerWheel.Hide();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            autoHammerWheel?.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -45,6 +52,7 @@ namespace BuilderEssentials.UI.UIStates
             Instance = null;
             arrowPanel = null;
             menuPanel = null;
+            autoHammerWheel = null;
         }
     }
 }

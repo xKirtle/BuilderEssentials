@@ -38,7 +38,7 @@ namespace BuilderEssentials.Items
             toolRange = new Vector2(9, 8);
             Item.tileBoost = 4;
 
-            panel = GameUIState.Instance.autoHammerWheel;
+            panel = UIUIState.Instance.autoHammerWheel;
         }
 
         public override void HoldItem(Player player)

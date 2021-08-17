@@ -16,6 +16,7 @@ namespace BuilderEssentials
         internal static GameUIState GameUIState;
         internal static UserInterface UIUserInterface;
         internal static UIUIState UIUIState;
+        internal static Vector2 cachedMouseCoords;
         
         public override void Load()
         {
@@ -43,6 +44,8 @@ namespace BuilderEssentials
         
         public override void UpdateUI(GameTime gameTime)
         {
+            cachedMouseCoords = new Vector2(Main.mouseX, Main.mouseY);
+            
             lastUpdateUiGameTime = gameTime;
             if (GameUserInterface?.CurrentState != null)
                 GameUserInterface.Update(gameTime);

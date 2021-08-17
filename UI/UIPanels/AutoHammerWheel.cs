@@ -120,10 +120,11 @@ namespace BuilderEssentials.UI.UIPanels
             base.Show();
 
             //Making sure the UI will stay within our screen
-            float offsetX = Main.mouseX - width / 2 > 0 ? Main.mouseX - width / 2 : 0;
-            offsetX = Main.mouseX + width / 2 > Main.screenWidth ? Main.screenWidth - width : offsetX;
-            float offsetY = Main.mouseY - height / 2 > 0 ? Main.mouseY - height / 2 : 0;
-            offsetY = Main.mouseY + height / 2 > Main.screenHeight ? Main.screenHeight - height : offsetY;
+            Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
+            float offsetX = cachedMouse.X - width / 2 > 0 ? cachedMouse.X - width / 2 : 0;
+            offsetX = cachedMouse.X + width / 2 > Main.screenWidth ? Main.screenWidth - width : offsetX;
+            float offsetY = cachedMouse.Y - height / 2 > 0 ? cachedMouse.Y - height / 2 : 0;
+            offsetY = cachedMouse.Y + height / 2 > Main.screenHeight ? Main.screenHeight - height : offsetY;
 
             Left.Set(offsetX, 0);
             Top.Set(offsetY, 0);
