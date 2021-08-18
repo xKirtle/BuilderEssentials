@@ -107,10 +107,10 @@ namespace BuilderEssentials.UI.UIPanels
         
         public void Update()
         {
+            if (!Visible) return;
             if (IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = false;
-
-            if (!Visible) return;
+            
             if (elementHovered)
                 Main.LocalPlayer.mouseInterface = true;
         }

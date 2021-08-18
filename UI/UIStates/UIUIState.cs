@@ -13,6 +13,7 @@ namespace BuilderEssentials.UI.UIStates
         public ArrowPanel arrowPanel;
         public MenuPanel menuPanel;
         public AutoHammerWheel autoHammerWheel;
+        public MultiWandWheel multiWandWheel;
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -29,12 +30,17 @@ namespace BuilderEssentials.UI.UIStates
             autoHammerWheel = new AutoHammerWheel();
             Append(autoHammerWheel);
             autoHammerWheel.Hide();
+            
+            multiWandWheel = new MultiWandWheel();
+            Append(multiWandWheel);
+            multiWandWheel.Hide();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             autoHammerWheel?.Update();
+            multiWandWheel?.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -53,6 +59,7 @@ namespace BuilderEssentials.UI.UIStates
             arrowPanel = null;
             menuPanel = null;
             autoHammerWheel = null;
+            multiWandWheel = null;
         }
     }
 }
