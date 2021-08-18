@@ -31,6 +31,8 @@ namespace BuilderEssentials
 
         public override void PostUpdateEquips()
         {
+            //TODO: Can't use a ternary here, it'll not allow other items to increase player range willingly
+            
             HelperMethods.SetPlayerRange(5, 4, 0);
             if (InfinitePlayerRange)
                 HelperMethods.SetPlayerRange(Main.screenWidth / 16 / 2 + 5, 

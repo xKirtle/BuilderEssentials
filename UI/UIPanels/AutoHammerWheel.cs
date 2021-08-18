@@ -14,7 +14,7 @@ using Terraria.ID;
 
 namespace BuilderEssentials.UI.UIPanels
 {
-    public class AutoHammerWheel : CustomUIPanel
+    internal class AutoHammerWheel : CustomUIPanel
     {
         private const float width = 170f, height = 150f;
         private const int elementsCount = 6;

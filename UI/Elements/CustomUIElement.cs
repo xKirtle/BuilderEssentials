@@ -2,7 +2,7 @@
 
 namespace BuilderEssentials.UI.Elements
 {
-    public class CustomUIElement : UIElement
+    internal class CustomUIElement : UIElement
     {
         /// <summary>
         /// Get the current visibility state.

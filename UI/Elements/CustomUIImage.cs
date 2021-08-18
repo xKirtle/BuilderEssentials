@@ -1,12 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
 namespace BuilderEssentials.UI.Elements
 {
-    internal class CustomUIPanel : UIPanel
+    internal class CustomUIImage : UIImage
     {
+        public CustomUIImage(Asset<Texture2D> texture) : base(texture) { }
+        public CustomUIImage(Texture2D nonReloadingTexture) : base(nonReloadingTexture) { }
+        
         /// <summary>
         /// Get the current visibility state.
         /// </summary>
