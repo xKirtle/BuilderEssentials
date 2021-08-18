@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -174,10 +175,15 @@ namespace BuilderEssentials.Utilities
                    (!notShowingMouseIcon || !player.cursorItemIconEnabled);
         }
 
-        internal static void ChangeSlope(SlopeType slopeType, bool IsHalfBlock = false)
+        /// <summary>
+        /// Modify the slope of the tile in the given coordinates
+        /// </summary>
+        /// <param name="i">X axis tile coordinates</param>
+        /// <param name="j">Y axis tile coordinates</param>
+        /// <param name="slopeType">New SlopeType of the tile</param>
+        /// <param name="IsHalfBlock">Whether tile will be a half block</param>
+        internal static void ChangeSlope(int i, int j, SlopeType slopeType, bool IsHalfBlock = false)
         {
-            int i = Player.tileTargetX;
-            int j = Player.tileTargetY;
             Tile tile = Framing.GetTileSafely(i, j);
 
             if (tile != null && Main.tileSolid[tile.type] && tile.type >= 0 && tile.IsActive)
@@ -212,6 +218,109 @@ namespace BuilderEssentials.Utilities
             Player.tileRangeX = tileX;
             Player.tileRangeY = tileY;
             mp.Player.blockRange = blockRange;
+        }
+        
+        /// <summary>
+        /// Returns true if it is a valid tile placement position
+        /// </summary>
+        /// <param name="i">X axis tile coordinates</param>
+        /// <param name="j">Y axis tile coordinates</param>
+        internal static bool ValidTilePlacement(int i, int j)
+        {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+            if (mp.PlacementAnywhere) return true;
+
+            int[] treeTypes =
+            {
+                TileID.Trees, TileID.PalmTree, TileID.PineTree, TileID.MushroomTrees,
+                TileID.ChristmasTree, TileID.TreeAmber, TileID.TreeAmethyst, TileID.TreeDiamond,
+                TileID.TreeEmerald, TileID.TreeRuby, TileID.TreeSapphire, TileID.TreeTopaz,
+                TileID.TreeNymphButterflyJar, TileID.VanityTreeSakura, TileID.VanityTreeSakuraSaplings,
+                TileID.VanityTreeYellowWillow, TileID.VanityTreeWillowSaplings
+            };
+
+            Tile middle = Framing.GetTileSafely(i, j);
+            Tile top = Framing.GetTileSafely(i, j - 1);
+            Tile right = Framing.GetTileSafely(i + 1, j);
+            Tile bottom = Framing.GetTileSafely(i, j + 1);
+            Tile left = Framing.GetTileSafely(i - 1, j);
+            
+            //TODO: Break this return in some meaningful bools
+            return (!middle.IsActive || !Main.tileSolid[middle.type]) && 
+                   !treeTypes.Contains(middle.type) &&
+                   (
+                       (top.IsActive && Main.tileSolid[top.type]) ||
+                       (right.IsActive && Main.tileSolid[right.type]) ||
+                       (bottom.IsActive && Main.tileSolid[bottom.type]) ||
+                       (left.IsActive && Main.tileSolid[left.type]) ||
+                       middle.wall != 0
+                   );
+        }
+
+        /// <summary>
+        /// Returns true if a given itemType can be reduced by a given amount
+        /// </summary>
+        /// <param name="itemType">Item type of the item to be reduced</param>
+        /// <param name="amount">Amount to be reduced by</param>
+        /// <param name="reduceStack">Whether it actually reduces the stack or just checks if it's possible</param>
+        /// <param name="itemShouldBeInHand">Checks HeldItem instead of going through the whole inventory first</param>
+        internal static bool CanReduceItemStack(int itemType, int amount = 1, bool reduceStack = true, bool itemShouldBeInHand = false)
+        {
+            BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+            if (mp.InfinitePlacement) return true;
+
+            //Checking heldItem first before looping through the inventory
+            //sometimes we might know it has to be in hand (like a tile being placed..)
+            if (itemShouldBeInHand)
+            {
+                if (Main.LocalPlayer.HeldItem.type == itemType && Main.LocalPlayer.HeldItem.stack >= amount)
+                {
+                    if (reduceStack)
+                        Main.LocalPlayer.HeldItem.stack -= amount;
+                    return true;
+                }
+            }
+
+            foreach (Item item in Main.LocalPlayer.inventory)
+            {
+                if (item.type == itemType && item.stack >= amount)
+                {
+                    if (reduceStack)
+                        item.stack -= amount;
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if tile in given coordinates can be broken when trying to place a new tile in the same position
+        /// </summary>
+        /// <param name="i">X axis tile coordinates</param>
+        /// <param name="j">Y axis tile coordinates</param>
+        internal static bool CanBreakToPlaceTile(int i, int j)
+        {
+            //Wasn't able to get a dynamic solution working making use of
+            //collisionType, whether tile is (not) active or Main.tileSolid..
+            //afaik there's no array that vanilla uses for this thing
+            //everything's hardcoded in the WorldGen.PlaceTile() method
+            
+            Tile tile = Framing.GetTileSafely(i, j);
+            int[] breakableTilesWithoutCollision =
+            {
+                TileID.Plants, TileID.Plants2, TileID.LongMoss, TileID.SmallPiles,
+                TileID.LargePiles, TileID.LargePiles2, TileID.MushroomPlants, TileID.SeaOats, 
+                TileID.OasisPlants, TileID.Pots, TileID.Stalactite, TileID.CorruptThorns,
+                TileID.CorruptPlants, TileID.CrimsonThorns, TileID.CrimsonPlants,
+                TileID.CrimsonVines, TileID.JungleThorns, TileID.JunglePlants, 
+                TileID.JunglePlants2, TileID.JungleVines, TileID.Vines, /*VineFlowers?*/
+                TileID.PlantDetritus, TileID.LilyPad, TileID.BeeHive, TileID.Cobweb,
+                TileID.BeachPiles, 
+            };
+
+            return breakableTilesWithoutCollision.Contains(tile.type);
         }
     }
 }

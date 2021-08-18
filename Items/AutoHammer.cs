@@ -60,7 +60,7 @@ namespace BuilderEssentials.Items
 
             if (canHammerTiles && panel.selectedIndex != -1)
             {
-                HelperMethods.ChangeSlope(panel.slopeType, panel.IsHalfBlock);
+                HelperMethods.ChangeSlope(Player.tileTargetX, Player.tileTargetY, panel.slopeType, panel.IsHalfBlock);
                 return false;
             }
 
