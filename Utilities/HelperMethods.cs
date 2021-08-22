@@ -366,16 +366,15 @@ namespace BuilderEssentials.Utilities
         /// <param name="infinitePaint">If true, it will not consume resources from the player</param>
         internal static void PaintTileOrWall(byte color, int selectedTool, Vector2 coords, bool infinitePaint = false)
         {
-            //TODO: Add vanilla's painting particles? They're the color of the color being used
-            
             Tile tile = Framing.GetTileSafely(coords);
-            if (color < 0 || color > 32 || selectedTool < 0 || selectedTool > 1) return;
+            if (tile == null || color < 0 || color > 32 || selectedTool < 0 || selectedTool > 1) return;
             bool needsSync = false;
 
             if (selectedTool == 0 && tile.IsActive && tile.Color != color)
             {
                 if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), reduceStack: true))
                 {
+                    WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, color, tile.Color);
                     tile.Color = color;
                     needsSync = true;
                 }
@@ -384,6 +383,7 @@ namespace BuilderEssentials.Utilities
             {
                 if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), reduceStack: true))
                 {
+                    WorldGen.paintEffect((int)coords.X, (int)coords.Y, color, tile.Color);
                     tile.WallColor = color;
                     needsSync = true;
                 }
@@ -400,6 +400,7 @@ namespace BuilderEssentials.Utilities
         internal static void ScrapPaint(Vector2 coords)
         {
             Tile tile = Framing.GetTileSafely(coords);
+            if (tile == null) return;
             bool needsSync = false;
 
             if (tile.Color != 0)
