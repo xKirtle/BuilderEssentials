@@ -14,6 +14,7 @@ namespace BuilderEssentials.UI.UIStates
         public MenuPanel menuPanel;
         public AutoHammerWheel autoHammerWheel;
         public MultiWandWheel multiWandWheel;
+        public PaintWheel paintWheel;
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -34,6 +35,10 @@ namespace BuilderEssentials.UI.UIStates
             multiWandWheel = new MultiWandWheel();
             Append(multiWandWheel);
             multiWandWheel.Hide();
+
+            paintWheel = new PaintWheel();
+            Append(paintWheel);
+            paintWheel.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -41,11 +46,13 @@ namespace BuilderEssentials.UI.UIStates
             base.Update(gameTime);
             autoHammerWheel?.Update();
             multiWandWheel?.Update();
+            paintWheel?.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+            paintWheel?.UpdateColors();
         }
 
         public void Load(Mod mod)
@@ -60,6 +67,7 @@ namespace BuilderEssentials.UI.UIStates
             menuPanel = null;
             autoHammerWheel = null;
             multiWandWheel = null;
+            paintWheel = null;
         }
     }
 }

@@ -322,5 +322,85 @@ namespace BuilderEssentials.Utilities
 
             return breakableTilesWithoutCollision.Contains(tile.type);
         }
+        
+        /*------------------------------------------------------------------------------------------------------------*/
+        internal static int PaintItemTypeToIndex(int paintType)
+        {
+            //The outputed indexes are not the paint color byte values. For those just increment one.
+
+            if (paintType >= 1073 && paintType <= 1099)
+                return paintType - 1073;
+            else if (paintType >= 1966 && paintType <= 1968)
+                return paintType - 1939;
+            else if (paintType >= 4668)
+                return paintType - 4638;
+
+            return -1; //it will never reach here
+        }
+
+        internal static int ColorByteToPaintItemType(byte color)
+        {
+            if (color >= 1 && color <= 27)
+                return (color - 1) + 1073;
+            else if (color >= 28 && color <= 30)
+                return (color - 1) + 1939;
+            else if (color == 31)
+                return (color - 1) + 4638;
+
+            return -1; //it will never reach here
+        }
+        
+        internal static void PaintTileOrWall(byte color, int selectedTool, Vector2 coords, bool infinitePaint = false)
+        {
+            //TODO: Add vanilla's painting particles? They're the color of the color being used
+            
+            Tile tile = Framing.GetTileSafely(coords);
+            if (color < 0 || color > 32 || selectedTool == 2) return;
+            bool needsSync = false;
+
+            if (selectedTool == 0 && tile.IsActive && tile.Color != color)
+            {
+                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), reduceStack: true))
+                {
+                    tile.Color = color;
+                    needsSync = true;
+                }
+            }
+            else if (selectedTool == 1 && tile.wall != 0 && tile.WallColor != color)
+            {
+                if (infinitePaint || CanReduceItemStack(ColorByteToPaintItemType(color), reduceStack: true))
+                {
+                    tile.WallColor = color;
+                    needsSync = true;
+                }
+            }
+
+            if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, (int)coords.X, (int)coords.Y, 1);
+        }
+
+        internal static void ScrapPaint(Vector2 coords)
+        {
+            Tile tile = Framing.GetTileSafely(coords);
+            bool needsSync = false;
+
+            if (tile.Color != 0)
+            {
+                tile.Color = 0;
+                needsSync = true;
+            }
+
+            if (tile.WallColor != 0)
+            {
+                tile.WallColor = 0;
+                needsSync = true;
+            }
+
+            if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X, number2: (int)coords.Y);
+                NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X, number2: (int)coords.Y);
+            }
+        }
     }
 }
