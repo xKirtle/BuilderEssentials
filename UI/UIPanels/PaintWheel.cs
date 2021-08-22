@@ -260,7 +260,7 @@ namespace BuilderEssentials.UI.UIPanels
 
             //Convering paint item types to actual indexes
             for (int i = 0; i < paintInInventory.Count; i++)
-                foundIndexes[i] = HelperMethods.PaintItemTypeToIndex(paintInInventory[i]);
+                foundIndexes[i] = HelperMethods.PaintItemTypeToColorIndex(paintInInventory[i]);
 
             //Reset all colors available
             for (int i = 0; i < colorAvailable.Length; i++)

@@ -317,14 +317,17 @@ namespace BuilderEssentials.Utilities
                 TileID.CrimsonVines, TileID.JungleThorns, TileID.JunglePlants, 
                 TileID.JunglePlants2, TileID.JungleVines, TileID.Vines, /*VineFlowers?*/
                 TileID.PlantDetritus, TileID.LilyPad, TileID.BeeHive, TileID.Cobweb,
-                TileID.BeachPiles, 
+                TileID.BeachPiles
             };
 
             return breakableTilesWithoutCollision.Contains(tile.type);
         }
         
-        /*------------------------------------------------------------------------------------------------------------*/
-        internal static int PaintItemTypeToIndex(int paintType)
+        /// <summary>
+        /// Returns the color index used in the PaintWheel given a paint item type (increase 1 to get the byte value used by Tiles)
+        /// </summary>
+        /// <param name="paintType">Item type of the paint item</param>
+        internal static int PaintItemTypeToColorIndex(int paintType)
         {
             //The outputed indexes are not the paint color byte values. For those just increment one.
 
@@ -338,6 +341,10 @@ namespace BuilderEssentials.Utilities
             return -1; //it will never reach here
         }
 
+        /// <summary>
+        /// Returns the paint item type given a color byte value
+        /// </summary>
+        /// <param name="color">Color byte value used by Tiles</param>
         internal static int ColorByteToPaintItemType(byte color)
         {
             if (color >= 1 && color <= 27)
@@ -350,12 +357,19 @@ namespace BuilderEssentials.Utilities
             return -1; //it will never reach here
         }
         
+        /// <summary>
+        /// Paints a tile or wall (based on given arguments)
+        /// </summary>
+        /// <param name="color">Color byte value used by Tiles</param>
+        /// <param name="selectedTool">0: Paint Tiles, 1: Paint Walls</param>
+        /// <param name="coords">Tile coordinates to apply the painting to</param>
+        /// <param name="infinitePaint">If true, it will not consume resources from the player</param>
         internal static void PaintTileOrWall(byte color, int selectedTool, Vector2 coords, bool infinitePaint = false)
         {
             //TODO: Add vanilla's painting particles? They're the color of the color being used
             
             Tile tile = Framing.GetTileSafely(coords);
-            if (color < 0 || color > 32 || selectedTool == 2) return;
+            if (color < 0 || color > 32 || selectedTool < 0 || selectedTool > 1) return;
             bool needsSync = false;
 
             if (selectedTool == 0 && tile.IsActive && tile.Color != color)
@@ -379,6 +393,10 @@ namespace BuilderEssentials.Utilities
                 NetMessage.SendTileSquare(-1, (int)coords.X, (int)coords.Y, 1);
         }
 
+        /// <summary>
+        /// Remove the paint from a tile in a given coordinate
+        /// </summary>
+        /// <param name="coords">Tile coordinate to scrap the paint at</param>
         internal static void ScrapPaint(Vector2 coords)
         {
             Tile tile = Framing.GetTileSafely(coords);
