@@ -5,6 +5,7 @@ using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.UI;
 
 namespace BuilderEssentials.UI.Elements.ShapesDrawer
@@ -58,6 +59,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
         internal void PlaceTilesInSelection(bool isFill = false)
         {
+            //Maybe place tiles with a BFS algorithm from the top left corner instead of all at once for big selections?
+
             if (Items.ShapesDrawer.selectedItemType <= 0) return;
 
             int rectWidth = (int) Math.Abs(cs.RMBEnd.X - cs.RMBStart.X);
@@ -66,22 +69,22 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             int minX = (int) (cs.RMBStart.X < cs.RMBEnd.X ? cs.RMBStart.X : cs.RMBEnd.X);
             int minY = (int) (cs.RMBStart.Y < cs.RMBEnd.Y ? cs.RMBStart.Y : cs.RMBEnd.Y);
-            Item item = new Item();
-            item.SetDefaults(Items.ShapesDrawer.selectedItemType);
 
             for (int i = 0; i <= rectWidth; i++)
             {
                 for (int j = 0; j <= rectHeight; j++)
                 {
-                    //TODO: This does not work for non fill, think this through
-                    if (!isFill && ((i != 0 || i != rectWidth - 1) || (j != 0 || j != rectHeight - 1))) continue;
-                    
-                    //HelperMethods.PlaceTile...
-                    //TODO: Sync this
-
-                    WorldGen.PlaceTile(minX + i, minY + j, item.createTile, style: item.placeStyle);
+                    if (!isFill && !(i == 0 || j == 0 || i == rectWidth || j == rectHeight)) continue;
+                    //TODO: Walls are not working?
+                    HelperMethods.PlaceTile(minX + i, minY + j, Items.ShapesDrawer.selectedItemType);
                 }
             }
+            
+            int syncSize = rectWidth > rectHeight ? rectWidth : rectHeight;
+            syncSize += 1 + (syncSize % 2);
+            
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, minX, minY, syncSize);
         }
 
         private int leftMouseTimer;

@@ -10,6 +10,7 @@ using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 using Terraria.UI;
 
 namespace BuilderEssentials.Utilities
@@ -421,5 +422,82 @@ namespace BuilderEssentials.Utilities
                 NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X, number2: (int)coords.Y);
             }
         }
+        
+        /*-------------------------------------- Refactor code below (from 1.3) --------------------------------------*/
+        internal enum ItemTypes
+        {
+            Air,
+            Tile,
+            Wall
+        }
+        
+        internal static ItemTypes WhatIsThisItem(int itemType)
+        {
+            //Settint item defaults with -1 will throw an IOOB
+            if (itemType == -1) return ItemTypes.Air;
+
+            Item item = new Item();
+            item.SetDefaults(itemType);
+
+            if (item.createTile != -1 && item.createWall == -1)
+                return ItemTypes.Tile;
+            else if (item.createTile == -1 && item.createWall != -1)
+                return ItemTypes.Wall;
+            else
+                return ItemTypes.Air;
+        }
+        
+        internal static Tile PlaceTile(int i, int j, int itemType, 
+            bool forced = false, bool sync = true, int placeStyle = -1)
+            => PlaceTile(i, j, WhatIsThisItem(itemType), itemType, forced, sync, placeStyle);
+        
+         internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int itemType, 
+             bool forced = false, bool sync = true, int placeStyle = -1)
+        {
+            if (itemType == 0 || !ValidTileCoordinates(i, j) || Framing.GetTileSafely(i, j).IsActive)
+                return new Tile();
+
+            Item item = new Item();
+            item.SetDefaults(itemType);
+            Tile tile = Framing.GetTileSafely(i, j);
+
+            TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
+            if (data != null) return new Tile(); //PlaceMultiTile(i, j, type, forced, sync, placeStyle);
+
+            if ((itemTypes == HelperMethods.ItemTypes.Tile && tile.IsActive && tile.CollisionType != -1) ||
+                (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall != 0) ||
+                !CanReduceItemStack(itemType, reduceStack: false))
+                return new Tile();
+
+            CanReduceItemStack(itemType); //We know it'll reduce the stack since it passed the condition above
+
+            switch (itemTypes)
+            {
+                case ItemTypes.Air:
+                    break;
+                case ItemTypes.Tile:
+                    if (placeStyle == -1)
+                        placeStyle = item.placeStyle;
+                    WorldGen.PlaceTile(i, j, item.createTile, forced: forced, style: placeStyle);
+                    break;
+                case ItemTypes.Wall:
+                    WorldGen.PlaceWall(i, j, item.createWall);
+                    break;
+            }
+
+            if (sync && Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, i, j, 1);
+
+            return Framing.GetTileSafely(i, j);
+        }
+
+         //Public method
+         //Player.PlaceThing()
+         
+         //Relevant private methods?
+         //Player.PlaceThing_Tiles()
+         //Player.PlaceThing_Tiles_PlaceIt()
+         //Player.PlaceThing_Walls()
+         //Player.PlaceThing_Walls_FillEmptySpace()
     }
 }

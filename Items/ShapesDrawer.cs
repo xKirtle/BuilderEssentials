@@ -54,10 +54,6 @@ namespace BuilderEssentials.Items
                 player.cursorItemIconEnabled = true;
                 player.cursorItemIconID = selectedItemType;
             }
-            
-            
-            //Implement a method in each Shape to actually place tiles (not where drawRectangle goes over)
-            //Call it here once if cs.LMBDown and CanPlaceTile. Said method will change depending if fill is enabled or not
         }
 
         public override void UpdateInventory(Player player)

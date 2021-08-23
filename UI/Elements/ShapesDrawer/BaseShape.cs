@@ -35,10 +35,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             Vector2 position = Main.ReverseGravitySupport(new Vector2(x, y) * 16f - Main.screenPosition, 16f);
             
             Main.spriteBatch.Draw(texture.Value, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            
-            //TODO: Place tiles in ShapesDrawer
-            //Bring back WhatIsThisItem to determine whether I should place a tile or a wall here?
-            //Shapes Drawer will only working with 1x1 tiles, maybe implement PlaceTile again as well?
         }
 
         internal void PlotLine(int x0, int y0, int x1, int y1)
