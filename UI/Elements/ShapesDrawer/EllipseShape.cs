@@ -14,10 +14,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
         /// <summary></summary>
         /// <param name="itemType">Item Type that must be held by the player for the shape to be able to be modified</param>
-        public EllipseShape(int itemType, UIState uiState)
+        public EllipseShape(int itemType, UIState uiState) : base(itemType, uiState)
         {
-            itemToWorkWith = itemType;
-            cs = new CoordsSelection(itemType, uiState);
             CanPlaceTiles = item => itemToWorkWith == item && selected[2] && !cs.RMBDown; //&& shapesDrawer has selected an itemType
         }
         
@@ -61,13 +59,13 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
             do {
                 if (allQuads || quadOne)
-                    DrawRectangle(x1, y0); /*   I. Quadrant */
+                    PlotPixel(x1, y0); /*   I. Quadrant */
                 if (allQuads || quadTwo)
-                    DrawRectangle(x0, y0); /*  II. Quadrant */
+                    PlotPixel(x0, y0); /*  II. Quadrant */
                 if (allQuads || quadThree)
-                    DrawRectangle(x0, y1); /* III. Quadrant */
+                    PlotPixel(x0, y1); /* III. Quadrant */
                 if (allQuads || quadFour)
-                    DrawRectangle(x1, y1); /*  IV. Quadrant */
+                    PlotPixel(x1, y1); /*  IV. Quadrant */
 
                     e2 = 2*err;
                 if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */ 
@@ -75,10 +73,10 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             } while (x0 <= x1);
    
             while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
-                DrawRectangle(x0-1, y0); /* -> finish tip of ellipse */
-                DrawRectangle(x1+1, y0++); 
-                DrawRectangle(x0-1, y1);
-                DrawRectangle(x1+1, y1--); 
+                PlotPixel(x0-1, y0); /* -> finish tip of ellipse */
+                PlotPixel(x1+1, y0++); 
+                PlotPixel(x0-1, y1);
+                PlotPixel(x1+1, y1--); 
             }
 
             //Draw line in axis if ellipse has a center in the X/Y axis

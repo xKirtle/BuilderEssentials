@@ -55,7 +55,6 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
                 {
                     int row = i;
                     int column = j;
-                    //TODO: FIX THIS
                     //I have no idea why the texture names start at 1 instead of 0 but I'm too lazy to fix that
                     Asset<Texture2D> tempButtonTexture = HelperMethods.RequestTexture(texturePath + $"SM{(column + 1) + 3 * row}");
                     UIImage tempButton = new UIImage(tempButtonTexture);

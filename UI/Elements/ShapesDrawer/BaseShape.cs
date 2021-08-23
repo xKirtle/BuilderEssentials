@@ -20,14 +20,25 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal Color Blue = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
         internal Color Yellow = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f;
         internal Color Red = new Color(1f, 0f, 0f, .75f) * 0.8f;
+        internal int itemToWorkWith;
 
-        internal virtual void DrawRectangle(int x, int y)
+        public BaseShape(int itemType, UIState uiState)
+        {
+            itemToWorkWith = itemType;
+            cs = new CoordsSelection(itemType, uiState);
+        }
+
+        internal virtual void PlotPixel(int x, int y, bool placeItem = false, int itemType = -1)
         {
             Asset<Texture2D> texture = TextureAssets.Extra[2];
             Rectangle value = new Rectangle(0, 0, 16, 16);
             Vector2 position = Main.ReverseGravitySupport(new Vector2(x, y) * 16f - Main.screenPosition, 16f);
             
             Main.spriteBatch.Draw(texture.Value, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            
+            //TODO: Place tiles in ShapesDrawer
+            //Bring back WhatIsThisItem to determine whether I should place a tile or a wall here?
+            //Shapes Drawer will only working with 1x1 tiles, maybe implement PlaceTile again as well?
         }
 
         internal void PlotLine(int x0, int y0, int x1, int y1)
@@ -37,7 +48,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             int err = dx + dy, e2;
             for (;;)
             {
-                DrawRectangle(x0, y0);
+                PlotPixel(x0, y0);
                 e2 = 2 * err;
                 if (e2 >= dy)
                 {
@@ -55,7 +66,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             }
         }
 
-        internal void Update()
+        internal virtual void Update()
         {
             selected = UIUIState.Instance.menuPanel?.selected;
         }

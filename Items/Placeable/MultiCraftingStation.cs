@@ -28,7 +28,6 @@ namespace BuilderEssentials.Items.Placeable
 
         public override void AddRecipes()
         {
-            //TODO: Add mod compatibility?
             CreateRecipe()
             .AddIngredient(GetModItem(ItemType<PreHardmodeCraftingStation>()))
             .AddIngredient(GetModItem(ItemType<HardmodeCraftingStation>()))

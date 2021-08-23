@@ -11,17 +11,11 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 {
     internal class RectangleShape : BaseShape
     {
-        private int itemToWorkWith;
-
         /// <summary></summary>
         /// <param name="itemType">Item Type that must be held by the player for the shape to be able to be modified</param>
-        public RectangleShape(int itemType, UIState uiState)
+        public RectangleShape(int itemType, UIState uiState) : base(itemType, uiState)
         {
-            itemToWorkWith = itemType;
-            cs = new CoordsSelection(itemType, uiState);
-            CanPlaceTiles =
-                item => itemToWorkWith == item && selected[1] && 
-                        !cs.RMBDown && Items.ShapesDrawer.selectedItemType != -1;
+            CanPlaceTiles = item => itemToWorkWith == item && selected[1] && !cs.RMBDown;
         }
 
         internal void PlotRectangle(int x0, int y0, int x1, int y1)
@@ -60,6 +54,47 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 }
                 color = tempColor;
             }
+        }
+
+        internal void PlaceTilesInSelection(bool isFill = false)
+        {
+            if (Items.ShapesDrawer.selectedItemType <= 0) return;
+
+            int rectWidth = (int) Math.Abs(cs.RMBEnd.X - cs.RMBStart.X);
+            int rectHeight = (int) Math.Abs(cs.RMBEnd.Y - cs.RMBStart.Y);
+            if (rectWidth == 0 && rectHeight == 0) return;
+            
+            int minX = (int) (cs.RMBStart.X < cs.RMBEnd.X ? cs.RMBStart.X : cs.RMBEnd.X);
+            int minY = (int) (cs.RMBStart.Y < cs.RMBEnd.Y ? cs.RMBStart.Y : cs.RMBEnd.Y);
+            Item item = new Item();
+            item.SetDefaults(Items.ShapesDrawer.selectedItemType);
+
+            for (int i = 0; i <= rectWidth; i++)
+            {
+                for (int j = 0; j <= rectHeight; j++)
+                {
+                    //TODO: This does not work for non fill, think this through
+                    if (!isFill && ((i != 0 || i != rectWidth - 1) || (j != 0 || j != rectHeight - 1))) continue;
+                    
+                    //HelperMethods.PlaceTile...
+                    //TODO: Sync this
+
+                    WorldGen.PlaceTile(minX + i, minY + j, item.createTile, style: item.placeStyle);
+                }
+            }
+        }
+
+        private int leftMouseTimer;
+        internal override void Update()
+        {
+            base.Update();
+            
+            //TODO: Does not work in Update nor Draw?? Not placing tiles..
+            if (cs.LMBDown && ++leftMouseTimer == 2)
+                PlaceTilesInSelection(selected[2]);
+
+            if (!cs.LMBDown)
+                leftMouseTimer = 0;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
