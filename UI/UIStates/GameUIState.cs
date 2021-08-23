@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.UI.Elements.ShapesDrawer;
+﻿using BuilderEssentials.Items;
+using BuilderEssentials.UI.Elements.ShapesDrawer;
 using BuilderEssentials.UI.UIPanels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,15 +20,15 @@ namespace BuilderEssentials.UI.UIStates
             Instance = this;
             base.OnInitialize();
 
-            rectangleShape = new RectangleShape(ItemID.None, this);
+            rectangleShape = new RectangleShape(ModContent.ItemType<ShapesDrawer>(), this);
             Append(rectangleShape);
             rectangleShape.Show();
 
-            ellipseShape = new EllipseShape(ItemID.None, this);
+            ellipseShape = new EllipseShape(ModContent.ItemType<ShapesDrawer>(), this);
             Append(ellipseShape);
             ellipseShape.Show();
 
-            // bezierCurve = new BezierCurve(ItemID.None, this);
+            // bezierCurve = new BezierCurve(ModContent.ItemType<ShapesDrawer>(), this);
             // Append(bezierCurve);
             // bezierCurve.Show();
         }

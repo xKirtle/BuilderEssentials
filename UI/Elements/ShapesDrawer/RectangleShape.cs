@@ -20,7 +20,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             itemToWorkWith = itemType;
             cs = new CoordsSelection(itemType, uiState);
             CanPlaceTiles =
-                item => itemToWorkWith == item && selected[2] && !cs.RMBDown; //&& shapesDrawer has selected an itemType
+                item => itemToWorkWith == item && selected[1] && 
+                        !cs.RMBDown && Items.ShapesDrawer.selectedItemType != -1;
         }
 
         internal void PlotRectangle(int x0, int y0, int x1, int y1)
@@ -58,16 +59,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                     PlotLine((int) (x0), fixedY, (int) (x1), fixedY);
                 }
                 color = tempColor;
-            }
-        }
-
-        internal override void DrawRectangle(int x, int y)
-        {
-            base.DrawRectangle(x, y);
-            
-            if (cs.LMBDown && CanPlaceTiles(Main.LocalPlayer.HeldItem.type))
-            {
-                //Place tiles here
             }
         }
 

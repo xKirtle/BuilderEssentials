@@ -22,7 +22,7 @@ namespace BuilderEssentials.UI.UIStates
 
             arrowPanel = new ArrowPanel();
             Append(arrowPanel);
-            arrowPanel.Show();
+            arrowPanel.Hide();
             
             menuPanel = new MenuPanel();
             Append(menuPanel);
