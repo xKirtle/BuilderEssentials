@@ -44,15 +44,11 @@ namespace BuilderEssentials.UI.UIStates
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            autoHammerWheel?.Update();
-            multiWandWheel?.Update();
-            paintWheel?.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            paintWheel?.UpdateColors();
         }
 
         public void Load(Mod mod)

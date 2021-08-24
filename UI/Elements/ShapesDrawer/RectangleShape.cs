@@ -91,9 +91,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal override void Update()
         {
             base.Update();
-            
-            //TODO: Does not work in Update nor Draw?? Not placing tiles..
-            if (cs.LMBDown && ++leftMouseTimer == 2)
+            if (cs.LMBDown && !Main.LocalPlayer.mouseInterface && ++leftMouseTimer == 2)
                 PlaceTilesInSelection(selected[2]);
 
             if (!cs.LMBDown)

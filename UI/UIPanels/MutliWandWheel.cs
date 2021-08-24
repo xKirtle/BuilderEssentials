@@ -3,6 +3,7 @@ using System.Linq;
 using BuilderEssentials.UI.Elements;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
@@ -96,19 +97,15 @@ namespace BuilderEssentials.UI.UIPanels
             hoverText?.Remove();
         }
 
-        public void Update()
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!Visible) return;
-            if (IsMouseHovering)
-                Main.LocalPlayer.mouseInterface = false;
-
-            if (elementHovered)
-            {
-                Main.LocalPlayer.mouseInterface = true;
-                Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
-                hoverText?.Left.Set(cachedMouse.X + 22 - Left.Pixels, 0);
-                hoverText?.Top.Set(cachedMouse.Y + 22 - Top.Pixels, 0);
-            }
+            base.Draw(spriteBatch);
+            if (!elementHovered) return;
+            
+            Main.LocalPlayer.mouseInterface = true;
+            Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
+            hoverText?.Left.Set(cachedMouse.X + 22 - Left.Pixels, 0);
+            hoverText?.Top.Set(cachedMouse.Y + 22 - Top.Pixels, 0);
         }
 
         public override void Show()

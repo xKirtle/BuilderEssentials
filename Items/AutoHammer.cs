@@ -79,6 +79,9 @@ namespace BuilderEssentials.Items
 
             if (Main.mouseRightRelease)
                 mouseRightTimer = 0;
+            
+            if (Main.LocalPlayer.HeldItem != this.Item)
+                panel.Hide();
         }
 
         public override void AddRecipes()

@@ -63,7 +63,11 @@ namespace BuilderEssentials.UI.UIPanels
                 toolElements[i] = new UIImageButton(toolTextures[i]);
 
             colorOverlay = new CustomUIImage(HelperMethods.RequestTexture(texturePath + "PaintSelected"));
+            colorOverlay.OnMouseOver += (__, _) => elementHovered = true;
+            colorOverlay.OnMouseOut += (__, _) => elementHovered = false;
             toolOverlay = new CustomUIImage(HelperMethods.RequestTexture(texturePath + "ToolSelected"));
+            toolOverlay.OnMouseOver += (__, _) => elementHovered = true;
+            toolOverlay.OnMouseOut += (__, _) => elementHovered = false;
 
             int radius = 155;
             double angle = Math.PI / 12;
@@ -271,22 +275,15 @@ namespace BuilderEssentials.UI.UIPanels
                 colorAvailable[index] = true;
         }
 
-        public void UpdateColors()
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintTool>())
-                UpdateCrossesOnColors();
-        }
-
-        public void Update()
-        {
-            if (!Visible) return;
+            base.Draw(spriteBatch);
             bool isSpectre = Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintTool>();
             for (int i = 0; i < toolElements.Length; i++)
                 toolElements[i].SetImage(toolTextures[isSpectre ? i + toolElements.Length : i]);
-
-            if (IsMouseHovering)
-                Main.LocalPlayer.mouseInterface = false;
-
+            
+            UpdateCrossesOnColors();
+            
             if (elementHovered)
                 Main.LocalPlayer.mouseInterface = true;
         }

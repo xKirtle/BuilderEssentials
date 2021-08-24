@@ -124,11 +124,16 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
                 elements[tempIndex].SetImage(HelperMethods.RequestTexture(texture));
             }
         }
-        
-        public override void Update(GameTime gameTime)
+
+        public override void Draw(SpriteBatch spriteBatch)
         {
+            base.Draw(spriteBatch);
+            
             //Fixing UI Scale positioning
             Top.Set((Main.screenHeight - MenuHeight) / 2, 0);
+            
+            if (IsMouseHovering)
+                Main.LocalPlayer.mouseInterface = true;
         }
     }
 }

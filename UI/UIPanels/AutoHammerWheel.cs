@@ -104,13 +104,10 @@ namespace BuilderEssentials.UI.UIPanels
                     break;
             }
         }
-        
-        public void Update()
+
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!Visible) return;
-            if (IsMouseHovering)
-                Main.LocalPlayer.mouseInterface = false;
-            
+            base.Draw(spriteBatch);
             if (elementHovered)
                 Main.LocalPlayer.mouseInterface = true;
         }

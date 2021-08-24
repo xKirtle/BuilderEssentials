@@ -39,5 +39,12 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
             //Fixing UI Scale positioning
             Top.Set(Main.screenHeight / 2, 0);
         }
+        
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            if (IsMouseHovering)
+                Main.LocalPlayer.mouseInterface = true;
+        }
     }
 }
