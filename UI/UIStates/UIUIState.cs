@@ -1,7 +1,9 @@
-﻿using BuilderEssentials.UI.UIPanels;
+﻿using BuilderEssentials.Items;
+using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIPanels.ShapesMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -44,6 +46,21 @@ namespace BuilderEssentials.UI.UIStates
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<ShapesDrawer>())
+            {
+                arrowPanel.Hide();
+                menuPanel.Hide();
+            }
+
+            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<AutoHammer>())
+                autoHammerWheel.Hide();
+            
+            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<MultiWand>())
+                multiWandWheel.Hide();
+            
+            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<SpectrePaintTool>())
+                paintWheel.Hide();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

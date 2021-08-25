@@ -35,7 +35,7 @@ namespace BuilderEssentials.UI.UIStates
 
             fillWandSelection = new FillWandSelection(ModContent.ItemType<FillWand>(), this);
             Append(fillWandSelection);
-            fillWandSelection.Show();
+            fillWandSelection.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -43,6 +43,8 @@ namespace BuilderEssentials.UI.UIStates
             base.Update(gameTime);
             rectangleShape?.Update();
             ellipseShape?.Update();
+            
+            fillWandSelection.Hide();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

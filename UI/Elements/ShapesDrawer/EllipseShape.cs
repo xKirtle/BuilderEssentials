@@ -202,14 +202,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 PlotPixel(x1+1, y1--); 
             }
 
-            if (CanPlaceItems)
-            {
-                int syncSize = rectWidth > rectHeight ? rectWidth : rectHeight;
-                syncSize += 1 + (syncSize % 2);
-
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    NetMessage.SendTileSquare(-1, minX, minY, syncSize);
-            }
+            if (CanPlaceItems && Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, minX, minY, rectWidth * 2, rectHeight * 2);
 
             CanPlaceItems = false;
             //Draw line in axis if rectangle has a center in the X/Y axis

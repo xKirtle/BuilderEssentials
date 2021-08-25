@@ -37,14 +37,13 @@ namespace BuilderEssentials.Items
             Item.UseSound = SoundID.Item1;
             toolRange = new Vector2(9, 8);
             Item.tileBoost = 4;
-
-            panel = UIUIState.Instance.autoHammerWheel;
         }
 
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-
+            panel = UIUIState.Instance.autoHammerWheel;
+            
             if (Main.mouseRight && player.HeldItem == Item && 
                 (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
                 panel.Toggle();
@@ -64,7 +63,8 @@ namespace BuilderEssentials.Items
         public override bool CanUseItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return true;
-
+            panel = UIUIState.Instance.autoHammerWheel;
+            
             if (canHammerTiles && panel.selectedIndex != -1)
             {
                 HelperMethods.ChangeSlope(Player.tileTargetX, Player.tileTargetY, panel.slopeType, panel.IsHalfBlock);
@@ -75,14 +75,6 @@ namespace BuilderEssentials.Items
         }
 
         private int mouseRightTimer = 0;
-
-        public override void UpdateInventory(Player player)
-        {
-            if (player.whoAmI != Main.myPlayer) return;
-
-            if (Main.LocalPlayer.HeldItem != this.Item)
-                panel.Hide();
-        }
 
         public override void AddRecipes()
         {

@@ -38,8 +38,6 @@ namespace BuilderEssentials.Items
             Item.rare = ItemRarityID.Red;
             Item.autoReuse = true;
             toolRange = new Vector2(9, 8);
-
-            panel = UIUIState.Instance.paintWheel;
         }
 
         public override Vector2? HoldoutOffset() => new Vector2(5, -8);
@@ -84,6 +82,7 @@ namespace BuilderEssentials.Items
         public override bool CanUseItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return false;
+            panel = UIUIState.Instance.paintWheel;
             if ((!canPaint && panel.toolIndex != 2) ||
                 !HelperMethods.ToolHasRange(toolRange)) return false;
 
@@ -105,14 +104,6 @@ namespace BuilderEssentials.Items
             }
 
             return true;
-        }
-
-        public override void UpdateInventory(Player player)
-        {
-            if (player.whoAmI != Main.myPlayer) return;
-
-            if (Main.LocalPlayer.HeldItem != this.Item)
-                panel.Hide();
         }
 
         public override void AddRecipes()

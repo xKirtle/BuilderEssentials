@@ -391,7 +391,10 @@ namespace BuilderEssentials.Utilities
             }
 
             if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendTileSquare(-1, (int)coords.X, (int)coords.Y, 1);
+            {
+                //TODO: Fix Color syncing (line below does not work)
+                //NetMessage.SendTileSquare(-1, (int) coords.X, (int) coords.Y, 1);
+            }
         }
 
         /// <summary>
@@ -418,8 +421,9 @@ namespace BuilderEssentials.Utilities
 
             if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
             {
-                NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X, number2: (int)coords.Y);
-                NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X, number2: (int)coords.Y);
+                //TODO: Fix Color syncing (line below does not work)
+                // NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X, number2: (int)coords.Y);
+                // NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X, number2: (int)coords.Y);
             }
         }
         
@@ -580,7 +584,7 @@ namespace BuilderEssentials.Utilities
             {
                 if (multiTileCoords.Contains(new Vector2(i, j))) continue;
 
-                //Check if multitile, and if yes, add it to a list of blacklisted coords
+                //Check if multitile, and if yes, add it to a list of blacklisted coords, so it only removes and drops the tile once
                 Tile tile = Framing.GetTileSafely(i, j);
                 TileObjectData data = TileObjectData.GetTileData(tile);
 

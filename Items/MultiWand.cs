@@ -18,7 +18,7 @@ namespace BuilderEssentials.Items
         private bool canPlaceItems;
         private MultiWandWheel panel;
 
-        public static int[] wandTypes =
+        internal static int[] wandTypes =
         {
             ItemID.LivingWoodWand, 
             ItemID.BoneWand, 
@@ -28,7 +28,7 @@ namespace BuilderEssentials.Items
             ItemID.LivingMahoganyLeafWand
         };
         
-        public static int[] wandMaterials =
+        internal static int[] wandMaterials =
         {
             ItemID.Wood,
             ItemID.Bone,
@@ -38,7 +38,7 @@ namespace BuilderEssentials.Items
             ItemID.RichMahogany
         };
 
-        public static int[] wandPlacedTiles =
+        internal static int[] wandPlacedTiles =
         {
             TileID.LivingWood,
             TileID.BoneBlock,
@@ -65,8 +65,6 @@ namespace BuilderEssentials.Items
             Item.autoReuse = true;
             Item.noMelee = false;
             toolRange = new Vector2(9, 8);
-            
-            panel = UIUIState.Instance.multiWandWheel;
         }
 
         public override Vector2? HoldoutOffset() => new Vector2(2, -9);
@@ -75,7 +73,8 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-
+            panel = UIUIState.Instance.multiWandWheel;
+            
             if (Main.mouseRight && player.HeldItem == Item &&
                 (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
                 UIUIState.Instance.multiWandWheel.Toggle();
@@ -94,6 +93,7 @@ namespace BuilderEssentials.Items
 
         private bool CanReduceWandAmmo(int amount = 1, bool reduceStack = true, bool itemShouldBeInHand = false)
         {
+            panel = UIUIState.Instance.multiWandWheel;
             int materialType = wandMaterials[panel.selectedIndex];
             return HelperMethods.CanReduceItemStack(materialType);
         }
@@ -101,7 +101,7 @@ namespace BuilderEssentials.Items
         public override bool CanUseItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer || !canPlaceItems) return false;
-            
+            panel = UIUIState.Instance.multiWandWheel;
             int tileType = wandPlacedTiles[panel.selectedIndex];
 
             if (HelperMethods.ValidTilePlacement(Player.tileTargetX, Player.tileTargetY) && CanReduceWandAmmo(reduceStack: false))
@@ -114,14 +114,6 @@ namespace BuilderEssentials.Items
             }
 
             return true;
-        }
-
-        public override void UpdateInventory(Player player)
-        {
-            if (player.whoAmI != Main.myPlayer) return;
-
-            if (Main.LocalPlayer.HeldItem != this.Item)
-                panel.Hide();
         }
 
         public override void AddRecipes()

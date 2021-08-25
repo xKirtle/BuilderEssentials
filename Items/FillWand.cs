@@ -43,8 +43,6 @@ namespace BuilderEssentials.Items
             Item.rare = ItemRarityID.Red;
             Item.autoReuse = true;
             Item.noMelee = true;
-
-            panel = GameUIState.Instance.fillWandSelection;
         }
 
         public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
@@ -54,9 +52,11 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            
-            panel.Show();
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
+            panel = GameUIState.Instance.fillWandSelection;
+            Main.NewText("holdiiiiing");
+            panel.Show();
+            
 
             //Left Mouse
             if (Main.mouseLeft && selectedTileItemType != -1 && !Main.LocalPlayer.mouseInterface && ++mouseLeftTimer == toolDelay)
@@ -95,14 +95,6 @@ namespace BuilderEssentials.Items
 
             if (Main.mouseRightRelease || mouseRightTimer == toolDelay)
                 mouseRightTimer = 0;
-        }
-
-        public override void UpdateInventory(Player player)
-        {
-            if (player.whoAmI != Main.myPlayer) return;
-            
-            if (Main.LocalPlayer.HeldItem != this.Item)
-                panel.Hide();
         }
 
         public override void AddRecipes()

@@ -44,9 +44,10 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         { 
             if (player.whoAmI != Main.myPlayer) return;
-
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-            
+            if (Main.LocalPlayer.HeldItem == this.Item && !UIUIState.Instance.menuPanel.Visible)
+                UIUIState.Instance.arrowPanel.Show();
+
             if (Main.mouseMiddle && !player.mouseInterface)
                 selectedItemType = HelperMethods.PickItem(mp.PointedTile, false, true);
 
