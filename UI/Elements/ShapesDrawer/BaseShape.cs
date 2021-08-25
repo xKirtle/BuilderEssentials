@@ -14,7 +14,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
     internal class BaseShape : CustomUIElement
     {
         internal CoordsSelection cs;
-        internal Func<int, bool> CanPlaceTiles;
         internal bool[] selected;
         internal Color color = default;
         internal Color Blue = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
@@ -28,23 +27,29 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             cs = new CoordsSelection(itemType, uiState);
         }
 
-        internal virtual void PlotPixel(int x, int y, bool placeItem = false, int itemType = -1)
+        internal virtual void PlotPixel(int x, int y, bool isPlacing = false, int itemTypeToPlace = -1, bool render = true)
         {
-            Asset<Texture2D> texture = TextureAssets.Extra[2];
-            Rectangle value = new Rectangle(0, 0, 16, 16);
-            Vector2 position = Main.ReverseGravitySupport(new Vector2(x, y) * 16f - Main.screenPosition, 16f);
-            
-            Main.spriteBatch.Draw(texture.Value, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (render)
+            {
+                Asset<Texture2D> texture = TextureAssets.Extra[2];
+                Rectangle value = new Rectangle(0, 0, 16, 16);
+                Vector2 position = Main.ReverseGravitySupport(new Vector2(x, y) * 16f - Main.screenPosition, 16f);
+
+                Main.spriteBatch.Draw(texture.Value, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
+
+            if (isPlacing && itemTypeToPlace >= 0)
+                HelperMethods.PlaceTile(x, y, itemTypeToPlace, sync: false);
         }
 
-        internal void PlotLine(int x0, int y0, int x1, int y1)
+        internal void PlotLine(int x0, int y0, int x1, int y1, bool isPlacing = false, int itemTypeToPlace = -1, bool render = true)
         {
             int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
             int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
             int err = dx + dy, e2;
             for (;;)
             {
-                PlotPixel(x0, y0);
+                PlotPixel(x0, y0, isPlacing, itemTypeToPlace, render);
                 e2 = 2 * err;
                 if (e2 >= dy)
                 {

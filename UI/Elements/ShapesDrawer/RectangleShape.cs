@@ -36,8 +36,9 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             {
                 for (int j = 0; j <= rectHeight; j++)
                 {
-                    if (!isFill && !(i == 0 || j == 0 || i == rectWidth || j == rectHeight)) continue;
-                    PlotPixel(minX + i, minY + j, isPlacing, Items.ShapesDrawer.selectedItemType);
+                    bool render = (i == 0 || j == 0 || i == rectWidth || j == rectHeight);
+                    if (!isFill && !render) continue;
+                    PlotPixel(minX + i, minY + j, isPlacing, Items.ShapesDrawer.selectedItemType, render);
                 }
             }
 
