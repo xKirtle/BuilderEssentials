@@ -11,8 +11,8 @@ namespace BuilderEssentials.Items
     {
         public override string Texture => "BuilderEssentials/Textures/Items/ShapesDrawer";
 
-        public static int selectedItemType = -1;
-        public static bool canPlaceItems;
+        private int selectedItemType = -1;
+        private bool canPlaceItems;
 
         public override void SetStaticDefaults()
         {
@@ -54,9 +54,14 @@ namespace BuilderEssentials.Items
             {
                 player.cursorItemIconEnabled = true;
                 player.cursorItemIconID = selectedItemType;
+                GameUIState.Instance.rectangleShape.SetItemToPlace(selectedItemType);
+                GameUIState.Instance.ellipseShape.SetItemToPlace(selectedItemType);
             }
 
             canPlaceItems = Main.mouseLeft && !Main.LocalPlayer.mouseInterface && ++leftMouseTimer == 2;
+            GameUIState.Instance.rectangleShape.CanPlaceItems = canPlaceItems && selectedItemType != -1;
+            GameUIState.Instance.ellipseShape.CanPlaceItems = canPlaceItems && selectedItemType != -1;
+            
             if (Main.mouseLeftRelease)
                 leftMouseTimer = 0;
         }

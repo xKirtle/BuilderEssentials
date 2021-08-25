@@ -8,6 +8,7 @@ using Terraria.GameContent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria.ModLoader;
 
 namespace BuilderEssentials.UI.Elements.ShapesDrawer
 {
@@ -19,7 +20,9 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal Color Blue = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
         internal Color Yellow = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f;
         internal Color Red = new Color(1f, 0f, 0f, .75f) * 0.8f;
-        internal int itemToWorkWith;
+        private int itemToWorkWith;
+        internal int selectedItemType;
+        internal bool CanPlaceItems { get; set; }
 
         public BaseShape(int itemType, UIState uiState)
         {
@@ -27,7 +30,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             cs = new CoordsSelection(itemType, uiState);
         }
 
-        internal virtual void PlotPixel(int x, int y, bool isPlacing = false, int itemTypeToPlace = -1, bool render = true)
+        internal virtual void PlotPixel(int x, int y, bool render = true)
         {
             if (render)
             {
@@ -38,18 +41,18 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 Main.spriteBatch.Draw(texture.Value, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
 
-            if (isPlacing && itemTypeToPlace >= 0)
-                HelperMethods.PlaceTile(x, y, itemTypeToPlace, sync: false);
+            if (CanPlaceItems)
+                HelperMethods.PlaceTile(x, y, selectedItemType, sync: false);
         }
 
-        internal void PlotLine(int x0, int y0, int x1, int y1, bool isPlacing = false, int itemTypeToPlace = -1, bool render = true)
+        internal void PlotLine(int x0, int y0, int x1, int y1, bool render = true)
         {
             int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
             int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
             int err = dx + dy, e2;
             for (;;)
             {
-                PlotPixel(x0, y0, isPlacing, itemTypeToPlace, render);
+                PlotPixel(x0, y0, render);
                 e2 = 2 * err;
                 if (e2 >= dy)
                 {
@@ -65,6 +68,12 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                     y0 += sy;
                 }
             }
+        }
+
+        internal void SetItemToPlace(int itemType)
+        {
+            if (itemType >= 0 && itemType < ItemLoader.ItemCount)
+                selectedItemType = itemType;
         }
 
         internal virtual void Update()

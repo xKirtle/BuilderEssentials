@@ -19,11 +19,9 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
         }
 
-        internal void PlotSelection(bool isFill = false, bool isPlacing = false)
+        internal void PlotSelection(bool isFill = false)
         {
             //Maybe place tiles with a BFS algorithm from the top left corner instead of all at once for big selections?
-
-            if (isPlacing && Items.ShapesDrawer.selectedItemType <= 0) return;
 
             int rectWidth = (int) Math.Abs(cs.RMBEnd.X - cs.RMBStart.X);
             int rectHeight = (int) Math.Abs(cs.RMBEnd.Y - cs.RMBStart.Y);
@@ -38,11 +36,11 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 {
                     bool render = (i == 0 || j == 0 || i == rectWidth || j == rectHeight);
                     if (!isFill && !render) continue;
-                    PlotPixel(minX + i, minY + j, isPlacing, Items.ShapesDrawer.selectedItemType, render);
+                    PlotPixel(minX + i, minY + j, render);
                 }
             }
 
-            if (isPlacing)
+            if (CanPlaceItems)
             {
                 int syncSize = rectWidth > rectHeight ? rectWidth : rectHeight;
                 syncSize += 1 + (syncSize % 2);
@@ -50,7 +48,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, minX, minY, syncSize);
             }
-
+            
+            CanPlaceItems = false;
             //Draw line in axis if rectangle has a center in the X/Y axis
             Color tempColor = color;
             color = tempColor * 0.4f;
@@ -79,7 +78,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             color = selected[2] ? Yellow : Blue;
             if (cs.RMBStart != cs.RMBEnd)
-                PlotSelection(selected[2], Items.ShapesDrawer.canPlaceItems);
+                PlotSelection(selected[2]);
         }
     }
 }

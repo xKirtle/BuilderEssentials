@@ -12,7 +12,6 @@ namespace BuilderEssentials.UI.UIPanels.ShapesMenu
 {
     internal class MenuPanel : CustomUIPanel
     {
-        //TODO: Make clicking on menu options not trigger the ShapesDrawer or smt
         //TODO: Change shapes menu assets.
         //When selected, only borders should be yellow and when fill is enabled, shapes borders should then become yellow
 

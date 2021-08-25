@@ -95,11 +95,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         }
 
         //Adapted from http://members.chello.at/easyfilter/bresenham.html
-        internal void PlotSelection(bool isFill = false, bool isPlacing = false)
+        internal void PlotSelection(bool isFill = false)
         {
-            int itemToPlace = Items.ShapesDrawer.selectedItemType; 
-            if (isPlacing && itemToPlace <= 0) return;
-
             int rectWidth = (int) Math.Abs(cs.RMBEnd.X - cs.RMBStart.X);
             int rectHeight = (int) Math.Abs(cs.RMBEnd.Y - cs.RMBStart.Y);
             if (rectWidth == 0 && rectHeight == 0) return;
@@ -144,13 +141,13 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
             do {
                 if (allQuads || quadOne)
-                    PlotPixel(x1, y0, isPlacing, itemToPlace); /*   I. Quadrant */
+                    PlotPixel(x1, y0); /*   I. Quadrant */
                 if (allQuads || quadTwo)
-                    PlotPixel(x0, y0, isPlacing, itemToPlace); /*  II. Quadrant */
+                    PlotPixel(x0, y0); /*  II. Quadrant */
                 if (allQuads || quadThree)
-                    PlotPixel(x0, y1, isPlacing, itemToPlace); /* III. Quadrant */
+                    PlotPixel(x0, y1); /* III. Quadrant */
                 if (allQuads || quadFour)
-                    PlotPixel(x1, y1, isPlacing, itemToPlace); /*  IV. Quadrant */
+                    PlotPixel(x1, y1); /*  IV. Quadrant */
 
                 if (isFill)
                 {
@@ -158,15 +155,15 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                     if (allQuads)
                     {
                         //Horizontal
-                        PlotLine(x0, y0, x1, y0, isPlacing, itemToPlace, false);
-                        PlotLine(x0, y1, x1, y1, isPlacing, itemToPlace, false);
+                        PlotLine(x0, y0, x1, y0, false);
+                        PlotLine(x0, y1, x1, y1, false);
                         //Vertical
-                        PlotLine(x0, y0, x0, y1, isPlacing, itemToPlace, false);
-                        PlotLine(x1, y0, x1, y1, isPlacing, itemToPlace, false);
+                        PlotLine(x0, y0, x0, y1, false);
+                        PlotLine(x1, y0, x1, y1, false);
 
                         //Diagonals (sometimes a few blocks are left to be placed and this fills the remaining)
-                        PlotLine(x0, y0, x1, y1, isPlacing, itemToPlace, false);
-                        PlotLine(x0, y1, x1, y0, isPlacing, itemToPlace, false);
+                        PlotLine(x0, y0, x1, y1, false);
+                        PlotLine(x0, y1, x1, y0, false);
                     }
                     
                     // Half Shapes
@@ -177,7 +174,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
                         do
                         {
-                            PlotLine(x0, tempY, x1, tempY, isPlacing, itemToPlace, false);
+                            PlotLine(x0, tempY, x1, tempY, false);
                             tempY += condition ? 1 : -1;
                         } while (condition);
                     }
@@ -188,7 +185,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
                         do
                         {
-                            PlotLine(tempX, y0, tempX, y1, isPlacing, itemToPlace, false);
+                            PlotLine(tempX, y0, tempX, y1, false);
                             tempX += condition ? -1 : 1;
                         } while (condition);
                     }
@@ -200,13 +197,13 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             } while (x0 <= x1);
    
             while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
-                PlotPixel(x0-1, y0, isPlacing, itemToPlace); /* -> finish tip of ellipse */
-                PlotPixel(x1+1, y0++, isPlacing, itemToPlace); 
-                PlotPixel(x0-1, y1, isPlacing, itemToPlace);
-                PlotPixel(x1+1, y1--, isPlacing, itemToPlace); 
+                PlotPixel(x0-1, y0); /* -> finish tip of ellipse */
+                PlotPixel(x1+1, y0++); 
+                PlotPixel(x0-1, y1);
+                PlotPixel(x1+1, y1--); 
             }
 
-            if (isPlacing)
+            if (CanPlaceItems)
             {
                 int syncSize = rectWidth > rectHeight ? rectWidth : rectHeight;
                 syncSize += 1 + (syncSize % 2);
@@ -214,7 +211,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, minX, minY, syncSize);
             }
-            
+
+            CanPlaceItems = false;
             //Draw line in axis if rectangle has a center in the X/Y axis
             Color tempColor = color;
             color = tempColor * 0.4f;
@@ -246,7 +244,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             color = selected[2] ? Yellow : Blue;
             if (cs.RMBStart != cs.RMBEnd)
-                PlotSelection(selected[2], Items.ShapesDrawer.canPlaceItems);
+                PlotSelection(selected[2]);
         }
     }
 }
