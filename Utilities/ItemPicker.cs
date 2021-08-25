@@ -7,8 +7,11 @@ namespace BuilderEssentials.Utilities
     internal static partial class HelperMethods
     {
         //Thanks Oli. B for the concept
-        internal static int PickItem(Tile tile, bool organizeInventory = true)
+        internal static int PickItem(Tile tile, bool organizeInventory = true, bool only1X1 = false)
         {
+            TileObjectData data = TileObjectData.GetTileData(tile);
+            if (data != null && only1X1) return -1;
+            
             Player player = Main.LocalPlayer;
             Item item = new Item();
             int itemID = -1;

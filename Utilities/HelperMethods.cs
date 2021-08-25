@@ -454,21 +454,23 @@ namespace BuilderEssentials.Utilities
          internal static Tile PlaceTile(int i, int j, ItemTypes itemTypes, int itemType, 
              bool forced = false, bool sync = true, int placeStyle = -1)
         {
-            if (itemType == 0 || !ValidTileCoordinates(i, j) || Framing.GetTileSafely(i, j).IsActive)
+            if (itemType < 0 || !ValidTileCoordinates(i, j))
                 return new Tile();
 
             Item item = new Item();
             item.SetDefaults(itemType);
             Tile tile = Framing.GetTileSafely(i, j);
 
-            TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
-            if (data != null) return new Tile(); //PlaceMultiTile(i, j, type, forced, sync, placeStyle);
-
-            if ((itemTypes == HelperMethods.ItemTypes.Tile && tile.IsActive && tile.CollisionType != -1) ||
-                (itemTypes == HelperMethods.ItemTypes.Wall && tile.wall != 0) ||
-                !CanReduceItemStack(itemType, reduceStack: false))
+            if (itemTypes == ItemTypes.Tile)
+            {
+                TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
+                if (data != null) return new Tile(); //PlaceMultiTile(i, j, type, forced, sync, placeStyle);
+            }
+            
+            if ((itemTypes == ItemTypes.Tile && tile.IsActive && tile.CollisionType != -1) ||
+                (itemTypes == ItemTypes.Wall && tile.wall != 0) || !CanReduceItemStack(itemType, reduceStack: false))
                 return new Tile();
-
+            
             CanReduceItemStack(itemType); //We know it'll reduce the stack since it passed the condition above
 
             switch (itemTypes)

@@ -47,7 +47,7 @@ namespace BuilderEssentials.Items
 
             //Middle Mouse
             if (Main.mouseMiddle && !player.mouseInterface)
-                selectedItemType = HelperMethods.PickItem(mp.PointedTile, false);
+                selectedItemType = HelperMethods.PickItem(mp.PointedTile, false, true);
 
             if (selectedItemType != -1)
             {
