@@ -16,7 +16,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         /// <param name="itemType">Item Type that must be held by the player for the shape to be able to be modified</param>
         public RectangleShape(int itemType, UIState uiState) : base(itemType, uiState)
         {
-            CanPlaceTiles = item => itemToWorkWith == item && selected[1] && !cs.RMBDown;
+            
         }
 
         internal void PlotSelection(bool isFill = false, bool isPlacing = false)
@@ -37,18 +37,38 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 for (int j = 0; j <= rectHeight; j++)
                 {
                     if (!isFill && !(i == 0 || j == 0 || i == rectWidth || j == rectHeight)) continue;
-                    
-                    PlotPixel(minX + i, minY + j);
-                    if (isPlacing)
-                        HelperMethods.PlaceTile(minX + i, minY + j, Items.ShapesDrawer.selectedItemType, sync: false);
+                    PlotPixel(minX + i, minY + j, isPlacing, Items.ShapesDrawer.selectedItemType);
                 }
             }
-            
-            int syncSize = rectWidth > rectHeight ? rectWidth : rectHeight;
-            syncSize += 1 + (syncSize % 2);
-            
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendTileSquare(-1, minX, minY, syncSize);
+
+            if (isPlacing)
+            {
+                int syncSize = rectWidth > rectHeight ? rectWidth : rectHeight;
+                syncSize += 1 + (syncSize % 2);
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendTileSquare(-1, minX, minY, syncSize);
+            }
+
+            //Draw line in axis if rectangle has a center in the X/Y axis
+            Color tempColor = color;
+            color = tempColor * 0.4f;
+            int quad = cs.SelectedQuad((int) cs.RMBStart.X, (int) cs.RMBStart.Y, (int) cs.RMBEnd.X, (int) cs.RMBEnd.Y);
+
+            //Vertical line
+            if (rectWidth % 2 == 0 && (selected[3] || (!selected[3] && !selected[4])) && rectWidth > 3)
+            {
+                int fixedX = (int) (cs.RMBStart.X + (quad == 0 || quad == 2 ? - rectWidth / 2 : + rectWidth / 2));
+                PlotLine(fixedX, (int) cs.RMBStart.Y, fixedX, (int) cs.RMBEnd.Y);
+            }
+
+            //Horizontal line
+            if (rectHeight % 2 == 0 && (selected[4] || (!selected[3] && !selected[4])) && rectHeight > 3)
+            {
+                int fixedY = (int) (cs.RMBStart.Y + (quad == 2 || quad == 3 ? + rectHeight / 2 : - rectHeight / 2));
+                PlotLine((int) (cs.RMBStart.X), fixedY, (int) (cs.RMBEnd.X), fixedY);
+            }
+            color = tempColor;
         }
 
         private int leftMouseTimer;
