@@ -71,12 +71,20 @@ namespace BuilderEssentials.Items
 
         public override Vector2? HoldoutOffset() => new Vector2(2, -9);
 
+        private int mouseRightTimer = 0;
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
 
+            if (Main.mouseRight && player.HeldItem == Item &&
+                (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
+                UIUIState.Instance.multiWandWheel.Toggle();
+
+            if (Main.mouseRightRelease)
+                mouseRightTimer = 0;
+            
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-            if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
+            if (mp.ValidCursorPos)
             {
                 canPlaceItems = HelperMethods.ToolHasRange(toolRange) && !Main.LocalPlayer.mouseInterface;
                 player.cursorItemIconEnabled = canPlaceItems;
@@ -108,19 +116,10 @@ namespace BuilderEssentials.Items
             return true;
         }
 
-        private int mouseRightTimer = 0;
-
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
 
-            if (Main.mouseRight && player.HeldItem == Item &&
-                (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
-                UIUIState.Instance.multiWandWheel.Toggle();
-
-            if (Main.mouseRightRelease)
-                mouseRightTimer = 0;
-            
             if (Main.LocalPlayer.HeldItem != this.Item)
                 panel.Hide();
         }

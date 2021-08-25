@@ -13,6 +13,7 @@ namespace BuilderEssentials
 {
 	public class BuilderEssentials : Mod
 	{
+        //TODO: Edit all recipes after all mods loaded to include the multi crafting station on all recipes?
 		public override void Load()
 		{
 			//hotkeys init

@@ -501,5 +501,111 @@ namespace BuilderEssentials.Utilities
          //Player.PlaceThing_Tiles_PlaceIt()
          //Player.PlaceThing_Walls()
          //Player.PlaceThing_Walls_FillEmptySpace()
+         
+         internal static void PlaceTilesInArea(int startX, int startY, int endX, int endY, int itemType,
+             bool forced = false)
+         {
+             //This whole method exists so I don't spam NetMessages to sync each tile individually but rather an area
+
+             if (!ValidTileCoordinates(startX, startY) || !ValidTileCoordinates(endX, endY)) return;
+
+             int minX = startX < endX ? startX : endX;
+             int minY = startY < endY ? startY : endY;
+             int horizontal = Math.Abs(endX - startX);
+             int vertical = Math.Abs(endY - startY);
+
+             for (int i = minX; i < minX + horizontal; i++)
+             for (int j = minY; j < minY + vertical; j++)
+                 PlaceTile(i, j, itemType, forced, false);
+
+             //Keeping syncSize an odd number since SendTileSquare as a bias towards up and left for even-numbers sizes
+             int syncSize = horizontal > vertical ? horizontal : vertical;
+             syncSize += 1 + (syncSize % 2);
+
+             if (Main.netMode == NetmodeID.MultiplayerClient)
+                 NetMessage.SendTileSquare(-1, minX, minY, syncSize);
+         }
+         
+         internal static void RemoveTile(int i, int j, bool removeTile = true,
+             bool removeWall = false, bool dropItem = true, int itemToDrop = -1, bool sync = true)
+         {
+             if (!ValidTileCoordinates(i, j)) return;
+
+             if (dropItem)
+             {
+                 Tile tile = Framing.GetTileSafely(i, j);
+
+                 //Default behaviour, can be laggy if doing a lot of iterations since PickItem is costly
+                 if (itemToDrop == -1)
+                     itemToDrop = HelperMethods.PickItem(tile, false);
+
+                 if (itemToDrop == -1)
+                     goto InvalidItemToDrop; //The selected tile doesn't have an associated item to spawn it 
+
+                 Item item = new Item();
+                 item.SetDefaults(itemToDrop);
+
+                 if (itemToDrop != -1 && (item.createTile == tile.type || item.createWall == tile.type) &&
+                     tile.IsActive && Main.netMode == NetmodeID.MultiplayerClient)
+                 {
+                     int number = Item.NewItem(i * 16, j * 16, 16, 16, itemToDrop, 1, false, -1, false, false);
+                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 0f, 0f, 0f, 0, 0, 0);
+                 }
+             }
+
+             InvalidItemToDrop:
+             if (removeTile)
+                 WorldGen.KillTile(i, j, !dropItem);
+
+             if (removeWall)
+                 WorldGen.KillWall(i, j);
+
+             if (sync && Main.netMode == NetmodeID.MultiplayerClient)
+                 NetMessage.SendTileSquare(-1, i, j, 1); //syncs whether the tile is there or not
+         }
+         
+         internal static void RemoveTilesInArea(int startX, int startY, int endX, int endY,
+            bool dropItem = true, int itemToDrop = -1)
+        {
+            //This whole method exists so I don't spam NetMessages to sync each tile individually but rather an area
+
+            int minX = startX < endX ? startX : endX;
+            int minY = startY < endY ? startY : endY;
+            int horizontal = Math.Abs(endX - startX);
+            int vertical = Math.Abs(endY - startY);
+
+            List<Vector2> multiTileCoords = new List<Vector2>();
+            for (int i = minX; i < minX + horizontal; i++)
+            for (int j = minY; j < minY + vertical; j++)
+            {
+                if (multiTileCoords.Contains(new Vector2(i, j))) continue;
+
+                //Check if multitile, and if yes, add it to a list of blacklisted coords
+                Tile tile = Framing.GetTileSafely(i, j);
+                TileObjectData data = TileObjectData.GetTileData(tile);
+
+                //If data != null, is multi tile. Prevents more than one drop per multi tile
+                if (data != null)
+                {
+                    for (int k = 0; k < data.CoordinateFullWidth / 18; k++)
+                    for (int l = 0; l < data.CoordinateFullHeight / 18; l++)
+                        multiTileCoords.Add(new Vector2(k, l));
+                }
+
+                Item item = new Item();
+                item.SetDefaults(itemToDrop);
+
+                bool removeTile = tile.type == item.createTile;
+                bool removeWall = tile.wall == item.createWall;
+                RemoveTile(i, j, removeTile, removeWall, dropItem, itemToDrop, false);
+            }
+
+            //Keeping syncSize an odd number since SendTileSquare has a bias towards up and left for even-numbers sizes
+            int syncSize = horizontal > vertical ? horizontal : vertical;
+            syncSize += 1 + (syncSize % 2);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendTileSquare(-1, startX, startY, syncSize);
+        }
     }
 }

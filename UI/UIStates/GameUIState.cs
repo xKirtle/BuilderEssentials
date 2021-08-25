@@ -15,6 +15,7 @@ namespace BuilderEssentials.UI.UIStates
         public RectangleShape rectangleShape;
         public EllipseShape ellipseShape;
         public BezierCurve bezierCurve;
+        public FillWandSelection fillWandSelection;
         public override void OnInitialize()
         {
             Instance = this;
@@ -31,6 +32,10 @@ namespace BuilderEssentials.UI.UIStates
             // bezierCurve = new BezierCurve(ModContent.ItemType<ShapesDrawer>(), this);
             // Append(bezierCurve);
             // bezierCurve.Show();
+
+            fillWandSelection = new FillWandSelection(ModContent.ItemType<FillWand>(), this);
+            Append(fillWandSelection);
+            fillWandSelection.Show();
         }
 
         public override void Update(GameTime gameTime)
@@ -56,6 +61,7 @@ namespace BuilderEssentials.UI.UIStates
             rectangleShape = null;
             ellipseShape = null;
             bezierCurve = null;
+            fillWandSelection = null;
         }
     }
 }

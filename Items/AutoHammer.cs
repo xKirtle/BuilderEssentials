@@ -45,8 +45,15 @@ namespace BuilderEssentials.Items
         {
             if (player.whoAmI != Main.myPlayer) return;
 
+            if (Main.mouseRight && player.HeldItem == Item && 
+                (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
+                panel.Toggle();
+
+            if (Main.mouseRightRelease)
+                mouseRightTimer = 0;
+            
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-            if (Main.netMode != NetmodeID.Server && mp.ValidCursorPos)
+            if (mp.ValidCursorPos)
             {
                 canHammerTiles = HelperMethods.ToolHasRange(toolRange) && !Main.LocalPlayer.mouseInterface;
                 player.cursorItemIconEnabled = canHammerTiles;
@@ -72,14 +79,7 @@ namespace BuilderEssentials.Items
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            
-            if (Main.mouseRight && player.HeldItem == Item && 
-                (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
-                panel.Toggle();
 
-            if (Main.mouseRightRelease)
-                mouseRightTimer = 0;
-            
             if (Main.LocalPlayer.HeldItem != this.Item)
                 panel.Hide();
         }

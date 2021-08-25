@@ -28,6 +28,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         {
             itemToWorkWith = itemType;
             cs = new CoordsSelection(itemType, uiState);
+            color = Blue;
         }
 
         internal virtual void PlotPixel(int x, int y, bool render = true)
@@ -79,6 +80,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal virtual void Update()
         {
             selected = UIUIState.Instance.menuPanel?.selected;
+            
+            //TODO: Make itemToWorkWith be useful here, instead of in the actual item code
         }
     }
 }
