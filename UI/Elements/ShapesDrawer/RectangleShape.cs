@@ -71,18 +71,14 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             color = tempColor;
         }
 
-        private int leftMouseTimer;
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (!selected[1]) return;
             cs.UpdateCoords();
-
+            
             color = selected[2] ? Yellow : Blue;
             if (cs.RMBStart != cs.RMBEnd)
-                PlotSelection(selected[2], cs.LMBDown && !Main.LocalPlayer.mouseInterface && ++leftMouseTimer == 2);
-            
-            if (!cs.LMBDown)
-                leftMouseTimer = 0;
+                PlotSelection(selected[2], Items.ShapesDrawer.canPlaceItems);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace BuilderEssentials.Items
         public override string Texture => "BuilderEssentials/Textures/Items/ShapesDrawer";
 
         public static int selectedItemType = -1;
+        public static bool canPlaceItems;
 
         public override void SetStaticDefaults()
         {
@@ -39,13 +40,13 @@ namespace BuilderEssentials.Items
 
         public override Vector2? HoldoutOffset() => new Vector2(2, -9);
         
+        private int leftMouseTimer;
         public override void HoldItem(Player player)
         { 
             if (player.whoAmI != Main.myPlayer) return;
 
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
-
-            //Middle Mouse
+            
             if (Main.mouseMiddle && !player.mouseInterface)
                 selectedItemType = HelperMethods.PickItem(mp.PointedTile, false, true);
 
@@ -54,6 +55,10 @@ namespace BuilderEssentials.Items
                 player.cursorItemIconEnabled = true;
                 player.cursorItemIconID = selectedItemType;
             }
+
+            canPlaceItems = Main.mouseLeft && !Main.LocalPlayer.mouseInterface && ++leftMouseTimer == 2;
+            if (Main.mouseLeftRelease)
+                leftMouseTimer = 0;
         }
 
         public override void UpdateInventory(Player player)
