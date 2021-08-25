@@ -392,8 +392,10 @@ namespace BuilderEssentials.Utilities
 
             if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
             {
-                //TODO: Fix Color syncing (line below does not work)
-                //NetMessage.SendTileSquare(-1, (int) coords.X, (int) coords.Y, 1);
+                NetMessage.SendData(MessageID.PaintTile, -1, -1, null, 
+                    (int)coords.X / 16, (int)coords.Y / 16, (int)color);
+                NetMessage.SendData(MessageID.PaintWall, -1, -1, null, 
+                    (int)coords.X / 16, (int)coords.Y / 16, (int)color);
             }
         }
 
@@ -421,9 +423,10 @@ namespace BuilderEssentials.Utilities
 
             if (needsSync && Main.netMode == NetmodeID.MultiplayerClient)
             {
-                //TODO: Fix Color syncing (line below does not work)
-                // NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X, number2: (int)coords.Y);
-                // NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X, number2: (int)coords.Y);
+                NetMessage.SendData(MessageID.PaintTile, -1, -1, null, 
+                    (int)coords.X / 16, (int)coords.Y / 16, 0);
+                NetMessage.SendData(MessageID.PaintWall, -1, -1, null, 
+                    (int)coords.X / 16, (int)coords.Y / 16, 0);
             }
         }
         
