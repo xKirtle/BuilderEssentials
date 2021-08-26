@@ -94,19 +94,19 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         }
 
         //Adapted from http://members.chello.at/easyfilter/bresenham.html
-        internal void PlotSelection(bool isFill = false)
+        internal void PlotSelection(Vector2 start, Vector2 end, bool isFill = false)
         {
-            int rectWidth = (int) Math.Abs(cs.RMBEnd.X - cs.RMBStart.X);
-            int rectHeight = (int) Math.Abs(cs.RMBEnd.Y - cs.RMBStart.Y);
+            int rectWidth = (int) Math.Abs(end.X - start.X);
+            int rectHeight = (int) Math.Abs(end.Y - start.Y);
             if (rectWidth == 0 && rectHeight == 0) return;
             
-            int minX = (int) (cs.RMBStart.X < cs.RMBEnd.X ? cs.RMBStart.X : cs.RMBEnd.X);
-            int minY = (int) (cs.RMBStart.Y < cs.RMBEnd.Y ? cs.RMBStart.Y : cs.RMBEnd.Y);
+            int minX = (int) (start.X < end.X ? start.X : end.X);
+            int minY = (int) (start.Y < end.Y ? start.Y : end.Y);
             
-            int x0 = (int) cs.RMBStart.X;
-            int y0 = (int) cs.RMBStart.Y;
-            int x1 = (int) cs.RMBEnd.X;
-            int y1 = (int) cs.RMBEnd.Y;
+            int x0 = (int) start.X;
+            int y0 = (int) start.Y;
+            int x1 = (int) end.X;
+            int y1 = (int) end.Y;
 
             bool allQuads = !selected[3] && !selected[4];
             bool quadOne, quadTwo, quadThree, quadFour;
@@ -237,7 +237,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             color = selected[2] ? Yellow : Blue;
             if (cs.RMBStart != cs.RMBEnd)
-                PlotSelection(selected[2]);
+                PlotSelection(cs.RMBStart, cs.RMBEnd, selected[2]);
         }
     }
 }

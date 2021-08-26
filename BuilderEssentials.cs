@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 using Terraria.UI;
 
 namespace BuilderEssentials
@@ -17,7 +18,27 @@ namespace BuilderEssentials
 		public override void Load()
 		{
 			//hotkeys init
-		}
+
+            // On.Terraria.Player.PlaceThing_Tiles += (orig, self) =>
+            // {
+            //     orig.Invoke(self);
+            //     Main.NewText("PlaceThing_Tiles");
+            // };
+
+            
+            //TODO: Figure out how containers/multi tiles are placed..
+            On.Terraria.Player.PlaceThing_Tiles_PlaceIt += (orig, self, type, data) =>
+            {
+                //multi tiles will update tileTarget so no point in modifying it with MirrorPlacement??
+                
+                //Only works for 1x1 tiles
+                orig.Invoke(self, type, data);
+                HelperMethods.MirrorPlacement(Player.tileTargetX, Player.tileTargetY);
+                orig.Invoke(self, type, data);
+
+                return data;
+            };
+        }
 
 		public override void Unload()
 		{

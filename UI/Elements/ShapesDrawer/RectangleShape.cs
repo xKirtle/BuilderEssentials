@@ -20,16 +20,16 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
         }
 
-        internal void PlotSelection(bool isFill = false)
+        internal void PlotSelection(Vector2 start, Vector2 end, bool isFill = false)
         {
             //Maybe place tiles with a BFS algorithm from the top left corner instead of all at once for big selections?
 
-            int rectWidth = (int) Math.Abs(cs.RMBEnd.X - cs.RMBStart.X);
-            int rectHeight = (int) Math.Abs(cs.RMBEnd.Y - cs.RMBStart.Y);
+            int rectWidth = (int) Math.Abs(end.X - start.X);
+            int rectHeight = (int) Math.Abs(end.Y - start.Y);
             if (rectWidth == 0 && rectHeight == 0) return;
             
-            int minX = (int) (cs.RMBStart.X < cs.RMBEnd.X ? cs.RMBStart.X : cs.RMBEnd.X);
-            int minY = (int) (cs.RMBStart.Y < cs.RMBEnd.Y ? cs.RMBStart.Y : cs.RMBEnd.Y);
+            int minX = (int) (start.X < end.X ? start.X : end.X);
+            int minY = (int) (start.Y < end.Y ? start.Y : end.Y);
 
             for (int i = 0; i <= rectWidth; i++)
             {
@@ -48,20 +48,20 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             //Draw line in axis if rectangle has a center in the X/Y axis
             Color tempColor = color;
             color = tempColor * 0.4f;
-            int quad = cs.SelectedQuad((int) cs.RMBStart.X, (int) cs.RMBStart.Y, (int) cs.RMBEnd.X, (int) cs.RMBEnd.Y);
+            int quad = cs.SelectedQuad((int) start.X, (int) start.Y, (int) end.X, (int) end.Y);
 
             //Vertical line
             if (rectWidth % 2 == 0 && (selected[3] || (!selected[3] && !selected[4])) && rectWidth > 3)
             {
-                int fixedX = (int) (cs.RMBStart.X + (quad == 0 || quad == 2 ? - rectWidth / 2 : + rectWidth / 2));
-                PlotLine(fixedX, (int) cs.RMBStart.Y, fixedX, (int) cs.RMBEnd.Y);
+                int fixedX = (int) (start.X + (quad == 0 || quad == 2 ? - rectWidth / 2 : + rectWidth / 2));
+                PlotLine(fixedX, (int) start.Y, fixedX, (int) end.Y);
             }
 
             //Horizontal line
             if (rectHeight % 2 == 0 && (selected[4] || (!selected[3] && !selected[4])) && rectHeight > 3)
             {
-                int fixedY = (int) (cs.RMBStart.Y + (quad == 2 || quad == 3 ? + rectHeight / 2 : - rectHeight / 2));
-                PlotLine((int) (cs.RMBStart.X), fixedY, (int) (cs.RMBEnd.X), fixedY);
+                int fixedY = (int) (start.Y + (quad == 2 || quad == 3 ? + rectHeight / 2 : - rectHeight / 2));
+                PlotLine((int) (start.X), fixedY, (int) (end.X), fixedY);
             }
             color = tempColor;
         }
@@ -73,7 +73,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             color = selected[2] ? Yellow : Blue;
             if (cs.RMBStart != cs.RMBEnd)
-                PlotSelection(selected[2]);
+                PlotSelection(cs.RMBStart, cs.RMBEnd, selected[2]);
         }
     }
 }

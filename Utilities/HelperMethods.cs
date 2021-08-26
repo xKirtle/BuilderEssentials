@@ -430,6 +430,21 @@ namespace BuilderEssentials.Utilities
             }
         }
         
+        /// <summary>
+        /// Returns true if 1st argument is within 2nd and 3rd argument
+        /// </summary>
+        /// <param name="number">Value to be evaluated</param>
+        /// <param name="value1">Upper or lower bound limiter</param>
+        /// <param name="value2">Upper or lower bound limiter</param>
+        /// <param name="equal">True to be inclusive of the bounds</param>
+        internal static bool IsWithinRange(float number, float value1, float value2, bool equal = false)
+        {
+            if (!equal)
+                return (number > value1 && number < value2) || (number < value1 && number > value2);
+            else
+                return (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
+        }
+        
         /*-------------------------------------- Refactor code below (from 1.3) --------------------------------------*/
         internal enum ItemTypes
         {

@@ -16,6 +16,7 @@ namespace BuilderEssentials.UI.UIStates
         public EllipseShape ellipseShape;
         public BezierCurve bezierCurve;
         public FillWandSelection fillWandSelection;
+        public MirrorWandSelection mirrorWandSelection;
         public override void OnInitialize()
         {
             Instance = this;
@@ -36,6 +37,10 @@ namespace BuilderEssentials.UI.UIStates
             fillWandSelection = new FillWandSelection(ModContent.ItemType<FillWand>(), this);
             Append(fillWandSelection);
             fillWandSelection.Hide();
+            
+            mirrorWandSelection = new MirrorWandSelection(ModContent.ItemType<MirrorWand>(), this);
+            Append(mirrorWandSelection);
+            mirrorWandSelection.Show();
         }
 
         public override void Update(GameTime gameTime)
@@ -43,6 +48,7 @@ namespace BuilderEssentials.UI.UIStates
             base.Update(gameTime);
             rectangleShape?.Update();
             ellipseShape?.Update();
+            mirrorWandSelection?.Update();
             
             fillWandSelection.Hide();
         }
@@ -64,6 +70,7 @@ namespace BuilderEssentials.UI.UIStates
             ellipseShape = null;
             bezierCurve = null;
             fillWandSelection = null;
+            mirrorWandSelection = null;
         }
     }
 }
