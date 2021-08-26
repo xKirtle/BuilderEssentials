@@ -1,6 +1,7 @@
 ﻿using System;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.UI;
 
 namespace BuilderEssentials.UI.Elements.ShapesDrawer
@@ -14,6 +15,10 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         {
             
         }
+
+        internal bool IsMouseWithinSelection() =>
+            HelperMethods.IsWithinRange(Player.tileTargetX, cs.RMBStart.X, cs.RMBEnd.X) &&
+            HelperMethods.IsWithinRange(Player.tileTargetY, cs.RMBStart.Y, cs.RMBEnd.Y);
         
         private bool IsMirrorAxisInsideSelection() =>
             cs.LMBStart != cs.LMBEnd &&

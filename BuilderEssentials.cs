@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuilderEssentials.Items;
+using BuilderEssentials.UI.Elements.ShapesDrawer;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -15,32 +20,108 @@ namespace BuilderEssentials
 	public class BuilderEssentials : Mod
 	{
         //TODO: Edit all recipes after all mods loaded to include the multi crafting station on all recipes?
-		public override void Load()
-		{
-			//hotkeys init
+        private int mouseLeftTimer = 0;
 
-            // On.Terraria.Player.PlaceThing_Tiles += (orig, self) =>
-            // {
-            //     orig.Invoke(self);
-            //     Main.NewText("PlaceThing_Tiles");
-            // };
-
+        public override void Load()
+        {
+            //hotkeys init
+            int oldTargetX = 0;
+            int oldRangeX = 0;
+            int oldDir = 0;
             
-            //TODO: Figure out how containers/multi tiles are placed..
-            On.Terraria.Player.PlaceThing_Tiles_PlaceIt += (orig, self, type, data) =>
+            //TODO: Requires 2 item placement animations as is. Investigate what happens in the code to play animation?
+            On.Terraria.Player.PlaceThing += (orig, self) =>
             {
-                //multi tiles will update tileTarget so no point in modifying it with MirrorPlacement??
+                orig.Invoke(self);
                 
-                //Only works for 1x1 tiles
-                orig.Invoke(self, type, data);
-                HelperMethods.MirrorPlacement(Player.tileTargetX, Player.tileTargetY);
-                orig.Invoke(self, type, data);
+                BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+                MirrorWandSelection sel = GameUIState.Instance.mirrorWandSelection;
+                CoordsSelection cs = sel.cs;
 
-                return data;
+                if (Main.mouseLeft && sel.IsMouseWithinSelection())
+                {
+                    //Mirror coords
+                    Vector2 mirrorStart = cs.LMBStart;
+                    Vector2 mirrorEnd = cs.LMBEnd;
+
+                    //Check if coords are within selection
+                    if (!sel.validMirrorPlacement || !HelperMethods.IsWithinRange(Player.tileTargetX, cs.RMBStart.X, cs.RMBEnd.X) ||
+                        !HelperMethods.IsWithinRange(Player.tileTargetY, cs.RMBStart.Y, cs.RMBEnd.Y)) return;
+
+                    //Check if coords intersect the mirror axis
+                    if (!HelperMethods.IsWithinRange(Player.tileTargetY, mirrorStart.X, mirrorEnd.X, true) &&
+                        !HelperMethods.IsWithinRange(Player.tileTargetY, mirrorStart.Y, mirrorEnd.Y, true)) return;
+
+                    if (!sel.horizontalMirror)
+                    {
+                        Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+                        TileObjectData data = TileObjectData.GetTileData(tile);
+                        int offsetCompensation = 0;
+                        if (data != null)
+                        {
+                            var tileOrigin = TileObjectData.GetTileData(tile).Origin;
+                            int tileSize = TileObjectData.GetTileData(tile).CoordinateFullWidth / 16;
+
+                            //A bit scuffed but it works? Might break with mod compat
+                            if (tileSize == 2 && (tileOrigin == new Point16(0, 0) || tileOrigin == new Point16(0, 1) ||
+                                                  tileOrigin == new Point16(0, 2)) || tileOrigin == new Point16(0, 4) || tileOrigin == new Point16(1, 2))
+                                offsetCompensation -= 1;
+
+                            if (tileSize == 2 && tileOrigin == new Point16(1, 1))
+                                offsetCompensation += 1;
+
+                            if (tileSize == 4 && (tileOrigin == new Point16(1, 1) || tileOrigin == new Point16(1, 3)))
+                                offsetCompensation -= 1;
+
+                            if (tileSize == 4 && tileOrigin == new Point16(1, 2))
+                                offsetCompensation -= 2;
+
+                            if (tile.type == TileID.Painting6X4)
+                                offsetCompensation = -1;
+
+                            if (tile.type == TileID.Statues || tile.type == TileID.AlphabetStatues ||
+                                tile.type == TileID.BoulderStatue || tile.type == TileID.MushroomStatue ||
+                                tile.type == TileID.WaterFountain)
+                                offsetCompensation = 1;
+                        }
+                        
+                        float minMirrorX = mirrorStart.X < mirrorEnd.X ? mirrorStart.X : mirrorEnd.X;
+                        bool LeftOfTheMirror = Player.tileTargetX < minMirrorX;
+                        float distanceToMirror = Math.Abs(Player.tileTargetX - mirrorStart.X) < Math.Abs(Player.tileTargetX - mirrorEnd.X) 
+                            ? Math.Abs(Player.tileTargetX - mirrorStart.X) 
+                            : Math.Abs(Player.tileTargetX - mirrorEnd.X);
+
+                        oldTargetX = Player.tileTargetX;
+                        Player.tileTargetX += LeftOfTheMirror 
+                            ? (int)(distanceToMirror * 2 + (sel.wideMirror ? 1 : 0) + offsetCompensation) 
+                            : -(int)(distanceToMirror * 2 + (sel.wideMirror ? 1 : 0) + offsetCompensation);
+
+                        oldRangeX = Player.tileRangeX;
+                        Player.tileRangeX += LeftOfTheMirror 
+                            ? (int)(distanceToMirror * 2 + (sel.wideMirror ? 1 : 0) + offsetCompensation) 
+                            : -(int)(distanceToMirror * 2 + (sel.wideMirror ? 1 : 0) + offsetCompensation);
+                        
+                        oldDir = mp.Player.direction;
+                        mp.Player.direction *= -1;
+
+                        //TODO: Check if player is trying to place on top of a player/npc before invoking this
+                        orig.Invoke(self);
+                        
+                        Player.tileTargetX = oldTargetX;
+                        Player.tileRangeX = oldRangeX;
+                        mp.Player.direction = oldDir;
+                        
+                        //TODO: Does not place it a second time??
+                        orig.Invoke(self);
+                    }
+                }
+
+                if (Main.mouseLeftRelease)
+                    mouseLeftTimer = 0;
             };
         }
 
-		public override void Unload()
+        public override void Unload()
 		{
 			
 		}
