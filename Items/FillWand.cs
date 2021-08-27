@@ -54,7 +54,6 @@ namespace BuilderEssentials.Items
             if (player.whoAmI != Main.myPlayer) return;
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             panel = GameUIState.Instance.fillWandSelection;
-            Main.NewText("holdiiiiing");
             panel.Show();
             
 

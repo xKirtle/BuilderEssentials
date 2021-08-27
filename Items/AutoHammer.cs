@@ -15,6 +15,7 @@ namespace BuilderEssentials.Items
         private bool canHammerTiles;
         private AutoHammerWheel panel;
 
+        //TODO: Make reusable?
         public override string Texture => "BuilderEssentials/Textures/Items/AutoHammer";
 
         public override void SetStaticDefaults()
