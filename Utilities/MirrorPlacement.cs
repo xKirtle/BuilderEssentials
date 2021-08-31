@@ -26,13 +26,12 @@ namespace BuilderEssentials.Utilities
                 Vector2 mirrorStart = cs.LMBStart;
                 Vector2 mirrorEnd = cs.LMBEnd;
 
-                //Check if coords are within selection
-                if (!sel.validMirrorPlacement || !HelperMethods.IsWithinRange(Player.tileTargetX, cs.RMBStart.X, cs.RMBEnd.X) ||
-                    !HelperMethods.IsWithinRange(Player.tileTargetY, cs.RMBStart.Y, cs.RMBEnd.Y)) return;
-
                 //Check if coords intersect the mirror axis
-                if (!HelperMethods.IsWithinRange(Player.tileTargetY, mirrorStart.X, mirrorEnd.X, true) &&
-                    !HelperMethods.IsWithinRange(Player.tileTargetY, mirrorStart.Y, mirrorEnd.Y, true)) return;
+                if (!IsWithinRange(Player.tileTargetY, mirrorStart.X, mirrorEnd.X, true) &&
+                    !IsWithinRange(Player.tileTargetY, mirrorStart.Y, mirrorEnd.Y, true)) return;
+                
+                //Check if placement is on top of a player
+                if (IsPlayerOnTopOfMouse()) return;
 
                 if (!sel.horizontalMirror)
                 {
@@ -79,22 +78,24 @@ namespace BuilderEssentials.Utilities
                         : -(int)(distanceToMirror * 2 + (sel.wideMirror ? 1 : 0) + offsetCompensation);
 
                     int oldRangeX = Player.tileRangeX;
-                    Player.tileRangeX += LeftOfTheMirror 
-                        ? (int)(distanceToMirror * 2 + (sel.wideMirror ? 1 : 0) + offsetCompensation) 
-                        : -(int)(distanceToMirror * 2 + (sel.wideMirror ? 1 : 0) + offsetCompensation);
+                    int oldRangeY = Player.tileRangeY;
+                    Player.tileRangeX += 200;
+                    Player.tileRangeY += 200;
                     
                     int oldDir = mp.Player.direction;
                     mp.Player.direction *= -1;
-
-                    //TODO: Check if player is trying to place on top of a player/npc before invoking this
-                    orig.Invoke(self);
                     
+                    
+                    //mp.Player.PlaceThing();
+                    //TODO: Requires me to try to place a tile twice, whyyyyyyyyyyy
+                    orig.Invoke(self);
+
                     Player.tileTargetX = oldTargetX;
                     Player.tileRangeX = oldRangeX;
+                    Player.tileRangeY = oldRangeY;
                     mp.Player.direction = oldDir;
-                    
-                    //TODO: Does not place it a second time??
-                    orig.Invoke(self);
+
+                    Main.NewText("before plaer placething");
                 }
             }
 

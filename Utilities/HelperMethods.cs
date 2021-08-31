@@ -629,5 +629,19 @@ namespace BuilderEssentials.Utilities
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, startX, startY, syncSize);
         }
+
+         internal static bool IsPlayerOnTopOfMouse()
+         {
+             //TODO: Check player mounts?
+             Rectangle rect = new Rectangle(Player.tileTargetX * 16, Player.tileTargetY * 16, 1, 1);
+             for (int i = 0; i < Main.maxPlayers; i++)
+             {
+                 Player player = Main.player[i];
+                 if (player.active && !player.dead && !player.ghost && player.Hitbox.Contains(rect.Location))
+                     return true;
+             }
+
+             return false;
+         }
     }
 }

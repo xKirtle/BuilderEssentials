@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BuilderEssentials.Items;
 using BuilderEssentials.UI.Elements.ShapesDrawer;
 using BuilderEssentials.UI.UIStates;
@@ -20,18 +21,27 @@ namespace BuilderEssentials
 	public class BuilderEssentials : Mod
 	{
         //TODO: Edit all recipes after all mods loaded to include the multi crafting station on all recipes?
-        private int mouseLeftTimer = 0;
-
         //TODO: Disable Player.PlaceThing_Walls_FillEmptySpace() when doing MirrorWand stuff
         public override void Load()
         {
             //hotkeys init
 
-            //TODO: Requires 2 item placement animations as is. Investigate what happens in the code to play animation?
+            //Works for non multi tiles only (but works correctly)
+            // On.Terraria.Player.PlaceThing_Tiles_PlaceIt += (orig, self, newObjectType, tileData) =>
+            // {
+            //     TileObject data = orig.Invoke(self, newObjectType, tileData);
+            //     Main.mouseLeft = true;
+            //     HelperMethods.MirrorPlacement(orig, self, newObjectType, tileData);
+            //
+            //     return tileData;
+            // };
+
             On.Terraria.Player.PlaceThing += (orig, self) =>
             {
                 orig.Invoke(self);
-                //The invoke method is probably getting stuck in the item placement animation with mouseLeft is down or something..
+                
+                //TODO: Figure out why I can't invoke this damn method twice
+                //If invoke above fails, the method below will work as intended. Something must have changed in PlaceThing()
                 
                 HelperMethods.MirrorPlacement(orig, self);
             };
