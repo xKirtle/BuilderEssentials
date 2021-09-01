@@ -148,13 +148,14 @@ namespace BuilderEssentials.Utilities
             
             if (MMBDown)
                 MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
-
-            if (bezierSelection && LMBDown && LMBStart != RMBEnd)
-                RMBEnd = LMBStart;
             
+            //Centering the control point
+            if (bezierSelection && LMBDown)
+                RMBEnd = new Vector2((LMBStart.X + LMBEnd.X) / 2, (LMBStart.Y + LMBEnd.Y) / 2);
+
             shiftDown = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
             if (!shiftDown) return;
-            
+
             if (RMBDown) 
                 SquareCoords(ref RMBStart, ref RMBEnd);
             else if (LMBDown)

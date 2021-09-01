@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ID;
 using Terraria.UI;
 
@@ -42,11 +44,12 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Prevents drawing and coord updates if Improved Ruler is not equipped
-           // if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().improvedRulerEquipped) return;
+           if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().improvedRulerEquipped) return;
 
            color = Blue;
             cs.UpdateCoords(true);
-            if (cs.LMBStart != cs.LMBEnd) //&& ImprovedRuler is equipped
+
+            if (cs.LMBStart != cs.LMBEnd)
                 DrawBezier(0.5f, cs.LMBStart, cs.RMBEnd, cs.LMBEnd);
         }
     }

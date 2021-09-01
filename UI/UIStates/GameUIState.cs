@@ -21,6 +21,8 @@ namespace BuilderEssentials.UI.UIStates
         {
             Instance = this;
             base.OnInitialize();
+            
+            //TODO: Add dimensions to shapes menu stuff on screen (like ellipse width/height or radius if circle?) 
 
             rectangleShape = new RectangleShape(ModContent.ItemType<ShapesDrawer>(), this);
             Append(rectangleShape);
@@ -30,9 +32,9 @@ namespace BuilderEssentials.UI.UIStates
             Append(ellipseShape);
             ellipseShape.Show();
 
-            // bezierCurve = new BezierCurve(ModContent.ItemType<ShapesDrawer>(), this);
-            // Append(bezierCurve);
-            // bezierCurve.Show();
+            bezierCurve = new BezierCurve(ItemID.None, this);
+            Append(bezierCurve);
+            bezierCurve.Show();
 
             fillWandSelection = new FillWandSelection(ModContent.ItemType<FillWand>(), this);
             Append(fillWandSelection);
