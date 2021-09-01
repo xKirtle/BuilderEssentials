@@ -64,13 +64,26 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 PlotLine((int) (start.X), fixedY, (int) (end.X), fixedY);
             }
             color = tempColor;
+            
+            //Draw dimensions text while making selection
+            //TODO: Try to leave the dimensions on screen on the bottom right corner of the selection?
+            if (cs.RMBDown)
+            {
+                Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
+                CustomUIText uiText = UIUIState.Instance.dimensionsText;
+                uiText?.SetText($"{rectWidth+1}x{rectHeight+1}");
+                uiText?.Left.Set(cachedMouse.X + 22, 0);
+                uiText?.Top.Set(cachedMouse.Y + 22, 0);
+                uiText.TextColor = color;
+                uiText?.Show();
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (!selected[1]) return;
             cs.UpdateCoords();
-            
+
             color = selected[2] ? Yellow : Blue;
             if (cs.RMBStart != cs.RMBEnd)
                 PlotSelection(cs.RMBStart, cs.RMBEnd, selected[2]);

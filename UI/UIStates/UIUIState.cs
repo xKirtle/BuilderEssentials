@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.Items;
+using BuilderEssentials.UI.Elements;
 using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIPanels.ShapesMenu;
 using Microsoft.Xna.Framework;
@@ -17,6 +18,7 @@ namespace BuilderEssentials.UI.UIStates
         public AutoHammerWheel autoHammerWheel;
         public MultiWandWheel multiWandWheel;
         public PaintWheel paintWheel;
+        public CustomUIText dimensionsText;
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -41,6 +43,10 @@ namespace BuilderEssentials.UI.UIStates
             paintWheel = new PaintWheel();
             Append(paintWheel);
             paintWheel.Hide();
+
+            dimensionsText = new CustomUIText("");
+            Append(dimensionsText);
+            dimensionsText.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -61,6 +67,8 @@ namespace BuilderEssentials.UI.UIStates
             
             if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<SpectrePaintTool>())
                 paintWheel.Hide();
+            
+            dimensionsText.Hide();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
