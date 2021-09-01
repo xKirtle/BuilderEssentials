@@ -67,13 +67,12 @@ namespace BuilderEssentials.UI.UIStates
             
             if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<SpectrePaintTool>())
                 paintWheel.Hide();
-            
-            dimensionsText.Hide();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+            dimensionsText.Hide();
         }
 
         public void Load(Mod mod)

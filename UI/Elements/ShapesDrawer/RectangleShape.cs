@@ -67,11 +67,12 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             //Draw dimensions text while making selection
             //TODO: Try to leave the dimensions on screen on the bottom right corner of the selection?
-            if (cs.RMBDown)
+
+            CustomUIText uiText = UIUIState.Instance.dimensionsText;
+            if (itemToWorkWith == Main.LocalPlayer.HeldItem.type)
             {
                 Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
-                CustomUIText uiText = UIUIState.Instance.dimensionsText;
-                uiText?.SetText($"{rectWidth+1}x{rectHeight+1}");
+                uiText?.SetText($"{rectWidth + 1}x{rectHeight + 1}");
                 uiText?.Left.Set(cachedMouse.X + 22, 0);
                 uiText?.Top.Set(cachedMouse.Y + 22, 0);
                 uiText.TextColor = color;

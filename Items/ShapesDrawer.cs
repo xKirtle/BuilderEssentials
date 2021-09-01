@@ -47,6 +47,8 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         { 
             if (player.whoAmI != Main.myPlayer) return;
+            UIUIState.Instance.dimensionsText.Show();
+            
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.LocalPlayer.HeldItem == this.Item && !UIUIState.Instance.menuPanel.Visible)
                 UIUIState.Instance.arrowPanel.Show();
@@ -73,15 +75,6 @@ namespace BuilderEssentials.Items
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-
-            var uiState = UIUIState.Instance;
-            if (Main.LocalPlayer.HeldItem != this.Item)
-            {
-                uiState.arrowPanel.Hide();
-                uiState.menuPanel.Hide();
-            }
-            else if (Main.LocalPlayer.HeldItem == this.Item && !uiState.menuPanel.Visible)
-                uiState.arrowPanel.Show();
         }
 
         public override void AddRecipes()

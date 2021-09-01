@@ -227,11 +227,11 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             color = tempColor;
             
             //Draw dimensions text while making selection
-            if (cs.RMBDown)
+            CustomUIText uiText = UIUIState.Instance.dimensionsText;
+            if (itemToWorkWith == Main.LocalPlayer.HeldItem.type)
             {
                 Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
-                CustomUIText uiText = UIUIState.Instance.dimensionsText;
-                uiText?.SetText($"{rectWidth+1}x{rectHeight+1}");
+                uiText?.SetText($"{rectWidth + 1}x{rectHeight + 1}");
                 uiText?.Left.Set(cachedMouse.X + 22, 0);
                 uiText?.Top.Set(cachedMouse.Y + 22, 0);
                 uiText.TextColor = color;

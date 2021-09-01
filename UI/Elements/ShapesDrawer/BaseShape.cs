@@ -20,7 +20,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal Color Blue = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
         internal Color Yellow = new Color(0.9f, 0.8f, 0.24f, 1f) * 0.8f;
         internal Color Red = new Color(1f, 0f, 0f, .75f) * 0.8f;
-        private int itemToWorkWith;
+        internal int itemToWorkWith;
         internal int selectedItemType;
         internal bool CanPlaceItems { get; set; }
 
