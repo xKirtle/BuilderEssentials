@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,6 +19,8 @@ namespace BuilderEssentials.Items
                                "\nLeft Click to make a mirror axis" +
                                "\n[c/FF0000:This is a work in progress and]" +
                                "\n[c/FF0000:does not support multi tiles yet]");
+            
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
         public override void SetDefaults()
         {

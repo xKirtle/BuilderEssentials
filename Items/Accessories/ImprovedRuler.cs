@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -13,6 +14,8 @@ namespace BuilderEssentials.Items.Accessories
             Tooltip.SetDefault("Only works when equipped and player's empty handed." +
                                "\nHold Left Click to draw a line." +
                                "\nHold Right Click to curve the line.");
+            
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

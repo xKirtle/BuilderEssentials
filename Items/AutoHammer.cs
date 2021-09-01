@@ -6,6 +6,7 @@ using Terraria.DataStructures;
 using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
+using Terraria.GameContent.Creative;
 
 namespace BuilderEssentials.Items
 {
@@ -21,6 +22,8 @@ namespace BuilderEssentials.Items
         {
             Tooltip.SetDefault("Better than a regular hammer!" +
                                "\nRight Click to open selection menu");
+
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

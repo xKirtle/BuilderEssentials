@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BuilderEssentials.Buffs;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,7 +11,12 @@ namespace BuilderEssentials.Items.Accessories
     internal class BuildInPeace : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/Accessories/BuildInPeace";
-        public override void SetStaticDefaults() => Tooltip.SetDefault("Disables all events in the game and sets the clock to 12pm daytime");
+
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault("Disables all events in the game and sets the clock to 12pm daytime");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

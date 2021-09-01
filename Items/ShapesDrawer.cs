@@ -2,6 +2,7 @@
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -22,6 +23,8 @@ namespace BuilderEssentials.Items
                                "\nLeft Click to place blocks in the selection" +
                                "\n[c/FFCC00:Press LShift to make circles/squares]" +
                                "\n[c/FFCC00:Enables a selection menu on the left of the screen]");
+            
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

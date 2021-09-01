@@ -9,6 +9,7 @@ using Terraria.DataStructures;
 using BuilderEssentials.Utilities;
 using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIStates;
+using Terraria.GameContent.Creative;
 
 namespace BuilderEssentials.Items
 {
@@ -50,8 +51,11 @@ namespace BuilderEssentials.Items
 
         public override string Texture => "BuilderEssentials/Textures/Items/MultiWand";
 
-        public override void SetStaticDefaults() =>
+        public override void SetStaticDefaults()
+        {
             Tooltip.SetDefault("Contains all building wands!\nRight Click to open selection menu");
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

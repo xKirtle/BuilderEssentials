@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
+using Terraria.GameContent.Creative;
 using Terraria.ObjectData;
 
 namespace BuilderEssentials.Items
@@ -32,6 +33,8 @@ namespace BuilderEssentials.Items
                 "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]" +
                 "\n[c/FF0000:Does not support multi tiles]"
             );
+            
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()

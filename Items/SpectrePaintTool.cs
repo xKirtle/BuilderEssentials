@@ -9,6 +9,7 @@ using static Terraria.ModLoader.ModContent;
 using BuilderEssentials.Utilities;
 using BuilderEssentials.UI.UIPanels;
 using BuilderEssentials.UI.UIStates;
+using Terraria.GameContent.Creative;
 
 namespace BuilderEssentials.Items
 {
@@ -24,6 +25,8 @@ namespace BuilderEssentials.Items
         {
             Tooltip.SetDefault("Able to paint and remove paint from tiles and walls!" +
                                "\nRight Click to open selection menu");
+            
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
         public override void SetDefaults()
