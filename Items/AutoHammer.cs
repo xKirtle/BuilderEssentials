@@ -14,8 +14,7 @@ namespace BuilderEssentials.Items
         private Vector2 toolRange;
         private bool canHammerTiles;
         private AutoHammerWheel panel;
-
-        //TODO: Make reusable?
+        
         public override string Texture => "BuilderEssentials/Textures/Items/AutoHammer";
 
         public override void SetStaticDefaults()
@@ -40,13 +39,14 @@ namespace BuilderEssentials.Items
             Item.tileBoost = 4;
         }
 
+        private int mouseRightTimer = 0;
         public override void HoldItem(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
             panel = UIUIState.Instance.autoHammerWheel;
             
-            if (Main.mouseRight && player.HeldItem == Item && 
-                (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
+            if (Main.mouseRight && player.HeldItem == Item &&
+                (HelperMethods.IsUIAvailable(notShowingMouseIcon: false) || panel.IsMouseHovering) && ++mouseRightTimer == 2)
                 panel.Toggle();
 
             if (Main.mouseRightRelease)
@@ -63,7 +63,7 @@ namespace BuilderEssentials.Items
 
         public override bool CanUseItem(Player player)
         {
-            if (player.whoAmI != Main.myPlayer) return true;
+            if (player.whoAmI != Main.myPlayer || !canHammerTiles) return true;
             panel = UIUIState.Instance.autoHammerWheel;
             
             if (canHammerTiles && panel.selectedIndex != -1)
@@ -74,8 +74,6 @@ namespace BuilderEssentials.Items
 
             return true;
         }
-
-        private int mouseRightTimer = 0;
 
         public override void AddRecipes()
         {

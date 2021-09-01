@@ -51,7 +51,7 @@ namespace BuilderEssentials.Items
             PaintWheel panel = UIUIState.Instance.paintWheel;
             
             if (Main.mouseRight && player.HeldItem == Item &&
-                (HelperMethods.IsUIAvailable() || panel.IsMouseHovering) && ++mouseRightTimer == 2)
+                (HelperMethods.IsUIAvailable(notShowingMouseIcon: false) || panel.IsMouseHovering) && ++mouseRightTimer == 2)
                 panel.Toggle();
 
             if (Main.mouseRightRelease)

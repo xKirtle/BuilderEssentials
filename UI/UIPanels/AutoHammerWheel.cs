@@ -108,8 +108,8 @@ namespace BuilderEssentials.UI.UIPanels
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (elementHovered)
-                Main.LocalPlayer.mouseInterface = true;
+            if (!elementHovered) return;
+            Main.LocalPlayer.mouseInterface = true;
         }
 
         public override void Show()

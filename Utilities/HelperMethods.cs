@@ -143,21 +143,23 @@ namespace BuilderEssentials.Utilities
             bool notShowingMouseIcon = true)
         {
             Player player = Main.LocalPlayer;
-            // if( !(!notTabbedAway || Main.hasFocus) ) { Main.NewText( "hasFocus" ); }
-            // if( !(!gameNotPaused || !Main.gamePaused) ) { Main.NewText( "gamePaused" ); }
-            // if( !(!mouseNotInUse || !player.mouseInterface) ) { Main.NewText( "mouseInterface" ); }
-            // if( !(!keyboardNotInVanillaUI || !Main.drawingPlayerChat) ) { Main.NewText( "drawingPlayerChat" ); }
-            // if( !(!keyboardNotInVanillaUI || !Main.editSign) ) { Main.NewText( "editSign" ); }
-            // if( !(!keyboardNotInVanillaUI || !Main.editChest) ) { Main.NewText( "editChest" ); }
-            // if( !(!keyboardNotInCustomUI || !PlayerInput.WritingText) ) { Main.NewText( "WritingText" ); }
-            // if( !(!keyboardNotInCustomUI || !Main.blockInput) ) { Main.NewText( "blockInput" ); }
-            // if( !(!playerAvailable || !player.dead) ) { Main.NewText( "dead" ); }
-            // if( !(!playerAvailable || !player.CCed) ) { Main.NewText( "CCed" ); }
-            // if( !(!playerNotTalkingToNPC || player.talkNPC == -1) ) { Main.NewText( "talkNPC" ); }
-            // if( !(!playerNotWieldingItem || (player.itemTime == 0 && player.itemAnimation == 0)) ) { Main.NewText( "itemTime" ); }
-            // if( !(!noFullscreenMap || !Main.mapFullscreen) ) { Main.NewText( "mapFullscreen" ); }
-            // if( !(!notShowingMouseIcon || !Main.HoveringOverAnNPC) ) { Main.NewText( "HoveringOverAnNPC" ); }
-            // if( !(!notShowingMouseIcon || !player.showItemIcon) ) { Main.NewText( "showItemIcon" ); }
+            // string toggled = "";
+            // if( !(!notTabbedAway || Main.hasFocus) ) { toggled += "hasFocus "; }
+            // if( !(!gameNotPaused || !Main.gamePaused) ) { toggled += "gamePaused "; }
+            // if (!(!mouseNotInUse || !player.mouseInterface)) { toggled += "mouseInterface "; }
+            // if (!(!keyboardNotInVanillaUI || !Main.drawingPlayerChat)) { toggled += "drawingPlayerChat "; }
+            // if( !(!keyboardNotInVanillaUI || !Main.editSign) ) { toggled += "editSign "; }
+            // if( !(!keyboardNotInVanillaUI || !Main.editChest) ) { toggled += "editChest "; }
+            // if( !(!keyboardNotInCustomUI || !PlayerInput.WritingText) ) { toggled += "WritingText "; }
+            // if( !(!keyboardNotInCustomUI || !Main.blockInput) ) { toggled += "blockInput "; }
+            // if( !(!playerAvailable || !player.dead) ) { toggled += "dead "; }
+            // if( !(!playerAvailable || !player.CCed) ) { Main.NewText( "CCed " ); }
+            // if( !(!playerNotTalkingToNPC || player.talkNPC == -1) ) { toggled += "talkNPC "; }
+            // if( !(!playerNotWieldingItem || (player.itemTime == 0 && player.itemAnimation == 0)) ) { toggled += "itemTime "; }
+            // if( !(!noFullscreenMap || !Main.mapFullscreen) ) { toggled += "mapFullscreen "; }
+            // if( !(!notShowingMouseIcon || !Main.HoveringOverAnNPC) ) { toggled += "HoveringOverAnNPC "; }
+            // if( !(!notShowingMouseIcon || !player.cursorItemIconEnabled) ) {  toggled += "showItemIcon"; }
+            // Main.NewText(toggled);
             return (!notTabbedAway || Main.hasFocus) &&
                    (!gameNotPaused || !Main.gamePaused) &&
                    (!gameNotPaused || !Main.ingameOptionsWindow) &&
