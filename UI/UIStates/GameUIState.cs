@@ -18,7 +18,6 @@ namespace BuilderEssentials.UI.UIStates
         public BezierCurve bezierCurve;
         public FillWandSelection fillWandSelection;
         public MirrorWandSelection mirrorWandSelection;
-        public CustomUIText dimensionsText;
         public override void OnInitialize()
         {
             Instance = this;
@@ -36,27 +35,29 @@ namespace BuilderEssentials.UI.UIStates
             Append(bezierCurve);
             bezierCurve.Show();
 
-            fillWandSelection = new FillWandSelection(ModContent.ItemType<FillWand>(), this);
+            //UIUIState was initialized before this UserInterface, so we can use its instance for the UIText
+            fillWandSelection = new FillWandSelection(ModContent.ItemType<FillWand>(), this, UIUIState.Instance);
             Append(fillWandSelection);
             fillWandSelection.Hide();
             
             mirrorWandSelection = new MirrorWandSelection(ModContent.ItemType<MirrorWand>(), this);
             Append(mirrorWandSelection);
             mirrorWandSelection.Show();
-            
-            dimensionsText = new CustomUIText("");
-            Append(dimensionsText);
-            dimensionsText.Hide();
         }
 
         public override void Update(GameTime gameTime)
         {
+            //TODO: Same coords on mirror wand selection don't hide the text
+            //shapes drawer, however, does
+            
             base.Update(gameTime);
             rectangleShape?.Update();
             ellipseShape?.Update();
             mirrorWandSelection?.Update();
+            fillWandSelection?.Update();
             
             fillWandSelection?.Hide();
+            fillWandSelection?.uiText.Hide();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -77,7 +78,6 @@ namespace BuilderEssentials.UI.UIStates
             bezierCurve = null;
             fillWandSelection = null;
             mirrorWandSelection = null;
-            dimensionsText = null;
         }
     }
 }

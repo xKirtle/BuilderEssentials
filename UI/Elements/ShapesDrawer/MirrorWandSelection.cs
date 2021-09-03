@@ -11,7 +11,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal bool horizontalMirror;
         internal bool wideMirror;
         internal bool validMirrorPlacement;
-        public MirrorWandSelection(int itemType, UIState uiState) : base(itemType, uiState)
+        public MirrorWandSelection(int itemType, UIState uiState, UIState textUiState = null) : base(itemType, uiState, textUiState)
         {
             
         }
@@ -62,6 +62,11 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             //Selected area
             color = Blue;
             PlotSelection(cs.RMBStart, cs.RMBEnd);
+        }
+
+        internal override void Update()
+        {
+            base.Update();
         }
     }
 }

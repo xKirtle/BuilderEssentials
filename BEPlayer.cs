@@ -51,6 +51,9 @@ namespace BuilderEssentials
 
             if (BuilderEssentials.DecreaseFillToolSize.JustPressed && FillWand.fillSelectionSize > 1)
                 --FillWand.fillSelectionSize;
+
+            if (BuilderEssentials.ReplaceTilesFillWand.JustPressed)
+                FillWand.replaceTiles = !FillWand.replaceTiles;
         }
     }
 }

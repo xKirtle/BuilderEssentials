@@ -36,7 +36,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 PlotLine((int)points[i].X, (int)points[i].Y, (int)points[i+1].X, (int)points[i+1].Y);
         }
 
-        public BezierCurve(int itemType, UIState uiState) : base(itemType, uiState)
+        public BezierCurve(int itemType, UIState uiState, UIState textUiState = null) : base(itemType, uiState, textUiState)
         {
             
         }

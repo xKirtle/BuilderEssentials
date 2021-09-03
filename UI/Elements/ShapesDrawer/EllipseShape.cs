@@ -14,7 +14,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         /// <summary></summary>
         /// <param name="itemType">Item Type that must be held by the player for the shape to be able to be modified</param>
         /// <param name="uiState">UIState to attach to</param>
-        public EllipseShape(int itemType, UIState uiState) : base(itemType, uiState)
+        public EllipseShape(int itemType, UIState uiState, UIState textUiState = null) : base(itemType, uiState, textUiState)
         {
             
         }

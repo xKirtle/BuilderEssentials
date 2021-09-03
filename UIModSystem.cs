@@ -22,15 +22,16 @@ namespace BuilderEssentials
         {
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
-                GameUIState = new GameUIState();
-                GameUIState.Activate();
-                GameUserInterface = new UserInterface();
-                GameUserInterface.SetState(GameUIState);
-
+                
                 UIUIState = new UIUIState();
                 UIUIState.Activate();
                 UIUserInterface = new UserInterface();
                 UIUserInterface.SetState(UIUIState);
+                
+                GameUIState = new GameUIState();
+                GameUIState.Activate();
+                GameUserInterface = new UserInterface();
+                GameUserInterface.SetState(GameUIState);
             }
         }
 

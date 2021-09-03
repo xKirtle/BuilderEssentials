@@ -15,8 +15,10 @@ namespace BuilderEssentials.Items
     {
         public override string Texture => "BuilderEssentials/Textures/Items/FillWand";
 
-        public static int selectedTileItemType = -1;
-        public static int fillSelectionSize = 3;
+        internal static int selectedTileItemType = -1;
+        internal static int fillSelectionSize = 3;
+        internal static bool replaceTiles = false;
+        
         private int toolDelay = 10;
         private FillWandSelection panel;
 
@@ -60,7 +62,8 @@ namespace BuilderEssentials.Items
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             panel = GameUIState.Instance.fillWandSelection;
             panel.Show();
-            
+            panel.uiText.Show();
+
 
             //Left Mouse
             if (Main.mouseLeft && selectedTileItemType != -1 && !Main.LocalPlayer.mouseInterface && ++mouseLeftTimer == toolDelay)

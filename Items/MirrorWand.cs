@@ -1,6 +1,7 @@
 ﻿using BuilderEssentials.UI;
 using Microsoft.Xna.Framework;
 using System;
+using BuilderEssentials.UI.UIStates;
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -37,6 +38,13 @@ namespace BuilderEssentials.Items
         }
 
         public override Vector2? HoldoutOffset() => new Vector2(5, -7);
+
+        public override void HoldItem(Player player)
+        {
+            if (player.whoAmI != Main.myPlayer) return;
+            
+            GameUIState.Instance.mirrorWandSelection.uiText.Show();
+        }
 
         public override void AddRecipes()
         {

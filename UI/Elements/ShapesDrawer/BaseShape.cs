@@ -25,14 +25,17 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal CustomUIText uiText;
         internal bool CanPlaceItems { get; set; }
 
-        public BaseShape(int itemType, UIState uiState)
+        public BaseShape(int itemType, UIState uiState, UIState textUiState = null)
         {
             itemToWorkWith = itemType;
             cs = new CoordsSelection(itemType, uiState);
             color = Blue;
             
             uiText = new CustomUIText("");
-            GameUIState.Instance.Append(uiText);
+            if (textUiState != null)
+                textUiState.Append(uiText);
+            else
+                uiState.Append(uiText);
         }
 
         internal virtual void PlotPixel(int x, int y, bool render = true)
