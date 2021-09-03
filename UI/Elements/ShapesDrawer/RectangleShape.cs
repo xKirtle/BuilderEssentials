@@ -67,21 +67,21 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             
             //Draw dimensions text while making selection
             //TODO: Try to leave the dimensions on screen on the bottom right corner of the selection?
-
-            CustomUIText uiText = UIUIState.Instance.dimensionsText;
-            if (itemToWorkWith == Main.LocalPlayer.HeldItem.type)
-            {
-                Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
-                uiText?.SetText($"{rectWidth + 1}x{rectHeight + 1}");
-                uiText?.Left.Set(cachedMouse.X + 22, 0);
-                uiText?.Top.Set(cachedMouse.Y + 22, 0);
-                uiText.TextColor = color;
-                uiText?.Show();
-            }
+            
+            //CustomUIText uiText = GameUIState.Instance.dimensionsText;
+            Vector2 pos = Vector2.Max(start, end);
+            var cachedMouse = pos * 16 - Main.screenPosition + new Vector2(22);
+            uiText.SetText($"{rectWidth + 1}x{rectHeight + 1}");
+            uiText.Left.Set(cachedMouse.X, 0);
+            uiText.Top.Set(cachedMouse.Y, 0);
+            uiText.TextColor = color;
+            uiText.Show();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //TODO: Alternative to actually dispose of the UIText elements is to create them in the UserInterface?
+            uiText.SetText("");
             if (!selected[1]) return;
             cs.UpdateCoords();
 

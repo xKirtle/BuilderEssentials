@@ -22,6 +22,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal Color Red = new Color(1f, 0f, 0f, .75f) * 0.8f;
         internal int itemToWorkWith;
         internal int selectedItemType;
+        internal CustomUIText uiText;
         internal bool CanPlaceItems { get; set; }
 
         public BaseShape(int itemType, UIState uiState)
@@ -29,6 +30,9 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             itemToWorkWith = itemType;
             cs = new CoordsSelection(itemType, uiState);
             color = Blue;
+            
+            uiText = new CustomUIText("");
+            GameUIState.Instance.Append(uiText);
         }
 
         internal virtual void PlotPixel(int x, int y, bool render = true)
@@ -44,6 +48,8 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
             if (CanPlaceItems)
                 HelperMethods.PlaceTile(x, y, selectedItemType, sync: false);
+
+            //TODO: Add a way to remove last selection with a keybind?
         }
 
         internal void PlotLine(int x0, int y0, int x1, int y1, bool render = true)
@@ -80,7 +86,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
         internal virtual void Update()
         {
             selected = UIUIState.Instance.menuPanel?.selected;
-            
             //TODO: Make itemToWorkWith be useful here, instead of in the actual item code
         }
     }

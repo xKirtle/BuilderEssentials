@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.Items;
+using BuilderEssentials.UI.Elements;
 using BuilderEssentials.UI.Elements.ShapesDrawer;
 using BuilderEssentials.UI.UIPanels;
 using Microsoft.Xna.Framework;
@@ -17,12 +18,11 @@ namespace BuilderEssentials.UI.UIStates
         public BezierCurve bezierCurve;
         public FillWandSelection fillWandSelection;
         public MirrorWandSelection mirrorWandSelection;
+        public CustomUIText dimensionsText;
         public override void OnInitialize()
         {
             Instance = this;
             base.OnInitialize();
-            
-            //TODO: Add dimensions to shapes menu stuff on screen (like ellipse width/height or radius if circle?) 
 
             rectangleShape = new RectangleShape(ModContent.ItemType<ShapesDrawer>(), this);
             Append(rectangleShape);
@@ -43,6 +43,10 @@ namespace BuilderEssentials.UI.UIStates
             mirrorWandSelection = new MirrorWandSelection(ModContent.ItemType<MirrorWand>(), this);
             Append(mirrorWandSelection);
             mirrorWandSelection.Show();
+            
+            dimensionsText = new CustomUIText("");
+            Append(dimensionsText);
+            dimensionsText.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -52,7 +56,7 @@ namespace BuilderEssentials.UI.UIStates
             ellipseShape?.Update();
             mirrorWandSelection?.Update();
             
-            fillWandSelection.Hide();
+            fillWandSelection?.Hide();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -73,6 +77,7 @@ namespace BuilderEssentials.UI.UIStates
             bezierCurve = null;
             fillWandSelection = null;
             mirrorWandSelection = null;
+            dimensionsText = null;
         }
     }
 }

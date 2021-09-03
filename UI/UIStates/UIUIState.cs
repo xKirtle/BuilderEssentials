@@ -18,7 +18,6 @@ namespace BuilderEssentials.UI.UIStates
         public AutoHammerWheel autoHammerWheel;
         public MultiWandWheel multiWandWheel;
         public PaintWheel paintWheel;
-        public CustomUIText dimensionsText;
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -43,10 +42,6 @@ namespace BuilderEssentials.UI.UIStates
             paintWheel = new PaintWheel();
             Append(paintWheel);
             paintWheel.Hide();
-
-            dimensionsText = new CustomUIText("");
-            Append(dimensionsText);
-            dimensionsText.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -72,7 +67,6 @@ namespace BuilderEssentials.UI.UIStates
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            dimensionsText.Hide();
         }
 
         public void Load(Mod mod)

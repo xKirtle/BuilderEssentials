@@ -47,8 +47,7 @@ namespace BuilderEssentials.Items
         public override void HoldItem(Player player)
         { 
             if (player.whoAmI != Main.myPlayer) return;
-            UIUIState.Instance.dimensionsText.Show();
-            
+
             BEPlayer mp = player.GetModPlayer<BEPlayer>();
             if (Main.LocalPlayer.HeldItem == this.Item && !UIUIState.Instance.menuPanel.Visible)
                 UIUIState.Instance.arrowPanel.Show();

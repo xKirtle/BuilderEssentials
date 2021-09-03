@@ -227,20 +227,18 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             color = tempColor;
             
             //Draw dimensions text while making selection
-            CustomUIText uiText = UIUIState.Instance.dimensionsText;
-            if (itemToWorkWith == Main.LocalPlayer.HeldItem.type)
-            {
-                Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
-                uiText?.SetText($"{rectWidth + 1}x{rectHeight + 1}");
-                uiText?.Left.Set(cachedMouse.X + 22, 0);
-                uiText?.Top.Set(cachedMouse.Y + 22, 0);
-                uiText.TextColor = color;
-                uiText?.Show();
-            }
+            Vector2 pos = Vector2.Max(start, end);
+            var cachedMouse = pos * 16 - Main.screenPosition + new Vector2(22);
+            uiText.SetText($"{rectWidth + 1}x{rectHeight + 1}");
+            uiText.Left.Set(cachedMouse.X, 0);
+            uiText.Top.Set(cachedMouse.Y, 0);
+            uiText.TextColor = color;
+            uiText.Show();
         }
         
         public override void Draw(SpriteBatch spriteBatch)
         {
+            uiText.SetText("");
             if (!selected[0]) return;
             cs.UpdateCoords();
             
