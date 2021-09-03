@@ -20,10 +20,18 @@ namespace BuilderEssentials
 {
 	public class BuilderEssentials : Mod
 	{
+        internal static ModKeybind IncreaseFillToolSize;
+        internal static ModKeybind DecreaseFillToolSize;
+        //internal static ModKeybind UndoLastShape;
+        
         //TODO: Edit all recipes after all mods loaded to include the multi crafting station on all recipes?
         //TODO: Disable Player.PlaceThing_Walls_FillEmptySpace() when doing MirrorWand stuff
         public override void Load()
         {
+            IncreaseFillToolSize = KeybindLoader.RegisterKeybind(this, "Increase Fill Tool Selection Size", "I");
+            DecreaseFillToolSize = KeybindLoader.RegisterKeybind(this, "Decrease Fill Tool Selection Size", "O");
+            //UndoLastShape = KeybindLoader.RegisterKeybind(this, "Undo Last Placement Of The Shapes Drawer", "U");
+            
             //hotkeys init
 
             //Works for non multi tiles only (but works correctly)
@@ -48,9 +56,9 @@ namespace BuilderEssentials
         }
 
         public override void Unload()
-		{
-			
-		}
+        {
+            IncreaseFillToolSize = DecreaseFillToolSize = null;
+        }
 		
 		public override void AddRecipeGroups()
         {
