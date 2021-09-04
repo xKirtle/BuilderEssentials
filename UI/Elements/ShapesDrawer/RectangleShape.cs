@@ -66,9 +66,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             color = tempColor;
             
             //Draw dimensions text while making selection
-            //TODO: Try to leave the dimensions on screen on the bottom right corner of the selection?
-            
-            //CustomUIText uiText = GameUIState.Instance.dimensionsText;
             Vector2 pos = Vector2.Max(start, end);
             var cachedMouse = pos * 16 - Main.screenPosition + new Vector2(22);
             uiText.SetText($"{rectWidth + 1}x{rectHeight + 1}");

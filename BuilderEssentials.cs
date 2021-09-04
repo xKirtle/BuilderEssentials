@@ -59,7 +59,7 @@ namespace BuilderEssentials
 
         public override void Unload()
         {
-            IncreaseFillToolSize = DecreaseFillToolSize = null;
+            IncreaseFillToolSize = DecreaseFillToolSize = ReplaceTilesFillWand = null;
         }
 		
 		public override void AddRecipeGroups()

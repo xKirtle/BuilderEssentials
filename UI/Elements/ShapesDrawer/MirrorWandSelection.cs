@@ -48,6 +48,7 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            uiText.SetText("");
             cs.UpdateCoords();
             
             //Mirror
@@ -57,11 +58,14 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             validMirrorPlacement = IsMirrorAxisInsideSelection();
             
             color = validMirrorPlacement ? Yellow : Red;
-            PlotSelection(cs.LMBStart, cs.LMBEnd);
+            
+            if (cs.LMBStart != cs.LMBEnd)
+                PlotSelection(cs.LMBStart, cs.LMBEnd);
             
             //Selected area
             color = Blue;
-            PlotSelection(cs.RMBStart, cs.RMBEnd);
+            if (cs.RMBStart != cs.RMBEnd)
+                PlotSelection(cs.RMBStart, cs.RMBEnd);
         }
 
         internal override void Update()

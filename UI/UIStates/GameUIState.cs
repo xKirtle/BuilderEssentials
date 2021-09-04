@@ -47,9 +47,6 @@ namespace BuilderEssentials.UI.UIStates
 
         public override void Update(GameTime gameTime)
         {
-            //TODO: Same coords on mirror wand selection don't hide the text
-            //shapes drawer, however, does
-            
             base.Update(gameTime);
             rectangleShape?.Update();
             ellipseShape?.Update();
