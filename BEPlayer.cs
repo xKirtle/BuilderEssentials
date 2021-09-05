@@ -22,6 +22,7 @@ namespace BuilderEssentials
 
         public bool improvedRulerEquipped;
         public bool infinitePaintBucketEquipped;
+        public bool replaceTiles;
         
         public override void ResetEffects()
         {
@@ -53,7 +54,7 @@ namespace BuilderEssentials
                 --FillWand.fillSelectionSize;
 
             if (BuilderEssentials.ReplaceTilesFillWand.JustPressed)
-                FillWand.replaceTiles = !FillWand.replaceTiles;
+                replaceTiles = !replaceTiles;
         }
     }
 }

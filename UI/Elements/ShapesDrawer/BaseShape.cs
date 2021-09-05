@@ -48,9 +48,12 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
 
                 Main.spriteBatch.Draw(texture.Value, position, value, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
-
+            
             if (CanPlaceItems)
-                HelperMethods.PlaceTile(x, y, selectedItemType, sync: false);
+            {
+                BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+                HelperMethods.PlaceTile(x, y, selectedItemType, sync: false, replaceTile: mp.replaceTiles);
+            }
 
             //TODO: Add a way to remove last selection with a keybind?
         }

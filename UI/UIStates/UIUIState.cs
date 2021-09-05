@@ -18,6 +18,7 @@ namespace BuilderEssentials.UI.UIStates
         public AutoHammerWheel autoHammerWheel;
         public MultiWandWheel multiWandWheel;
         public PaintWheel paintWheel;
+        public CustomUIText replaceTileText;
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -42,31 +43,50 @@ namespace BuilderEssentials.UI.UIStates
             paintWheel = new PaintWheel();
             Append(paintWheel);
             paintWheel.Hide();
+
+            replaceTileText = new CustomUIText("");
+            Append(replaceTileText);
+            replaceTileText.Hide();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<ShapesDrawer>())
+            int heldItemType = Main.LocalPlayer.HeldItem.type;
+            if (heldItemType != ModContent.ItemType<ShapesDrawer>())
             {
                 arrowPanel.Hide();
                 menuPanel.Hide();
             }
 
-            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<AutoHammer>())
+            if (heldItemType != ModContent.ItemType<AutoHammer>())
                 autoHammerWheel.Hide();
             
-            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<MultiWand>())
+            if (heldItemType != ModContent.ItemType<MultiWand>())
                 multiWandWheel.Hide();
             
-            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<SpectrePaintTool>())
+            if (heldItemType != ModContent.ItemType<SpectrePaintTool>())
                 paintWheel.Hide();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+            
+            int heldItemType = Main.LocalPlayer.HeldItem.type;
+            if (heldItemType == ModContent.ItemType<FillWand>() || heldItemType == ModContent.ItemType<ShapesDrawer>())
+            {
+                BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+                Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
+                replaceTileText.SetText($"Replace mode: {(mp.replaceTiles ? "On" : "Off")}");
+                replaceTileText.Left.Set(cachedMouse.X + 44, 0);
+                replaceTileText.Top.Set(cachedMouse.Y + 44, 0);
+                replaceTileText.TextColor = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
+                replaceTileText.Show();
+            }
+            else 
+                replaceTileText.Hide();
         }
 
         public void Load(Mod mod)
@@ -82,6 +102,7 @@ namespace BuilderEssentials.UI.UIStates
             autoHammerWheel = null;
             multiWandWheel = null;
             paintWheel = null;
+            replaceTileText = null;
         }
     }
 }

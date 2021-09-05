@@ -17,8 +17,7 @@ namespace BuilderEssentials.Items
 
         internal static int selectedTileItemType = -1;
         internal static int fillSelectionSize = 3;
-        internal static bool replaceTiles = false;
-        
+
         private int toolDelay = 10;
         private FillWandSelection panel;
 
@@ -74,7 +73,7 @@ namespace BuilderEssentials.Items
                 bool canPlaceItems = !Main.LocalPlayer.mouseInterface && selectedTileItemType != -1;
                 if (canPlaceItems)
                     HelperMethods.PlaceTilesInArea(posX, posY, posX + fillSelectionSize,
-                        posY + fillSelectionSize, selectedTileItemType, true);
+                        posY + fillSelectionSize, selectedTileItemType, true, mp.replaceTiles);
             }
             
             if (Main.mouseLeftRelease || mouseLeftTimer == toolDelay)

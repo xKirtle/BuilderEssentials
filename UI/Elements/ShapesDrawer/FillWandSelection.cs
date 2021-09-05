@@ -32,13 +32,6 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY - size, syncSize);
             }
-
-            Vector2 cachedMouse = UIModSystem.cachedMouseCoords;
-            uiText.SetText($"Replace mode: {(FillWand.replaceTiles ? "On" : "Off")}");
-            uiText.Left.Set(cachedMouse.X + 22, 0);
-            uiText.Top.Set(cachedMouse.Y + 22, 0);
-            uiText.TextColor = color;
-            uiText.Show();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
