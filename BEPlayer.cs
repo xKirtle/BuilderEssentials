@@ -44,13 +44,27 @@ namespace BuilderEssentials
 
         public override void PostUpdateEquips()
         {
-            Player.tileRangeX = InfinitePlayerRange ? Main.screenWidth / 16 / 2 + 5 : 5;
-            Player.tileRangeY = InfinitePlayerRange ? Main.screenHeight / 16 / 2 + 4 : 4;
-            player.blockRange = InfinitePlacementRange ? Main.screenWidth / 16 / 2 + 5 : 0;
-            player.wallSpeed = FastPlacement ? player.wallSpeed + 10 : 1;
-            player.tileSpeed = FastPlacement ? player.tileSpeed + 50 : 1;
-            Player.defaultItemGrabRange =
-                InfinitePickupRange ? 1000000 : 38; //I have no idea how much it should be so that should suffice??
+            if (InfinitePlayerRange)
+            {
+                Player.tileRangeX = Main.screenWidth / 16 / 2 + 5;
+                Player.tileRangeY = Main.screenHeight / 16 / 2 + 4;
+            }
+
+            if (InfinitePlacementRange)
+            {
+                player.blockRange = Main.screenWidth / 16 / 2 + 5;
+            }
+
+            if (FastPlacement)
+            {
+                player.wallSpeed = player.wallSpeed + 10;
+                player.tileSpeed = player.tileSpeed + 50;
+            }
+
+            if (InfinitePickupRange)
+            {
+                Player.defaultItemGrabRange = 1000000;
+            }
         }
 
         public override void OnEnterWorld(Player player)
