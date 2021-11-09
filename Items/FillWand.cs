@@ -21,8 +21,6 @@ namespace BuilderEssentials.Items
         private int toolDelay = 10;
         private FillWandSelection panel;
 
-        //TODO: add keybind to replace tiles in range (UIText displaying whether it's on or not)
-        
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault

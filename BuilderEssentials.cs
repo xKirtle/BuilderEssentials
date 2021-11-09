@@ -54,6 +54,9 @@ namespace BuilderEssentials
                 //If invoke above fails, the method below will work as intended. Something must have changed in PlaceThing()
                 
                 HelperMethods.MirrorPlacement(orig, self);
+                
+                //Mimic stuff like this? How to proceed with directional tiles?
+                //tile.CopyFrom(Other tile);
             };
         }
 

@@ -568,8 +568,8 @@ namespace BuilderEssentials.Utilities
                 NetMessage.SendTileSquare(-1, minX, minY, syncSize);
         }
 
-        internal static void RemoveTile(int i, int j, bool removeTile = true,
-            bool removeWall = false, bool dropItem = true, int itemToDrop = -1, bool sync = true)
+        internal static void RemoveTile(int i, int j, bool removeTile = true, bool removeWall = false, 
+            bool dropItem = true, int itemToDrop = -1, bool sync = true, bool needPickPower = false)
         {
             if (!ValidTileCoordinates(i, j)) return;
 
@@ -662,6 +662,14 @@ namespace BuilderEssentials.Utilities
             }
 
             return false;
+        }
+
+        internal static int InventoryMaxPickPower()
+        {
+            //Can we even know the tile break pick power required?
+
+            Tile tile = Framing.GetTileSafely(20, 20);
+            return 0;
         }
     }
 }
