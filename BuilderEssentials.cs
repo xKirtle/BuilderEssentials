@@ -31,7 +31,7 @@ namespace BuilderEssentials
         {
             IncreaseFillToolSize = KeybindLoader.RegisterKeybind(this, "Increase fill tool selection size", "I");
             DecreaseFillToolSize = KeybindLoader.RegisterKeybind(this, "Decrease fill tool selection size", "O");
-            ReplaceTilesFillWand = KeybindLoader.RegisterKeybind(this, "Toggle replace tiles in fill wand", "F");
+            ReplaceTilesFillWand = KeybindLoader.RegisterKeybind(this, "Toggle replace tiles", "F");
             //UndoLastShape = KeybindLoader.RegisterKeybind(this, "Undo Last Placement Of The Shapes Drawer", "U");
             
             //hotkeys init
