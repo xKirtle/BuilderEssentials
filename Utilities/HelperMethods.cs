@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuilderEssentials.Items;
 using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -325,6 +326,17 @@ namespace BuilderEssentials.Utilities
             };
 
             return breakableTilesWithoutCollision.Contains(tile.type);
+        }
+
+        internal static byte FirstPaintBucketInInventory()
+        {
+            foreach (Item item in Main.LocalPlayer.inventory)
+            {
+                if (item.type != ModContent.ItemType<InfinitePaintBucket>() && item.paint > 0)
+                    return item.paint;
+            }
+
+            return 0;
         }
 
         /// <summary>
@@ -662,14 +674,6 @@ namespace BuilderEssentials.Utilities
             }
 
             return false;
-        }
-
-        internal static int InventoryMaxPickPower()
-        {
-            //Can we even know the tile break pick power required?
-
-            Tile tile = Framing.GetTileSafely(20, 20);
-            return 0;
         }
     }
 }
