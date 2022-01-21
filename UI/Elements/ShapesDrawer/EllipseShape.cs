@@ -226,6 +226,12 @@ namespace BuilderEssentials.UI.Elements.ShapesDrawer
             }
             color = tempColor;
             
+            //Draw start/end selection corners
+            color = Red * 0.4f;
+            PlotPixel((int)start.X, (int)start.Y);
+            PlotPixel((int)end.X, (int)end.Y);
+            color = tempColor;
+            
             //Draw dimensions text while making selection
             Vector2 pos = Vector2.Max(start, end);
             var cachedMouse = pos * 16 - Main.screenPosition + new Vector2(22);
