@@ -26,7 +26,6 @@ namespace BuilderEssentials
         //internal static ModKeybind UndoLastShape;
         
         //TODO: Edit all recipes after all mods loaded to include the multi crafting station on all recipes?
-        //TODO: Disable Player.PlaceThing_Walls_FillEmptySpace() when doing MirrorWand stuff
         public override void Load()
         {
             IncreaseFillToolSize = KeybindLoader.RegisterKeybind(this, "Increase fill tool selection size", "I");
@@ -46,18 +45,18 @@ namespace BuilderEssentials
             //     return tileData;
             // };
 
-            On.Terraria.Player.PlaceThing += (orig, self) =>
-            {
-                orig.Invoke(self);
-                
-                //TODO: Figure out why I can't invoke this damn method twice
-                //If invoke above fails, the method below will work as intended. Something must have changed in PlaceThing()
-                
-                HelperMethods.MirrorPlacement(orig, self);
-                
-                //Mimic stuff like this? How to proceed with directional tiles?
-                //tile.CopyFrom(Other tile);
-            };
+            // On.Terraria.Player.PlaceThing += (orig, self) =>
+            // {
+            //     orig.Invoke(self);
+            //     
+            //     //TODO: Figure out why I can't invoke this damn method twice
+            //     //If invoke above fails, the method below will work as intended. Something must have changed in PlaceThing()
+            //     
+            //     HelperMethods.MirrorPlacement(orig, self);
+            //     
+            //     //Mimic stuff like this? How to proceed with directional tiles?
+            //     //tile.CopyFrom(Other tile);
+            // };
         }
 
         public override void Unload()

@@ -66,7 +66,8 @@ namespace BuilderEssentials.UI.UIStates
             if (heldItemType != ModContent.ItemType<MultiWand>())
                 multiWandWheel.Hide();
             
-            if (heldItemType != ModContent.ItemType<SpectrePaintTool>())
+            if (heldItemType != ModContent.ItemType<SpectrePaintTool>() &&
+                heldItemType != ModContent.ItemType<PaintTool>())
                 paintWheel.Hide();
         }
 

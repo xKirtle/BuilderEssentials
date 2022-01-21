@@ -13,13 +13,13 @@ using Terraria.GameContent.Creative;
 
 namespace BuilderEssentials.Items
 {
-    internal class SpectrePaintTool : ModItem
+    internal class PaintTool : ModItem
     {
         private Vector2 toolRange;
         private bool canPaint;
         private PaintWheel panel;
 
-        public override string Texture => "BuilderEssentials/Textures/Items/SpectrePaintTool";
+        public override string Texture => "BuilderEssentials/Textures/Items/PaintTool";
 
         public override void SetStaticDefaults()
         {
@@ -69,15 +69,15 @@ namespace BuilderEssentials.Items
             {
                 case 0: //Paint tiles
                     if (mp.PointedTile.type >= 0 && mp.PointedTile.IsActive)
-                        player.cursorItemIconID = ItemID.SpectrePaintbrush;
+                        player.cursorItemIconID = ItemID.Paintbrush;
                     break;
                 case 1: //Paint walls
                     if (mp.PointedTile.type >= 0 && mp.PointedTile.wall > 0)
-                        player.cursorItemIconID = ItemID.SpectrePaintRoller;
+                        player.cursorItemIconID = ItemID.PaintRoller;
                     break;
                 case 2: //Scrap paint
                     if (mp.PointedTile.Color != 0 || mp.PointedTile.WallColor != 0)
-                        player.cursorItemIconID = ItemID.SpectrePaintScraper;
+                        player.cursorItemIconID = ItemID.PaintScraper;
                     break;
             }
         }
