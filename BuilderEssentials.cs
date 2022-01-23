@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BuilderEssentials.Items;
+using BuilderEssentials.Items.Upgrades;
 using BuilderEssentials.UI.Elements.ShapesDrawer;
 using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;

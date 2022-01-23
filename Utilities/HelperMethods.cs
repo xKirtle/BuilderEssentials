@@ -459,6 +459,16 @@ namespace BuilderEssentials.Utilities
             else
                 return (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
         }
+        
+        public enum WrenchUpgrade
+        {
+            FastPlacement,
+            InfPlayerRange,
+            PlacementAnywhere,
+            InfPlacement,
+            InfPickupRange,
+            UpgradesCount
+        }
 
         /*-------------------------------------- Refactor code below (from 1.3) --------------------------------------*/
         internal enum ItemTypes

@@ -22,13 +22,14 @@ namespace BuilderEssentials
 
         public bool improvedRulerEquipped;
         public bool infinitePaintBucketEquipped;
+        public bool buildingWrenchEquipped;
         public bool replaceTiles;
         
         public override void ResetEffects()
         {
             InfinitePlayerRange = FastPlacement = InfinitePlacement = 
-                PlacementAnywhere = InfinitePickupRange = 
-                    improvedRulerEquipped = infinitePaintBucketEquipped = false;
+            PlacementAnywhere = InfinitePickupRange = improvedRulerEquipped = 
+            infinitePaintBucketEquipped = buildingWrenchEquipped = false;
         }
 
         public override void PostUpdateEquips()

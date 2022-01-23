@@ -19,6 +19,7 @@ namespace BuilderEssentials.UI.UIStates
         public MultiWandWheel multiWandWheel;
         public PaintWheel paintWheel;
         public CustomUIText replaceTileText;
+        public WrenchUpgradeButtons wrenchUpgrades;
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -47,6 +48,10 @@ namespace BuilderEssentials.UI.UIStates
             replaceTileText = new CustomUIText("");
             Append(replaceTileText);
             replaceTileText.Hide();
+
+            wrenchUpgrades = new WrenchUpgradeButtons();
+            Append(wrenchUpgrades);
+            wrenchUpgrades.Hide();
         }
 
         public override void Update(GameTime gameTime)
@@ -69,6 +74,10 @@ namespace BuilderEssentials.UI.UIStates
             if (heldItemType != ModContent.ItemType<SpectrePaintTool>() &&
                 heldItemType != ModContent.ItemType<PaintTool>())
                 paintWheel.Hide();
+
+            if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().buildingWrenchEquipped)
+                wrenchUpgrades.Hide();
+            else wrenchUpgrades.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -104,6 +113,7 @@ namespace BuilderEssentials.UI.UIStates
             multiWandWheel = null;
             paintWheel = null;
             replaceTileText = null;
+            wrenchUpgrades = null;
         }
     }
 }

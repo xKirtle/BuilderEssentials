@@ -5,16 +5,22 @@ using BuilderEssentials.UI.UIStates;
 using BuilderEssentials.Utilities;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
+using Terraria.GameContent.Creative;
 
 namespace BuilderEssentials.Items
 {
     public class InfinitePaintBucket : ModItem
     {
         public override string Texture => "BuilderEssentials/Textures/Items/InfinitePaintBucket";
-        public override void SetStaticDefaults() => 
+
+        public override void SetStaticDefaults()
+        {
             Tooltip.SetDefault("Allows infinite painting!" +
-               "\n[c/FFCC00:Must be the first paint bucket in your inventory!]" +
-               "\n[c/FFCC00:Copies the color of the next paint bucket in your inventory]");
+                               "\n[c/FFCC00:Must be the first paint bucket in your inventory!]" +
+                               "\n[c/FFCC00:Copies the color of the next paint bucket in your inventory]");
+            
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
         public override void SetDefaults()
         {

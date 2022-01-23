@@ -18,6 +18,7 @@ namespace BuilderEssentials.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Used to draw shapes" +
+                               "\nOpen its menu by clicking the arrow on the left of your screen when equipped" +
                                "\nRight Click to make selection" +
                                "\nMiddle Click to select working tile" +
                                "\nLeft Click to place blocks in the selection" +
