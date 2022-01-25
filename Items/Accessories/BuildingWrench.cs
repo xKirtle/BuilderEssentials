@@ -37,7 +37,7 @@ namespace BuilderEssentials.Items.Accessories
 
         public override void SetStaticDefaults()
         {
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = -1;
         }
 
         public override void Load()
@@ -45,8 +45,6 @@ namespace BuilderEssentials.Items.Accessories
             //Programmatically add the upgrade Items
             for (int i = 0; i < (int)WrenchUpgrade.UpgradesCount; i++)
                 Mod.AddContent(new WrenchItemUpgrade(i));
-            
-            //TODO: Not updating tooltips based on loaded data
         }
 
         public override ModItem Clone(Item item)
@@ -69,11 +67,14 @@ namespace BuilderEssentials.Items.Accessories
             };
         
             tooltips.Remove(tooltips.Find(x => x.Name == "Material"));
-        
+
             if (unlockedUpgrades.All(x => x == false))
-                tooltips.Add(new TooltipLine(Mod, "No Upgrades Added", "Add upgrades to make use of this wrench!"));
+                tooltips.Add(new TooltipLine(Mod, "No Upgrades Added", "Add upgrades to be able to enable them!"));
+
+            tooltips.Add(new TooltipLine(Mod, "UI Toggle Menu",
+                "[c/FFCC00:Enable modifiers on the buttons above your hotbar!]"));
             
-            for (int i = 0; i < (int)WrenchUpgrade.UpgradesCount; i++)
+            for (int i = 0; i < (int) WrenchUpgrade.UpgradesCount; i++)
                 if (unlockedUpgrades[i])
                     tooltips.Add(new TooltipLine(Mod, WrenchItemUpgrade.upgradeNames[i], tooltipText[i]));
         }
@@ -97,27 +98,20 @@ namespace BuilderEssentials.Items.Accessories
             Main.LocalPlayer.GetModPlayer<BEPlayer>().buildingWrenchEquipped = true;
             UIUIState.Instance.wrenchUpgrades.UpdateUpgrades(player, ref upgrades, ref unlockedUpgrades);
             UIUIState.Instance.wrenchUpgrades.Show();
-
-            
-            //TODO: Remove
-            string text = "upgrades " + string.Join(", ", upgrades);
-            text += "\nunlocked " + string.Join(", ", unlockedUpgrades);
-            Main.NewText(text);
         }
         
         public override void UpdateInventory(Player player)
         {
             if (player.whoAmI != Main.myPlayer) return;
-            UIUIState.Instance.wrenchUpgrades.Hide();
+            // string text = "upgrades " + string.Join(", ", upgrades);
+            // text += "\nunlocked " + string.Join(", ", unlockedUpgrades);
+            // Main.NewText(text);
         }
 
         public override void SaveData(TagCompound tag)
         {
-            tag = new TagCompound
-            {
-                {"upgrades", upgrades},
-                {"unlockedUpgrades", unlockedUpgrades}
-            };
+            tag["upgrades"] = upgrades;
+            tag["unlockedUpgrades"] = unlockedUpgrades;
         }
 
         public override void LoadData(TagCompound tag)
@@ -165,11 +159,24 @@ namespace BuilderEssentials.Items.Accessories
                     .AddConsumeItemCallback((Recipe recipe, int type, ref int amount) =>
                     {
                         //Previously the OnCraft hook?
+                        
+                        //TODO: When reloading the mod, wrench upgrades List is empty (as if it hasn't read LoadData yet)
+                        BuildingWrench wrench = (BuildingWrench) recipe.requiredItem[0].ModItem;
+                        string text = "upgrades " + string.Join(", ", wrench.upgrades);
+                        text += "\nunlocked " + string.Join(", ", wrench.unlockedUpgrades);
+                        Main.NewText(text);
+                        
+                        
                         int upgradeIndex = ((WrenchItemUpgrade) recipe.requiredItem[1].ModItem).GetUpgradeNumber();
-                        SetUpgrade((WrenchUpgrade) upgradeIndex, true); //TODO: Why set it immediately to true?
+                        // SetUpgrade((WrenchUpgrade) upgradeIndex, true); //Why set it immediately to true?
                         unlockedUpgrades[upgradeIndex] = true;
                     })
                     .Register();
+                
+                //TODO: Make condition to prevent wasting an already applied upgrade..
+                //Create Localization/en-US.hjson
+                //Mods: {    BuilderEssentials: {        RecipeConditions: {            Upgrade: "Must not have added the upgrade before"        }    }}
+                //.AddCondition(NetworkText.FromKey("RecipeConditions.Upgrade"), condition => !unlockedUpgrades[i])
             }
 
             Recipe r;
