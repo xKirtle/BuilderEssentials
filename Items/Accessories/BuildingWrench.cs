@@ -45,6 +45,8 @@ namespace BuilderEssentials.Items.Accessories
             //Programmatically add the upgrade Items
             for (int i = 0; i < (int)WrenchUpgrade.UpgradesCount; i++)
                 Mod.AddContent(new WrenchItemUpgrade(i));
+            
+            //TODO: Not updating tooltips based on loaded data
         }
 
         public override ModItem Clone(Item item)
@@ -75,20 +77,7 @@ namespace BuilderEssentials.Items.Accessories
                 if (unlockedUpgrades[i])
                     tooltips.Add(new TooltipLine(Mod, WrenchItemUpgrade.upgradeNames[i], tooltipText[i]));
         }
-
-        public override void OnCraft(Recipe recipe)
-        {
-            int upgradeIndex = ((WrenchItemUpgrade) recipe.requiredItem[1].ModItem).GetUpgradeNumber();
-            Main.NewText(upgradeIndex);
-            SetUpgrade((WrenchUpgrade) upgradeIndex, true); //TODO: Why set it immediately to true?
-            unlockedUpgrades[upgradeIndex] = true;
-        }
-
-        public override void OnCreate(ItemCreationContext context)
-        {
-            //OnCraft is not running? OnCreate is creating a new empty item, not keeping data from before
-        }
-
+        
         public void SetUpgrade(WrenchUpgrade upgrade, bool state)
         {
             if ((int)upgrade < upgrades.Count && (int)upgrade >= 0 && unlockedUpgrades[(int)upgrade])
@@ -109,6 +98,8 @@ namespace BuilderEssentials.Items.Accessories
             UIUIState.Instance.wrenchUpgrades.UpdateUpgrades(player, ref upgrades, ref unlockedUpgrades);
             UIUIState.Instance.wrenchUpgrades.Show();
 
+            
+            //TODO: Remove
             string text = "upgrades " + string.Join(", ", upgrades);
             text += "\nunlocked " + string.Join(", ", unlockedUpgrades);
             Main.NewText(text);
@@ -171,6 +162,13 @@ namespace BuilderEssentials.Items.Accessories
                     .AddIngredient(this)
                     .AddIngredient(Mod, WrenchItemUpgrade.upgradeNames[i])
                     .AddTile(TileID.TinkerersWorkbench)
+                    .AddConsumeItemCallback((Recipe recipe, int type, ref int amount) =>
+                    {
+                        //Previously the OnCraft hook?
+                        int upgradeIndex = ((WrenchItemUpgrade) recipe.requiredItem[1].ModItem).GetUpgradeNumber();
+                        SetUpgrade((WrenchUpgrade) upgradeIndex, true); //TODO: Why set it immediately to true?
+                        unlockedUpgrades[upgradeIndex] = true;
+                    })
                     .Register();
             }
 

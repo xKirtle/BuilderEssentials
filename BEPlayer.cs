@@ -16,8 +16,8 @@ namespace BuilderEssentials
         public Tile PointedTile => Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         public bool InfinitePlayerRange { get; set; }
         public bool FastPlacement { get; set; }
-        public bool InfinitePlacement { get; set; }
-        public bool PlacementAnywhere { get; set; }
+        public bool InfinitePlacement { get; set; } //TODO: Needs to be implemented into vanilla stuff
+        public bool PlacementAnywhere { get; set; } //TODO: Needs to be implemented into vanilla stuff
         public bool InfinitePickupRange { get; set; }
 
         public bool improvedRulerEquipped;
@@ -34,16 +34,22 @@ namespace BuilderEssentials
 
         public override void PostUpdateEquips()
         {
-            //TODO: Can't use a ternary here, it'll not allow other items to increase player range willingly
-            
-            // HelperMethods.SetPlayerRange(5, 4, 0);
-            // if (InfinitePlayerRange)
-            //     HelperMethods.SetPlayerRange(Main.screenWidth / 16 / 2 + 5, 
-            //         Main.screenHeight / 16 / 2 + 4, Main.screenWidth / 16 / 2 + 5);
-            // Player.wallSpeed = FastPlacement ? Player.wallSpeed + 10 : 1;
-            // Player.tileSpeed = FastPlacement ? Player.tileSpeed + 50 : 1;
-            // Player.defaultItemGrabRange = //I have no idea how much it should be so that should be enough??
-            //     InfinitePickupRange ? (int) Math.Pow(Math.Max(Main.maxTilesX, Main.maxTilesY), 2) : 42;
+            if (InfinitePlayerRange)
+            {
+                int reach = Main.screenWidth / 16 / 2 + 5;
+                HelperMethods.AddToPlayerRange(reach, reach, reach);
+            }
+
+            if (FastPlacement)
+            {
+                Player.wallSpeed += 10;
+                Player.tileSpeed += 10;
+            }
+
+            if (InfinitePickupRange)
+            {
+                Player.defaultItemGrabRange = 1000000;
+            }
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)

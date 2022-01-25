@@ -35,7 +35,9 @@ namespace BuilderEssentials.UI.UIPanels
             {
                 int index = i;
                 CustomUIImageButton toggle = new CustomUIImageButton(OffTexture);
-                toggle.Left.Set(OffTexture.Value.Width * i + 7f, 0);
+                toggle.Width.Set(14, 0);
+                toggle.Height.Set(14, 0);
+                toggle.Left.Set(16 * i + 27f, 0);
                 toggle.Top.Set(1f, 0);
                 toggle.OnMouseOver += (__, _) =>
                 {

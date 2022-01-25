@@ -212,16 +212,16 @@ namespace BuilderEssentials.Utilities
             ModContent.Request<Texture2D>(path, requestMode);
 
         /// <summary>
-        /// Sets the player range
+        /// Adds to the player range
         /// </summary>
-        /// <param name="range">Horizontal and vertical range from the center of the player (2 tiles above ground)</param>
-        internal static void SetPlayerRange(int tileX, int tileY, int blockRange)
+        /// <param name="placementRange">Horizontal and vertical range from the center of the player (2 tiles above ground)</param>
+        internal static void AddToPlayerRange(int playerReachX, int playerReachY, int placementRange)
         {
             BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
 
-            Player.tileRangeX = tileX;
-            Player.tileRangeY = tileY;
-            mp.Player.blockRange = blockRange;
+            Player.tileRangeX += playerReachX;
+            Player.tileRangeY += playerReachY;
+            mp.Player.blockRange += placementRange;
         }
 
         /// <summary>
