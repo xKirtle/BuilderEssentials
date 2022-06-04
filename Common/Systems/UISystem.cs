@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using BuilderEssentials.Content.UI;
+using BuilderEssentials.Content.UI.UIStates;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -10,24 +11,46 @@ namespace BuilderEssentials.Common.Systems;
 
 public class UISystem : ModSystem
 {
+    internal List<BaseUIState> uiStates;
     internal UserInterface userInterface;
-    internal ShapesUIState shapesUiState;
     internal Vector2 cachedMouseCoords;
-    
+
+    public void ChangeOrToggleUIState(UIStateType uiStateType)
+    {
+        int index = (int) uiStateType - 1;
+        if (uiStateType == UIStateType.None || userInterface?.CurrentState == uiStates[index])
+        {
+            if (uiStateType != UIStateType.None)
+                uiStates[index].Deactivate();
+            userInterface?.SetState(null);
+        }
+        else
+        {
+            uiStates[index].Activate();
+            userInterface?.SetState(uiStates[index]);
+        }
+    }
+
     public override void Load()
     {
         if (!Main.dedServ && Main.netMode != NetmodeID.Server)
         {
+            uiStates = new()
+            {
+                new AutoHammerUIState(),
+            };
             userInterface = new UserInterface();
-            shapesUiState = new ShapesUIState();
-            // userInterface.SetState(shapesUiState);
         }
     }
 
     public override void Unload()
     {
-        shapesUiState.Unload();
-        shapesUiState = null;
+        uiStates?.ForEach(uiState =>
+        {
+            uiState.Dispose();
+            uiState = null;
+        });
+
         userInterface = null;
     }
 
