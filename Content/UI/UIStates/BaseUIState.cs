@@ -1,15 +1,11 @@
 using System;
-using BuilderEssentials.Common.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace BuilderEssentials.Content.UI;
+namespace BuilderEssentials.Content.UI.UIStates;
 
-public class ShapesUIState : UIState
+public abstract class BaseUIState : UIState, IDisposable
 {
     public override void OnInitialize()
     {
@@ -26,11 +22,6 @@ public class ShapesUIState : UIState
         base.Draw(spriteBatch);
     }
 
-    public void Unload()
-    {
-        //Dispose of static references such as textures
-    }
-
     public override void OnActivate()
     {
         //Retrieve most recent data to fill the UI
@@ -39,5 +30,10 @@ public class ShapesUIState : UIState
     public override void OnDeactivate()
     {
         //Reset variables (or null them out to unallocate memory) to keep the UI ready to be activated again
+    }
+    
+    public void Dispose()
+    {
+        //Dispose of static references such as textures
     }
 }
