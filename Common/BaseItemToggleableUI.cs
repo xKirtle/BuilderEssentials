@@ -1,6 +1,6 @@
 using System;
 using BuilderEssentials.Common.Systems;
-using BuilderEssentials.Content.UI.UIStates;
+using BuilderEssentials.Content.UI;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

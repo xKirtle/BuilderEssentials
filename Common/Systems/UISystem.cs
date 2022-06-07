@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using BuilderEssentials.Content.UI.UIStates;
+using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -22,16 +22,13 @@ public class UISystem : ModSystem
                 uiStates[index].Deactivate();
             userInterface?.SetState(null);
         }
-        else {
-            uiStates[index].Activate();
-            userInterface?.SetState(uiStates[index]);
-        }
+        else userInterface?.SetState(uiStates[index]);
     }
 
     public override void Load() {
         if (!Main.dedServ && Main.netMode != NetmodeID.Server) {
             uiStates = new() {
-                new AutoHammerUIState(),
+                new AutoHammerState(),
             };
             userInterface = new UserInterface();
         }
@@ -48,11 +45,11 @@ public class UISystem : ModSystem
 
     private GameTime lastUpdateUiGameTime;
     public override void UpdateUI(GameTime gameTime) {
+        cachedMouseCoords = Main.MouseScreen;
+
         lastUpdateUiGameTime = gameTime;
         if (userInterface?.CurrentState != null)
             userInterface.Update(gameTime);
-
-        cachedMouseCoords = new Vector2(Main.mouseX, Main.mouseY);
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
@@ -68,5 +65,19 @@ public class UISystem : ModSystem
                 },
                 InterfaceScaleType.UI));
         }
+    }
+    
+    //TODO: Figure out why in the right/bottom edges there's a small radius where it messes it up slightly (very unnoticeable)
+    public static void PreventOffScreen(UIElement element, float Width, float Height)
+    {
+        Vector2 cachedCoords = ModContent.GetInstance<UISystem>().cachedMouseCoords;
+
+        float offsetX = Main.mouseX - Width / 2 > 0 ? cachedCoords.X - Width / 2 : 0;
+        offsetX = Main.mouseX + Width / 2 > Main.screenWidth ? Main.screenWidth / Main.UIScale - Width : offsetX;
+        float offsetY = Main.mouseY - Height / 2 > 0 ? cachedCoords.Y - Height / 2 : 0;
+        offsetY = Main.mouseY + Height / 2 > Main.screenHeight ? Main.screenHeight / Main.UIScale - Height : offsetY;
+        
+        element.Left.Set(offsetX, 0f);
+        element.Top.Set(offsetY, 0f);
     }
 }

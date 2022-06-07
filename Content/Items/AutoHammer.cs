@@ -1,7 +1,7 @@
 using System;
 using BuilderEssentials.Common;
 using BuilderEssentials.Common.Systems;
-using BuilderEssentials.Content.UI.UIStates;
+using BuilderEssentials.Content.UI;
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -23,7 +23,7 @@ public class AutoHammer : BaseItemToggleableUI
         DisplayName.SetDefault("Default Hammer");
         Tooltip.SetDefault("Better than a regular hammer!\n" +
                            "Right Click to open selection menu");
-        SacrificeTotal = 1;
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
     public override void SetDefaults() {
