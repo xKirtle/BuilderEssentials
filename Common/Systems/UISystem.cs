@@ -15,38 +15,30 @@ public class UISystem : ModSystem
     internal UserInterface userInterface;
     internal Vector2 cachedMouseCoords;
 
-    public void ChangeOrToggleUIState(UIStateType uiStateType)
-    {
+    public void ChangeOrToggleUIState(UIStateType uiStateType) {
         int index = (int) uiStateType - 1;
-        if (uiStateType == UIStateType.None || userInterface?.CurrentState == uiStates[index])
-        {
+        if (uiStateType == UIStateType.None || userInterface?.CurrentState == uiStates[index]) {
             if (uiStateType != UIStateType.None)
                 uiStates[index].Deactivate();
             userInterface?.SetState(null);
         }
-        else
-        {
+        else {
             uiStates[index].Activate();
             userInterface?.SetState(uiStates[index]);
         }
     }
 
-    public override void Load()
-    {
-        if (!Main.dedServ && Main.netMode != NetmodeID.Server)
-        {
-            uiStates = new()
-            {
+    public override void Load() {
+        if (!Main.dedServ && Main.netMode != NetmodeID.Server) {
+            uiStates = new() {
                 new AutoHammerUIState(),
             };
             userInterface = new UserInterface();
         }
     }
 
-    public override void Unload()
-    {
-        uiStates?.ForEach(uiState =>
-        {
+    public override void Unload() {
+        uiStates?.ForEach(uiState => {
             uiState.Dispose();
             uiState = null;
         });
@@ -55,8 +47,7 @@ public class UISystem : ModSystem
     }
 
     private GameTime lastUpdateUiGameTime;
-    public override void UpdateUI(GameTime gameTime)
-    {
+    public override void UpdateUI(GameTime gameTime) {
         lastUpdateUiGameTime = gameTime;
         if (userInterface?.CurrentState != null)
             userInterface.Update(gameTime);
@@ -64,15 +55,12 @@ public class UISystem : ModSystem
         cachedMouseCoords = new Vector2(Main.mouseX, Main.mouseY);
     }
 
-    public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-    {
+    public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
         //https://github.com/tModLoader/tModLoader/wiki/Vanilla-Interface-layers-values
         int interfaceLayer = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Cursor"));
-        if (interfaceLayer != -1)
-        {
+        if (interfaceLayer != -1) {
             layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer("Builder Essentials: Cursor",
-                delegate
-                {
+                delegate {
                     if (lastUpdateUiGameTime != null && userInterface?.CurrentState != null)
                         userInterface.Draw(Main.spriteBatch, lastUpdateUiGameTime);
 

@@ -23,11 +23,10 @@ public class AutoHammer : BaseItemToggleableUI
         DisplayName.SetDefault("Default Hammer");
         Tooltip.SetDefault("Better than a regular hammer!\n" +
                            "Right Click to open selection menu");
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        SacrificeTotal = 1;
     }
 
-    public override void SetDefaults()
-    {
+    public override void SetDefaults() {
         Item.width = Item.height = 44;
         Item.useTime = Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.Swing;
@@ -38,5 +37,13 @@ public class AutoHammer : BaseItemToggleableUI
         Item.hammer = 80;
         Item.UseSound = SoundID.Item1;
         Item.autoReuse = true;
+    }
+    
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddIngredient(ItemID.Pwnhammer)
+            .AddRecipeGroup("BuilderEssentials:Wood", 200)
+            .Register();
     }
 }

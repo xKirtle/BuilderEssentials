@@ -18,12 +18,10 @@ public class AutoHammerUIState : BaseUIState
     private bool elementHovered;
     private int selectedIndex = -1;
     
-    public override void OnInitialize()
-    {
+    public override void OnInitialize() {
         base.OnInitialize();
 
-        _wheel = new UIElement()
-        {
+        _wheel = new UIElement() {
             Width = new StyleDimension(ParentWidth, 0f),
             Height = new StyleDimension(ParentHeight, 0f),
             Left = new StyleDimension(Main.screenWidth / 2 - ParentWidth, 0f),
@@ -42,8 +40,7 @@ public class AutoHammerUIState : BaseUIState
         const double angle = Math.PI / 3;
         const int ElementsSize = 44;
 
-        for (int i = 0; i < elementsCount; i++)
-        {
+        for (int i = 0; i < elementsCount; i++) {
             int index = i;
             Vector2 offset = new Vector2(ParentWidth - ElementsSize, ParentHeight - ElementsSize) / 2;
             double x = offset.X + (radius * Math.Cos(angle * (i + 3)));
@@ -68,21 +65,18 @@ public class AutoHammerUIState : BaseUIState
         Append(_wheel);
     }
     
-    private void ElementOnClick(int index)
-    {
+    private void ElementOnClick(int index) {
         for (int i = 0; i < elementsCount; i++)
             elements[i].SetVisibility(.75f, .4f);
 
-        if (selectedIndex != index)
-        {
+        if (selectedIndex != index) {
             elements[index].SetVisibility(1f, 1f);
             selectedIndex = index;
         }
         else selectedIndex = -1;
     }
 
-    public override void Update(GameTime gameTime)
-    {
+    public override void Update(GameTime gameTime) {
         base.Update(gameTime);
         
         // if (_wheel.IsMouseHovering)
@@ -92,8 +86,7 @@ public class AutoHammerUIState : BaseUIState
         //     Main.LocalPlayer.mouseInterface = true;
     }
 
-    public void PreventParentOffScreen()
-    {
+    public void PreventParentOffScreen() {
         Vector2 cachedCoords = ModContent.GetInstance<UISystem>().cachedMouseCoords;
         
         float offsetX = cachedCoords.X - ParentWidth / 2 > 0 ? cachedCoords.X - ParentWidth / 2 : 0;
@@ -105,24 +98,20 @@ public class AutoHammerUIState : BaseUIState
         _wheel.Top.Set(offsetY, 0);
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
-    {
+    public override void Draw(SpriteBatch spriteBatch) {
         base.Draw(spriteBatch);
     }
 
-    public override void OnActivate()
-    {
+    public override void OnActivate() {
         PreventParentOffScreen();
         //Retrieve most recent data to fill the UI
     }
 
-    public override void OnDeactivate()
-    {
+    public override void OnDeactivate() {
         //Reset variables (or null them out to unallocate memory) to keep the UI ready to be activated again
     }
     
-    public void Dispose()
-    {
+    public void Dispose() {
         //Dispose of static references such as textures
     }
 }
