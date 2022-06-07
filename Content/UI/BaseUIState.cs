@@ -1,9 +1,10 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace BuilderEssentials.Content.UI.UIStates;
+namespace BuilderEssentials.Content.UI;
 
 public abstract class BaseUIState : UIState, IDisposable
 {
