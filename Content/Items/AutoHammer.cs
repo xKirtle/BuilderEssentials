@@ -54,28 +54,23 @@ public class AutoHammer : BaseItemToggleableUI
         var panel = AutoHammerState.Instance.menuPanel;
         //TODO: Check if tool has range?
         if (panel.selectedIndex != -1) {
-            ChangeSlope(panel.blockType);
+            ChangeSlope(panel.slopeType, panel.isHalfBlock);
             return false;
         }
 
         return true;
     }
 
-    internal static void ChangeSlope(BlockType blockType) {
+    internal static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0) {
             //If there are no changes, return so it doesn't play feedback sound and tries to sync unnecessary info
+            if (tile.Slope == slopeType && tile.IsHalfBlock == isHalfBlock) return;
 
-            int oldSlope = (int)tile.Slope;
-            bool oldHalfBlock = tile.IsHalfBlock;
+            tile.Slope = slopeType;
+            tile.IsHalfBlock = isHalfBlock;
 
-            //TODO: Don't use block types for this?? Setting a blockType != setting slope + halfblock
-            tile.Slope = (int)blockType == 0 || (int)blockType > 1 ? (SlopeType)(blockType + 1) : SlopeType.Solid;
-            tile.IsHalfBlock = (int) blockType == 1;
-
-            if (oldSlope == (int) tile.Slope && oldHalfBlock == tile.IsHalfBlock) return;
-            
             SoundEngine.PlaySound(SoundID.Dig);
             WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY, false);
             if (Main.netMode == NetmodeID.MultiplayerClient)

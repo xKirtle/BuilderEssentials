@@ -18,7 +18,8 @@ public class AutoHammerPanel : UIElement
     private UIImageButton[] elements;
     private bool elementHovered;
     public int selectedIndex = -1;
-    public BlockType blockType;
+    public SlopeType slopeType;
+    public bool isHalfBlock;
 
     public AutoHammerPanel() {
         Width.Set(ParentWidth, 0);
@@ -69,6 +70,16 @@ public class AutoHammerPanel : UIElement
             selectedIndex = index;
         }
         else selectedIndex = -1;
+        
+        //Assign slopeType and IsHalfBlock based on selectedIndex (and its respective UI image)
+        SlopeType[] types = new[] {
+            SlopeType.SlopeDownLeft, SlopeType.SlopeDownRight, SlopeType.SlopeUpLeft, 
+            SlopeType.SlopeUpRight, SlopeType.Solid
+        };
+
+        isHalfBlock = selectedIndex == 5;
+        if (selectedIndex != -1 && !isHalfBlock)
+            slopeType = types[selectedIndex];
     }
 
     public override void OnActivate() {
