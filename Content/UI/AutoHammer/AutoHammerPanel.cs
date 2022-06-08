@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -16,10 +17,10 @@ public class AutoHammerPanel : UIElement
     private const int elementsCount = 6;
     private UIImageButton[] elements;
     private bool elementHovered;
-    private int selectedIndex = -1;
+    public int selectedIndex = -1;
+    public BlockType blockType;
 
-    public AutoHammerPanel()
-    {
+    public AutoHammerPanel() {
         Width.Set(ParentWidth, 0);
         Height.Set(ParentHeight, 0);
         Left.Set(Main.screenWidth / 2 - ParentWidth, 0);
@@ -57,8 +58,6 @@ public class AutoHammerPanel : UIElement
         //Append to the main panel
         for (int i = 0; i < elementsCount; i++)
             Append(elements[i]);
-
-        UISystem.PreventOffScreen(this, ParentWidth, ParentHeight);
     }
     
     private void ElementOnClick(int index) {
@@ -73,7 +72,7 @@ public class AutoHammerPanel : UIElement
     }
 
     public override void OnActivate() {
-        UISystem.PreventOffScreen(this, ParentWidth, ParentHeight);
+        UISystem.PreventOffScreen(this, ModContent.GetInstance<UISystem>().cachedMouseCoords);
     }
 
     public override void Update(GameTime gameTime) {

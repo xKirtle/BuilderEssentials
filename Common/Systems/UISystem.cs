@@ -68,14 +68,12 @@ public class UISystem : ModSystem
     }
     
     //TODO: Figure out why in the right/bottom edges there's a small radius where it messes it up slightly (very unnoticeable)
-    public static void PreventOffScreen(UIElement element, float Width, float Height)
-    {
-        Vector2 cachedCoords = ModContent.GetInstance<UISystem>().cachedMouseCoords;
-
-        float offsetX = Main.mouseX - Width / 2 > 0 ? cachedCoords.X - Width / 2 : 0;
-        offsetX = Main.mouseX + Width / 2 > Main.screenWidth ? Main.screenWidth / Main.UIScale - Width : offsetX;
-        float offsetY = Main.mouseY - Height / 2 > 0 ? cachedCoords.Y - Height / 2 : 0;
-        offsetY = Main.mouseY + Height / 2 > Main.screenHeight ? Main.screenHeight / Main.UIScale - Height : offsetY;
+    public static void PreventOffScreen(UIElement element, Vector2 center, Vector2 size = default) {
+        size = size == default ? new Vector2(element.Width.Pixels, element.Height.Pixels) : size;
+        Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight) / Main.UIScale;
+        
+        float offsetX = Utils.Clamp(center.X - size.X / 2, 0, screenSize.X - size.X);
+        float offsetY = Utils.Clamp(center.Y - size.Y / 2, 0, screenSize.Y - size.Y);
         
         element.Left.Set(offsetX, 0f);
         element.Top.Set(offsetY, 0f);

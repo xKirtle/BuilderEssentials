@@ -13,15 +13,16 @@ namespace BuilderEssentials.Content.UI;
 
 public class AutoHammerState : BaseUIState
 {
-    private AutoHammerPanel menuPanel;
+    public static AutoHammerState Instance;
+    public AutoHammerPanel menuPanel;
 
-    public override void OnInitialize() {
-        base.OnInitialize();
-
+    public AutoHammerState()
+    {
+        Instance = this;
         menuPanel = new AutoHammerPanel();
         Append(menuPanel);
     }
-    
+
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
     }
@@ -39,5 +40,6 @@ public class AutoHammerState : BaseUIState
     
     public void Dispose() {
         //Dispose of static references such as textures
+        Instance = null;
     }
 }
