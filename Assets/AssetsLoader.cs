@@ -10,7 +10,7 @@ public static class AssetsLoader
     private const string AssetsPath = "BuilderEssentials/Assets/";
     private static Dictionary<string, Asset<Texture2D>[]> texturesDictionary = new() {
         {AssetsID.AutoHammer, new Asset<Texture2D>[6]},
-        
+        {AssetsID.MultiWand, new Asset<Texture2D>[6]}
     };
 
     public static Asset<Texture2D>[] GetAssets(string key) => texturesDictionary[key];
