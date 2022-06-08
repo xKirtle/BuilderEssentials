@@ -63,16 +63,15 @@ public class AutoHammer : BaseItemToggleableUI
 
     internal static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-        
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0) {
-            //If there are no changes, return so it doesn't play feedback sound and tries to sync unnecessary info
             if (tile.Slope == slopeType && tile.IsHalfBlock == isHalfBlock) return;
 
-            tile.Slope = slopeType;
             tile.IsHalfBlock = isHalfBlock;
-
+            if (!isHalfBlock)
+                tile.Slope = slopeType;
             SoundEngine.PlaySound(SoundID.Dig);
             WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY, false);
+            
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
         }

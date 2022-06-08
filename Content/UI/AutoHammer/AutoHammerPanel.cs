@@ -13,7 +13,7 @@ namespace BuilderEssentials.Content.UI;
 
 public class AutoHammerPanel : UIElement
 {
-    private const float ParentWidth = 170f, ParentHeight = 150f;
+    private const float ParentWidth = 160f, ParentHeight = 132f;
     private const int elementsCount = 6;
     private UIImageButton[] elements;
     private bool elementHovered;
@@ -27,40 +27,38 @@ public class AutoHammerPanel : UIElement
         Left.Set(Main.screenWidth / 2 - ParentWidth, 0);
         Top.Set(Main.screenHeight / 2 - ParentHeight, 0);
         SetPadding(0);
-        
+
         //Initialize image buttons
         string texturePath = "BuilderEssentials/Assets/UI/AutoHammer/AH";
         elements = new UIImageButton[elementsCount];
         for (int i = 0; i < elementsCount; i++)
             elements[i] = new UIImageButton(ModContent.Request<Texture2D>(texturePath + i, AssetRequestMode.ImmediateLoad));
-        
-        //Define our Wheel (circle)
-        const int radius = 60;
-        const double angle = Math.PI / 3;
+
+        //Define our shape
         const int ElementsSize = 44;
+        Vector2[] buttonPositions = new[] {
+            new Vector2(36, 0), new Vector2(88, 0), new Vector2(36, 88), 
+            new Vector2(88, 88), new Vector2(0, 44), new Vector2(124, 44)
+        };
 
         for (int i = 0; i < elementsCount; i++) {
             int index = i;
-            Vector2 offset = new Vector2(ParentWidth - ElementsSize, ParentHeight - ElementsSize) / 2;
-            double x = offset.X + (radius * Math.Cos(angle * (i + 3)));
-            double y = offset.Y - (radius * Math.Sin(angle * (i + 3)));
-            elements[i].Left.Set((float) x, 0);
-            elements[i].Top.Set((float) y, 0);
-            elements[i].SetVisibility(.75f, .4f);
+            elements[i].Left.Set(buttonPositions[i].X, 0f);
+            elements[i].Top.Set(buttonPositions[i].Y, 0f);
             elements[i].OnClick += (__, _) => ElementOnClick(index);
             elements[i].OnMouseOver += (__, _) => elementHovered = true;
             elements[i].OnMouseOut += (__, _) => elementHovered = false;
         }
-
+        
         //Correct display of previously toggled settings
         if (selectedIndex != -1)
             elements[selectedIndex].SetVisibility(1f, 1f);
-        
+
         //Append to the main panel
         for (int i = 0; i < elementsCount; i++)
             Append(elements[i]);
     }
-    
+
     private void ElementOnClick(int index) {
         for (int i = 0; i < elementsCount; i++)
             elements[i].SetVisibility(.75f, .4f);
@@ -70,11 +68,11 @@ public class AutoHammerPanel : UIElement
             selectedIndex = index;
         }
         else selectedIndex = -1;
-        
+
         //Assign slopeType and IsHalfBlock based on selectedIndex (and its respective UI image)
         SlopeType[] types = new[] {
-            SlopeType.SlopeDownLeft, SlopeType.SlopeDownRight, SlopeType.SlopeUpLeft, 
-            SlopeType.SlopeUpRight, SlopeType.Solid
+            SlopeType.SlopeDownRight, SlopeType.SlopeDownLeft, 
+            SlopeType.SlopeUpRight, SlopeType.SlopeUpLeft, SlopeType.Solid
         };
 
         isHalfBlock = selectedIndex == 5;
