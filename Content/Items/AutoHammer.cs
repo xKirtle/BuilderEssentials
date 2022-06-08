@@ -13,13 +13,12 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class AutoHammer : BaseItemToggleableUI
 {
-    public override string Texture => "BuilderEssentials/Assets/Items/AutoHammer";
     public override UIStateType UiStateType => UIStateType.AutoHammer;
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 
     public override void SetStaticDefaults() {
-        DisplayName.SetDefault("Default Hammer");
+        DisplayName.SetDefault("Auto Hammer");
         Tooltip.SetDefault("Better than a regular hammer!\n" +
                            "Right Click to open selection menu");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -48,7 +47,8 @@ public class AutoHammer : BaseItemToggleableUI
     }
 
     public override bool CanUseItem(Player player) {
-
+        if (player.whoAmI != Main.myPlayer) return false;
+        
         var panel = AutoHammerState.Instance.menuPanel;
         if (ItemHasRange() && panel.selectedIndex != -1) {
             ChangeSlope(panel.slopeType, panel.isHalfBlock);

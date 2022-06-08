@@ -1,21 +1,28 @@
 using System;
 using System.Collections.Generic;
 using BuilderEssentials.Common.Systems;
+using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace BuilderEssentials.Common;
 
 [Autoload(false)]
 public abstract class BaseItemToggleableUI : ModItem
 {
+    public override string Texture => "BuilderEssentials/Assets/Items/" + GetType().Name;
+    
     private static UISystem UiSystem = ModContent.GetInstance<UISystem>();
     public virtual UIStateType UiStateType { get; private set; }
+    private BaseUIState uiStateInstance => UiStateType != UIStateType.None ? UiSystem.uiStates[(int) UiStateType - 1] : null;
     public virtual int ItemRange { get; protected set; } = 8;
+    public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
 
-    public bool IsUiVisible() => UiSystem.userInterface.CurrentState == UiSystem.uiStates[(int) UiStateType - 1];
+    public bool IsUiVisible() => UiStateType != UIStateType.None
+        ? UiSystem.userInterface.CurrentState == UiSystem.uiStates[(int) UiStateType - 1] : false;
 
     public override void SetDefaults() {
         Item.tileBoost = ItemRange - 18; //So that ItemRange is accurate per tiles
@@ -44,8 +51,9 @@ public abstract class BaseItemToggleableUI : ModItem
 
     public override void UpdateInventory(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
-        
-        if (IsUiVisible() && player.HeldItem.type != Item.type)
+
+        if (IsUiVisible() && uiStateInstance?.BoundItemType != -1 &&
+            player.HeldItem.type != uiStateInstance?.BoundItemType)
             UiSystem.ChangeOrToggleUIState(UiStateType);
     }
 
@@ -66,8 +74,5 @@ public abstract class BaseItemToggleableUI : ModItem
         itemRangeInTiles = itemRangeInTiles == default ? ItemRange : itemRangeInTiles;
         return Math.Abs(playerCenterScreen.X - mouseCoords.X) <= itemRangeInTiles &&
                Math.Abs(playerCenterScreen.Y - mouseCoords.Y) <= itemRangeInTiles - 2;
-
-        // return (playerCenter - screenPosition).WithinRange(mouseCoords,
-        //     itemRangeInTiles == default ? ItemRange : itemRangeInTiles);
     }
 }

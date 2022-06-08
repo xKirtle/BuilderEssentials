@@ -12,7 +12,7 @@ namespace BuilderEssentials.Content.UI;
 public class AutoHammerPanel : UIElement
 {
     private const float ParentWidth = 160f, ParentHeight = 132f;
-    private const int elementsCount = 6;
+    private const int ElementsCount = 6;
     private UIImageButton[] elements;
     private bool elementHovered;
     public int selectedIndex = -1;
@@ -26,8 +26,8 @@ public class AutoHammerPanel : UIElement
         Top.Set(Main.screenHeight / 2 - ParentHeight, 0);
         SetPadding(0);
         
-        elements = new UIImageButton[elementsCount];
-        for (int i = 0; i < elementsCount; i++)
+        elements = new UIImageButton[ElementsCount];
+        for (int i = 0; i < ElementsCount; i++)
             elements[i] = new UIImageButton(AssetsLoader.GetAssets(AssetsID.AutoHammer)[i]);
 
         //Define our shape
@@ -36,7 +36,7 @@ public class AutoHammerPanel : UIElement
             new Vector2(88, 88), new Vector2(0, 44), new Vector2(124, 44)
         };
 
-        for (int i = 0; i < elementsCount; i++) {
+        for (int i = 0; i < ElementsCount; i++) {
             int index = i;
             elements[i].Left.Set(buttonPositions[i].X, 0f);
             elements[i].Top.Set(buttonPositions[i].Y, 0f);
@@ -44,18 +44,14 @@ public class AutoHammerPanel : UIElement
             elements[i].OnMouseOver += (__, _) => elementHovered = true;
             elements[i].OnMouseOut += (__, _) => elementHovered = false;
         }
-        
-        //Correct display of previously toggled settings
-        if (selectedIndex != -1)
-            elements[selectedIndex].SetVisibility(1f, 1f);
 
         //Append to the main panel
-        for (int i = 0; i < elementsCount; i++)
+        for (int i = 0; i < ElementsCount; i++)
             Append(elements[i]);
     }
 
     private void ElementOnClick(int index) {
-        for (int i = 0; i < elementsCount; i++)
+        for (int i = 0; i < ElementsCount; i++)
             elements[i].SetVisibility(.75f, .4f);
 
         if (selectedIndex != index) {
@@ -76,7 +72,7 @@ public class AutoHammerPanel : UIElement
     }
 
     public override void OnActivate() {
-        UISystem.PreventOffScreen(this, ModContent.GetInstance<UISystem>().cachedMouseCoords);
+        UISystem.PreventOffScreen(this, BEPlayer.CachedPointedCoord);
     }
 
     public override void Update(GameTime gameTime) {
