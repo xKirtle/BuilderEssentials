@@ -8,6 +8,6 @@ namespace BuilderEssentials.Content.UI;
 
 public abstract class BaseUIState : UIState, IDisposable
 {
-    //Is this really needed?
+    public virtual int BoundItemType { get; protected set; } = -1; 
     public abstract void Dispose();
 }

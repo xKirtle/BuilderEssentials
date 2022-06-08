@@ -27,8 +27,10 @@ public class UISystem : ModSystem
 
     public override void Load() {
         if (!Main.dedServ && Main.netMode != NetmodeID.Server) {
+            //TODO: Get this by classes extending BaseUIState?
             uiStates = new() {
                 new AutoHammerState(),
+                new MultiWandState()
             };
             userInterface = new UserInterface();
         }
@@ -67,7 +69,6 @@ public class UISystem : ModSystem
         }
     }
     
-    //TODO: Figure out why in the right/bottom edges there's a small radius where it messes it up slightly (very unnoticeable)
     public static void PreventOffScreen(UIElement element, Vector2 center, Vector2 size = default) {
         size = size == default ? new Vector2(element.Width.Pixels, element.Height.Pixels) : size;
         Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight) / Main.UIScale;
