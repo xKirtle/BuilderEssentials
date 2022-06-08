@@ -1,8 +1,6 @@
-﻿using System;
+﻿using BuilderEssentials.Assets;
 using BuilderEssentials.Common.Systems;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
@@ -21,21 +19,18 @@ public class AutoHammerPanel : UIElement
     public SlopeType slopeType;
     public bool isHalfBlock;
 
-    public AutoHammerPanel() {
+    public override void OnInitialize() {
         Width.Set(ParentWidth, 0);
         Height.Set(ParentHeight, 0);
         Left.Set(Main.screenWidth / 2 - ParentWidth, 0);
         Top.Set(Main.screenHeight / 2 - ParentHeight, 0);
         SetPadding(0);
-
-        //Initialize image buttons
-        string texturePath = "BuilderEssentials/Assets/UI/AutoHammer/AH";
+        
         elements = new UIImageButton[elementsCount];
         for (int i = 0; i < elementsCount; i++)
-            elements[i] = new UIImageButton(ModContent.Request<Texture2D>(texturePath + i, AssetRequestMode.ImmediateLoad));
+            elements[i] = new UIImageButton(AssetsLoader.GetAssets(AssetsID.AutoHammer)[i]);
 
         //Define our shape
-        const int ElementsSize = 44;
         Vector2[] buttonPositions = new[] {
             new Vector2(36, 0), new Vector2(88, 0), new Vector2(36, 88), 
             new Vector2(88, 88), new Vector2(0, 44), new Vector2(124, 44)

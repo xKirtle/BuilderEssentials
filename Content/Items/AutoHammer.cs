@@ -1,7 +1,6 @@
 using System;
-using System.Threading;
+using System.Collections.Generic;
 using BuilderEssentials.Common;
-using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.UI;
 using Terraria;
 using Terraria.Audio;
@@ -14,11 +13,10 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class AutoHammer : BaseItemToggleableUI
 {
-    public override UIStateType UiStateType => UIStateType.AutoHammer;
-
     public override string Texture => "BuilderEssentials/Assets/Items/AutoHammer";
-
+    public override UIStateType UiStateType => UIStateType.AutoHammer;
     protected override bool CloneNewInstances => true;
+    public override int ItemRange => 10;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Default Hammer");
@@ -28,6 +26,8 @@ public class AutoHammer : BaseItemToggleableUI
     }
 
     public override void SetDefaults() {
+        base.SetDefaults();
+        
         Item.width = Item.height = 44;
         Item.useTime = Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.Swing;
@@ -39,7 +39,7 @@ public class AutoHammer : BaseItemToggleableUI
         Item.UseSound = SoundID.Item1;
         Item.autoReuse = true;
     }
-    
+
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient(ItemID.Pwnhammer)
@@ -48,12 +48,9 @@ public class AutoHammer : BaseItemToggleableUI
     }
 
     public override bool CanUseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) 
-            return base.CanUseItem(player);
 
         var panel = AutoHammerState.Instance.menuPanel;
-        //TODO: Check if tool has range?
-        if (panel.selectedIndex != -1) {
+        if (ItemHasRange() && panel.selectedIndex != -1) {
             ChangeSlope(panel.slopeType, panel.isHalfBlock);
             return false;
         }
@@ -63,15 +60,17 @@ public class AutoHammer : BaseItemToggleableUI
 
     internal static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-        if (Main.tileSolid[tile.TileType] && tile.TileType >= 0) {
-            if (tile.Slope == slopeType && tile.IsHalfBlock == isHalfBlock) return;
-
+        if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {
+            //Prevent unnecessary changes to the tile and MP sync
+            if ((tile.Slope == slopeType || tile.IsHalfBlock != isHalfBlock) 
+                && tile.IsHalfBlock == isHalfBlock) return;
+            
             tile.IsHalfBlock = isHalfBlock;
-            if (!isHalfBlock)
-                tile.Slope = slopeType;
+            tile.Slope = slopeType;
+
             SoundEngine.PlaySound(SoundID.Dig);
             WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY, false);
-            
+
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
         }
