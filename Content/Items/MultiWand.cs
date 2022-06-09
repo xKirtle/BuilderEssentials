@@ -65,12 +65,6 @@ public class MultiWand : BaseItemToggleableUI
         TileID.Hive, TileID.LivingMahogany, TileID.LivingMahoganyLeaves
     };
 
-    public override bool CanUseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return false;
-        
-        return true;
-    }
-
     public override void UpdateInventory(Player player) {
         base.UpdateInventory(player);
         

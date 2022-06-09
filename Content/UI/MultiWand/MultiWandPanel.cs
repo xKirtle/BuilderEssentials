@@ -67,10 +67,10 @@ public class MultiWandPanel : UIElement
     }
     
     private readonly string[] text = {
-        "Places living wood, consumes [i/s:9]", "Places bones, consumes [i/s:154]", 
-        "Places leaves, consumes [i/s:9]", "Places hives, consumes [i/s:1124]", 
-        "Places living rich mahogany, consumes [i/s:620]", 
-        "Places rich mahogany leaves, consumes [i/s:620]"
+        "[i/s:9]   - Places living wood", "[i/s:154]  - Places bones", 
+        "[i/s:9]   - Places leaves", "[i/s:1124]  - Places hives", 
+        "[i/s:620]   - Places living rich mahogany", 
+        "[i/s:620]   - Places rich mahogany leaves"
     };
     
     private void ElementOnMouseOver(int index) {
