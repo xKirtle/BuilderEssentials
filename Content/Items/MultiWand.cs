@@ -1,4 +1,6 @@
-﻿using BuilderEssentials.Common;
+﻿using System;
+using BuilderEssentials.Common;
+using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
 using Terraria;
@@ -27,6 +29,7 @@ public class MultiWand : BaseItemToggleableUI
         Item.width = Item.height = 44;
         Item.useTime = Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.Shoot;
+        Item.useTurn = true;
         Item.value = Item.sellPrice(silver: 2);
         Item.rare = ItemRarityID.Red;
         Item.noMelee = true;
@@ -65,9 +68,14 @@ public class MultiWand : BaseItemToggleableUI
     public override bool CanUseItem(Player player) {
         if (player.whoAmI != Main.myPlayer) return false;
         
-        Tile tile = Framing.GetTileSafely(BEPlayer.PointedTileCoord);
-        
-        
         return true;
+    }
+
+    public override void UpdateInventory(Player player) {
+        base.UpdateInventory(player);
+        
+        var panel = MultiWandState.Instance.menuPanel;
+        Item.tileWand = wandMaterials[panel.selectedIndex];
+        Item.createTile = wandPlacedTiles[panel.selectedIndex];
     }
 }

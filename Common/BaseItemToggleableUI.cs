@@ -24,7 +24,7 @@ public abstract class BaseItemToggleableUI : ModItem
     public bool IsUiVisible() => UiStateType != UIStateType.None
         ? UiSystem.userInterface.CurrentState == UiSystem.uiStates[(int) UiStateType - 1] : false;
 
-    public override void SetDefaults() {
+    public override void SetDefaults() { //TODO: Check if updating tile range in holdItem is a better solution
         Item.tileBoost = ItemRange - 18; //So that ItemRange is accurate per tiles
     }
 
@@ -43,7 +43,7 @@ public abstract class BaseItemToggleableUI : ModItem
     }
 
     public override bool AltFunctionUse(Player player) {
-        if (player.whoAmI == Main.myPlayer) 
+        if (player.whoAmI == Main.myPlayer)
             UiSystem.ChangeOrToggleUIState(UiStateType);
 
         return false;

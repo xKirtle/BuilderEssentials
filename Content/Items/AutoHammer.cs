@@ -30,6 +30,7 @@ public class AutoHammer : BaseItemToggleableUI
         Item.width = Item.height = 44;
         Item.useTime = Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.Swing;
+        Item.useTurn = true;
         Item.value = Item.sellPrice(silver: 80);
         Item.rare = ItemRarityID.Red;
         Item.damage = 26;
