@@ -21,8 +21,8 @@ public abstract class BaseCraftingStation : ModTile
         Main.tileNoAttach[Type] = true;
         Main.tileTable[Type] = true;
         Main.tileLighted[Type] = true;
-        Main.tileShine[Type] = 1800;
-        Main.tileShine2[Type] = false;
+        Main.tileShine[Type] = 0;
+        Main.tileShine2[Type] = true;
         Main.tileWaterDeath[Type] = true;
         Main.tileLavaDeath[Type] = true;
 

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using BuilderEssentials.Content.Items.Placeable;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -28,25 +31,48 @@ public class MultiCraftingStation : BaseCraftingStation
         TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, TileObjectData.newTile.Width, 0);
         TileObjectData.addTile(Type);
     }
-    
-    //TODO: Fetch these from TileLoader?
-    public override int[] AdjacentTiles() => new int[] { TileID.WorkBenches, TileID.Furnaces, TileID.Hellforge, 
-        TileID.Anvils, TileID.AlchemyTable, TileID.Sinks, TileID.Sawmill, TileID.Loom, TileID.Chairs, TileID.Tables, 
-        TileID.Tables2, TileID.CookingPots, TileID.TinkerersWorkbench, TileID.ImbuingStation, TileID.DyeVat, 
-        TileID.HeavyWorkBench, TileID.DemonAltar, TileID.MythrilAnvil, TileID.AdamantiteForge, TileID.Bookcases, 
-        TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation, TileID.Kegs, TileID.Blendomatic, 
-        TileID.MeatGrinder, TileID.BoneWelder, TileID.GlassKiln, TileID.HoneyDispenser, TileID.IceMachine, 
-        TileID.LivingLoom, TileID.SkyMill, TileID.Solidifier, TileID.FleshCloningVat, TileID.SteampunkBoiler, 
-        TileID.LihzahrdFurnace, TileID.WaterDrip, TileID.Waterfall, TileID.LavaDrip, TileID.Lavafall, TileID.HoneyDrip, 
-        TileID.Honeyfall, TileID.Campfire, TileID.Extractinator, TileID.SnowCloud, TileID.Tombstones};
 
+    public override int[] AdjacentTiles() => new int[0];
     
+    public override void PostSetDefaults() => AdjTiles = Enumerable.Range(0, TileLoader.TileCount).ToArray();
+
     public override void AnimateTile(ref int frame, ref int frameCounter) {
         //new frame each 5 ticks
         if (++frameCounter > 5) {
             frameCounter = 0;
             if (++frame > 27)
                 frame = 0;
+        }
+    }
+    
+    // private static Color[] colors = {
+    //     Color.Green, Color.Red, Color.Orange, Color.DodgerBlue
+    // };
+    //
+    // private int colorCounter = 0;
+    private int effectCounter = 0;
+    public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
+        // int frame = drawData.tileFrameY;
+        // Console.WriteLine($"{drawData.tileFrameX} {drawData.tileFrameY}");
+        if (drawData.tileFrameX ==  54 && drawData.tileFrameY == 54 && ++effectCounter >= 10) {
+            effectCounter = 0;
+
+            Vector2 player = Main.LocalPlayer.Center;
+            Vector2 tile = new Vector2(i, j).ToWorldCoordinates();
+            float distance = Math.Min(Math.Abs(Vector2.Subtract(player, tile).Length()), 500f);
+            float fluctuation = 1 - distance / 500;
+            
+            Vector2 coord = new Vector2((i-1) * 16, (j) * 16);
+            //TODO: Change dust colos based on which gem is hitting
+            for (int k = 0; k < 26 * fluctuation; k++) {
+                Dust dust = Dust.NewDustPerfect(coord + new Vector2(Main.rand.NextFloat(-8, 8), Main.rand.NextFloat(-8, 8)), 
+                    158, new Vector2(Main.rand.NextFloat(-1.5f, 1.5f), -0.6f));
+
+                dust.noLightEmittence = true;
+                // dust.color = colors[colorCounter];
+                //
+                // colorCounter = (colorCounter + 1) % colors.Length;
+            }
         }
     }
 
