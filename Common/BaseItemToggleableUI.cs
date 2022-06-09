@@ -32,6 +32,12 @@ public abstract class BaseItemToggleableUI : ModItem
         tooltips.Remove(tooltips.Find(x => x.Text.Contains($"{Item.tileBoost} range")));
     }
     
+    public override bool CanUseItem(Player player) {
+        if (player.whoAmI != Main.myPlayer) return false;
+    
+        return ItemHasRange();
+    }
+    
     public override bool? UseItem(Player player) {
         if (player.whoAmI != Main.myPlayer)
             return base.UseItem(player);

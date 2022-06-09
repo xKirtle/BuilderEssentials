@@ -48,11 +48,12 @@ public class AutoHammer : BaseItemToggleableUI
     }
 
     public override bool CanUseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return false;
+        if (!base.CanUseItem(player)) return false;
         
         var panel = AutoHammerState.Instance.menuPanel;
-        if (ItemHasRange() && panel.selectedIndex != -1) {
+        if (panel.selectedIndex != -1) {
             ChangeSlope(panel.slopeType, panel.isHalfBlock);
+            base.UseItem(player);
             return false;
         }
 
