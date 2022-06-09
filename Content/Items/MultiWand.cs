@@ -27,7 +27,7 @@ public class MultiWand : BaseItemToggleableUI
         base.SetDefaults();
         
         Item.width = Item.height = 44;
-        Item.useTime = Item.useAnimation = 20;
+        Item.useTime = Item.useAnimation = 10;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.useTurn = true;
         Item.value = Item.sellPrice(silver: 2);

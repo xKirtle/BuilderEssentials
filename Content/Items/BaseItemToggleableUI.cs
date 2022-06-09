@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BuilderEssentials.Common;
 using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
@@ -8,7 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace BuilderEssentials.Common;
+namespace BuilderEssentials.Content.Items;
 
 [Autoload(false)]
 public abstract class BaseItemToggleableUI : ModItem
