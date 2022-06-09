@@ -24,7 +24,7 @@ public class SpecCraftingItem : ModItem
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
-        Item.value = Item.sellPrice(gold: 7);
+        Item.value = Item.sellPrice(gold: 5);
         Item.createTile = ModContent.TileType<SpecCraftingStation>();
         Item.rare = ItemRarityID.Red;
     }
