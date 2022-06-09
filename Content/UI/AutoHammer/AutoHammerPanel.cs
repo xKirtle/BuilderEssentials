@@ -72,7 +72,7 @@ public class AutoHammerPanel : UIElement
     }
 
     public override void OnActivate() {
-        UISystem.PreventOffScreen(this, BEPlayer.CachedPointedCoord);
+        UISystem.PreventElementOffScreen(this, BEPlayer.CachedPointedCoord);
     }
 
     public override void Update(GameTime gameTime) {

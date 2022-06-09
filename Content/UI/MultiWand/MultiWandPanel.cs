@@ -79,9 +79,8 @@ public class MultiWandPanel : UIElement
     
     private void ElementOnMouseOver(int index) {
         elementHovered = true;
+        Main.mouseText = true;
         hoverText = new UIText(text[index], 0.4f, true);
-        hoverText.Left.Set(BEPlayer.CachedPointedCoord.X + 22 - Left.Pixels, 0);
-        hoverText.Top.Set(BEPlayer.CachedPointedCoord.Y - 22 - Top.Pixels, 0);
         Append(hoverText);
     }
 
@@ -91,14 +90,15 @@ public class MultiWandPanel : UIElement
     }
 
     public override void OnActivate() {
-        UISystem.PreventOffScreen(this, BEPlayer.CachedPointedCoord);
+        UISystem.PreventElementOffScreen(this, BEPlayer.CachedPointedCoord);
     }
     
     public override void Update(GameTime gameTime) {
-        if (IsMouseHovering && elementHovered) {
+        if ((IsMouseHovering && elementHovered) || hoverText?.IsMouseHovering == true) {
             Main.LocalPlayer.mouseInterface = true;
-            hoverText?.Left.Set(BEPlayer.CachedPointedCoord.X + 22 - Left.Pixels, 0);
-            hoverText?.Top.Set(BEPlayer.CachedPointedCoord.Y - 22 - Top.Pixels, 0);
+            
+            if (hoverText == null) return;
+            UISystem.PreventTextOffScreen(this, hoverText, BEPlayer.CachedPointedCoord, new Vector2(11, -22));
         }
     }
 }
