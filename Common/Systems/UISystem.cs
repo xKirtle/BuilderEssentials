@@ -32,7 +32,8 @@ public class UISystem : ModSystem
             //TODO: Get this by classes extending BaseUIState?
             uiStates = new() {
                 new AutoHammerState(),
-                new MultiWandState()
+                new MultiWandState(),
+                new PaintBrushState() 
             };
             userInterface = new UserInterface();
         }

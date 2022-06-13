@@ -20,6 +20,6 @@ public static class EnumExtensions
         if (uiStateType == UIStateType.None || uiStateType == UIStateType.Count)
             return null;
 
-        return ModContent.GetInstance<UISystem>().uiStates[(int) uiStateType];
+        return ModContent.GetInstance<UISystem>().uiStates[(int) uiStateType - 1];
     }
 }
