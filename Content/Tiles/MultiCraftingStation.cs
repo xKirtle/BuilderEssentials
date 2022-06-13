@@ -17,7 +17,7 @@ namespace BuilderEssentials.Content.Tiles;
 public class MultiCraftingStation : BaseCraftingStation
 {
     public override string DisplayName =>"Multi Crafting Station";
-    public override Color MapColor => Color.White;
+    public override Color MapColor => Color.White * 0.65f;
 
     public override void SetTileObjectData() {
         AnimationFrameHeight = 74;
@@ -37,6 +37,7 @@ public class MultiCraftingStation : BaseCraftingStation
     public override void PostSetDefaults() => AdjTiles = Enumerable.Range(0, TileLoader.TileCount).ToArray();
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
+        frameNumber = frame;
         //new frame each 5 ticks
         if (++frameCounter > 5) {
             frameCounter = 0;
@@ -44,35 +45,31 @@ public class MultiCraftingStation : BaseCraftingStation
                 frame = 0;
         }
     }
-    
-    // private static Color[] colors = {
-    //     Color.Green, Color.Red, Color.Orange, Color.DodgerBlue
-    // };
-    //
-    // private int colorCounter = 0;
-    private int effectCounter = 0;
-    public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
-        // int frame = drawData.tileFrameY;
-        // Console.WriteLine($"{drawData.tileFrameX} {drawData.tileFrameY}");
-        if (drawData.tileFrameX ==  54 && drawData.tileFrameY == 54 && ++effectCounter >= 10) {
-            effectCounter = 0;
 
+    private static Color[] colors = {
+        new Color(36, 151, 64), new Color(191, 55, 64), new Color(185, 92, 31), new Color(39, 137, 205)
+    };
+    
+    private int colorCounter = 0;
+    private int frameNumber = 0;
+    public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
+        if (drawData.tileFrameX == 36 && drawData.tileFrameY == 54 && (frameNumber + 5) % 7 == 0) {
             Vector2 player = Main.LocalPlayer.Center;
             Vector2 tile = new Vector2(i, j).ToWorldCoordinates();
             float distance = Math.Min(Math.Abs(Vector2.Subtract(player, tile).Length()), 500f);
             float fluctuation = 1 - distance / 500;
             
-            Vector2 coord = new Vector2((i-1) * 16, (j) * 16);
+            Vector2 coord = new Vector2((i) * 16, (j) * 16);
             //TODO: Change dust colos based on which gem is hitting
-            for (int k = 0; k < 26 * fluctuation; k++) {
-                Dust dust = Dust.NewDustPerfect(coord + new Vector2(Main.rand.NextFloat(-8, 8), Main.rand.NextFloat(-8, 8)), 
-                    158, new Vector2(Main.rand.NextFloat(-1.5f, 1.5f), -0.6f));
+            for (int k = 0; k < 16 * fluctuation; k++) {
+                Dust.NewDustPerfect(coord + new Vector2(k, Main.rand.Next(-8, 8)), 158,
+                    new Vector2(Math.Max(0.3f, 0.6f * (k % 4)), -0.3f), 0, colors[colorCounter]);
 
-                dust.noLightEmittence = true;
-                // dust.color = colors[colorCounter];
-                //
-                // colorCounter = (colorCounter + 1) % colors.Length;
+                Dust.NewDustPerfect(coord - new Vector2(k, Main.rand.Next(-8, 8)), 158,
+                    new Vector2(Math.Min(-0.3f, -0.6f * (k % 4)), -0.3f), 0, colors[colorCounter]);
             }
+            
+            colorCounter = (colorCounter + 1) % colors.Length;
         }
     }
 
