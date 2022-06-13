@@ -49,7 +49,7 @@ public class AutoHammer : BaseItemToggleableUI
 
     public override bool CanUseItem(Player player) {
         if (!base.CanUseItem(player)) return false;
-        
+
         var panel = AutoHammerState.Instance.menuPanel;
         if (panel.selectedIndex != -1) {
             ChangeSlope(panel.slopeType, panel.isHalfBlock);

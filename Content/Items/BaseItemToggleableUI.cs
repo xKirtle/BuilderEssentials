@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BuilderEssentials.Common;
 using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.UI;
@@ -18,7 +19,6 @@ public abstract class BaseItemToggleableUI : ModItem
     
     private static UISystem UiSystem = ModContent.GetInstance<UISystem>();
     public virtual UIStateType UiStateType { get; private set; }
-    private BaseUIState uiStateInstance => UiStateType != UIStateType.None ? UiSystem.uiStates[(int) UiStateType - 1] : null;
     public virtual int ItemRange { get; protected set; } = 8;
     public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
 
@@ -59,8 +59,7 @@ public abstract class BaseItemToggleableUI : ModItem
     public override void UpdateInventory(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
 
-        if (IsUiVisible() && uiStateInstance?.BoundItemType != -1 &&
-            player.HeldItem.type != uiStateInstance?.BoundItemType)
+        if (IsUiVisible() && UiStateType.GetInstance()?.BoundItemType.Contains(player.HeldItem.type) == false)
             UiSystem.ChangeOrToggleUIState(UiStateType);
     }
 

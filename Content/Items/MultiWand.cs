@@ -67,8 +67,11 @@ public class MultiWand : BaseItemToggleableUI
 
     public override void UpdateInventory(Player player) {
         base.UpdateInventory(player);
+        if (player.whoAmI != Main.myPlayer) return;
         
         var panel = MultiWandState.Instance.menuPanel;
+        if (panel == null) return;
+        
         Item.tileWand = wandMaterials[panel.selectedIndex];
         Item.createTile = wandPlacedTiles[panel.selectedIndex];
     }

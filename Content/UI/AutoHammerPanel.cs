@@ -1,5 +1,8 @@
-﻿using BuilderEssentials.Assets;
+﻿using System;
+using BuilderEssentials.Assets;
+using BuilderEssentials.Common;
 using BuilderEssentials.Common.Systems;
+using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -8,6 +11,23 @@ using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
+
+public class AutoHammerState : BaseUIState
+{
+    public static AutoHammerState Instance;
+    public AutoHammerPanel menuPanel;
+    public override int[] BoundItemType => new int[] {ModContent.ItemType<AutoHammer>()};
+
+    public AutoHammerState() {
+        Instance = this;
+        menuPanel = new AutoHammerPanel();
+        Append(menuPanel);
+    }
+    
+    public override void Dispose() {
+        Instance = null;
+    }
+}
 
 public class AutoHammerPanel : UIElement
 {

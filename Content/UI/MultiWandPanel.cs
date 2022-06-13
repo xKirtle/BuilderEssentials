@@ -1,12 +1,32 @@
 ﻿using System;
 using BuilderEssentials.Assets;
+using BuilderEssentials.Common;
 using BuilderEssentials.Common.Systems;
+using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
+
+public class MultiWandState : BaseUIState
+{
+    public static MultiWandState Instance;
+    public MultiWandPanel menuPanel;
+    public override int[] BoundItemType => new int[] {ModContent.ItemType<MultiWand>()};
+
+    public MultiWandState() {
+        Instance = this;
+        menuPanel = new MultiWandPanel();
+        Append(menuPanel);
+    }
+    
+    public override void Dispose() {
+        Instance = null;
+    }
+}
 
 public class MultiWandPanel : UIElement
 {
