@@ -29,28 +29,35 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
     public override Vector2? HoldoutOffset() => new Vector2(5, -8);
 
     public override bool CanUseItem(Player player) {
-        if (!base.CanUseItem(player)) return false;
+        if (Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
+            if (!ItemHasRange()) return true;
 
-        var panel = PaintBrushState.Instance.menuPanel;
-        byte selectedColor = (byte) (panel.colorIndex + 1);
-        int toolIndex = panel.toolIndex;
+            var panel = PaintBrushState.Instance.menuPanel;
+            byte selectedColor = (byte) (panel.colorIndex + 1);
+            int toolIndex = panel.toolIndex;
 
-        if (selectedColor == 0) return false;
-        
-        if (toolIndex != 2) {
-            // MethodInfo tryPaintMethod = player.GetType().GetMethod("TryPainting",
-            //     BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance);
-            // tryPaintMethod.Invoke(player, new object[] {Player.tileTargetX, Player.tileTargetY, toolIndex == 1, true});
+            if (selectedColor == 0) return true;
 
-            Tile tile = Framing.GetTileSafely(BEPlayer.PointedCoord);
-            if (tile.TileColor == selectedColor || tile.WallColor == selectedColor ||
-                (toolIndex == 0 && (!tile.HasTile || tile.TileType < 0)) ||
-                (toolIndex == 1 && tile.WallType <= 0)) return false;
+            if (toolIndex != 2) {
+                // MethodInfo tryPaintMethod = player.GetType().GetMethod("TryPainting",
+                //     BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance);
+                // tryPaintMethod.Invoke(player, new object[] {Player.tileTargetX, Player.tileTargetY, toolIndex == 1, true});
 
-            PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedCoord);
+                Tile tile = Framing.GetTileSafely(BEPlayer.PointedCoord);
+                if (tile.TileColor == selectedColor || tile.WallColor == selectedColor ||
+                    (toolIndex == 0 && (!tile.HasTile || tile.TileType < 0)) ||
+                    (toolIndex == 1 && tile.WallType <= 0)) return true;
+
+                PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedCoord);
+            }
+            else ScrapPaint(BEPlayer.PointedCoord);
         }
-        else ScrapPaint(BEPlayer.PointedCoord);
 
+        return true;
+    }
+
+    public override bool? UseItem(Player player) {
+        base.UseItem(player);
         return true;
     }
 

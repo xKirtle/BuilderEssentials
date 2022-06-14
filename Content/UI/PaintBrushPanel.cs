@@ -245,7 +245,7 @@ public class PaintBrushPanel : UIElement
     }
 
     private void UpdateCrossesOnColors() {
-        EvaluateAvailableColorsInInventory();
+        // EvaluateAvailableColorsInInventory();
 
         BEPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BEPlayer>();
         for (int i = 0; i < noPaintOverlay.Length; i++) {
@@ -283,7 +283,13 @@ public class PaintBrushPanel : UIElement
     public override void OnActivate() {
         UISystem.PreventElementOffScreen(this, BEPlayer.CachedPointedCoord);
     }
-    
+
+    public override void Update(GameTime gameTime) {
+        base.Update(gameTime);
+        
+        EvaluateAvailableColorsInInventory();
+    }
+
     //TODO: Draw little circle with selected color under the cursor (down left) like Grand Design
     
 }

@@ -47,20 +47,39 @@ public class AutoHammer : BaseItemToggleableUI
             .Register();
     }
 
+    //Note: Hacky workaround so that the hammer swings even when we're changing the slope ourselves.
+    //Setting Item.hammer to 0 disables vanilla hammer's logic and thus, the UseItem swing doesn't mess with our slope change.
+    //Can this be done properly?
+    private bool canChangeSlope;
     public override bool CanUseItem(Player player) {
-        if (!base.CanUseItem(player)) return false;
-
-        var panel = AutoHammerState.Instance.menuPanel;
-        if (panel.selectedIndex != -1) {
-            ChangeSlope(panel.slopeType, panel.isHalfBlock);
-            base.UseItem(player);
-            return false;
+        if (Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
+            var panel = AutoHammerState.Instance.menuPanel;
+            if (panel.selectedIndex != -1) {
+                Item.hammer = 0;
+                canChangeSlope = true;
+            }
         }
 
         return true;
     }
+    
+    public override bool? UseItem(Player player) {
+        base.UseItem(player);
+        
+        if (canChangeSlope) {
+            var panel = AutoHammerState.Instance.menuPanel;
+            //Can the selected index change between CanUseItem and UseItem at all?
+            if (panel.selectedIndex != -1)
+                ChangeSlope(panel.slopeType, panel.isHalfBlock);
 
-    internal static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
+            Item.hammer = 80;
+            canChangeSlope = false;
+        }
+        
+        return true;
+    }
+
+    public static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {
             //Prevent unnecessary changes to the tile and MP sync
@@ -69,9 +88,10 @@ public class AutoHammer : BaseItemToggleableUI
             
             tile.IsHalfBlock = isHalfBlock;
             tile.Slope = slopeType;
-
+            
+            WorldGen.KillTile(Player.tileTargetX, Player.tileTargetY, fail: true, effectOnly: true);
+            WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY, true);
             SoundEngine.PlaySound(SoundID.Dig);
-            WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY, false);
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);

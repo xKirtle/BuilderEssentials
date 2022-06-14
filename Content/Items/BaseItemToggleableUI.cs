@@ -33,39 +33,33 @@ public abstract class BaseItemToggleableUI : ModItem
         tooltips.Remove(tooltips.Find(x => x.Text.Contains($"{Item.tileBoost} range")));
     }
     
-    public override bool CanUseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return false;
-    
-        return ItemHasRange();
-    }
-    
     public override bool? UseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer)
-            return base.UseItem(player);
-        
-        if (IsUiVisible())
-            UiSystem.ChangeOrToggleUIState(UiStateType);
+        if (player.whoAmI == Main.myPlayer) {
+            if (IsUiVisible())
+                UiSystem.ChangeOrToggleUIState(UiStateType);
+        }
 
-        return null;
+        return base.UseItem(player);
     }
-
+    
     public override bool AltFunctionUse(Player player) {
-        if (player.whoAmI == Main.myPlayer)
+        if (player.whoAmI == Main.myPlayer) {
             UiSystem.ChangeOrToggleUIState(UiStateType);
+        }
 
         return false;
     }
 
     public override void UpdateInventory(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
-
+        
         if (IsUiVisible() && UiStateType.GetInstance()?.BoundItemType.Contains(player.HeldItem.type) == false)
             UiSystem.ChangeOrToggleUIState(UiStateType);
     }
 
     public override void HoldItem(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
-        
+
         if (ItemHasRange()) {
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = Type;
