@@ -10,4 +10,39 @@
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Content\Items\PaintBrush.cs">
+      <DependentUpon>BasePaintBrush.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Items\SpectrePaintBrush.cs">
+      <DependentUpon>BasePaintBrush.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Items\AutoHammer.cs">
+      <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Items\InfinitePaintBucket.cs">
+      <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Items\MultiWand.cs">
+      <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Items\BasePaintBrush.cs">
+      <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\HMCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\MultiCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\PreHMCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\SpecCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\TFCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
