@@ -125,7 +125,6 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         }
 
         if (needSync && Main.netMode != NetmodeID.SinglePlayer)
-            //Kirtle: Coords / 16? Check MP
             NetMessage.SendTileSquare(-1, (int)coords.X / 16, (int)coords.Y / 16, 1);
     }
 
@@ -145,8 +144,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         }
 
         if (needSync && Main.netMode != NetmodeID.SinglePlayer) {
-            NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X, number2: (int)coords.Y);
-            NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X, number2: (int)coords.Y);
+            NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X / 16, number2: (int)coords.Y / 16);
+            NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X / 16, number2: (int)coords.Y / 16);
         }
     }
 }
