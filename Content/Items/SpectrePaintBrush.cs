@@ -10,6 +10,13 @@ public class SpectrePaintBrush : BasePaintBrush
 {
     public override int ItemRange => 16;
     protected override bool CloneNewInstances => true;
+
+    public override void SetDefaults() {
+        base.SetDefaults();
+        
+        Item.useTime = Item.useAnimation = 7;
+    }
+
     public override void HoldItem(Player player) {
         base.HoldItem(player);
         if (player.whoAmI != Main.myPlayer) return;
@@ -23,7 +30,7 @@ public class SpectrePaintBrush : BasePaintBrush
                     player.cursorItemIconID = ItemID.SpectrePaintbrush;
                 break;
             case 1:
-                if (!tile.HasTile && tile.WallType > 0)
+                if (tile.WallType > 0)
                     player.cursorItemIconID = ItemID.SpectrePaintRoller;
                 break;
             case 2:

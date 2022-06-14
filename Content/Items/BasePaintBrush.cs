@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.Common;
+﻿using System.Reflection;
+using BuilderEssentials.Common;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -17,8 +18,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         
         Item.height = 44;
         Item.width = 44;
-        Item.useTime = 1;
-        Item.useAnimation = 1;
+        Item.useTime = Item.useAnimation = 10;
         Item.useTurn = true;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.value = Item.sellPrice(silver: 80);
@@ -35,7 +35,18 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         byte selectedColor = (byte) (panel.colorIndex + 1);
         int toolIndex = panel.toolIndex;
 
-        if (toolIndex == 0 || toolIndex == 1) {
+        if (selectedColor == 0) return false;
+        
+        if (toolIndex != 2) {
+            // MethodInfo tryPaintMethod = player.GetType().GetMethod("TryPainting",
+            //     BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance);
+            // tryPaintMethod.Invoke(player, new object[] {Player.tileTargetX, Player.tileTargetY, toolIndex == 1, true});
+
+            Tile tile = Framing.GetTileSafely(BEPlayer.PointedCoord);
+            if (tile.TileColor == selectedColor || tile.WallColor == selectedColor ||
+                (toolIndex == 0 && (!tile.HasTile || tile.TileType < 0)) ||
+                (toolIndex == 1 && tile.WallType <= 0)) return false;
+
             PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedCoord);
         }
         else ScrapPaint(BEPlayer.PointedCoord);
@@ -43,10 +54,25 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         return true;
     }
 
-    public static int PaintItemTypeToColorIndex(int paintType)
-    {
-        //The outputed indexes are not the paint color byte values. For those just increment one.
+    public static Item GetFirstSelectedPaintItem(Player player, byte color) {
+        for (int i = 54; i < 58; i++) {
+            if (player.inventory[i].stack > 0 && player.inventory[i].paint == color) {
+                return player.inventory[i];
+            }
+        }
+        
+        for (int i = 0; i < 54; i++) {
+            if (player.inventory[i].stack > 0 && player.inventory[i].paint == color) {
+                return player.inventory[i];
+            }
+        }
 
+        //Should be impossible since this is called after color selection was done
+        //in the UI which does not allow to select a color we don't have
+        return new Item();
+    }
+    public static int PaintItemTypeToColorIndex(int paintType) {
+        //The outputed indexes are not the paint color byte values. For those just increment one.
         if (paintType >= 1073 && paintType <= 1099)
             return paintType - 1073;
         else if (paintType >= 1966 && paintType <= 1968)
@@ -57,8 +83,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         return -1; //it will never reach here
     }
     
-    public static int ColorByteToPaintItemType(byte color)
-    {
+    public static int ColorByteToPaintItemType(byte color) {
         if (color >= 1 && color <= 27)
             return (color - 1) + 1073;
         else if (color >= 28 && color <= 30)
@@ -69,10 +94,23 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         return -1; //it will never reach here
     }
     
-    public static void PaintTileOrWall(byte color, int selectedTool, Vector2 coords)
-    {
+    public static void PaintTileOrWall(byte color, int selectedTool, Vector2 coords) {
         Tile tile = Framing.GetTileSafely(coords);
-        if (color < 1 || color > 32 || selectedTool < 0 || selectedTool > 1) return;
+        bool canPaint = true;
+        
+        if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().InfinitePaint) {
+            Item paintItem = GetFirstSelectedPaintItem(Main.LocalPlayer, color);
+            if (ItemLoader.ConsumeItem(paintItem, Main.LocalPlayer)) {
+                if (paintItem.stack >= 1) {
+                    paintItem.stack--;
+                    if (paintItem.stack <= 0)
+                        paintItem.SetDefaults();
+                }
+                else canPaint = false;
+            }
+        }
+        
+        if (!canPaint || color < 1 || color > 32 || selectedTool < 0 || selectedTool > 1) return;
         bool needSync = false;
 
         if (selectedTool == 0 && tile.HasTile && tile.TileType >= 0 && tile.TileColor != color) {
@@ -80,14 +118,15 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             tile.TileColor = color;
             needSync = true;
         }
-        else if (selectedTool == 1 && !tile.HasTile && tile.WallType > 0 && tile.WallColor != color) {
+        else if (selectedTool == 1 && tile.WallType > 0 && tile.WallColor != color) {
             WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, color, tile.WallColor);
             tile.WallColor = color;
             needSync = true;
         }
 
         if (needSync && Main.netMode != NetmodeID.SinglePlayer)
-            NetMessage.SendTileSquare(-1, (int)coords.X, (int)coords.Y, 1);
+            //Kirtle: Coords / 16? Check MP
+            NetMessage.SendTileSquare(-1, (int)coords.X / 16, (int)coords.Y / 16, 1);
     }
 
     public static void ScrapPaint(Vector2 coords) {

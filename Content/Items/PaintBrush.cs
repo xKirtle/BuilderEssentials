@@ -25,7 +25,7 @@ public class PaintBrush : BasePaintBrush
                     player.cursorItemIconID = ItemID.Paintbrush;
                 break;
             case 1:
-                if (!tile.HasTile && tile.WallType > 0)
+                if (tile.WallType > 0)
                     player.cursorItemIconID = ItemID.PaintRoller;
                 break;
             case 2:

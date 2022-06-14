@@ -247,8 +247,9 @@ public class PaintBrushPanel : UIElement
     private void UpdateCrossesOnColors() {
         EvaluateAvailableColorsInInventory();
 
+        BEPlayer modPlayer = Main.LocalPlayer.GetModPlayer<BEPlayer>();
         for (int i = 0; i < noPaintOverlay.Length; i++) {
-            if (!colorAvailable[i]) {
+            if (!colorAvailable[i] && !modPlayer.InfinitePaint) {
                 noPaintOverlay[i].Left = colorElements[i].Left;
                 noPaintOverlay[i].Top = colorElements[i].Top;
                 Append(noPaintOverlay[i]);
