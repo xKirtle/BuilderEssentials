@@ -72,7 +72,7 @@ public class PaintBrushPanel : UIElement
         colorOverlay.OnMouseOver += (__, _) => elementHovered = true;
         colorOverlay.OnMouseOut += (__, _) => elementHovered = false;
         
-        toolTextures = AssetsLoader.GetAssets(AssetsID.PaintBrushTools)[0..5];
+        toolTextures = AssetsLoader.GetAssets(AssetsID.PaintBrushTools)[..6];
         toolOverlay = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushTools)[6]);
         toolOverlay.OnMouseOver += (__, _) => elementHovered = true;
         toolOverlay.OnMouseOut += (__, _) => elementHovered = false;
@@ -192,7 +192,7 @@ public class PaintBrushPanel : UIElement
     }
 
     private void ColorSelected(int index) {
-        // if (!colorAvailable[index]) return;
+        if (!colorAvailable[index]) return;
         
         colorOverlay.Remove();
         for (int i = 0; i < colorElements.Length; i++)

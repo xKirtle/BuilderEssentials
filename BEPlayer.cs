@@ -9,5 +9,5 @@ public class BEPlayer : ModPlayer
 {
     public static Vector2 PointedCoord => Main.MouseWorld;
     public static Vector2 CachedPointedCoord => ModContent.GetInstance<UISystem>().cachedMouseCoords;
-    public static Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
+    // public static Vector2 PointedTileCoord => new Vector2(Player.tileTargetX, Player.tileTargetY);
 }

@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.Common;
+using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -27,10 +28,21 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
     
     public override Vector2? HoldoutOffset() => new Vector2(5, -8);
 
-    public override void HoldItem(Player player) {
-        base.HoldItem(player);
+    public override bool CanUseItem(Player player) {
+        if (!base.CanUseItem(player)) return false;
+
+        var panel = PaintBrushState.Instance.menuPanel;
+        byte selectedColor = (byte) (panel.colorIndex + 1);
+        int toolIndex = panel.toolIndex;
+
+        if (toolIndex == 0 || toolIndex == 1) {
+            PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedCoord);
+        }
+        else ScrapPaint(BEPlayer.PointedCoord);
+
+        return true;
     }
-    
+
     public static int PaintItemTypeToColorIndex(int paintType)
     {
         //The outputed indexes are not the paint color byte values. For those just increment one.
@@ -55,5 +67,47 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             return (color - 1) + 4638;
 
         return -1; //it will never reach here
+    }
+    
+    public static void PaintTileOrWall(byte color, int selectedTool, Vector2 coords)
+    {
+        Tile tile = Framing.GetTileSafely(coords);
+        if (color < 1 || color > 32 || selectedTool < 0 || selectedTool > 1) return;
+        bool needSync = false;
+
+        if (selectedTool == 0 && tile.HasTile && tile.TileType >= 0 && tile.TileColor != color) {
+            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, color, tile.TileColor);
+            tile.TileColor = color;
+            needSync = true;
+        }
+        else if (selectedTool == 1 && !tile.HasTile && tile.WallType > 0 && tile.WallColor != color) {
+            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, color, tile.WallColor);
+            tile.WallColor = color;
+            needSync = true;
+        }
+
+        if (needSync && Main.netMode != NetmodeID.SinglePlayer)
+            NetMessage.SendTileSquare(-1, (int)coords.X, (int)coords.Y, 1);
+    }
+
+    public static void ScrapPaint(Vector2 coords) {
+        Tile tile = Framing.GetTileSafely(coords);
+        bool needSync = false;
+
+        if (tile.TileColor != 0) {
+            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, 0, tile.TileColor);
+            tile.TileColor = 0;
+            needSync = true;
+        }
+        else if (tile.WallColor != 0) {
+            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, 0, tile.WallColor);
+            tile.WallColor = 0;
+            needSync = true;
+        }
+
+        if (needSync && Main.netMode != NetmodeID.SinglePlayer) {
+            NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X, number2: (int)coords.Y);
+            NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X, number2: (int)coords.Y);
+        }
     }
 }
