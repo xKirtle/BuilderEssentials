@@ -1,7 +1,10 @@
-﻿using Terraria.ID;
+﻿using BuilderEssentials.Common;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace BuilderEssentials.Content.Items;
 
+[Autoload(true)]
 public class PaintBrush : BasePaintBrush
 {
     public override void AddRecipes() {
