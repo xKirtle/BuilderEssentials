@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.UI;
 using Terraria.ModLoader;
@@ -12,14 +14,4 @@ public enum UIStateType
     MultiWand,
     PaintBrush,
     Count
-}
-
-public static class EnumExtensions
-{
-    public static BaseUIState GetInstance(this UIStateType uiStateType) {
-        if (uiStateType == UIStateType.None || uiStateType == UIStateType.Count)
-            return null;
-
-        return ModContent.GetInstance<UISystem>().uiStates[(int) uiStateType - 1];
-    }
 }

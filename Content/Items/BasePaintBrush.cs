@@ -32,7 +32,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         if (Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
             if (!ItemHasRange()) return true;
 
-            var panel = PaintBrushState.Instance.menuPanel;
+            var panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
             byte selectedColor = (byte) (panel.colorIndex + 1);
             int toolIndex = panel.toolIndex;
 

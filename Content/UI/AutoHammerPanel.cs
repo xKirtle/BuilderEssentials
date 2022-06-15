@@ -4,6 +4,7 @@ using BuilderEssentials.Common;
 using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
@@ -12,24 +13,7 @@ using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
 
-public class AutoHammerState : BaseUIState
-{
-    public static AutoHammerState Instance;
-    public AutoHammerPanel menuPanel;
-    public override int[] BoundItemType => new int[] {ModContent.ItemType<AutoHammer>()};
-
-    public AutoHammerState() {
-        Instance = this;
-        menuPanel = new AutoHammerPanel();
-        Append(menuPanel);
-    }
-    
-    public override void Dispose() {
-        Instance = null;
-    }
-}
-
-public class AutoHammerPanel : UIElement
+public class AutoHammerPanel : BaseToggleableUIElement
 {
     private const float ParentWidth = 160f, ParentHeight = 132f;
     private const int ElementsCount = 6;
@@ -91,8 +75,12 @@ public class AutoHammerPanel : UIElement
             slopeType = types[selectedIndex];
     }
 
+    public override void Draw(SpriteBatch spriteBatch) {
+        base.Draw(spriteBatch);
+    }
+
     public override void OnActivate() {
-        UISystem.PreventElementOffScreen(this, BEPlayer.CachedScreenCoords);
+        PreventElementOffScreen(this, BEPlayer.CachedScreenCoords);
     }
 
     public override void Update(GameTime gameTime) {
