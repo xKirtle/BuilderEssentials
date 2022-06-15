@@ -106,7 +106,7 @@ public class MultiWandPanel : UIElement
     }
 
     public override void OnActivate() {
-        UISystem.PreventElementOffScreen(this, BEPlayer.CachedPointedCoord);
+        UISystem.PreventElementOffScreen(this, BEPlayer.CachedScreenCoords);
     }
     
     public override void Update(GameTime gameTime) {
@@ -114,7 +114,7 @@ public class MultiWandPanel : UIElement
             Main.LocalPlayer.mouseInterface = true;
             
             if (hoverText == null) return;
-            UISystem.PreventTextOffScreen(this, hoverText, BEPlayer.CachedPointedCoord, new Vector2(11, -22));
+            UISystem.PreventTextOffScreen(this, hoverText, BEPlayer.CachedScreenCoords, new Vector2(11, -22));
         }
     }
 }

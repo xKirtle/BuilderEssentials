@@ -43,14 +43,14 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
                 //     BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance);
                 // tryPaintMethod.Invoke(player, new object[] {Player.tileTargetX, Player.tileTargetY, toolIndex == 1, true});
 
-                Tile tile = Framing.GetTileSafely(BEPlayer.PointedCoord);
+                Tile tile = Framing.GetTileSafely(BEPlayer.PointedWorldCoords);
                 if (tile.TileColor == selectedColor || tile.WallColor == selectedColor ||
                     (toolIndex == 0 && (!tile.HasTile || tile.TileType < 0)) ||
                     (toolIndex == 1 && tile.WallType <= 0)) return true;
 
-                PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedCoord);
+                PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedWorldCoords);
             }
-            else ScrapPaint(BEPlayer.PointedCoord);
+            else ScrapPaint(BEPlayer.PointedWorldCoords);
         }
 
         return true;

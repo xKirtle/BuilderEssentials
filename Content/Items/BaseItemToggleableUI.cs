@@ -23,7 +23,7 @@ public abstract class BaseItemToggleableUI : ModItem
     public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
 
     public bool IsUiVisible() => UiStateType != UIStateType.None
-        ? UiSystem.userInterface.CurrentState == UiSystem.uiStates[(int) UiStateType - 1] : false;
+        ? UiSystem.uiScaleUI.CurrentState == UiSystem.uiStates[(int) UiStateType - 1] : false;
 
     public override void SetDefaults() { //TODO: Check if updating tile range in holdItem is a better solution
         Item.tileBoost = ItemRange - 18; //So that ItemRange is accurate per tiles
