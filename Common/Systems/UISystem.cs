@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BuilderEssentials.Content.UI;
+using BuilderEssentials.Content.UI.PixelShapes;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent;
@@ -14,17 +15,19 @@ namespace BuilderEssentials.Common.Systems;
 public class UISystem : ModSystem
 {
     internal List<BaseUIState> uiStates;
-    internal UserInterface userInterface;
-    internal Vector2 cachedMouseCoords;
+    internal List<BaseUIState> gameStates;
+    internal UserInterface uiScaleUI;
+    internal UserInterface gameScaleUI;
+    internal Vector2 cachedScreenCoords;
 
     public void ChangeOrToggleUIState(UIStateType uiStateType) {
         int index = (int) uiStateType - 1;
-        if (uiStateType == UIStateType.None || userInterface?.CurrentState == uiStates[index]) {
+        if (uiStateType == UIStateType.None || uiScaleUI?.CurrentState == uiStates[index]) {
             if (uiStateType != UIStateType.None)
                 uiStates[index].Deactivate();
-            userInterface?.SetState(null);
+            uiScaleUI?.SetState(null);
         }
-        else userInterface?.SetState(uiStates[index]);
+        else uiScaleUI?.SetState(uiStates[index]);
     }
 
     public override void Load() {
@@ -35,7 +38,13 @@ public class UISystem : ModSystem
                 new MultiWandState(),
                 new PaintBrushState() 
             };
-            userInterface = new UserInterface();
+            uiScaleUI = new UserInterface();
+
+            gameStates = new() {
+                new BasePixelShapesState()
+            };
+            gameScaleUI = new UserInterface();
+            gameScaleUI.SetState(gameStates[0]);
         }
     }
 
@@ -45,16 +54,20 @@ public class UISystem : ModSystem
             uiState = null;
         });
 
-        userInterface = null;
+        uiScaleUI = null;
+        gameScaleUI = null;
     }
 
     private GameTime lastUpdateUiGameTime;
     public override void UpdateUI(GameTime gameTime) {
-        cachedMouseCoords = Main.MouseScreen;
+        cachedScreenCoords = Main.MouseScreen;
 
         lastUpdateUiGameTime = gameTime;
-        if (userInterface?.CurrentState != null)
-            userInterface.Update(gameTime);
+        if (uiScaleUI?.CurrentState != null)
+            uiScaleUI.Update(gameTime);
+        
+        if (gameScaleUI?.CurrentState != null)
+            gameScaleUI.Update(gameTime);
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
@@ -63,12 +76,23 @@ public class UISystem : ModSystem
         if (interfaceLayer != -1) {
             layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer("Builder Essentials: Cursor",
                 delegate {
-                    if (lastUpdateUiGameTime != null && userInterface?.CurrentState != null)
-                        userInterface.Draw(Main.spriteBatch, lastUpdateUiGameTime);
+                    if (lastUpdateUiGameTime != null && uiScaleUI?.CurrentState != null)
+                        uiScaleUI.Draw(Main.spriteBatch, lastUpdateUiGameTime);
 
                     return true;
                 },
                 InterfaceScaleType.UI));
+        }
+        
+        if (interfaceLayer != -1) {
+            layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer("Builder Essentials: Cursor",
+                delegate {
+                    if (lastUpdateUiGameTime != null && gameScaleUI?.CurrentState != null)
+                        gameScaleUI.Draw(Main.spriteBatch, lastUpdateUiGameTime);
+
+                    return true;
+                },
+                InterfaceScaleType.Game));
         }
     }
     
