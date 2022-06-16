@@ -89,7 +89,7 @@ public class CoordSelection
         if (MMBDown)
             MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
         
-        shiftDown = Keyboard.GetState().IsKeyDown(Keys.LeftShift);
+        shiftDown = Main.keyState.IsKeyDown(Keys.LeftShift);
 
         if (shiftDown)
         {
