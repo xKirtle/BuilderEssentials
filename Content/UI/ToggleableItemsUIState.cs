@@ -18,7 +18,7 @@ public class ToggleableItemsUISystem : UISystem<ToggleableItemsUIState> { }
 
 public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 {
-    public override List<Type> PanelTypes => new() {
+    public override List<Type> PanelTypes() => new() {
         typeof(AutoHammerPanel),
         typeof(MultiWandPanel),
         typeof(PaintBrushPanel)
@@ -27,7 +27,7 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
 
-        for (int i = 0; i < PanelTypes.Count; i++) {
+        for (int i = 0; i < PanelTypes().Count; i++) {
             var panel = GetUIPanel(i);
             if (!panel.ItemBoundToDisplay.Contains(Main.LocalPlayer.HeldItem.type) && panel.IsVisible) {
                 panel.Remove();
