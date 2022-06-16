@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿//Adapted from https://github.com/MutantWafflez/LivingWorldMod/blob/1.4_retarget/Common/Systems/UISystem.cs
+
+using System.Collections.Generic;
 using BuilderEssentials.Assets;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -22,23 +24,22 @@ public abstract class UISystem<T> : ModSystem where T : UIState, new()
     protected GameTime lastUpdateUiGameTime;
 
     public override void Load() {
-        //oof
-        AssetsLoader.AsyncLoadTextures();
+        AssetsLoader.LoadTextures();
         
         userInterface = new();
         uiState = new();
         userInterface.SetState(uiState);
-        // uiState.Initialize();
     }
 
     public override void Unload() {
         AssetsLoader.UnloadTextures();
+        CachedScreenCoords = Vector2.Zero;
     }
 
-    public Vector2 cachedScreenCoords;
+    public static Vector2 CachedScreenCoords;
     public override void UpdateUI(GameTime gameTime) {
-        cachedScreenCoords = Main.MouseScreen;
-        
+        CachedScreenCoords = Main.MouseScreen;
+
         lastUpdateUiGameTime = gameTime;
         if (userInterface?.CurrentState != null)
             userInterface.Update(gameTime);

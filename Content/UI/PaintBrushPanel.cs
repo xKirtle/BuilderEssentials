@@ -15,8 +15,11 @@ using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
 
-public class PaintBrushPanel : BaseToggleableUIElement
+public class PaintBrushPanel : BaseToggleablePanel
 {
+    public override int[] ItemBoundToDisplay => new[] 
+        { ModContent.ItemType<PaintBrush>(), ModContent.ItemType<SpectrePaintBrush>() };
+    
     private const float ParentWidth = 430f, ParentHeight = 360f;
     private UIImageButton[] colorElements;
     private UIImageButton[] toolElements;
@@ -259,10 +262,6 @@ public class PaintBrushPanel : BaseToggleableUIElement
 
         if (elementHovered)
             Main.LocalPlayer.mouseInterface = true;
-    }
-
-    public override void OnActivate() {
-        PreventElementOffScreen(this, BEPlayer.CachedScreenCoords);
     }
 
     public override void Update(GameTime gameTime) {

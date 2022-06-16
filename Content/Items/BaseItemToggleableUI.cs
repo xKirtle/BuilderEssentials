@@ -22,9 +22,6 @@ public abstract class BaseItemToggleableUI : ModItem
     public virtual int ItemRange { get; protected set; } = 8;
     public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
 
-    public bool IsUiVisible() => UiStateType != UIStateType.None
-        ? ToggleableItemsUIState.GetUIPanel(UiStateType).Parent != null : false;
-
     public override void SetDefaults() { //TODO: Check if updating tile range in holdItem is a better solution
         Item.tileBoost = ItemRange - 18; //So that ItemRange is accurate per tiles
     }
@@ -33,19 +30,9 @@ public abstract class BaseItemToggleableUI : ModItem
         tooltips.Remove(tooltips.Find(x => x.Text.Contains($"{Item.tileBoost} range")));
     }
     
-    public override bool? UseItem(Player player) {
-        if (player.whoAmI == Main.myPlayer) {
-            if (IsUiVisible())
-                ToggleableItemsUIState.ChangeOrTogglePanel(UiStateType);
-        }
-
-        return base.UseItem(player);
-    }
-    
     public override bool AltFunctionUse(Player player) {
-        if (player.whoAmI == Main.myPlayer) {
-            ToggleableItemsUIState.ChangeOrTogglePanel(UiStateType);
-        }
+        if (player.whoAmI == Main.myPlayer) 
+            TogglePanel();
 
         return false;
     }
@@ -57,6 +44,12 @@ public abstract class BaseItemToggleableUI : ModItem
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = Type;
         }
+    }
+
+    public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel(UiStateType).IsVisible;
+    
+    public void TogglePanel() {
+        ToggleableItemsUIState.ToggleUIPanelVisibility(UiStateType);
     }
 
     public bool ItemHasRange(float itemRangeInTiles = default) {

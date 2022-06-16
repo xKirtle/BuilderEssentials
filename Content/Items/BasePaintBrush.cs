@@ -28,6 +28,16 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
     
     public override Vector2? HoldoutOffset() => new Vector2(5, -8);
 
+    public override void UpdateInventory(Player player) {
+        if (player.whoAmI != Main.myPlayer) return;
+
+        if (Main.LocalPlayer.GetModPlayer<BEPlayer>().InfinitePaint) return;
+        
+        var panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
+        if (panel.colorIndex != -1)
+            Item.tileWand = GetFirstSelectedPaintItem(player, (byte) (panel.colorIndex + 1)).type;
+    }
+
     public override bool CanUseItem(Player player) {
         if (Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
             if (!ItemHasRange()) return true;
@@ -57,8 +67,10 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
     }
 
     public override bool? UseItem(Player player) {
-        base.UseItem(player);
-        return true;
+        if (player.whoAmI == Main.myPlayer && IsPanelVisible())
+            TogglePanel();
+
+        return base.UseItem(player);
     }
 
     public static Item GetFirstSelectedPaintItem(Player player, byte color) {

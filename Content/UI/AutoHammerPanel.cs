@@ -1,6 +1,4 @@
-﻿using System;
-using BuilderEssentials.Assets;
-using BuilderEssentials.Common;
+﻿using BuilderEssentials.Assets;
 using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
@@ -9,12 +7,13 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
 
-public class AutoHammerPanel : BaseToggleableUIElement
+public class AutoHammerPanel : BaseToggleablePanel
 {
+    public override int[] ItemBoundToDisplay => new[] { ModContent.ItemType<AutoHammer>() };
+
     private const float ParentWidth = 160f, ParentHeight = 132f;
     private const int ElementsCount = 6;
     private UIImageButton[] elements;
@@ -29,14 +28,14 @@ public class AutoHammerPanel : BaseToggleableUIElement
         Left.Set(Main.screenWidth / 2 - ParentWidth, 0);
         Top.Set(Main.screenHeight / 2 - ParentHeight, 0);
         SetPadding(0);
-        
+
         elements = new UIImageButton[ElementsCount];
         for (int i = 0; i < ElementsCount; i++)
             elements[i] = new UIImageButton(AssetsLoader.GetAssets(AssetsID.AutoHammer)[i]);
 
         //Define our shape
         Vector2[] buttonPositions = new[] {
-            new Vector2(36, 0), new Vector2(88, 0), new Vector2(36, 88), 
+            new Vector2(36, 0), new Vector2(88, 0), new Vector2(36, 88),
             new Vector2(88, 88), new Vector2(0, 44), new Vector2(124, 44)
         };
 
@@ -53,7 +52,7 @@ public class AutoHammerPanel : BaseToggleableUIElement
         for (int i = 0; i < ElementsCount; i++)
             Append(elements[i]);
     }
-
+    
     private void ElementOnClick(int index) {
         for (int i = 0; i < ElementsCount; i++)
             elements[i].SetVisibility(.75f, .4f);
@@ -75,15 +74,9 @@ public class AutoHammerPanel : BaseToggleableUIElement
             slopeType = types[selectedIndex];
     }
 
-    public override void Draw(SpriteBatch spriteBatch) {
-        base.Draw(spriteBatch);
-    }
-
-    public override void OnActivate() {
-        PreventElementOffScreen(this, BEPlayer.CachedScreenCoords);
-    }
-
     public override void Update(GameTime gameTime) {
+        base.Update(gameTime);
+
         if (IsMouseHovering && elementHovered)
             Main.LocalPlayer.mouseInterface = true;
     }

@@ -64,7 +64,8 @@ public class AutoHammer : BaseItemToggleableUI
     }
     
     public override bool? UseItem(Player player) {
-        base.UseItem(player);
+        if (player.whoAmI == Main.myPlayer && IsPanelVisible())
+            TogglePanel();
         
         if (canChangeSlope) {
             var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
