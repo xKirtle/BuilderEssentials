@@ -40,7 +40,9 @@ public class ToggleableItemsUIState : UIState, IDisposable
             uIStateElements[i] = null;
         }
 
+        uIStateElements = null;
         panelTypes = null;
+        Instance = null;
     }
 
     public static BaseToggleablePanel GetUIPanel(UIStateType uiStateType)
