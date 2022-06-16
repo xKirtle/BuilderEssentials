@@ -7,6 +7,7 @@ using Terraria.UI;
 namespace BuilderEssentials.Common.Systems;
 
 //T is the base UIElement type for the UIState
+[Autoload(Side = ModSide.Client)]
 public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIElement
 {
     private static ManagedUIState<T> instance;

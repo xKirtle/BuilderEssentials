@@ -11,9 +11,6 @@
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Content\Items\PaintBrush.cs">
       <DependentUpon>BasePaintBrush.cs</DependentUpon>
     </Compile>
@@ -28,6 +25,24 @@
     </Compile>
     <Compile Update="Content\Items\BasePaintBrush.cs">
       <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\HMCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\MultiCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\PreHMCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\SpecCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\Tiles\TFCraftingStation.cs">
+      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\UI\Shapes\RectangleShape.cs">
+      <DependentUpon>ShapesUIState.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

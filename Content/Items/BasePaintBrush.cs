@@ -16,8 +16,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
     public override void SetDefaults() {
         base.SetDefaults();
         
-        Item.height = 44;
-        Item.width = 44;
+        Item.height = Item.width = 44;
         Item.useTime = Item.useAnimation = 10;
         Item.useTurn = true;
         Item.useStyle = ItemUseStyleID.Shoot;

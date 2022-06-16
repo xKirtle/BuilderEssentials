@@ -1,14 +1,14 @@
-﻿using Terraria.GameContent.Creative;
+﻿using BuilderEssentials.Common;
+using Terraria.GameContent.Creative;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials.Content.Items;
 
-public class InfinitePaintBucket : ModItem
+[Autoload(true)]
+public class InfinitePaintBucket : BuilderEssentialsItem
 {
-    public override string Texture => "BuilderEssentials/Assets/Items/" + GetType().Name;
-    
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Allows infinite painting while in the inventory!");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

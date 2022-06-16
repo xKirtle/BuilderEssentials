@@ -13,13 +13,10 @@ using Terraria.UI;
 namespace BuilderEssentials.Content.Items;
 
 [Autoload(false)]
-public abstract class BaseItemToggleableUI : ModItem
+public abstract class BaseItemToggleableUI : BuilderEssentialsItem
 {
-    public override string Texture => "BuilderEssentials/Assets/Items/" + GetType().Name;
-    
     private static ToggleableItemsUISystem UiSystem = ModContent.GetInstance<ToggleableItemsUISystem>();
     public virtual UIStateType UiStateType { get; private set; }
-    public virtual int ItemRange { get; protected set; } = 8;
     public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
 
     public override void SetDefaults() { //TODO: Check if updating tile range in holdItem is a better solution
@@ -31,34 +28,15 @@ public abstract class BaseItemToggleableUI : ModItem
     }
     
     public override bool AltFunctionUse(Player player) {
-        if (player.whoAmI == Main.myPlayer) 
+        if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server) 
             TogglePanel();
 
         return false;
-    }
-
-    public override void HoldItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return;
-
-        if (ItemHasRange()) {
-            player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = Type;
-        }
     }
 
     public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel((int) UiStateType).IsVisible;
     
     public void TogglePanel() {
         ToggleableItemsUIState.TogglePanelVisibility((int) UiStateType);
-    }
-
-    public bool ItemHasRange(float itemRangeInTiles = default) {
-        Vector2 screenPosition = Main.screenPosition.ToTileCoordinates().ToVector2();
-        Vector2 playerCenterScreen = Main.LocalPlayer.Center.ToTileCoordinates().ToVector2() - screenPosition;
-        Vector2 mouseCoords = Main.MouseScreen.ToTileCoordinates().ToVector2();
-
-        itemRangeInTiles = itemRangeInTiles == default ? ItemRange : itemRangeInTiles;
-        return Math.Abs(playerCenterScreen.X - mouseCoords.X) <= itemRangeInTiles &&
-               Math.Abs(playerCenterScreen.Y - mouseCoords.Y) <= itemRangeInTiles - 2;
     }
 }
