@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.UI;
 
-namespace BuilderEssentials.Content.UI.PixelShapes;
+namespace BuilderEssentials.Content.UI;
 
 public static class Pixel
 {

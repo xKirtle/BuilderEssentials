@@ -29,14 +29,5 @@
     <Compile Update="Content\Items\BasePaintBrush.cs">
       <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
     </Compile>
-    <Compile Update="Content\UI\PaintBrushPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\MultiWandPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\AutoHammerPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
 </Project>
