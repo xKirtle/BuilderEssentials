@@ -46,10 +46,10 @@ public abstract class BaseItemToggleableUI : ModItem
         }
     }
 
-    public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel(UiStateType).IsVisible;
+    public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel((int) UiStateType).IsVisible;
     
     public void TogglePanel() {
-        ToggleableItemsUIState.ToggleUIPanelVisibility(UiStateType);
+        ToggleableItemsUIState.TogglePanelVisibility((int) UiStateType);
     }
 
     public bool ItemHasRange(float itemRangeInTiles = default) {

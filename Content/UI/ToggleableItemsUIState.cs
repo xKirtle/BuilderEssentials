@@ -16,63 +16,19 @@ namespace BuilderEssentials.Content.UI;
 
 public class ToggleableItemsUISystem : UISystem<ToggleableItemsUIState> { }
 
-public class ToggleableItemsUIState : UIState, IDisposable
+public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 {
-    public static ToggleableItemsUIState Instance;
-    private static List<BaseToggleablePanel> uIStateElements = new();
-
-    private static List<Type> panelTypes = new() {
+    public override List<Type> PanelTypes => new() {
         typeof(AutoHammerPanel),
         typeof(MultiWandPanel),
         typeof(PaintBrushPanel)
     };
     
-    public override void OnInitialize() {
-        Instance = this;
-
-        for (var i = 0; i < panelTypes.Count; i++)
-            uIStateElements.Add((BaseToggleablePanel)Activator.CreateInstance(panelTypes[i])); 
-    }
-
-    public void Dispose() {
-        for (int i = 0; i < uIStateElements.Count; i++) {
-            uIStateElements[i].Deactivate();
-            uIStateElements[i] = null;
-        }
-
-        uIStateElements = null;
-        panelTypes = null;
-        Instance = null;
-    }
-
-    public static BaseToggleablePanel GetUIPanel(UIStateType uiStateType)
-        => uIStateElements[(int) uiStateType];
-    
-    public static T GetUIPanel<T>() where T : BaseToggleablePanel 
-        => (T)uIStateElements[panelTypes.IndexOf(typeof(T))];
-    
-    public static void ToggleUIPanelVisibility(UIStateType uiStateType) 
-        => ActuallyTogglePanelVisiblity(uIStateElements[(int) uiStateType]);
-    
-
-    public static void ToggleUIPanelVisibility<T>() where T : BaseToggleablePanel 
-        => ActuallyTogglePanelVisiblity(GetUIPanel<T>());
-
-    private static void ActuallyTogglePanelVisiblity(BaseToggleablePanel panel) {
-        if (panel.Parent == null) {
-            Instance.Append(panel);
-            panel.Activate();
-        }
-        else {
-            panel.Remove();
-            panel.Deactivate();
-        }
-    }
-
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
-        
-        foreach (BaseToggleablePanel panel in uIStateElements) {
+
+        for (int i = 0; i < PanelTypes.Count; i++) {
+            var panel = GetUIPanel(i);
             if (!panel.ItemBoundToDisplay.Contains(Main.LocalPlayer.HeldItem.type) && panel.IsVisible) {
                 panel.Remove();
                 panel.Deactivate();
