@@ -53,7 +53,7 @@ public class AutoHammer : BaseItemToggleableUI
     private bool canChangeSlope;
     public override bool CanUseItem(Player player) {
         if (Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
-            var panel = AutoHammerState.Instance.menuPanel;
+            var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             if (panel.selectedIndex != -1) {
                 Item.hammer = 0;
                 canChangeSlope = true;
@@ -64,10 +64,11 @@ public class AutoHammer : BaseItemToggleableUI
     }
     
     public override bool? UseItem(Player player) {
-        base.UseItem(player);
+        if (player.whoAmI == Main.myPlayer && IsPanelVisible())
+            TogglePanel();
         
         if (canChangeSlope) {
-            var panel = AutoHammerState.Instance.menuPanel;
+            var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             //Can the selected index change between CanUseItem and UseItem at all?
             if (panel.selectedIndex != -1)
                 ChangeSlope(panel.slopeType, panel.isHalfBlock);

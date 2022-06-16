@@ -11,25 +11,10 @@ using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
 
-public class MultiWandState : BaseUIState
+public class MultiWandPanel : BaseToggleablePanel
 {
-    public static MultiWandState Instance;
-    public MultiWandPanel menuPanel;
-    public override int[] BoundItemType => new int[] {ModContent.ItemType<MultiWand>()};
-
-    public MultiWandState() {
-        Instance = this;
-        menuPanel = new MultiWandPanel();
-        Append(menuPanel);
-    }
+    public override int[] ItemBoundToDisplay => new[] { ModContent.ItemType<MultiWand>() };
     
-    public override void Dispose() {
-        Instance = null;
-    }
-}
-
-public class MultiWandPanel : UIElement
-{
     private const float ParentWidth = 180f, ParentHeight = 160f;
     private const int ElementsCount = 6;
     private UIImageButton[] elements;
@@ -104,17 +89,13 @@ public class MultiWandPanel : UIElement
         elementHovered = false;
         hoverText?.Remove();
     }
-
-    public override void OnActivate() {
-        UISystem.PreventElementOffScreen(this, BEPlayer.CachedScreenCoords);
-    }
     
     public override void Update(GameTime gameTime) {
         if ((IsMouseHovering && elementHovered) || hoverText?.IsMouseHovering == true) {
             Main.LocalPlayer.mouseInterface = true;
             
             if (hoverText == null) return;
-            UISystem.PreventTextOffScreen(this, hoverText, BEPlayer.CachedScreenCoords, new Vector2(11, -22));
+            PreventTextOffScreen(this, hoverText, BEPlayer.PointedScreenCoords, new Vector2(11, -22));
         }
     }
 }

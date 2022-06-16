@@ -17,7 +17,7 @@ public class PaintBrush : BasePaintBrush
         if (player.whoAmI != Main.myPlayer) return;
 
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-        var panel = PaintBrushState.Instance.menuPanel;
+        var panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
         
         switch (panel.toolIndex) {
             case 0:

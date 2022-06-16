@@ -17,13 +17,10 @@ public abstract class BaseItemToggleableUI : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/" + GetType().Name;
     
-    private static UISystem UiSystem = ModContent.GetInstance<UISystem>();
+    private static ToggleableItemsUISystem UiSystem = ModContent.GetInstance<ToggleableItemsUISystem>();
     public virtual UIStateType UiStateType { get; private set; }
     public virtual int ItemRange { get; protected set; } = 8;
     public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
-
-    public bool IsUiVisible() => UiStateType != UIStateType.None
-        ? UiSystem.uiScaleUI.CurrentState == UiSystem.uiStates[(int) UiStateType - 1] : false;
 
     public override void SetDefaults() { //TODO: Check if updating tile range in holdItem is a better solution
         Item.tileBoost = ItemRange - 18; //So that ItemRange is accurate per tiles
@@ -33,28 +30,11 @@ public abstract class BaseItemToggleableUI : ModItem
         tooltips.Remove(tooltips.Find(x => x.Text.Contains($"{Item.tileBoost} range")));
     }
     
-    public override bool? UseItem(Player player) {
-        if (player.whoAmI == Main.myPlayer) {
-            if (IsUiVisible())
-                UiSystem.ChangeOrToggleUIState(UiStateType);
-        }
-
-        return base.UseItem(player);
-    }
-    
     public override bool AltFunctionUse(Player player) {
-        if (player.whoAmI == Main.myPlayer) {
-            UiSystem.ChangeOrToggleUIState(UiStateType);
-        }
+        if (player.whoAmI == Main.myPlayer) 
+            TogglePanel();
 
         return false;
-    }
-
-    public override void UpdateInventory(Player player) {
-        if (player.whoAmI != Main.myPlayer) return;
-        
-        if (IsUiVisible() && UiStateType.GetInstance()?.BoundItemType.Contains(player.HeldItem.type) == false)
-            UiSystem.ChangeOrToggleUIState(UiStateType);
     }
 
     public override void HoldItem(Player player) {
@@ -64,6 +44,12 @@ public abstract class BaseItemToggleableUI : ModItem
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = Type;
         }
+    }
+
+    public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel(UiStateType).IsVisible;
+    
+    public void TogglePanel() {
+        ToggleableItemsUIState.ToggleUIPanelVisibility(UiStateType);
     }
 
     public bool ItemHasRange(float itemRangeInTiles = default) {

@@ -7,6 +7,7 @@ namespace BuilderEssentials.Assets;
 
 public static class AssetsLoader
 {
+    private static bool isInitialized;
     private const string AssetsPath = "BuilderEssentials/Assets/";
     private static Dictionary<string, Asset<Texture2D>[]> texturesDictionary = new() {
         {AssetsID.AutoHammer, new Asset<Texture2D>[6]},
@@ -17,11 +18,16 @@ public static class AssetsLoader
 
     public static Asset<Texture2D>[] GetAssets(string key) => texturesDictionary[key];
 
-    internal static void AsyncLoadTextures() {
+    internal static void LoadTextures() {
+        if (isInitialized) return;
         foreach (string key in texturesDictionary.Keys) {
-            for (int i = 0; i < texturesDictionary[key].Length; i++)
-                texturesDictionary[key][i] = ModContent.Request<Texture2D>(AssetsPath + key + i);
+            for (int i = 0; i < texturesDictionary[key].Length; i++) {
+                var asset = ModContent.Request<Texture2D>(AssetsPath + key + i, AssetRequestMode.ImmediateLoad);
+                texturesDictionary[key][i] = asset;
+            }
         }
+
+        isInitialized = true;
     }
 
     internal static void UnloadTextures() {
@@ -30,5 +36,6 @@ public static class AssetsLoader
             texturesDictionary[key] = null;
 
         texturesDictionary = null;
+        isInitialized = false;
     }
 }

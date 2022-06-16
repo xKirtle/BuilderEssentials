@@ -15,27 +15,11 @@ using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
 
-public class PaintBrushState : BaseUIState
+public class PaintBrushPanel : BaseToggleablePanel
 {
-    public static PaintBrushState Instance;
-    public PaintBrushPanel menuPanel;
-
-    public override int[] BoundItemType => new int[]
-        {ModContent.ItemType<PaintBrush>(), ModContent.ItemType<SpectrePaintBrush>()};
-
-    public PaintBrushState() {
-        Instance = this;
-        menuPanel = new PaintBrushPanel();
-        Append(menuPanel);
-    }
+    public override int[] ItemBoundToDisplay => new[] 
+        { ModContent.ItemType<PaintBrush>(), ModContent.ItemType<SpectrePaintBrush>() };
     
-    public override void Dispose() {
-        Instance = null;
-    }
-}
-
-public class PaintBrushPanel : UIElement
-{
     private const float ParentWidth = 430f, ParentHeight = 360f;
     private UIImageButton[] colorElements;
     private UIImageButton[] toolElements;
@@ -269,19 +253,15 @@ public class PaintBrushPanel : UIElement
 
     public override void Draw(SpriteBatch spriteBatch) {
         base.Draw(spriteBatch);
-        
+
         bool isSpectre = Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintBrush>();
         for (int i = 0; i < toolElements.Length; i++)
             toolElements[i].SetImage(toolTextures[isSpectre ? i + toolElements.Length : i]);
-            
+
         UpdateCrossesOnColors();
-            
+
         if (elementHovered)
             Main.LocalPlayer.mouseInterface = true;
-    }
-
-    public override void OnActivate() {
-        UISystem.PreventElementOffScreen(this, BEPlayer.CachedScreenCoords);
     }
 
     public override void Update(GameTime gameTime) {

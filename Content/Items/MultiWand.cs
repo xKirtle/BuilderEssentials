@@ -65,13 +65,17 @@ public class MultiWand : BaseItemToggleableUI
         TileID.Hive, TileID.LivingMahogany, TileID.LivingMahoganyLeaves
     };
 
+    public override bool? UseItem(Player player) {
+        if (player.whoAmI == Main.myPlayer && IsPanelVisible())
+            TogglePanel();
+
+        return base.UseItem(player);
+    }
+
     public override void UpdateInventory(Player player) {
-        base.UpdateInventory(player);
         if (player.whoAmI != Main.myPlayer) return;
         
-        var panel = MultiWandState.Instance.menuPanel;
-        if (panel == null) return;
-        
+        var panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
         Item.tileWand = wandMaterials[panel.selectedIndex];
         Item.createTile = wandPlacedTiles[panel.selectedIndex];
     }
