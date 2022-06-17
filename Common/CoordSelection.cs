@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Terraria;
@@ -8,6 +9,7 @@ namespace BuilderEssentials.Common;
 
 public class CoordSelection
 {
+    //Kirtle: Allow this to be changed in a ModConfig?
     public bool shiftDown;
 
     public bool RMBDown;
@@ -22,8 +24,7 @@ public class CoordSelection
     public Vector2 MMBStart = Vector2.Zero;
     public Vector2 MMBEnd = Vector2.Zero;
 
-    public CoordSelection(UIState instance)
-    {
+    public CoordSelection(UIState instance) {
         instance.OnRightMouseDown += OnRightMouseDown;
         instance.OnRightMouseUp += OnRightMouseUp;
         instance.OnMouseDown += OnMouseDown;
