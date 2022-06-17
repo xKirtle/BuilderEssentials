@@ -50,17 +50,17 @@ public class MultiWand : BaseItemToggleableUI
             .Register();
     }
     
-    private readonly int[] wandTypes = {
+    public static readonly int[] wandTypes = {
         ItemID.LivingWoodWand, ItemID.BoneWand, ItemID.LeafWand, 
         ItemID.HiveWand, ItemID.LivingMahoganyWand, ItemID.LivingMahoganyLeafWand
     };
         
-    private readonly int[] wandMaterials = {
+    public static readonly int[] wandMaterials = {
         ItemID.Wood, ItemID.Bone, ItemID.Wood,
         ItemID.Hive, ItemID.RichMahogany, ItemID.RichMahogany
     };
 
-    private readonly int[] wandPlacedTiles = {
+    public static readonly int[] wandPlacedTiles = {
         TileID.LivingWood, TileID.BoneBlock, TileID.LeafBlock,
         TileID.Hive, TileID.LivingMahogany, TileID.LivingMahoganyLeaves
     };

@@ -41,8 +41,17 @@
     <Compile Update="Content\Tiles\TFCraftingStation.cs">
       <DependentUpon>BaseCraftingStation.cs</DependentUpon>
     </Compile>
-    <Compile Update="Content\UI\Shapes\RectangleShape.cs">
+    <Compile Update="Content\UI\Shapes\FillWandPanel.cs">
       <DependentUpon>ShapesUIState.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\UI\ToggleableItems\PaintBrushPanel.cs">
+      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\UI\ToggleableItems\MultiWandPanel.cs">
+      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Content\UI\ToggleableItems\AutoHammerPanel.cs">
+      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

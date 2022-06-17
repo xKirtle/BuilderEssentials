@@ -13,11 +13,12 @@ public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIEleme
     private static ManagedUIState<T> instance;
     private List<T> uiStateElements = new();
     public abstract List<Type> PanelTypes();
-    
+
     public override void OnInitialize() {
         instance = this;
+    
         for (var i = 0; i < PanelTypes().Count; i++)
-            uiStateElements.Add((T)Activator.CreateInstance(PanelTypes()[i]));
+            uiStateElements.Add((T) Activator.CreateInstance(PanelTypes()[i]));
     }
 
     public virtual void Dispose() {

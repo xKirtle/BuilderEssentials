@@ -53,6 +53,8 @@ public class AutoHammer : BaseItemToggleableUI
     private bool canChangeSlope;
     public override bool CanUseItem(Player player) {
         if (Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
+            if (!ItemHasRange()) return true;
+            
             var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             if (panel.selectedIndex != -1) {
                 Item.hammer = 0;

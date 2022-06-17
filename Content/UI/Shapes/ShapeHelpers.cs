@@ -8,7 +8,7 @@ using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
 
-public static class Pixel
+public static class ShapeHelpers
 {
     public static Color SelectedColor = default;
     public static Color Blue = new Color(0.24f, 0.8f, 0.9f, 1f) * 0.8f;
@@ -19,7 +19,7 @@ public static class Pixel
     private static Asset<Texture2D> PixelTexture = TextureAssets.Extra[2];
     private static Rectangle Rectangle = new Rectangle(0, 0, 16, 16);
     
-    private static void DrawPixel(int tileX, int tileY) {
+    public static void PlotPixel(int tileX, int tileY) {
         SelectedColor = Blue;
         Vector2 position = new Vector2(tileX, tileY) * 16 - Main.screenPosition;
         Main.spriteBatch.Draw(PixelTexture.Value, position, Rectangle, 
@@ -35,7 +35,7 @@ public static class Pixel
         int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
         int err = dx + dy, e2;
         while (true) {
-            DrawPixel(x0, y0);
+            PlotPixel(x0, y0);
             e2 = 2 * err;
             if (e2 >= dy) {
                 if (x0 == x1) break;
