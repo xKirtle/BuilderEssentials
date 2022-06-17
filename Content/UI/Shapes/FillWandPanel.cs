@@ -12,25 +12,29 @@ public class FillWandPanel : BaseShapePanel
 {
     public override int[] ItemBoundToDisplay => new[] { ModContent.ItemType<FillWand>() };
 
+    public override bool CanPlaceItems() => doPlacement && SelectedItem.type != ItemID.None;
+    
     public override void PlotSelection() {
         int size = FillWand.FillSelectionSize;
         for (int i = 0; i < size; i++)
         for (int j = 0; j < size; j++) {
             ShapeHelpers.PlotPixel(Player.tileTargetX + j, Player.tileTargetY + i - size + 1);
             
-            if (SelectedTileType != ItemID.None && CanPlaceItems()) {
-                QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1), SelectedTileType);
+            //Move this to update? Might be lagging too much
+            if (CanPlaceItems()) {
+                QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1), SelectedItem);
             }
         }
+        
+        // if (CanPlaceItems())
+        //     Console.WriteLine("Queued");
     }
 
-    public override bool CanPlaceItems() => IsVisible && Main.mouseLeft;
-
     public override void UpdateRegardlessOfVisibility() {
-        // int heldItemType = Main.LocalPlayer.HeldItem.type;
-        // if ((heldItemType == ItemBoundToDisplay[0] && !IsVisible) || 
-        //     (heldItemType != ItemBoundToDisplay[0] && IsVisible)) {
-        //     ShapesUIState.TogglePanelVisibility<FillWandPanel>();
-        // }
+        int heldItemType = Main.LocalPlayer.HeldItem.type;
+        if ((heldItemType == ItemBoundToDisplay[0] && !IsVisible) || 
+            (heldItemType != ItemBoundToDisplay[0] && IsVisible)) {
+            ShapesUIState.TogglePanelVisibility<FillWandPanel>();
+        }
     }
 }

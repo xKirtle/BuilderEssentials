@@ -50,17 +50,17 @@ public class MultiWand : BaseItemToggleableUI
             .Register();
     }
     
-    public static readonly int[] wandTypes = {
+    public static readonly int[] WandTypes = {
         ItemID.LivingWoodWand, ItemID.BoneWand, ItemID.LeafWand, 
         ItemID.HiveWand, ItemID.LivingMahoganyWand, ItemID.LivingMahoganyLeafWand
     };
         
-    public static readonly int[] wandMaterials = {
+    public static readonly int[] WandMaterials = {
         ItemID.Wood, ItemID.Bone, ItemID.Wood,
         ItemID.Hive, ItemID.RichMahogany, ItemID.RichMahogany
     };
 
-    public static readonly int[] wandPlacedTiles = {
+    public static readonly int[] WandPlacedTiles = {
         TileID.LivingWood, TileID.BoneBlock, TileID.LeafBlock,
         TileID.Hive, TileID.LivingMahogany, TileID.LivingMahoganyLeaves
     };
@@ -76,7 +76,7 @@ public class MultiWand : BaseItemToggleableUI
         if (player.whoAmI != Main.myPlayer) return;
         
         var panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
-        Item.tileWand = wandMaterials[panel.selectedIndex];
-        Item.createTile = wandPlacedTiles[panel.selectedIndex];
+        Item.tileWand = WandMaterials[panel.selectedIndex];
+        Item.createTile = WandPlacedTiles[panel.selectedIndex];
     }
 }

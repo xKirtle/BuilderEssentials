@@ -1,12 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BuilderEssentials.Common.DataStructures;
 
-public class HistoryStack<T>
+public class HistoryStack<T> where T : class
 {
     private LinkedList<T> items = new LinkedList<T>();
     public List<T> Items => items.ToList();
+    public int Count => items.Count;
     public int Capacity { get;}
     public HistoryStack(int capacity) {
         Capacity = capacity;
@@ -28,4 +30,6 @@ public class HistoryStack<T>
         items.RemoveLast();
         return ls == null ? default : ls.Value;
     }
+
+    public T Peek() => items.Last?.Value ?? null;
 }

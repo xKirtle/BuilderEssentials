@@ -22,7 +22,7 @@ public class ShapesUISystem : UISystem<ShapesUIState>
 public class ShapesUIState : ManagedUIState<BaseShapePanel>
 {
     public override List<Type> PanelTypes() => new() {
-        // typeof(FillWandPanel)
+        typeof(FillWandPanel)
     };
 
     public override void Update(GameTime gameTime) {
@@ -39,84 +39,130 @@ public class ShapesUIState : ManagedUIState<BaseShapePanel>
 public abstract class BaseShapePanel : UIElement
 {
     public bool IsVisible => Parent != null;
+    
+    /// <summary>
+    /// Item types that, when held by the player, won't make the panel be removed
+    /// If the array is null, empty or its only value is 0, won't be removed automatically
+    /// </summary>
     public virtual int[] ItemBoundToDisplay { get; protected set; } = { ItemID.None };
-    public int SelectedTileType { get; private set; }
-    public int SelectedItemType { get; private set; }
-    public virtual bool CanPlaceItems() => false;
-    public virtual bool CanPlotSelection() => true;
+    
+    /// <summary>
+    /// Item selected for shape placements
+    /// </summary>
+    public Item SelectedItem { get; private set; }
+    
+    /// <summary>
+    /// Whether this <see cref="BaseShapePanel"/> can queue placements or not
+    /// </summary>
+    public abstract bool CanPlaceItems();
 
     //Use this to auto disable/enable elemnts of ItemBoundToDisplay
+    
+    /// <summary>
+    /// Called after <see cref="Update"/> is called
+    /// </summary>
     public virtual void UpdateRegardlessOfVisibility() { }
 
-    public void SetSelectedTileType(int itemType) {
-        SelectedItemType = itemType;
-        Item item = new();
-        item.SetDefaults(itemType);
-        SelectedTileType = item.createTile;
-    }
-    
+    /// <summary>
+    /// Sets <see cref="SelectedItem"/>
+    /// </summary>
+    public void SetSelectedItem(int itemType) => SelectedItem.SetDefaults(itemType);
+
+    /// <summary>
+    /// Define draw behaviour here
+    /// </summary>
     public abstract void PlotSelection();
 
     protected CoordSelection cs;
-    private HistoryStack<List<Tuple<Point, int>>> lastPlacements;
-    private UniqueQueue<Tuple<Point, int>> queuedPlacements;
+    private HistoryStack<List<Tuple<Point, Tile>>> historyPlacements;
+    private UniqueQueue<Tuple<Point, Item>> queuedPlacements;
+    //Make this configurable in ModConfig? -> Affects memory usage
     private const int HistoryNum = 5;
+    public bool doPlacement = false;
+    public bool doUndo = false;
     public override void OnInitialize() {
+        SelectedItem = new(ItemID.None);
         cs = new(ShapesUIState.GetInstance());
-        lastPlacements = new(HistoryNum);
+        historyPlacements = new(HistoryNum);
         queuedPlacements = new();
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
+        // if (doUndo)
+        //     Console.WriteLine("Undo this tick");
+        //
+        // if (doPlacement)
+        //     Console.WriteLine("Dequeue this tick, if CanPlace");
+        
+        if (doUndo) {
+            // Console.WriteLine("Undo");
+            UndoPlacement();
+            doUndo = false;
+        }
+        
         base.Draw(spriteBatch);
         cs.UpdateCoords();
-
-        if (CanPlotSelection())
-            PlotSelection();
+        PlotSelection();
+        
+        if (doPlacement) {
+            if (CanPlaceItems()) {
+                // Console.WriteLine("Dequeued");
+                DequeuePlacement();
+            }
+            doPlacement = false;
+        }
     }
 
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
-        
-        if (CanPlaceItems())
-            UnqueuePlacements();
     }
 
-    protected void QueuePlacement(Point coords, int tileType)
-        => queuedPlacements.Enqueue(new(coords, tileType));
+    protected void QueuePlacement(Point coords, Item item)
+        => queuedPlacements.Enqueue(new(coords, item));
 
     //TODO: Make Async?
-    private void UnqueuePlacements() {
+    public void DequeuePlacement() {
         if (queuedPlacements.Count == 0) return;
+
+        //TODO: Detect if coords in queuedPlacements are the same as the ones present in historyPlacements.Peek()
+        //If they are, no point in trying to place the same stuff if i
         
-        List<Tuple<Point, int>> previousPlacement = new(queuedPlacements.Count);
+        //Just check if the selection/mouse changed in anyway
+        
+        List<Tuple<Point, Tile>> previousPlacement = new(queuedPlacements.Count);
+
         while (queuedPlacements.Count != 0) {
             //Get queued info
-            Tuple<Point, int> tuple = queuedPlacements.Dequeue();
+            Tuple<Point, Item> tuple = queuedPlacements.Dequeue();
             Point coord = tuple.Item1;
-            int tileType = tuple.Item2;
+            Item item = tuple.Item2;
             
             //Save previous placement to history
             Tile tile = Framing.GetTileSafely(coord);
-            previousPlacement.Add(new(coord, tile.TileType));
+            previousPlacement.Add(new(coord, tile));
             
             //Place
-            WorldGen.PlaceTile(coord.X, coord.Y, tileType, mute: true, forced: true);
+            //TODO: Choose between createTile and createWall and sync it
+            WorldGen.PlaceTile(coord.X, coord.Y, item.createTile, mute: true, forced: true);
         }
         
-        lastPlacements.Push(previousPlacement);
+        historyPlacements.Push(previousPlacement);
+        // Console.WriteLine($"Push -> New history size: {historyPlacements.Count}");
     }
 
-    protected void UndoPlacement() {
-        List<Tuple<Point, int>> previousPlacement = lastPlacements.Pop();
+    public void UndoPlacement() {
+        if (historyPlacements.Count == 0) return;
         
+        List<Tuple<Point, Tile>> previousPlacement = historyPlacements.Pop();
         previousPlacement.ForEach(tuple =>
         {
             Point coord = tuple.Item1;
-            int tileType = tuple.Item2;
+            Tile tile = tuple.Item2;
             
-            //Kirtle: maybe check if tileType > 0, else remove tile
-            WorldGen.PlaceTile(coord.X, coord.Y, tileType, mute: true, forced: true);
+            //TODO: Replace with old tile, instead of just killing last placement
+            WorldGen.KillTile(coord.X, coord.Y);
         });
+
+        // Console.WriteLine($"Pop -> New history size: {historyPlacements.Count}");
     }
 }

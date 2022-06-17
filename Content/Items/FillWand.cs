@@ -51,20 +51,26 @@ public class FillWand : BuilderEssentialsItem
         if (Main.mouseMiddle && !player.mouseInterface) {
             Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
             var itemType = ItemPicker.PickItem(tile, false, false);
-            panel.SetSelectedTileType(itemType);
+            panel.SetSelectedItem(itemType);
         }
         
         player.cursorItemIconEnabled = ItemHasRange();
         player.cursorItemIconID = Type;
         if (!player.cursorItemIconEnabled) return;
-        
-        player.cursorItemIconEnabled = true;
-        player.cursorItemIconID = panel.SelectedItemType;
+        player.cursorItemIconID = panel.SelectedItem?.type ?? Type;
     }
 
     public override bool? UseItem(Player player) {
+        var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
+        panel.doPlacement = true;
         return true;
     }
-    
+
+    public override bool AltFunctionUse(Player player) {
+        var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
+        panel.doUndo = true;
+        return false;
+    }
+
     //CanUseItem -> UseItem -> Panel PlotSelection
 }
