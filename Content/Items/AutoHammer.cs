@@ -52,14 +52,12 @@ public class AutoHammer : BaseItemToggleableUI
     //Can this be done properly?
     private bool canChangeSlope;
     public override bool CanUseItem(Player player) {
-        if (Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
-            if (!ItemHasRange()) return true;
-            
-            var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
-            if (panel.selectedIndex != -1) {
-                Item.hammer = 0;
-                canChangeSlope = true;
-            }
+        if (player.whoAmI != Main.myPlayer || !ItemHasRange()) return true;
+
+        var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
+        if (panel.selectedIndex != -1) {
+            Item.hammer = 0;
+            canChangeSlope = true;
         }
 
         return true;
@@ -86,8 +84,8 @@ public class AutoHammer : BaseItemToggleableUI
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {
             //Prevent unnecessary changes to the tile and MP sync
-            if ((tile.Slope == slopeType || tile.IsHalfBlock != isHalfBlock) 
-                && tile.IsHalfBlock == isHalfBlock) return;
+            if ((tile.Slope == slopeType || tile.IsHalfBlock != isHalfBlock) && 
+                tile.IsHalfBlock == isHalfBlock) return;
             
             tile.IsHalfBlock = isHalfBlock;
             tile.Slope = slopeType;

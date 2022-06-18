@@ -13,7 +13,7 @@ namespace BuilderEssentials.Content.Items;
 public class FillWand : BuilderEssentialsItem
 {
     public static int FillSelectionSize = 3;
-    
+
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 
@@ -26,10 +26,10 @@ public class FillWand : BuilderEssentialsItem
             "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]" +
             "\n[c/FF0000:Does not support multi tiles]"
         );
-            
+
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
-    
+
     public override void SetDefaults() {
         Item.height = Item.width = 46;
         Item.useTime = Item.useAnimation = 10;
@@ -39,13 +39,12 @@ public class FillWand : BuilderEssentialsItem
         Item.autoReuse = true;
         Item.noMelee = true;
     }
-    
+
     public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
 
     public override void HoldItem(Player player) {
-        
-        if (player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server) return;
-        
+        if (player.whoAmI != Main.myPlayer) return;
+
         var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
 
         if (Main.mouseMiddle && !player.mouseInterface) {
@@ -53,7 +52,7 @@ public class FillWand : BuilderEssentialsItem
             var itemType = ItemPicker.PickItem(tile, false, false);
             panel.SetSelectedItem(itemType);
         }
-        
+
         player.cursorItemIconEnabled = ItemHasRange();
         player.cursorItemIconID = Type;
         if (!player.cursorItemIconEnabled) return;
@@ -61,16 +60,18 @@ public class FillWand : BuilderEssentialsItem
     }
 
     public override bool? UseItem(Player player) {
+        if (player.whoAmI != Main.myPlayer) return true;
+        
         var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
         panel.doPlacement = true;
         return true;
     }
 
     public override bool AltFunctionUse(Player player) {
+        if (player.whoAmI != Main.myPlayer) return false;
+        
         var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
         panel.doUndo = true;
         return false;
     }
-
-    //CanUseItem -> UseItem -> Panel PlotSelection
 }
