@@ -7,7 +7,10 @@ namespace BuilderEssentials.Assets;
 
 public static class AssetsLoader
 {
+    //Shouldn't be needed but why not
     private static bool isInitialized;
+    private static bool isUnloaded;
+    
     private const string AssetsPath = "BuilderEssentials/Assets/";
     private static Dictionary<string, Asset<Texture2D>[]> texturesDictionary = new() {
         {AssetsID.AutoHammer, new Asset<Texture2D>[6]},
@@ -31,11 +34,13 @@ public static class AssetsLoader
     }
 
     internal static void UnloadTextures() {
-        //No need to null each array in the dictionary individually since nothing is referencing them?
+        if (isUnloaded) return;
+        //No need to null each array in the dictionary individually since nothing is referencing them directly?
         foreach (string key in texturesDictionary.Keys)
             texturesDictionary[key] = null;
 
         texturesDictionary = null;
         isInitialized = false;
+        isUnloaded = true;
     }
 }
