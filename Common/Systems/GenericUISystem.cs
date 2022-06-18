@@ -31,11 +31,6 @@ public abstract class UISystem<T> : ModSystem where T : UIState, new()
         userInterface.SetState(uiState);
     }
 
-    public override void Unload() {
-        AssetsLoader.UnloadTextures();
-        CachedScreenCoords = Vector2.Zero;
-    }
-
     public static Vector2 CachedScreenCoords;
     public override void UpdateUI(GameTime gameTime) {
         CachedScreenCoords = Main.MouseScreen;

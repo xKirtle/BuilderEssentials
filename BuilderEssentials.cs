@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BuilderEssentials.Assets;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -55,6 +56,10 @@ namespace BuilderEssentials
 			}));
 			
 			Initialized = true;
+		}
+
+		public override void Unload() {
+			AssetsLoader.UnloadTextures();
 		}
 	}
 }
