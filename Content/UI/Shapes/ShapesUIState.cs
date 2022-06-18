@@ -134,10 +134,6 @@ public abstract class BaseShapePanel : UIElement
         }
     }
 
-    public override void Update(GameTime gameTime) {
-        base.Update(gameTime);
-    }
-
     protected void QueuePlacement(Point coords, Item item)
         => queuedPlacements.Enqueue(new(coords, item));
 
@@ -174,7 +170,7 @@ public abstract class BaseShapePanel : UIElement
     public void UndoPlacement() {
         //Kirtle: Do UI that allows a specific historyPlacement to be removed rather than behaving like a Stack?
         if (historyPlacements.Count == 0) return;
-        
+
         List<Tuple<Point, Tile>> previousPlacement = historyPlacements.Pop();
         previousPlacement.ForEach(tuple =>
         {

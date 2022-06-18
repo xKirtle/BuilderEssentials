@@ -7,99 +7,91 @@ using Terraria.UI;
 
 namespace BuilderEssentials.Common;
 
+public class MouseSelection
+{
+    public Vector2 Start { get; private set; }
+    public Vector2 End { get; set; }
+    public bool IsDown { get; private set; }
+    public bool IsUp { get; private set; }
+    public bool Click => IsDown && IsUp;
+    
+    public void MouseDown() {
+        Start = End = new Vector2(Player.tileTargetX, Player.tileTargetY);
+        IsDown = true;
+    }
+
+    public void MouseUp() {
+        End = new Vector2(Player.tileTargetX, Player.tileTargetY);
+        IsUp = true;
+
+        OnClick?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void UpdateCoords(bool shiftDown) {
+        if (IsDown && !IsUp) {
+            End = new Vector2(Player.tileTargetX, Player.tileTargetY);
+            
+            if (shiftDown) SquareCoords();
+        }
+
+        if (IsUp) IsUp = false;
+    }
+
+    public event EventHandler OnClick;
+
+    void SquareCoords() {
+        int distanceX = (int) (End.X - Start.X);
+        int distanceY = (int) (End.Y - Start.Y);
+
+        //Turning rectangle into a square
+        if (Math.Abs(distanceX) < Math.Abs(distanceY)) {
+            //Horizontal
+            float endX;
+            if (distanceX > 0) //I. and IV. Quadrant
+                endX = Start.X + Math.Abs(distanceY);
+            else //II. and III. Quadrant
+                endX = Start.X - Math.Abs(distanceY);
+
+            End = new Vector2(endX, End.Y);
+        }
+        else {
+            //Vertical
+            float endY;
+            if (distanceY > 0) //III. and IV. Quadrant
+                endY = Start.Y + Math.Abs(distanceX);
+            else //I. and II. Quadrant
+                endY = Start.Y - Math.Abs(distanceX);
+
+            End = new Vector2(End.X, endY);
+        }
+    }
+}
+
 public class CoordSelection
 {
     //Kirtle: Allow this to be changed in a ModConfig?
-    public bool shiftDown;
-
-    public bool RMBDown;
-    public Vector2 RMBStart = Vector2.Zero;
-    public Vector2 RMBEnd = Vector2.Zero;
-
-    public bool LMBDown;
-    public Vector2 LMBStart = Vector2.Zero;
-    public Vector2 LMBEnd = Vector2.Zero;
-
-    public bool MMBDown;
-    public Vector2 MMBStart = Vector2.Zero;
-    public Vector2 MMBEnd = Vector2.Zero;
+    private bool shiftDown;
+    public MouseSelection RightMouse { get; }
+    public MouseSelection LeftMouse { get; }
+    public MouseSelection MiddleMouse { get; }
 
     public CoordSelection(UIState instance) {
-        instance.OnRightMouseDown += OnRightMouseDown;
-        instance.OnRightMouseUp += OnRightMouseUp;
-        instance.OnMouseDown += OnMouseDown;
-        instance.OnMouseUp += OnMouseUp;
-        instance.OnMiddleMouseDown += OnMiddleMouseDown;
-        instance.OnMiddleMouseUp += OnMiddleMouseUp;
-    }
-    
-    private void OnRightMouseDown(UIMouseEvent evt, UIElement listeningelement)
-    {
-        RMBDown = true;
-        RMBStart = RMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
-    }
-
-    private void OnRightMouseUp(UIMouseEvent evt, UIElement listeningelement) => RMBDown = false;
-
-    private void OnMouseDown(UIMouseEvent evt, UIElement listeningelement)
-    {
-        LMBDown = true;
-        LMBStart = LMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
-    }
-
-    private void OnMouseUp(UIMouseEvent evt, UIElement listeningelement) => LMBDown = false;
-
-    private void OnMiddleMouseDown(UIMouseEvent evt, UIElement listeningelement)
-    {
-        MMBDown = true;
-        MMBStart = MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
-    }
+        RightMouse = new();
+        LeftMouse = new();
+        MiddleMouse = new();
         
-    private void OnMiddleMouseUp(UIMouseEvent evt, UIElement listeningelement) => MMBDown = false;
-
-    private void SquareCoords(ref Vector2 start, ref Vector2 end)
-    {
-        int distanceX = (int) (end.X - start.X);
-        int distanceY = (int) (end.Y - start.Y);
-
-        //Turning rectangle into a square
-        if (Math.Abs(distanceX) < Math.Abs(distanceY)) //Horizontal
-        {
-            if (distanceX > 0) //I. and IV. Quadrant
-                end.X = start.X + Math.Abs(distanceY);
-            else //II. and III. Quadrant
-                end.X = start.X - Math.Abs(distanceY);
-        }
-        else //Vertical
-        {
-            if (distanceY > 0) //III. and IV. Quadrant
-                end.Y = start.Y + Math.Abs(distanceX);
-            else //I. and II. Quadrant
-                end.Y = start.Y - Math.Abs(distanceX);
-        }
+        instance.OnRightMouseDown += (__, _) => RightMouse.MouseDown();
+        instance.OnRightMouseUp += (__, _) => RightMouse.MouseUp();
+        instance.OnMouseDown += (__, _) => LeftMouse.MouseDown();
+        instance.OnMouseUp += (__, _) => LeftMouse.MouseUp();
+        instance.OnMiddleMouseDown += (__, _) => MiddleMouse.MouseDown();
+        instance.OnMiddleMouseUp += (__, _) => MiddleMouse.MouseUp();
     }
-    
-    public void UpdateCoords()
-    {
-        if (RMBDown)
-            RMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
-        if (LMBDown)
-            LMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
-            
-        if (MMBDown)
-            MMBEnd = new Vector2(Player.tileTargetX, Player.tileTargetY);
-        
+    public void UpdateCoords() {
         shiftDown = Main.keyState.IsKeyDown(Keys.LeftShift);
-
-        if (shiftDown)
-        {
-            if (RMBDown)
-                SquareCoords(ref RMBStart, ref RMBEnd);
-            else if (LMBDown)
-                SquareCoords(ref LMBStart, ref LMBEnd);
-            else if (MMBDown)
-                SquareCoords(ref MMBStart, ref MMBEnd);
-        }
+        RightMouse.UpdateCoords(shiftDown);
+        LeftMouse.UpdateCoords(shiftDown);
+        MiddleMouse.UpdateCoords(shiftDown);
     }
 }

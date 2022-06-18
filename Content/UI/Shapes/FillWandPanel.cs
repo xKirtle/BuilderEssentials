@@ -20,7 +20,6 @@ public class FillWandPanel : BaseShapePanel
         for (int j = 0; j < size; j++) {
             ShapeHelpers.PlotPixel(Player.tileTargetX + j, Player.tileTargetY + i - size + 1);
             
-            //Move this to update? Might be lagging too much
             if (CanPlaceItems()) {
                 QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1), SelectedItem);
             }
