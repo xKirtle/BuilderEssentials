@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Common.DataStructures;
 using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.Items;
@@ -32,6 +33,13 @@ public class ShapesUIState : ManagedUIState<BaseShapePanel>
         for (int i = 0; i < PanelTypes().Count; i++) {
             var panel = GetUIPanel(i);
             panel.UpdateRegardlessOfVisibility();
+        }
+    }
+
+    public static void UpdateMaxUndoNum(int value) {
+        for (int i = 0; i < GetPanelCount(); i++) {
+            var panel = GetUIPanel(i);
+            panel.UpdateMaxUndoNum(value);
         }
     }
 }
@@ -76,15 +84,22 @@ public abstract class BaseShapePanel : UIElement
     protected CoordSelection cs;
     private HistoryStack<List<Tuple<Point, Tile>>> historyPlacements;
     private UniqueQueue<Tuple<Point, Item>> queuedPlacements;
-    //Make this configurable in ModConfig? -> Affects memory usage
-    private const int HistoryNum = 5;
     public bool doPlacement = false;
     public bool doUndo = false;
     public override void OnInitialize() {
         SelectedItem = new(ItemID.None);
         cs = new(ShapesUIState.GetInstance());
-        historyPlacements = new(HistoryNum);
+        historyPlacements = new(ModContent.GetInstance<MainConfig>().MaxUndoNum);
         queuedPlacements = new();
+    }
+
+    public void UpdateMaxUndoNum(int value) {
+        if (historyPlacements == null) return;
+        
+        var oldHistoryPlacements = historyPlacements;
+        HistoryStack<List<Tuple<Point, Tile>>> newHistoryPlacements = new(value);
+        newHistoryPlacements.AddRange(oldHistoryPlacements.Items);
+        historyPlacements = newHistoryPlacements;
     }
 
     public override void Draw(SpriteBatch spriteBatch) {

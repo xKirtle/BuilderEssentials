@@ -60,4 +60,7 @@ public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIEleme
             panel.Deactivate();
         }
     }
+
+    //ModConfig OnChanged ends up calling this, where instance might be null at that point
+    public static int GetPanelCount() => GetInstance()?.PanelTypes().Count ?? 0;
 }
