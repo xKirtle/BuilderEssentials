@@ -30,6 +30,15 @@ public class FillWandPanel : BaseShapePanel
         //     Console.WriteLine("Queued");
     }
 
+    private Vector2 oldTileCoords;
+    public override bool SelectionHasChanged() {
+        Vector2 newTileCoords = new Vector2(Player.tileTargetX, Player.tileTargetY);
+        if (oldTileCoords == newTileCoords) return false;
+        
+        oldTileCoords = newTileCoords;
+        return true;
+    }
+
     public override void UpdateRegardlessOfVisibility() {
         int heldItemType = Main.LocalPlayer.HeldItem.type;
         if ((heldItemType == ItemBoundToDisplay[0] && !IsVisible) || 

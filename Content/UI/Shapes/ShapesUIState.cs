@@ -81,6 +81,12 @@ public abstract class BaseShapePanel : UIElement
     /// </summary>
     public abstract void PlotSelection();
 
+    /// <summary>
+    /// Whether we should make latest placement undoable when it's dequeued
+    /// </summary>
+    /// <returns>True if it can be undoable</returns>
+    public abstract bool SelectionHasChanged();
+
     protected CoordSelection cs;
     private HistoryStack<List<Tuple<Point, Tile>>> historyPlacements;
     private UniqueQueue<Tuple<Point, Item>> queuedPlacements;
@@ -139,11 +145,11 @@ public abstract class BaseShapePanel : UIElement
     public void DequeuePlacement() {
         if (queuedPlacements.Count == 0) return;
 
-        //TODO: Detect if coords in queuedPlacements are the same as the ones present in historyPlacements.Peek()
-        //If they are, no point in trying to place the same stuff if i
-        
-        //Just check if the selection/mouse changed in anyway
-        
+        if (!SelectionHasChanged()) {
+            queuedPlacements.Clear();
+            return;
+        }
+
         List<Tuple<Point, Tile>> previousPlacement = new(queuedPlacements.Count);
 
         while (queuedPlacements.Count != 0) {
@@ -166,6 +172,7 @@ public abstract class BaseShapePanel : UIElement
     }
 
     public void UndoPlacement() {
+        //Kirtle: Do UI that allows a specific historyPlacement to be removed rather than behaving like a Stack?
         if (historyPlacements.Count == 0) return;
         
         List<Tuple<Point, Tile>> previousPlacement = historyPlacements.Pop();
