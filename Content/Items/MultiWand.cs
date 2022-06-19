@@ -12,7 +12,7 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class MultiWand : BaseItemToggleableUI
 {
-    public override UIStateType UiStateType => UIStateType.MultiWand;
+    public override ToggleableUiType ToggleableUiType => ToggleableUiType.MultiWand;
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
     

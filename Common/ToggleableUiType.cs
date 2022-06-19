@@ -1,6 +1,6 @@
 namespace BuilderEssentials.Common;
 
-public enum UIStateType
+public enum ToggleableUiType
 {
     AutoHammer,
     MultiWand,

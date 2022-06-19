@@ -16,7 +16,7 @@ namespace BuilderEssentials.Content.Items;
 public abstract class BaseItemToggleableUI : BuilderEssentialsItem
 {
     private static ToggleableItemsUISystem UiSystem = ModContent.GetInstance<ToggleableItemsUISystem>();
-    public virtual UIStateType UiStateType { get; private set; }
+    public virtual ToggleableUiType ToggleableUiType { get; private set; }
     public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
 
     public override void SetDefaults() { //TODO: Check if updating tile range in holdItem is a better solution
@@ -34,9 +34,9 @@ public abstract class BaseItemToggleableUI : BuilderEssentialsItem
         return false;
     }
 
-    public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel((int) UiStateType).IsVisible;
+    public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel((int) ToggleableUiType).IsVisible;
     
     public void TogglePanel() {
-        ToggleableItemsUIState.TogglePanelVisibility((int) UiStateType);
+        ToggleableItemsUIState.TogglePanelVisibility((int) ToggleableUiType);
     }
 }

@@ -13,7 +13,7 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class AutoHammer : BaseItemToggleableUI
 {
-    public override UIStateType UiStateType => UIStateType.AutoHammer;
+    public override ToggleableUiType ToggleableUiType => ToggleableUiType.AutoHammer;
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 

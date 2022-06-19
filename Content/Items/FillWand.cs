@@ -59,20 +59,4 @@ public class FillWand : BuilderEssentialsItem
         if (!player.cursorItemIconEnabled) return;
         player.cursorItemIconID = panel.SelectedItem?.type ?? Type;
     }
-
-    public override bool? UseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return true;
-        
-        // var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
-        // panel.doPlacement = true;
-        return true;
-    }
-
-    public override bool AltFunctionUse(Player player) {
-        if (player.whoAmI != Main.myPlayer) return false;
-        
-        var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
-        panel.doUndo = true;
-        return false;
-    }
 }

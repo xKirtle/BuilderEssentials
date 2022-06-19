@@ -11,7 +11,7 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(false)]
 public abstract class BasePaintBrush : BaseItemToggleableUI
 {
-    public override UIStateType UiStateType => UIStateType.PaintBrush;
+    public override ToggleableUiType ToggleableUiType => ToggleableUiType.PaintBrush;
     
     public override void SetDefaults() {
         base.SetDefaults();
