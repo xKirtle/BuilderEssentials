@@ -63,8 +63,8 @@ public class FillWand : BuilderEssentialsItem
     public override bool? UseItem(Player player) {
         if (player.whoAmI != Main.myPlayer) return true;
         
-        var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
-        panel.doPlacement = true;
+        // var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
+        // panel.doPlacement = true;
         return true;
     }
 

@@ -12,7 +12,7 @@ public class FillWandPanel : BaseShapePanel
 {
     public override int[] ItemBoundToDisplay => new[] { ModContent.ItemType<FillWand>() };
 
-    public override bool CanPlaceItems() => doPlacement && SelectedItem.type != ItemID.None;
+    public override bool CanPlaceItems() => cs.LeftMouse.IsDown && SelectedItem.type != ItemID.None;
     
     public override void PlotSelection() {
         int size = FillWand.FillSelectionSize;

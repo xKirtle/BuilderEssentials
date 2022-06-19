@@ -97,6 +97,18 @@ public abstract class BaseShapePanel : UIElement
         cs = new(ShapesUIState.GetInstance());
         historyPlacements = new(ModContent.GetInstance<MainConfig>().MaxUndoNum);
         queuedPlacements = new();
+
+        cs.LeftMouse.OnClick += _ =>
+        {
+            Console.WriteLine($"Click left: {CanPlaceItems()}");
+            if (CanPlaceItems())
+                DequeuePlacement();
+        };
+        cs.RightMouse.OnClick += _ =>
+        {
+            Console.WriteLine($"Click Right");
+            UndoPlacement();
+        };
     }
 
     public void UpdateMaxUndoNum(int value) {
@@ -114,24 +126,24 @@ public abstract class BaseShapePanel : UIElement
         //
         // if (doPlacement)
         //     Console.WriteLine("Dequeue this tick, if CanPlace");
-        
-        if (doUndo) {
-            // Console.WriteLine("Undo");
-            UndoPlacement();
-            doUndo = false;
-        }
+
+        // if (cs.RightMouse.Click) {
+        //     UndoPlacement();
+        // }
         
         base.Draw(spriteBatch);
         cs.UpdateCoords();
         PlotSelection();
         
-        if (doPlacement) {
-            if (CanPlaceItems()) {
-                // Console.WriteLine("Dequeued");
-                DequeuePlacement();
-            }
-            doPlacement = false;
-        }
+        // if (CanPlaceItems()) {
+        //     Console.WriteLine("Dequeued");
+        //     DequeuePlacement();
+        // }
+    }
+
+    public override void Update(GameTime gameTime) {
+        base.Update(gameTime);
+        // cs.UpdateCoords();
     }
 
     protected void QueuePlacement(Point coords, Item item)
@@ -139,7 +151,10 @@ public abstract class BaseShapePanel : UIElement
 
     //TODO: Make Async?
     public void DequeuePlacement() {
+        Console.WriteLine("Dequeue called");
         if (queuedPlacements.Count == 0) return;
+
+        Console.WriteLine("Queued Placements");
 
         if (!SelectionHasChanged()) {
             queuedPlacements.Clear();
@@ -164,7 +179,7 @@ public abstract class BaseShapePanel : UIElement
         }
         
         historyPlacements.Push(previousPlacement);
-        // Console.WriteLine($"Push -> New history size: {historyPlacements.Count}");
+        Console.WriteLine($"Push -> New history size: {historyPlacements.Count}");
     }
 
     public void UndoPlacement() {
@@ -181,6 +196,6 @@ public abstract class BaseShapePanel : UIElement
             WorldGen.KillTile(coord.X, coord.Y);
         });
 
-        // Console.WriteLine($"Pop -> New history size: {historyPlacements.Count}");
+        Console.WriteLine($"Pop -> New history size: {historyPlacements.Count}");
     }
 }

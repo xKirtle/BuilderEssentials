@@ -10,34 +10,27 @@ namespace BuilderEssentials.Common;
 public class MouseSelection
 {
     public Vector2 Start { get; private set; }
-    public Vector2 End { get; set; }
+    public Vector2 End { get; private set; }
     public bool IsDown { get; private set; }
-    public bool IsUp { get; private set; }
-    public bool Click => IsDown && IsUp;
+    public event UIElement.ElementEvent OnClick;
     
-    public void MouseDown() {
+    public void MouseDown(UIMouseEvent evt, UIElement element) {
         Start = End = new Vector2(Player.tileTargetX, Player.tileTargetY);
         IsDown = true;
     }
 
-    public void MouseUp() {
+    public void MouseUp(UIMouseEvent evt, UIElement element) {
         End = new Vector2(Player.tileTargetX, Player.tileTargetY);
-        IsUp = true;
-
-        OnClick?.Invoke(this, EventArgs.Empty);
+        IsDown = false;
+        OnClick?.Invoke(element);
     }
 
     public void UpdateCoords(bool shiftDown) {
-        if (IsDown && !IsUp) {
+        if (IsDown) {
             End = new Vector2(Player.tileTargetX, Player.tileTargetY);
-            
             if (shiftDown) SquareCoords();
         }
-
-        if (IsUp) IsUp = false;
     }
-
-    public event EventHandler OnClick;
 
     void SquareCoords() {
         int distanceX = (int) (End.X - Start.X);
@@ -80,12 +73,12 @@ public class CoordSelection
         LeftMouse = new();
         MiddleMouse = new();
         
-        instance.OnRightMouseDown += (__, _) => RightMouse.MouseDown();
-        instance.OnRightMouseUp += (__, _) => RightMouse.MouseUp();
-        instance.OnMouseDown += (__, _) => LeftMouse.MouseDown();
-        instance.OnMouseUp += (__, _) => LeftMouse.MouseUp();
-        instance.OnMiddleMouseDown += (__, _) => MiddleMouse.MouseDown();
-        instance.OnMiddleMouseUp += (__, _) => MiddleMouse.MouseUp();
+        instance.OnRightMouseDown += RightMouse.MouseDown;
+        instance.OnRightMouseUp += RightMouse.MouseUp;
+        instance.OnMouseDown += LeftMouse.MouseDown;
+        instance.OnMouseUp += LeftMouse.MouseUp;
+        instance.OnMiddleMouseDown += MiddleMouse.MouseDown;
+        instance.OnMiddleMouseUp += MiddleMouse.MouseUp;
     }
 
     public void UpdateCoords() {
