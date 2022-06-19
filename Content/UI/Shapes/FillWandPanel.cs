@@ -10,23 +10,18 @@ namespace BuilderEssentials.Content.UI;
 
 public class FillWandPanel : BaseShapePanel
 {
-    public override int[] ItemBoundToDisplay => new[] { ModContent.ItemType<FillWand>() };
+    public override bool IsHoldingBindingItem() =>
+        Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>();
 
-    public override bool CanPlaceItems() => cs.LeftMouse.IsDown && SelectedItem.type != ItemID.None;
+    public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
     
     public override void PlotSelection() {
         int size = FillWand.FillSelectionSize;
         for (int i = 0; i < size; i++)
         for (int j = 0; j < size; j++) {
             ShapeHelpers.PlotPixel(Player.tileTargetX + j, Player.tileTargetY + i - size + 1);
-            
-            if (CanPlaceItems()) {
-                QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1), SelectedItem);
-            }
+            QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1), SelectedItem);
         }
-        
-        // if (CanPlaceItems())
-        //     Console.WriteLine("Queued");
     }
 
     private Vector2 oldTileCoords;
@@ -39,10 +34,7 @@ public class FillWandPanel : BaseShapePanel
     }
 
     public override void UpdateRegardlessOfVisibility() {
-        int heldItemType = Main.LocalPlayer.HeldItem.type;
-        if ((heldItemType == ItemBoundToDisplay[0] && !IsVisible) || 
-            (heldItemType != ItemBoundToDisplay[0] && IsVisible)) {
+        if ((IsHoldingBindingItem() && !IsVisible) || (!IsHoldingBindingItem() && IsVisible))
             ShapesUIState.TogglePanelVisibility<FillWandPanel>();
-        }
     }
 }

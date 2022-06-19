@@ -49,10 +49,10 @@ public abstract class BaseShapePanel : UIElement
     public bool IsVisible => Parent != null;
     
     /// <summary>
-    /// Item types that, when held by the player, won't make the panel be removed
-    /// If the array is null, empty or its only value is 0, won't be removed automatically
+    /// Whether the panel will be removed from the Parent UIState or not
     /// </summary>
-    public virtual int[] ItemBoundToDisplay { get; protected set; } = { ItemID.None };
+    /// <returns>True if it's not going to be removed</returns>
+    public abstract bool IsHoldingBindingItem();
     
     /// <summary>
     /// Item selected for shape placements
@@ -90,24 +90,23 @@ public abstract class BaseShapePanel : UIElement
     protected CoordSelection cs;
     private HistoryStack<List<Tuple<Point, Tile>>> historyPlacements;
     private UniqueQueue<Tuple<Point, Item>> queuedPlacements;
-    public bool doPlacement = false;
-    public bool doUndo = false;
+    // public bool doPlacement = false;
+    // public bool doUndo = false;
     public override void OnInitialize() {
         SelectedItem = new(ItemID.None);
         cs = new(ShapesUIState.GetInstance());
         historyPlacements = new(ModContent.GetInstance<MainConfig>().MaxUndoNum);
         queuedPlacements = new();
 
-        cs.LeftMouse.OnClick += _ =>
-        {
+        cs.LeftMouse.OnClick += _ => {
             Console.WriteLine($"Click left: {CanPlaceItems()}");
-            if (CanPlaceItems())
+            if (IsHoldingBindingItem() && CanPlaceItems())
                 DequeuePlacement();
         };
-        cs.RightMouse.OnClick += _ =>
-        {
+        cs.RightMouse.OnClick += _ => {
             Console.WriteLine($"Click Right");
-            UndoPlacement();
+            if (IsHoldingBindingItem())
+                UndoPlacement();
         };
     }
 
@@ -121,24 +120,11 @@ public abstract class BaseShapePanel : UIElement
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
-        // if (doUndo)
-        //     Console.WriteLine("Undo this tick");
-        //
-        // if (doPlacement)
-        //     Console.WriteLine("Dequeue this tick, if CanPlace");
-
-        // if (cs.RightMouse.Click) {
-        //     UndoPlacement();
-        // }
-        
         base.Draw(spriteBatch);
         cs.UpdateCoords();
-        PlotSelection();
         
-        // if (CanPlaceItems()) {
-        //     Console.WriteLine("Dequeued");
-        //     DequeuePlacement();
-        // }
+        queuedPlacements.Clear();
+        PlotSelection();
     }
 
     public override void Update(GameTime gameTime) {
@@ -175,7 +161,7 @@ public abstract class BaseShapePanel : UIElement
             
             //Place
             //TODO: Choose between createTile and createWall and sync it
-            WorldGen.PlaceTile(coord.X, coord.Y, item.createTile, mute: true, forced: true);
+            WorldGen.PlaceTile(coord.X, coord.Y, item.createTile, mute: false, forced: true);
         }
         
         historyPlacements.Push(previousPlacement);
@@ -185,10 +171,14 @@ public abstract class BaseShapePanel : UIElement
     public void UndoPlacement() {
         //Kirtle: Do UI that allows a specific historyPlacement to be removed rather than behaving like a Stack?
         if (historyPlacements.Count == 0) return;
+        
+        //TODO: Need to store in dequeueing what was there before placement, and what was added in the placement
+        
+        //Check if the current tile at coord is exactly what it was placed on dequeuing,
+        //and if it is, place what was there before
 
         List<Tuple<Point, Tile>> previousPlacement = historyPlacements.Pop();
-        previousPlacement.ForEach(tuple =>
-        {
+        previousPlacement.ForEach(tuple => {
             Point coord = tuple.Item1;
             Tile tile = tuple.Item2;
             
