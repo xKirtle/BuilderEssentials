@@ -47,7 +47,7 @@ public class FillWand : BuilderEssentialsItem
 
         var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
 
-        if (Main.mouseMiddle && !player.mouseInterface) {
+        if (Main.mouseMiddle && Main.mouseMiddleRelease && !player.mouseInterface) {
             Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
             //TODO: Air is giving a gold pickaxe itemType??
             var itemType = ItemPicker.PickItem(tile, false, false);
