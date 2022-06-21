@@ -93,12 +93,14 @@ public static class PlacementHelpers
             if (typeOfItem == TypeOfItem.Tile && !tile.HasTile)
                 goto noReplacement;
 
-            if (typeOfItem == TypeOfItem.Tile)
+            if (typeOfItem == TypeOfItem.Tile) {
                 if (!WorldGen.ReplaceTile(x, y, (ushort) item.createTile, item.placeStyle))
                     goto noReplacement;
-            else if (typeOfItem == TypeOfItem.Wall)
+            }
+            else if (typeOfItem == TypeOfItem.Wall) {
                 if (!WorldGen.ReplaceWall(x, y, (ushort) item.createWall))
                     goto noReplacement;
+            }
 
             return tile;
         }
