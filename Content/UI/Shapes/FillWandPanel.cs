@@ -17,10 +17,10 @@ public class FillWandPanel : BaseShapePanel
     
     public override void PlotSelection() {
         int size = FillWand.FillSelectionSize;
-        for (int i = 0; i < size; i++)
-        for (int j = 0; j < size; j++) {
-            ShapeHelpers.PlotPixel(Player.tileTargetX + j, Player.tileTargetY + i - size + 1);
-            QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1));
+        for (int x = 0; x < size; x++)
+        for (int y = 0; y < size; y++) {
+            ShapeHelpers.PlotPixel(Player.tileTargetX + y, Player.tileTargetY + x - size + 1, ShapeHelpers.Blue, 0.9f);
+            QueuePlacement(new Point(Player.tileTargetX + y, Player.tileTargetY + x - size + 1));
         }
     }
 

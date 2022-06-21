@@ -33,6 +33,7 @@ public class FillWand : BuilderEssentialsItem
     public override void SetDefaults() {
         Item.height = Item.width = 46;
         Item.useTime = Item.useAnimation = 10;
+        Item.useTurn = true;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.value = Item.sellPrice(gold: 1, silver: 40);
         Item.rare = ItemRarityID.Red;
