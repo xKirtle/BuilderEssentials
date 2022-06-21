@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 using Terraria.UI;
 
 namespace BuilderEssentials.Content.UI;
@@ -88,10 +89,9 @@ public abstract class BaseShapePanel : UIElement
     public abstract bool SelectionHasChanged();
 
     protected CoordSelection cs;
-    private HistoryStack<List<Tuple<Point, Tile>>> historyPlacements;
-    private UniqueQueue<Tuple<Point, Item>> queuedPlacements;
-    // public bool doPlacement = false;
-    // public bool doUndo = false;
+    private HistoryStack<List<PlacementHistory>> historyPlacements;
+    private UniqueQueue<Point> queuedPlacements;
+    private bool undo;
     public override void OnInitialize() {
         SelectedItem = new(ItemID.None);
         cs = new(ShapesUIState.GetInstance());
@@ -99,14 +99,16 @@ public abstract class BaseShapePanel : UIElement
         queuedPlacements = new();
 
         cs.LeftMouse.OnClick += _ => {
-            Console.WriteLine($"Click left: {CanPlaceItems()}");
-            if (IsHoldingBindingItem() && CanPlaceItems())
+            if (IsHoldingBindingItem() && CanPlaceItems()) {
                 DequeuePlacement();
+                undo = false;
+            }
         };
         cs.RightMouse.OnClick += _ => {
-            Console.WriteLine($"Click Right");
-            if (IsHoldingBindingItem())
+            if (IsHoldingBindingItem()) {
                 UndoPlacement();
+                undo = true;
+            }
         };
     }
 
@@ -114,7 +116,7 @@ public abstract class BaseShapePanel : UIElement
         if (historyPlacements == null) return;
         
         var oldHistoryPlacements = historyPlacements;
-        HistoryStack<List<Tuple<Point, Tile>>> newHistoryPlacements = new(value);
+        HistoryStack<List<PlacementHistory>> newHistoryPlacements = new(value);
         newHistoryPlacements.AddRange(oldHistoryPlacements.Items);
         historyPlacements = newHistoryPlacements;
     }
@@ -127,65 +129,52 @@ public abstract class BaseShapePanel : UIElement
         PlotSelection();
     }
 
-    public override void Update(GameTime gameTime) {
-        base.Update(gameTime);
-        // cs.UpdateCoords();
-    }
+    protected void QueuePlacement(Point coords)
+        => queuedPlacements.Enqueue(coords);
 
-    protected void QueuePlacement(Point coords, Item item)
-        => queuedPlacements.Enqueue(new(coords, item));
-
-    //TODO: Make Async?
     public void DequeuePlacement() {
-        Console.WriteLine("Dequeue called");
         if (queuedPlacements.Count == 0) return;
 
-        Console.WriteLine("Queued Placements");
-
-        if (!SelectionHasChanged()) {
+        if (!SelectionHasChanged() && !undo) {
             queuedPlacements.Clear();
             return;
         }
 
-        List<Tuple<Point, Tile>> previousPlacement = new(queuedPlacements.Count);
+        List<PlacementHistory> previousPlacement = new(queuedPlacements.Count);
 
         while (queuedPlacements.Count != 0) {
-            //Get queued info
-            Tuple<Point, Item> tuple = queuedPlacements.Dequeue();
-            Point coord = tuple.Item1;
-            Item item = tuple.Item2;
-            
-            //Save previous placement to history
-            Tile tile = Framing.GetTileSafely(coord);
-            previousPlacement.Add(new(coord, tile));
-            
-            //Place
-            //TODO: Choose between createTile and createWall and sync it
-            WorldGen.PlaceTile(coord.X, coord.Y, item.createTile, mute: false, forced: true);
+            Point coordinate = queuedPlacements.Dequeue(); 
+            Tile tile = Framing.GetTileSafely(coordinate);
+            MinimalTile previousTile = new(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile));
+            PlacementHelpers.PlaceTile(coordinate.X, coordinate.Y, SelectedItem);
+            MinimalTile placedTile = new(tile.TileType, tile.WallType, tile.HasTile, SelectedItem.placeStyle);
+            previousPlacement.Add(new(coordinate, previousTile, placedTile, SelectedItem));
         }
         
         historyPlacements.Push(previousPlacement);
-        Console.WriteLine($"Push -> New history size: {historyPlacements.Count}");
     }
-
+    
     public void UndoPlacement() {
         //Kirtle: Do UI that allows a specific historyPlacement to be removed rather than behaving like a Stack?
         if (historyPlacements.Count == 0) return;
         
-        //TODO: Need to store in dequeueing what was there before placement, and what was added in the placement
-        
-        //Check if the current tile at coord is exactly what it was placed on dequeuing,
-        //and if it is, place what was there before
+        List<PlacementHistory> lastPlacement = historyPlacements.Pop();
+        for (int i = 0; i < lastPlacement.Count; i++) {
+            PlacementHistory last = lastPlacement[i];
+            Point coords = last.Coordinate;
+            MinimalTile previousTile = last.PreviousTile;
+            MinimalTile placedTile = last.PlacedTile;
 
-        List<Tuple<Point, Tile>> previousPlacement = historyPlacements.Pop();
-        previousPlacement.ForEach(tuple => {
-            Point coord = tuple.Item1;
-            Tile tile = tuple.Item2;
-            
-            //TODO: Replace with old tile, instead of just killing last placement
-            WorldGen.KillTile(coord.X, coord.Y);
-        });
+            Tile tile = Framing.GetTileSafely(coords);
+            if ((tile.TileType == placedTile.TileType && placedTile.HasTile) ||
+                (tile.WallType == placedTile.WallType && placedTile.IsWall)) {
+                int itemType = ItemPicker.PickItem(previousTile);
+                Item item = new Item(itemType);
 
-        Console.WriteLine($"Pop -> New history size: {historyPlacements.Count}");
+                PlacementHelpers.RemoveTile(coords.X, coords.Y, placedTile.HasTile, placedTile.IsWall, needPickPower: true);
+                if (previousTile.HasTile && item.type > ItemID.None)
+                    PlacementHelpers.PlaceTile(coords.X, coords.Y, item);
+            }
+        }
     }
 }

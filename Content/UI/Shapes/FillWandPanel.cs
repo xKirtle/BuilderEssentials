@@ -20,7 +20,7 @@ public class FillWandPanel : BaseShapePanel
         for (int i = 0; i < size; i++)
         for (int j = 0; j < size; j++) {
             ShapeHelpers.PlotPixel(Player.tileTargetX + j, Player.tileTargetY + i - size + 1);
-            QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1), SelectedItem);
+            QueuePlacement(new Point(Player.tileTargetX + j, Player.tileTargetY + i - size + 1));
         }
     }
 
