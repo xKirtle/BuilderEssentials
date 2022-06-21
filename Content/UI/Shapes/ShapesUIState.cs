@@ -24,7 +24,8 @@ public class ShapesUISystem : UISystem<ShapesUIState>
 public class ShapesUIState : ManagedUIState<BaseShapePanel>
 {
     public override List<Type> PanelTypes() => new() {
-        typeof(FillWandPanel)
+        typeof(FillWandPanel),
+        typeof(MirrorWandPanel)
     };
 
     public override void Update(GameTime gameTime) {
@@ -91,24 +92,25 @@ public abstract class BaseShapePanel : UIElement
     protected CoordSelection cs;
     private HistoryStack<List<PlacementHistory>> historyPlacements;
     private UniqueQueue<Point> queuedPlacements;
-    private bool undo;
+    private bool undo = true;
     public override void OnInitialize() {
         SelectedItem = new(ItemID.None);
-        cs = new(ShapesUIState.GetInstance());
+        cs = new(ShapesUIState.GetInstance(), () => IsHoldingBindingItem());
         historyPlacements = new(ModContent.GetInstance<MainConfig>().MaxUndoNum);
         queuedPlacements = new();
 
+        //TODO: Still updating coords when not holding binding item
+
         cs.LeftMouse.OnClick += _ => {
-            if (IsHoldingBindingItem() && CanPlaceItems()) {
+            if (CanPlaceItems()) {
                 DequeuePlacement();
                 undo = false;
             }
         };
+        
         cs.RightMouse.OnClick += _ => {
-            if (IsHoldingBindingItem()) {
-                UndoPlacement();
-                undo = true;
-            }
+            UndoPlacement();
+            undo = true;
         };
     }
 

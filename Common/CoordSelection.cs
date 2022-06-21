@@ -9,24 +9,29 @@ namespace BuilderEssentials.Common;
 
 public class MouseSelection
 {
-    public Vector2 Start { get; private set; }
-    public Vector2 End { get; private set; }
+    public Vector2 Start { get; internal set; }
+    public Vector2 End { get; internal set; }
     public bool IsDown { get; private set; }
     public event UIElement.ElementEvent OnClick;
+    public Func<bool> CanUpdateCoords = (() => true);
     
     public void MouseDown(UIMouseEvent evt, UIElement element) {
-        Start = End = new Vector2(Player.tileTargetX, Player.tileTargetY);
-        IsDown = true;
+        if (CanUpdateCoords()) {
+            Start = End = new Vector2(Player.tileTargetX, Player.tileTargetY);
+            IsDown = true;
+        }
     }
 
     public void MouseUp(UIMouseEvent evt, UIElement element) {
-        End = new Vector2(Player.tileTargetX, Player.tileTargetY);
-        IsDown = false;
-        OnClick?.Invoke(element);
+        if (CanUpdateCoords()) {
+            End = new Vector2(Player.tileTargetX, Player.tileTargetY);
+            IsDown = false;
+            OnClick?.Invoke(element);
+        }
     }
 
     public void UpdateCoords(bool shiftDown) {
-        if (IsDown) {
+        if (IsDown && CanUpdateCoords()) {
             End = new Vector2(Player.tileTargetX, Player.tileTargetY);
             if (shiftDown) SquareCoords();
         }
@@ -64,21 +69,27 @@ public class CoordSelection
 {
     //Kirtle: Allow this to be changed in a ModConfig?
     private bool shiftDown;
-    public MouseSelection RightMouse { get; }
     public MouseSelection LeftMouse { get; }
+    public MouseSelection RightMouse { get; }
     public MouseSelection MiddleMouse { get; }
+    public Func<bool> CanUpdateCoords;
 
-    public CoordSelection(UIState instance) {
-        RightMouse = new();
+    public CoordSelection(UIState instance, Func<bool> canUpdateCoords = null) {
         LeftMouse = new();
+        RightMouse = new();
         MiddleMouse = new();
         
-        instance.OnRightMouseDown += RightMouse.MouseDown;
-        instance.OnRightMouseUp += RightMouse.MouseUp;
         instance.OnMouseDown += LeftMouse.MouseDown;
         instance.OnMouseUp += LeftMouse.MouseUp;
+        instance.OnRightMouseDown += RightMouse.MouseDown;
+        instance.OnRightMouseUp += RightMouse.MouseUp;
         instance.OnMiddleMouseDown += MiddleMouse.MouseDown;
         instance.OnMiddleMouseUp += MiddleMouse.MouseUp;
+
+        CanUpdateCoords = canUpdateCoords ??= () => true;
+        LeftMouse.CanUpdateCoords = CanUpdateCoords;
+        RightMouse.CanUpdateCoords = CanUpdateCoords;
+        MiddleMouse.CanUpdateCoords = CanUpdateCoords;
     }
 
     public void UpdateCoords() {
@@ -86,5 +97,12 @@ public class CoordSelection
         RightMouse.UpdateCoords(shiftDown);
         LeftMouse.UpdateCoords(shiftDown);
         MiddleMouse.UpdateCoords(shiftDown);
+    }
+    
+    public bool IsWithinRange(float number, float value1, float value2, bool equal = false) {
+        if (!equal)
+            return (number > value1 && number < value2) || (number < value1 && number > value2);
+        else
+            return (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
     }
 }
