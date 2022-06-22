@@ -13,13 +13,16 @@ public class MouseSelection
     public Vector2 End { get; internal set; }
     public bool IsDown { get; private set; }
     public event UIElement.ElementEvent OnClick;
+    public event UIElement.ElementEvent OnMouseDown;
     public Func<bool> CanUpdateCoords = (() => true);
     
     public void MouseDown(UIMouseEvent evt, UIElement element) {
         if (CanUpdateCoords()) {
             Start = End = new Vector2(Player.tileTargetX, Player.tileTargetY);
             IsDown = true;
+            // OnMouseDown?.Invoke(element);
         }
+        OnMouseDown?.Invoke(element);
     }
 
     public void MouseUp(UIMouseEvent evt, UIElement element) {

@@ -1,4 +1,5 @@
 using System;
+using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -8,27 +9,39 @@ namespace BuilderEssentials.Content.UI;
 
 public class MirrorWandPanel : BaseShapePanel
 {
-    private bool horizontalMirror;
-    private bool wideMirror;
-    private bool validMirrorPlacement;
+    public bool wideMirror;
+    public bool validMirrorPlacement;
+    public bool horizontalMirror;
+    
     public override bool IsHoldingBindingItem()
         => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();
 
-    public override bool CanPlaceItems() => false;
+    public override bool CanPlaceItems() => true;
 
     public override bool SelectionHasChanged() => false;
 
-    private bool IsMouseWithinSelection() =>
+    public bool IsMouseWithinSelection() =>
         cs.IsWithinRange(Player.tileTargetX, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
         cs.IsWithinRange(Player.tileTargetY, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
     
-    private bool IsMirrorAxisInsideSelection() =>
+    public bool IsMirrorAxisInsideSelection() =>
         cs.LeftMouse.Start != cs.LeftMouse.End &&
         cs.IsWithinRange(cs.LeftMouse.Start.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
         cs.IsWithinRange(cs.LeftMouse.End.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
         cs.IsWithinRange(cs.LeftMouse.Start.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y) &&
         cs.IsWithinRange(cs.LeftMouse.End.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
-    
+
+    public override void OnInitialize() {
+        base.OnInitialize();
+
+        cs.LeftMouse.OnMouseDown += _ => {
+            //Better way to check if it's a tile placement?
+            if (!IsHoldingBindingItem() && CanPlaceItems() && Main.LocalPlayer.HasItem(ModContent.ItemType<MirrorWand>()))
+                MirrorPlacement.PlaceTile();
+            // Main.LocalPlayer.PlaceThing();
+        };
+    }
+
     public override void PlotSelection() {
         //Selected area
         ShapeHelpers.PlotRectangle(cs.RightMouse.Start, cs.RightMouse.End, ShapeHelpers.Blue, 0.90f, false);

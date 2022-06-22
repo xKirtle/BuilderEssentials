@@ -41,19 +41,7 @@ public static class PlacementHelpers
 
         return false;
     }
-
-    public static int GetMaxPickPower() {
-        int maxPickPower = 0;
-
-        foreach (Item item in Main.LocalPlayer.inventory) {
-            if (item.pick > maxPickPower)
-                maxPickPower = item.pick;
-        }
-
-        return maxPickPower;
-    }
-
-
+    
     public static TypeOfItem WhatIsThisItem(int itemType) {
         if (itemType <= 0 || itemType >= ItemLoader.ItemCount) return TypeOfItem.Air;
         return WhatIsThisItem(new Item(itemType));
@@ -68,16 +56,24 @@ public static class PlacementHelpers
         return TypeOfItem.Air;
     }
 
+    public static void PlaceMultiTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
+        //Call PlaceTile_PlaceIt?
+    }
+
     public static Tile PlaceTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
         if (!ValidTileCoordinates(x, y)) return new Tile();
 
         Tile tile = Framing.GetTileSafely(x, y);
-        bool replaceTilesEnabled = Main.LocalPlayer.builderAccStatus[10] == 0;
+        bool replaceTilesEnabled = Main.LocalPlayer.TileReplacementEnabled;
         TypeOfItem typeOfItem = WhatIsThisItem(item);
 
         if (typeOfItem == TypeOfItem.Tile) {
             TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
-            if (data != null) return new Tile(); //TODO: Place MultiTile
+
+            if (data != null) {
+                PlaceMultiTile(x, y, item, mute, forced, sync);
+                return tile;
+            }
         }
         
         //No need to (re)place if the tile is already the desired 
@@ -144,7 +140,7 @@ public static class PlacementHelpers
         if (!ValidTileCoordinates(x, y)) return;
 
         Tile tile = Framing.GetTileSafely(x, y);
-        if (needPickPower && TileLoader.GetTile(tile.TileType)?.MinPick > GetMaxPickPower()) return;
+        if (needPickPower && TileLoader.GetTile(tile.TileType)?.MinPick > Main.LocalPlayer.GetBestPickaxe().pick) return;
         
         if (removeTile && (WorldGen.CanKillTile(x, y, out _)))
             WorldGen.KillTile(x, y, noItem: !dropItem);

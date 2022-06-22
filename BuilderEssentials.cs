@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using BuilderEssentials.Assets;
+using BuilderEssentials.Common;
 using Newtonsoft.Json;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials
@@ -45,6 +48,18 @@ namespace BuilderEssentials
 			
 				WallToItems.Add(i, wallItems);
 			}
+		}
+
+		public override void Load() {
+			// On.Terraria.Player.PlaceThing += (orig, self) =>
+			// {
+			// 	// Console.WriteLine("Place Thing");
+			// 	orig.Invoke(self);
+			// 	// Console.WriteLine("After Placing");
+			// 	// MirrorPlacement.PlaceTile();
+			// 	
+			// 	// TileObject.objectPreview.CopyFrom(new TileObjectPreviewData());
+			// };
 		}
 
 		public override void Unload() {

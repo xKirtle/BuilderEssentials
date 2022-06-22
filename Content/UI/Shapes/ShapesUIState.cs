@@ -89,7 +89,7 @@ public abstract class BaseShapePanel : UIElement
     /// <returns>True if it can be undoable</returns>
     public abstract bool SelectionHasChanged();
 
-    protected CoordSelection cs;
+    internal CoordSelection cs;
     private HistoryStack<List<PlacementHistory>> historyPlacements;
     private UniqueQueue<Point> queuedPlacements;
     private bool undo = true;
@@ -168,12 +168,13 @@ public abstract class BaseShapePanel : UIElement
             MinimalTile placedTile = last.PlacedTile;
 
             Tile tile = Framing.GetTileSafely(coords);
-            if ((tile.TileType == placedTile.TileType && placedTile.HasTile) ||
-                (tile.WallType == placedTile.WallType && placedTile.IsWall)) {
+            bool isTile = tile.TileType == placedTile.TileType && placedTile.HasTile;
+            bool isWall = tile.WallType == placedTile.WallType && placedTile.IsWall;
+            if (isTile || isWall) {
                 int itemType = ItemPicker.PickItem(previousTile);
                 Item item = new Item(itemType);
 
-                PlacementHelpers.RemoveTile(coords.X, coords.Y, placedTile.HasTile, placedTile.IsWall, needPickPower: true);
+                PlacementHelpers.RemoveTile(coords.X, coords.Y, isTile, !isTile && placedTile.IsWall, needPickPower: true);
                 if (previousTile.HasTile && item.type > ItemID.None)
                     PlacementHelpers.PlaceTile(coords.X, coords.Y, item);
             }

@@ -53,7 +53,7 @@
     <Compile Update="Content\UI\ToggleableItems\AutoHammerPanel.cs">
       <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
     </Compile>
-    <Compile Update="Content\UI\Shapes\RectanglePanel.cs">
+    <Compile Update="Content\UI\Shapes\MirrorWandPanel.cs">
       <DependentUpon>ShapesUIState.cs</DependentUpon>
     </Compile>
   </ItemGroup>
