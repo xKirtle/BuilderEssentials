@@ -21,6 +21,7 @@ public static class ShapeHelpers
     
     public static void PlotPixel(int tileX, int tileY, Color color, float scale = 1f) {
         Vector2 position = Main.ReverseGravitySupport(new Vector2(tileX, tileY) * 16 - Main.screenPosition);
+        position += new Vector2(8 - 8 * scale); //Make it not fix on the top left corner
         Main.spriteBatch.Draw(PixelTexture.Value, position, Rectangle, 
             color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
     }
