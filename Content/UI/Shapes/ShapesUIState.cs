@@ -99,8 +99,6 @@ public abstract class BaseShapePanel : UIElement
         historyPlacements = new(ModContent.GetInstance<MainConfig>().MaxUndoNum);
         queuedPlacements = new();
 
-        //TODO: Still updating coords when not holding binding item
-
         cs.LeftMouse.OnClick += _ => {
             if (CanPlaceItems()) {
                 DequeuePlacement();
@@ -174,9 +172,16 @@ public abstract class BaseShapePanel : UIElement
                 int itemType = ItemPicker.PickItem(previousTile);
                 Item item = new Item(itemType);
 
-                PlacementHelpers.RemoveTile(coords.X, coords.Y, isTile, !isTile && placedTile.IsWall, needPickPower: true);
-                if (previousTile.HasTile && item.type > ItemID.None)
-                    PlacementHelpers.PlaceTile(coords.X, coords.Y, item);
+                //Kirtle: Bug prone?
+                if (!PlacementHelpers.RemoveTile(coords.X, coords.Y, isTile, !isTile && placedTile.IsWall,
+                        needPickPower: true)) {
+                    //Undo stack popping
+                    historyPlacements.Push(lastPlacement);
+                }
+                else {
+                    if (previousTile.HasTile && item.type > ItemID.None)
+                        PlacementHelpers.PlaceTile(coords.X, coords.Y, item);
+                }
             }
         }
     }

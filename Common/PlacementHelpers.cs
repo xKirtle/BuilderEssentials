@@ -134,14 +134,14 @@ public static class PlacementHelpers
             NetMessage.SendTileSquare(-1, minX, minY, syncSize);
     }
 
-    public static void RemoveTile(int x, int y, bool removeTile = true, bool removeWall = false, bool dropItem = true,
+    public static bool RemoveTile(int x, int y, bool removeTile = true, bool removeWall = false, bool dropItem = true,
         int itemToDrop = -1, bool sync = true, bool needPickPower = false) {
 
-        if (!ValidTileCoordinates(x, y)) return;
+        if (!ValidTileCoordinates(x, y)) return false;
 
         Tile tile = Framing.GetTileSafely(x, y);
-        //TODO: Player.HasEnoughPickPowerToHurtTile instead comparing that
-        if (needPickPower && TileLoader.GetTile(tile.TileType)?.MinPick > Main.LocalPlayer.GetBestPickaxe().pick) return;
+
+        if (needPickPower && !Main.LocalPlayer.HasEnoughPickPowerToHurtTile(x, y)) return false;
         
         if (removeTile && (WorldGen.CanKillTile(x, y, out _)))
             WorldGen.KillTile(x, y, noItem: !dropItem);
@@ -152,5 +152,7 @@ public static class PlacementHelpers
         
         if (sync && Main.netMode == NetmodeID.MultiplayerClient)
             NetMessage.SendTileSquare(-1, x, y, 1);
+        
+        return true;
     }
 }
