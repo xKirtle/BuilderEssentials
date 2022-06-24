@@ -76,7 +76,7 @@ public class MirrorWandPanel : BaseShapePanel
         if ((hasItemInInventory && !IsVisible) || (!hasItemInInventory && IsVisible))
             ShapesUIState.TogglePanelVisibility<MirrorWandPanel>();
     }
-    
+
     public Vector2 GetMirroredTileTargetCoordinate() {
         Vector2 result = new Vector2(Player.tileTargetX, Player.tileTargetY);
 
@@ -87,9 +87,10 @@ public class MirrorWandPanel : BaseShapePanel
         
         if (!validMirrorPlacement || !IsMouseWithinSelection()) return result;
         
-        if (!cs.IsWithinRange(result.X, selStart.X, selEnd.X, true) &&
-            !cs.IsWithinRange(result.Y, selStart.Y, selEnd.Y, true)) return result;
-        
+        //Check if coords intersect mirror axis
+        if (cs.IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
+            cs.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
+
         Tile tile = Framing.GetTileSafely(result);
         TileObjectData data = TileObjectData.GetTileData(tile);
         
