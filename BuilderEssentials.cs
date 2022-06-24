@@ -66,39 +66,57 @@ namespace BuilderEssentials
 				if (!panel.IsVisible) return;
 					
 				Vector2 mirroredCords = panel.GetMirroredTileTargetCoordinate();
-				
+
 				if (item.hammer > 0) {
 					Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-					if (!tile.HasTile) return;
-
+					// if (!tile.HasTile) return; -> !walls
+					
 					Player.tileTargetX = (int) mirroredCords.X;
 					Player.tileTargetY = (int) mirroredCords.Y;
+					
+					if (!walls) {
 
-					int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
-					Tile mirrorTile = Framing.GetTileSafely(mirroredCords);
-					AutoHammer.ChangeSlope((SlopeType)mirroredSlopes[(int)tile.Slope], tile.IsHalfBlock);
+						int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+						Tile mirrorTile = Framing.GetTileSafely(mirroredCords);
+						AutoHammer.ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
+					}
 				}
+				else if (item.pick > 0) {
+					Player.tileTargetX = (int) mirroredCords.X;
+					Player.tileTargetY = (int) mirroredCords.Y;
+					
+					orig.Invoke(player, item, out walls, Player.tileTargetX, Player.tileTargetY);
+				}
+			};
+
+			On.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
+				orig.Invoke(player, item, x, y);
 				
-				if (item.pick > 0) {
-					//Calculate if can killtile and remove if so, idk. check vanilla
-				}
+				var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+				if (!panel.IsVisible) return;
+				
+				Vector2 mirroredCords = panel.GetMirroredTileTargetCoordinate();
+				
+				Player.tileTargetX = (int) mirroredCords.X;
+				Player.tileTargetY = (int) mirroredCords.Y;
+				player.controlUseItem = true;
+				player.releaseUseItem = false;
+				
+				orig.Invoke(player, item, Player.tileTargetX, Player.tileTargetY);
+
 			};
 			
 			int oldItemUse = 0;
 			On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 				oldItemUse = player.ItemUsesThisAnimation;
 				orig.Invoke(player, item, multiplier, useItem);
-				Console.WriteLine("used");
 				if (oldItemUse != player.ItemUsesThisAnimation) {
-					Console.WriteLine("used inner");
 					var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 					if (!panel.IsVisible) return;
 					
 					Vector2 mirroredCords = panel.GetMirroredTileTargetCoordinate();
 					
 					//Tile Placements
-					Console.WriteLine($"{item.createTile} {item.createWall}");
-					Console.WriteLine($"{item.createTile >= TileID.Dirt} {item.createWall >= WallID.Stone}");
 					if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone) {
 						Player.tileTargetX = (int) mirroredCords.X;
 						Player.tileTargetY = (int) mirroredCords.Y;
@@ -108,20 +126,22 @@ namespace BuilderEssentials
 						player.itemAnimationMax = item.useAnimation;
 						player.itemTime = 0;
 
-						//Not needed?
-						// self.controlUseItem = true;
-						// self.releaseUseItem = true;
-
 						Main.LocalPlayer.direction *= -1;
 						player.ItemCheck(player.whoAmI); //Would like to skip pre item check but oh well
 						Main.LocalPlayer.direction *= -1;
 					}
 
-					if (item.axe > 0) {
-						Console.WriteLine("Axe");
-						
-						//Should this work on trees?
-					}
+					// if (item.hammer > 0) {
+					// 	MethodInfo UseMiningTools = Code.GetType().GetMethod("ItemCheck_UseMiningTools",
+					// 		BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod);
+					//
+					// 	Player.tileTargetX = (int) mirroredCords.X;
+					// 	Player.tileTargetY = (int) mirroredCords.Y;
+					// 	player.controlUseItem = true;
+					// 	player.releaseUseItem = false;
+					// 	
+					// 	UseMiningTools.Invoke(player, new[] {item});
+					// }
 				}
 			};
 		}
