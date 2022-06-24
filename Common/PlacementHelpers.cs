@@ -140,6 +140,7 @@ public static class PlacementHelpers
         if (!ValidTileCoordinates(x, y)) return;
 
         Tile tile = Framing.GetTileSafely(x, y);
+        //TODO: Player.HasEnoughPickPowerToHurtTile instead comparing that
         if (needPickPower && TileLoader.GetTile(tile.TileType)?.MinPick > Main.LocalPlayer.GetBestPickaxe().pick) return;
         
         if (removeTile && (WorldGen.CanKillTile(x, y, out _)))

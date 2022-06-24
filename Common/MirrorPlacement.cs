@@ -10,7 +10,17 @@ namespace BuilderEssentials.Common;
 
 public static class MirrorPlacement
 {
+    //ItemCheck_UseMiningTools_ActuallyUseMiningTool -> Event to mirror tile breaking?
+    //or ItemCheck_StartActualUse?
     
+    //TileObject.DrawPreview so we can see preview in real time?
+
+    public static Vector2 GetMirroredTileTargetCoordinate() {
+
+        //Mirror coords through mirror axis and return them
+        
+        return default;
+    }
     
     public static void PlaceTile() {
         //PlaceThing_Tiles_PlaceIt
@@ -23,7 +33,7 @@ public static class MirrorPlacement
         
         Console.WriteLine("First Invoke");
         // placeit.Invoke(Main.LocalPlayer, new object[] { });
-        placeit.Invoke(Main.LocalPlayer, new object[] {false, default(TileObject)});
+        // placeit.Invoke(Main.LocalPlayer, new object[] {false, default(TileObject)});
         Console.WriteLine("After First Invoke");
 
         var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();

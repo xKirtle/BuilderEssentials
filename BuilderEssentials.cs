@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using BuilderEssentials.Assets;
 using BuilderEssentials.Common;
+using Microsoft.Xna.Framework;
+using MonoMod.Utils;
 using Newtonsoft.Json;
 using Terraria;
 using Terraria.DataStructures;
@@ -51,15 +54,41 @@ namespace BuilderEssentials
 		}
 
 		public override void Load() {
-			// On.Terraria.Player.PlaceThing += (orig, self) =>
-			// {
-			// 	// Console.WriteLine("Place Thing");
-			// 	orig.Invoke(self);
-			// 	// Console.WriteLine("After Placing");
-			// 	// MirrorPlacement.PlaceTile();
-			// 	
-			// 	// TileObject.objectPreview.CopyFrom(new TileObjectPreviewData());
-			// };
+			//Runs whenever mining capable items are used
+			On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += (
+				On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, 
+				Terraria.Player self, Item item, out bool walls, int i, int i1) =>
+			{
+				orig.Invoke(self, item, out walls, i, i1);
+			};
+
+			//Runs every item.useTime or useAnimation (idk)
+			On.Terraria.Player.ItemCheck_StartActualUse += (orig, self, item) =>
+			{
+				orig.Invoke(self, item);
+			};
+
+			//Runs on successful placements
+			On.Terraria.Player.ApplyItemTime += (orig, self, item, multiplier, useItem) =>
+			{
+				orig.Invoke(self, item, multiplier, useItem);
+				if (self.ItemUsesThisAnimation == 1) {
+
+					Vector2 mirroredCords = MirrorPlacement.GetMirroredTileTargetCoordinate();
+					Player.tileTargetX = (int) mirroredCords.X;
+					Player.tileTargetY = (int) mirroredCords.Y;
+					
+					//If set to 0, makes it so ItemCheck_StartActualUse is called again
+					self.itemAnimation = item.useAnimation;
+					self.itemAnimationMax = item.useAnimation;
+					self.itemTime = 0;
+					//Not needed?
+					// self.controlUseItem = true;
+					// self.releaseUseItem = true;
+					
+					self.ItemCheck(self.whoAmI); //Would like to skip pre item check but oh well
+				}
+			};
 		}
 
 		public override void Unload() {

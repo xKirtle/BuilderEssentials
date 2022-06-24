@@ -21,6 +21,7 @@ public abstract class BuilderEssentialsItem : ModItem
         }
     }
     
+    //TODO: Player.IsTargetTileInItemRange
     public bool ItemHasRange(float itemRangeInTiles = default) {
         Vector2 screenPosition = Main.screenPosition.ToTileCoordinates().ToVector2();
         Vector2 playerCenterScreen = Main.LocalPlayer.Center.ToTileCoordinates().ToVector2() - screenPosition;

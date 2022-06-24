@@ -30,18 +30,7 @@ public class MirrorWandPanel : BaseShapePanel
         cs.IsWithinRange(cs.LeftMouse.End.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
         cs.IsWithinRange(cs.LeftMouse.Start.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y) &&
         cs.IsWithinRange(cs.LeftMouse.End.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
-
-    public override void OnInitialize() {
-        base.OnInitialize();
-
-        cs.LeftMouse.OnMouseDown += _ => {
-            //Better way to check if it's a tile placement?
-            if (!IsHoldingBindingItem() && CanPlaceItems() && Main.LocalPlayer.HasItem(ModContent.ItemType<MirrorWand>()))
-                MirrorPlacement.PlaceTile();
-            // Main.LocalPlayer.PlaceThing();
-        };
-    }
-
+    
     public override void PlotSelection() {
         //Selected area
         ShapeHelpers.PlotRectangle(cs.RightMouse.Start, cs.RightMouse.End, ShapeHelpers.Blue, 0.90f, false);
