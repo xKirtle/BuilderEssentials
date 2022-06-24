@@ -139,7 +139,7 @@ public static class PlacementHelpers
 
         if (!ValidTileCoordinates(x, y)) return false;
 
-        Tile tile = Framing.GetTileSafely(x, y);
+        // Tile tile = Framing.GetTileSafely(x, y);
 
         if (needPickPower && !Main.LocalPlayer.HasEnoughPickPowerToHurtTile(x, y)) return false;
         
