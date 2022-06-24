@@ -3,7 +3,9 @@ using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace BuilderEssentials.Content.UI;
 
@@ -73,5 +75,46 @@ public class MirrorWandPanel : BaseShapePanel
         bool hasItemInInventory = Main.LocalPlayer.HasItem(ModContent.ItemType<MirrorWand>());
         if ((hasItemInInventory && !IsVisible) || (!hasItemInInventory && IsVisible))
             ShapesUIState.TogglePanelVisibility<MirrorWandPanel>();
+    }
+    
+    public Vector2 GetMirroredTileTargetCoordinate() {
+        Vector2 result = new Vector2(Player.tileTargetX, Player.tileTargetY);
+
+        Vector2 selStart = cs.RightMouse.Start;
+        Vector2 selEnd = cs.RightMouse.End;
+        Vector2 mirStart = cs.LeftMouse.Start;
+        Vector2 mirEnd = cs.LeftMouse.End;
+        
+        if (!validMirrorPlacement || !IsMouseWithinSelection()) return result;
+        
+        if (!cs.IsWithinRange(result.X, selStart.X, selEnd.X, true) &&
+            !cs.IsWithinRange(result.Y, selStart.Y, selEnd.Y, true)) return result;
+        
+        Tile tile = Framing.GetTileSafely(result);
+        TileObjectData data = TileObjectData.GetTileData(tile);
+        
+        Vector2 offset = Vector2.Zero;
+        if (data != null) {
+            //TODO: figure out multi tile origin offset fix math    
+        }
+        
+        if (!horizontalMirror) {
+            float minMirrorX = Math.Min(mirStart.X, mirEnd.X);
+            bool leftOfTheMirror = result.X < minMirrorX;
+            float distanceToMirror = Math.Min(Math.Abs(result.X - mirStart.X), Math.Abs(result.X - mirEnd.X));
+            
+            result.X += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.X) * (leftOfTheMirror ? 1 : -1));
+            int oldDir = Main.LocalPlayer.direction;
+            Main.LocalPlayer.direction *= -1;
+        }
+        else {
+            float minMirrorY = Math.Min(mirStart.Y, mirEnd.Y);
+            bool topOfTheMirror = result.Y < minMirrorY;
+            float distanceToMirror = Math.Min(Math.Abs(result.Y - mirStart.Y), Math.Abs(result.Y - mirEnd.Y));
+            
+            result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
+        }
+        
+        return result;
     }
 }

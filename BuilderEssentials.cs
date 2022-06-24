@@ -4,11 +4,14 @@ using System.Reflection;
 using System.Text;
 using BuilderEssentials.Assets;
 using BuilderEssentials.Common;
+using BuilderEssentials.Content.Items;
+using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using MonoMod.Utils;
 using Newtonsoft.Json;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials
@@ -54,39 +57,60 @@ namespace BuilderEssentials
 		}
 
 		public override void Load() {
-			//Runs whenever mining capable items are used
 			On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += (
 				On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, 
-				Terraria.Player self, Item item, out bool walls, int i, int i1) =>
-			{
-				orig.Invoke(self, item, out walls, i, i1);
+				Terraria.Player player, Item item, out bool walls, int x, int y) => {
+				orig.Invoke(player, item, out walls, x, y);
+
+				Console.WriteLine("mine");
 			};
+			
+			int oldItemUse = 0;
+			On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
+				oldItemUse = player.ItemUsesThisAnimation;
+				orig.Invoke(player, item, multiplier, useItem);
+				if (oldItemUse != player.ItemUsesThisAnimation) {
 
-			//Runs every item.useTime or useAnimation (idk)
-			On.Terraria.Player.ItemCheck_StartActualUse += (orig, self, item) =>
-			{
-				orig.Invoke(self, item);
-			};
-
-			//Runs on successful placements
-			On.Terraria.Player.ApplyItemTime += (orig, self, item, multiplier, useItem) =>
-			{
-				orig.Invoke(self, item, multiplier, useItem);
-				if (self.ItemUsesThisAnimation == 1) {
-
-					Vector2 mirroredCords = MirrorPlacement.GetMirroredTileTargetCoordinate();
-					Player.tileTargetX = (int) mirroredCords.X;
-					Player.tileTargetY = (int) mirroredCords.Y;
+					var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+					if (!panel.IsVisible) return;
 					
-					//If set to 0, makes it so ItemCheck_StartActualUse is called again
-					self.itemAnimation = item.useAnimation;
-					self.itemAnimationMax = item.useAnimation;
-					self.itemTime = 0;
-					//Not needed?
-					// self.controlUseItem = true;
-					// self.releaseUseItem = true;
+					Vector2 mirroredCords = panel.GetMirroredTileTargetCoordinate();
 					
-					self.ItemCheck(self.whoAmI); //Would like to skip pre item check but oh well
+					//Tile Placements
+					if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone) {
+						Player.tileTargetX = (int) mirroredCords.X;
+						Player.tileTargetY = (int) mirroredCords.Y;
+
+						//If set to 0, makes it so ItemCheck_StartActualUse is called again
+						player.itemAnimation = item.useAnimation;
+						player.itemAnimationMax = item.useAnimation;
+						player.itemTime = 0;
+
+						//Not needed?
+						// self.controlUseItem = true;
+						// self.releaseUseItem = true;
+
+						player.ItemCheck(player.whoAmI); //Would like to skip pre item check but oh well
+					}
+					
+					if (item.hammer > 0) {
+						Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+
+						Player.tileTargetX = (int) mirroredCords.X;
+						Player.tileTargetY = (int) mirroredCords.Y;
+						
+						int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+						int mirroredHammerIndex = mirroredSlopes[((int)tile.Slope + 1) % 5];
+						SlopeType newSlope = (SlopeType) mirroredHammerIndex;
+						bool isHalfBlock = !tile.IsHalfBlock && mirroredHammerIndex == 2;
+						AutoHammer.ChangeSlope(!isHalfBlock ? newSlope : tile.Slope, isHalfBlock);
+					}
+					
+					if (item.axe > 0) {
+						Console.WriteLine("Axe");
+						
+						//Should this work on trees?
+					}
 				}
 			};
 		}
