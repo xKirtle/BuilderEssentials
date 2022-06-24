@@ -74,6 +74,6 @@ public class MultiCraftingStation : BaseCraftingStation
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        Item.NewItem(null, i * 16, j * 16, 32, 16, ModContent.ItemType<MultiCraftingItem>());
+        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ModContent.ItemType<MultiCraftingItem>());
     }
 }
