@@ -41,8 +41,7 @@ public abstract class BaseToggleablePanel : UIElement
 {
     public bool IsVisible => Parent != null;
     public virtual int[] ItemBoundToDisplay { get; protected set; } = { -1 };
-
-    //Kirtle: Hacky workaround to fix mouse coords not matching screen coords because of UIScale?
+    
     private bool canDisplay = false;
     public override void OnActivate() {
         canDisplay = true;
