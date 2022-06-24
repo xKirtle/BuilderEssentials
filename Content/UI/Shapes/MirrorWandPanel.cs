@@ -104,8 +104,6 @@ public class MirrorWandPanel : BaseShapePanel
             float distanceToMirror = Math.Min(Math.Abs(result.X - mirStart.X), Math.Abs(result.X - mirEnd.X));
             
             result.X += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.X) * (leftOfTheMirror ? 1 : -1));
-            int oldDir = Main.LocalPlayer.direction;
-            Main.LocalPlayer.direction *= -1;
         }
         else {
             float minMirrorY = Math.Min(mirStart.Y, mirEnd.Y);

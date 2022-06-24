@@ -62,21 +62,43 @@ namespace BuilderEssentials
 				Terraria.Player player, Item item, out bool walls, int x, int y) => {
 				orig.Invoke(player, item, out walls, x, y);
 
-				Console.WriteLine("mine");
+				var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+				if (!panel.IsVisible) return;
+					
+				Vector2 mirroredCords = panel.GetMirroredTileTargetCoordinate();
+				
+				if (item.hammer > 0) {
+					Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+					if (!tile.HasTile) return;
+
+					Player.tileTargetX = (int) mirroredCords.X;
+					Player.tileTargetY = (int) mirroredCords.Y;
+
+					int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+					Tile mirrorTile = Framing.GetTileSafely(mirroredCords);
+					AutoHammer.ChangeSlope((SlopeType)mirroredSlopes[(int)tile.Slope], tile.IsHalfBlock);
+				}
+				
+				if (item.pick > 0) {
+					//Calculate if can killtile and remove if so, idk. check vanilla
+				}
 			};
 			
 			int oldItemUse = 0;
 			On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 				oldItemUse = player.ItemUsesThisAnimation;
 				orig.Invoke(player, item, multiplier, useItem);
+				Console.WriteLine("used");
 				if (oldItemUse != player.ItemUsesThisAnimation) {
-
+					Console.WriteLine("used inner");
 					var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 					if (!panel.IsVisible) return;
 					
 					Vector2 mirroredCords = panel.GetMirroredTileTargetCoordinate();
 					
 					//Tile Placements
+					Console.WriteLine($"{item.createTile} {item.createWall}");
+					Console.WriteLine($"{item.createTile >= TileID.Dirt} {item.createWall >= WallID.Stone}");
 					if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone) {
 						Player.tileTargetX = (int) mirroredCords.X;
 						Player.tileTargetY = (int) mirroredCords.Y;
@@ -90,22 +112,11 @@ namespace BuilderEssentials
 						// self.controlUseItem = true;
 						// self.releaseUseItem = true;
 
+						Main.LocalPlayer.direction *= -1;
 						player.ItemCheck(player.whoAmI); //Would like to skip pre item check but oh well
+						Main.LocalPlayer.direction *= -1;
 					}
-					
-					if (item.hammer > 0) {
-						Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
 
-						Player.tileTargetX = (int) mirroredCords.X;
-						Player.tileTargetY = (int) mirroredCords.Y;
-						
-						int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
-						int mirroredHammerIndex = mirroredSlopes[((int)tile.Slope + 1) % 5];
-						SlopeType newSlope = (SlopeType) mirroredHammerIndex;
-						bool isHalfBlock = !tile.IsHalfBlock && mirroredHammerIndex == 2;
-						AutoHammer.ChangeSlope(!isHalfBlock ? newSlope : tile.Slope, isHalfBlock);
-					}
-					
 					if (item.axe > 0) {
 						Console.WriteLine("Axe");
 						
