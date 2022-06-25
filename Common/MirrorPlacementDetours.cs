@@ -9,6 +9,20 @@ namespace BuilderEssentials.Common;
 
 public static class MirrorPlacementDetours
 {
+	internal static void MirrorPlacementAction(Action action, bool shouldReduceStack = false, int itemType = 0) {
+		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+
+		if (panel.IsVisible && panel.IsMouseWithinSelection()) {
+			Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
+			Player.tileTargetX = (int) mirroredCoords.X;
+			Player.tileTargetY = (int) mirroredCoords.Y;
+
+			//TODO: reducing stack not working
+			// if (!shouldReduceStack || PlacementHelpers.CanReduceItemStack(itemType, shouldBeHeld: true))
+			action?.Invoke();
+		}
+	}
+	
     public static void LoadDetours() {
 	    //Kirtle: Detour WorldGen.PlaceTile/Wall and WorldGen.RemoveTile/Wall,
 	    //see if coords are inside selection and mirror them by invoking orig again??
@@ -115,21 +129,7 @@ public static class MirrorPlacementDetours
 
 		//TODO: Multi tiles are not working in PlaceTile, I might need to go back to ApplyItemTime
 		//Hammering is also not working somehow (exactly like it was before, minus the useTime/Animation fuckery)
-		
-		static void MirrorPlacementAction(Action action, bool shouldReduceStack = false, int itemType = 0) {
-			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 
-			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
-				Player.tileTargetX = (int) mirroredCoords.X;
-				Player.tileTargetY = (int) mirroredCoords.Y;
-
-				//TODO: reducing stack not working
-				// if (!shouldReduceStack || PlacementHelpers.CanReduceItemStack(itemType, shouldBeHeld: true))
-					action?.Invoke();
-			}
-		}
-		
 		On.Terraria.WorldGen.PlaceTile += (orig, x, y, type, mute, forced, plr, style) => {
 			bool baseReturn = orig.Invoke(x, y, type, mute, forced, plr, style);
 			
@@ -235,7 +235,25 @@ public static class MirrorPlacementDetours
 			});
 		};
 		
-		//TODO: Painting!
+		On.Terraria.WorldGen.paintTile += (orig, x, y, color, sync) => {
+			bool baseReturn = orig.Invoke(x, y, color, sync);
+
+			MirrorPlacementAction(() => {
+				orig.Invoke(Player.tileTargetX, Player.tileTargetY, color, sync);
+			});
+			
+			return baseReturn;
+		};
+		
+		On.Terraria.WorldGen.paintWall += (orig, x, y, color, sync) => {
+			bool baseReturn = orig.Invoke(x, y, color, sync);
+
+			MirrorPlacementAction(() => {
+				orig.Invoke(Player.tileTargetX, Player.tileTargetY, color, sync);
+			});
+			
+			return baseReturn;
+		};
 
 		// On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += (
 		// 	On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig,

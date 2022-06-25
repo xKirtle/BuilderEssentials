@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
@@ -56,9 +57,17 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
                 (toolIndex == 0 && (!tile.HasTile || tile.TileType < 0)) ||
                 (toolIndex == 1 && tile.WallType <= 0)) return true;
 
-            PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedWorldCoords);
+            PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedTileCoords.ToPoint());
+
+            MirrorPlacementDetours.MirrorPlacementAction(() =>
+                PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedTileCoords.ToPoint()));
         }
-        else ScrapPaint(BEPlayer.PointedWorldCoords);
+        else {
+            ScrapPaint(BEPlayer.PointedTileCoords.ToPoint());
+            
+            MirrorPlacementDetours.MirrorPlacementAction(() => 
+                ScrapPaint(BEPlayer.PointedTileCoords.ToPoint()));
+        }
 
         return true;
     }
@@ -110,8 +119,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         return -1; //it will never reach here
     }
     
-    public static void PaintTileOrWall(byte color, int selectedTool, Vector2 coords) {
-        Tile tile = Framing.GetTileSafely(coords);
+    public static void PaintTileOrWall(byte color, int selectedTool, Point coords) {
+        Tile tile = Framing.GetTileSafely(coords.X, coords.Y);
         bool canPaint = true;
         
         if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().InfinitePaint) {
@@ -130,38 +139,38 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         bool needSync = false;
 
         if (selectedTool == 0 && tile.HasTile && tile.TileType >= 0 && tile.TileColor != color) {
-            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, color, tile.TileColor);
+            WorldGen.paintEffect(coords.X, coords.Y, color, tile.TileColor);
             tile.TileColor = color;
             needSync = true;
         }
         else if (selectedTool == 1 && tile.WallType > 0 && tile.WallColor != color) {
-            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, color, tile.WallColor);
+            WorldGen.paintEffect(coords.X, coords.Y, color, tile.WallColor);
             tile.WallColor = color;
             needSync = true;
         }
 
         if (needSync && Main.netMode != NetmodeID.SinglePlayer)
-            NetMessage.SendTileSquare(-1, (int)coords.X / 16, (int)coords.Y / 16, 1);
+            NetMessage.SendTileSquare(-1, coords.X, coords.Y, 1);
     }
 
-    public static void ScrapPaint(Vector2 coords) {
+    public static void ScrapPaint(Point coords) {
         Tile tile = Framing.GetTileSafely(coords);
         bool needSync = false;
 
         if (tile.TileColor != 0) {
-            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, 0, tile.TileColor);
+            WorldGen.paintEffect(coords.X, coords.Y, 0, tile.TileColor);
             tile.TileColor = 0;
             needSync = true;
         }
         else if (tile.WallColor != 0) {
-            WorldGen.paintEffect((int)coords.X / 16, (int)coords.Y / 16, 0, tile.WallColor);
+            WorldGen.paintEffect(coords.X,coords.Y, 0, tile.WallColor);
             tile.WallColor = 0;
             needSync = true;
         }
 
         if (needSync && Main.netMode != NetmodeID.SinglePlayer) {
-            NetMessage.SendData(MessageID.PaintTile, number: (int)coords.X / 16, number2: (int)coords.Y / 16);
-            NetMessage.SendData(MessageID.PaintWall, number: (int)coords.X / 16, number2: (int)coords.Y / 16);
+            NetMessage.SendData(MessageID.PaintTile, number: coords.X, number2: coords.Y);
+            NetMessage.SendData(MessageID.PaintWall, number: coords.X, number2: coords.Y);
         }
     }
 }
