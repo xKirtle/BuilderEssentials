@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.Content.Items;
+﻿using System;
+using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -110,20 +111,31 @@ public static class MirrorPlacementDetours
 		// 	}
 		// 	else orig.Invoke(player);
 		// };
-		
-		//TODO: Check if can reduce stack once more in Placement methods before placing
 
+
+		//TODO: Multi tiles are not working in PlaceTile, I might need to go back to ApplyItemTime
+		//Hammering is also not working somehow (exactly like it was before, minus the useTime/Animation fuckery)
+		
+		static void MirrorPlacementAction(Action action, bool shouldReduceStack = false, int itemType = 0) {
+			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+
+			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
+				Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
+				Player.tileTargetX = (int) mirroredCoords.X;
+				Player.tileTargetY = (int) mirroredCoords.Y;
+
+				//TODO: reducing stack not working
+				// if (!shouldReduceStack || PlacementHelpers.CanReduceItemStack(itemType, shouldBeHeld: true))
+					action?.Invoke();
+			}
+		}
+		
 		On.Terraria.WorldGen.PlaceTile += (orig, x, y, type, mute, forced, plr, style) => {
 			bool baseReturn = orig.Invoke(x, y, type, mute, forced, plr, style);
 			
-			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
-
-				Player.tileTargetX = (int) mirroredCoords.X;
-				Player.tileTargetY = (int) mirroredCoords.Y;
+			MirrorPlacementAction(() => {
 				orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, mute, forced, plr, style);
-			}
+			}, true, type);
 
 			return baseReturn;
 		};
@@ -131,15 +143,9 @@ public static class MirrorPlacementDetours
 		On.Terraria.WorldGen.PlaceWall += (orig, x, y, type, mute) => {
 			orig.Invoke(x, y, type, mute);
 
-			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
-				
-				Player.tileTargetX = (int) mirroredCoords.X;
-				Player.tileTargetY = (int) mirroredCoords.Y;
-				
+			MirrorPlacementAction(() => {
 				orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, mute);
-			}
+			}, true, type);
 		};
 		
 		On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
@@ -152,49 +158,119 @@ public static class MirrorPlacementDetours
 			else orig.Invoke(player);
 		};
 
+		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
+			bool baseReturn = orig.Invoke(x, y, type, style);
+
+			MirrorPlacementAction(() => {
+				orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, style);
+			}, true, type);
+
+			return baseReturn;
+		};
+		
+		On.Terraria.WorldGen.ReplaceWall += (orig, x, y, type) => {
+			bool baseReturn = orig.Invoke(x, y, type);
+
+			MirrorPlacementAction(() => {
+				orig.Invoke(Player.tileTargetX, Player.tileTargetY, type);
+			}, true, type);
+
+			return baseReturn;
+		};
+
 		On.Terraria.WorldGen.KillTile += (orig, x, y, fail, only, item) => {
 			orig.Invoke(x, y, fail, only, item);
-
-			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
-
-				Player.tileTargetX = (int) mirroredCoords.X;
-				Player.tileTargetY = (int) mirroredCoords.Y;
+			
+			MirrorPlacementAction(() => {
 				orig.Invoke(Player.tileTargetX, Player.tileTargetY, fail, only, item);
-			}
+			});
 		};
 		
 		On.Terraria.WorldGen.KillWall += (orig, x, y, fail) => {
 			orig.Invoke(x, y, fail);
 
-			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
-
-				Player.tileTargetX = (int) mirroredCoords.X;
-				Player.tileTargetY = (int) mirroredCoords.Y;
+			MirrorPlacementAction(() => {
 				orig.Invoke(Player.tileTargetX, Player.tileTargetY, fail);
-			}
+			});
+		};
+
+		On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += (
+			On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig,
+			Terraria.Player player, Item item, out bool walls, int x, int y) => {
+			orig.Invoke(player, item, out walls, x, y);
+			
+			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+			bool isWall = walls;
+			
+			MirrorPlacementAction(() => {
+				if (item.hammer > 0) {
+					Tile mirrorTile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+					if (!isWall) {
+						int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+						AutoHammer.ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
+					}
+				}
+			});
 		};
 		
-		//TODO: Not working
-		On.Terraria.WorldGen.SlopeTile += (orig, x, y, slope, effects) => {
-			bool baseReturn = orig.Invoke(x, y, slope, effects);
-			
+		On.Terraria.Player.ItemCheck_UseMiningTools_TryFindingWallToHammer += (
+			On.Terraria.Player.orig_ItemCheck_UseMiningTools_TryFindingWallToHammer orig, out int x, out int y) => {
 			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
-				Tile tile = Framing.GetTileSafely(x, y);
-				int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
-				
-				Player.tileTargetX = (int) mirroredCoords.X;
-				Player.tileTargetY = (int) mirroredCoords.Y;
-
-				orig.Invoke(Player.tileTargetX, Player.tileTargetY, mirroredSlopes[(int)tile.Slope], effects);
+				//Messing with vanilla behaviour here for the sake of MirrorWand?
+				x = Player.tileTargetX;
+				y = Player.tileTargetY;
 			}
-			
-			return baseReturn;
+			else orig.Invoke(out x, out y);
 		};
+		
+		On.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
+			orig.Invoke(player, item, x, y);
+			
+			MirrorPlacementAction(() => {
+				player.controlUseItem = true;
+				player.releaseUseItem = false;
+		
+				orig.Invoke(player, item, Player.tileTargetX, Player.tileTargetY);
+			});
+		};
+		
+		//TODO: Painting!
+
+		// On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += (
+		// 	On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig,
+		// 	Terraria.Player player, Item item, out bool walls, int x, int y) => {
+		// 	orig.Invoke(player, item, out walls, x, y);
+		//
+		// 	var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+		// 	if (!panel.IsVisible) return;
+		//
+		// 	Vector2 mirroredCords = panel.GetMirroredTileTargetCoordinate();
+		//
+		// 	if (item.hammer > 0) {
+		// 		Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+		// 		// if (!tile.HasTile) return; -> !walls
+		//
+		// 		Player.tileTargetX = (int) mirroredCords.X;
+		// 		Player.tileTargetY = (int) mirroredCords.Y;
+		// 		player.controlUseItem = true;
+		// 		player.releaseUseItem = false;
+		//
+		// 		if (!walls) {
+		//
+		// 			// int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+		// 			// Tile mirrorTile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+		// 			// Console.WriteLine($"Tile after?: {(int)tile.Slope} {tile.IsHalfBlock}");
+		// 			// Console.WriteLine($"Mirror before: {(int)mirrorTile.Slope} {mirrorTile.IsHalfBlock}");
+		// 			// AutoHammer.ChangeSlope((SlopeType) tile.Slope, tile.IsHalfBlock);
+		// 			// Console.WriteLine($"Mirror after: {(int)mirrorTile.Slope} {mirrorTile.IsHalfBlock}");
+		// 			// Console.WriteLine("Change Slope");
+		// 			
+		// 			int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+		// 			Tile mirrorTile = Framing.GetTileSafely(mirroredCords);
+		// 			AutoHammer.ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
+		// 		}
+		// 	}
+		// };
     }
 }

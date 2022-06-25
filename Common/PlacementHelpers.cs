@@ -20,10 +20,10 @@ public static class PlacementHelpers
         => i >= 0 && i < Main.maxTilesX && j >= 0 && j < Main.maxTilesY;
     
     
-    public static bool CanReduceItemStack(Item item, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
-        if (!ItemLoader.ConsumeItem(item, Main.LocalPlayer)) return true;
+    public static bool CanReduceItemStack(int type, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
+        if (!ItemLoader.ConsumeItem(new Item(type), Main.LocalPlayer)) return true;
 
-        if (shouldBeHeld && Main.LocalPlayer.HeldItem.type == item.type && Main.LocalPlayer.HeldItem.stack >= amount) {
+        if (shouldBeHeld && Main.LocalPlayer.HeldItem.type == type && Main.LocalPlayer.HeldItem.stack >= amount) {
             if (reduceStack)
                 Main.LocalPlayer.HeldItem.stack -= amount;
 
@@ -31,7 +31,7 @@ public static class PlacementHelpers
         }
 
         foreach (Item itemInv in Main.LocalPlayer.inventory) {
-            if (itemInv.type == item.type && itemInv.stack >= amount) {
+            if (itemInv.type == type && itemInv.stack >= amount) {
                 if (reduceStack)
                     itemInv.stack -= amount;
 
@@ -82,7 +82,7 @@ public static class PlacementHelpers
             return tile;
 
         //Check if enough materials
-        if (!CanReduceItemStack(item)) return tile;
+        if (!CanReduceItemStack(item.type)) return tile;
         
         if (replaceTilesEnabled) {
             //Can't replace Air
