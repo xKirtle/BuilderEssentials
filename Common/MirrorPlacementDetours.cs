@@ -19,6 +19,9 @@ public static class MirrorPlacementDetours
 			Player.tileTargetX = (int) mirroredCoords.X;
 			Player.tileTargetY = (int) mirroredCoords.Y;
 
+			//Paints don't work if there's not enough paint
+			//Tiles are being mirrored even though when stack is only 1
+			
 			//TODO: reducing stack not working -> Check if can invoke action and has enough stack
 			// if (!shouldReduceStack || PlacementHelpers.CanReduceItemStack(itemType, shouldBeHeld: true))
 			action?.Invoke();
@@ -26,6 +29,7 @@ public static class MirrorPlacementDetours
 	}
 	
     public static void LoadDetours() {
+	    //TODO: ApplyItemTime will remove both items from stack but it's placed/mirrored before stack is checked
 	    On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 		    orig.Invoke(player, item, multiplier, useItem);
 
@@ -33,8 +37,6 @@ public static class MirrorPlacementDetours
 		    if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
 		    
 			MirrorPlacementAction(() => {
-				// player.reuseDelay = item.useTime;
-				
 				int itemTime = player.itemTime;
 				player.itemTime = 0;
 		
@@ -44,9 +46,15 @@ public static class MirrorPlacementDetours
 
 				player.itemTime = itemTime;
 			});
-			
-			//If player.toolTime == 1 -> it's a tool
-		};
+	    };
+
+	    On.Terraria.WorldGen.PlaceWall += (orig, x, y, type, mute) => {
+		    orig.Invoke(x, y, type, mute);
+		    
+		    MirrorPlacementAction(() => {
+			    orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, mute);
+		    });
+	    };
 
 	    On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
 			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
@@ -58,6 +66,7 @@ public static class MirrorPlacementDetours
 			else orig.Invoke(player);
 		};
 
+	    //TODO: Replace tile/wall only removes 1 from stack
 		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
 			bool baseReturn = orig.Invoke(x, y, type, style);
 
@@ -142,6 +151,7 @@ public static class MirrorPlacementDetours
 			});
 		};
 		
+		//TODO: Not running on vanilla paint tools because they just set tile.color()...
 		On.Terraria.WorldGen.paintTile += (orig, x, y, color, sync) => {
 			bool baseReturn = orig.Invoke(x, y, color, sync);
 
