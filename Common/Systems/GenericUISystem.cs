@@ -17,7 +17,7 @@ public abstract class UISystem<T> : ModSystem where T : UIState, new()
 {
     public UserInterface userInterface;
     public T uiState;
-    public virtual string VanillaInterfaceLayer { get; protected set; } = "Vanilla: Cursor";
+    public virtual string VanillaInterfaceLayer { get; protected set; } = "Vanilla: Ruler";
     public virtual string InterfaceLayerName { get; protected set; } = typeof(T).Name;
     public virtual InterfaceScaleType InterfaceScaleType { get; protected set; } = InterfaceScaleType.UI;
 
