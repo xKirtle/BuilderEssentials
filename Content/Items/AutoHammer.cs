@@ -70,8 +70,17 @@ public class AutoHammer : BaseItemToggleableUI
         if (canChangeSlope) {
             var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             //Can the selected index change between CanUseItem and UseItem at all?
-            if (panel.selectedIndex != -1)
+            if (panel.selectedIndex != -1) {
                 ChangeSlope(panel.slopeType, panel.isHalfBlock);
+                
+                //Add MirrorPlacement logic
+                Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+                MirrorPlacementDetours.MirrorPlacementAction(() => {
+                    Tile mirrorTile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+                    int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+                    ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
+                });
+            }
 
             Item.hammer = 80;
             canChangeSlope = false;
