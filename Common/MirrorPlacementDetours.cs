@@ -19,54 +19,36 @@ public static class MirrorPlacementDetours
 			Player.tileTargetX = (int) mirroredCoords.X;
 			Player.tileTargetY = (int) mirroredCoords.Y;
 
-			//TODO: reducing stack not working
+			//TODO: reducing stack not working -> Check if can invoke action and has enough stack
 			// if (!shouldReduceStack || PlacementHelpers.CanReduceItemStack(itemType, shouldBeHeld: true))
 			action?.Invoke();
 		}
 	}
 	
     public static void LoadDetours() {
-	    //TODO: Multi tiles are not working in PlaceTile, need to use ApplyItemTime
-
 	    On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
+		    orig.Invoke(player, item, multiplier, useItem);
 
-			Console.WriteLine("ApplyItemTime");
-			orig.Invoke(player, item, multiplier, useItem);
-
+		    //Only Tile Placements
+		    if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
+		    
 			MirrorPlacementAction(() => {
-				//Tile Placements
-				if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone) {
-					
-					// if (player.ItemUsesThisAnimation != 1) return;
-					
-					player.itemTime = 0;
-			
-					player.direction *= -1;
-					player.ItemCheck(player.whoAmI); //Would like to skip pre item check but oh well
-					player.direction *= -1;
-				}
+				// player.reuseDelay = item.useTime;
+				
+				int itemTime = player.itemTime;
+				player.itemTime = 0;
+		
+				player.direction *= -1;
+				player.ItemCheck(player.whoAmI); //Would like to skip pre item check but oh well
+				player.direction *= -1;
+
+				player.itemTime = itemTime;
 			});
+			
+			//If player.toolTime == 1 -> it's a tool
 		};
 
-	    // On.Terraria.WorldGen.PlaceTile += (orig, x, y, type, mute, forced, plr, style) => {
-		// 	bool baseReturn = orig.Invoke(x, y, type, mute, forced, plr, style);
-		// 	
-		// 	MirrorPlacementAction(() => {
-		// 		orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, mute, forced, plr, style);
-		// 	}, true, type);
-		//
-		// 	return baseReturn;
-		// };
-
-		// On.Terraria.WorldGen.PlaceWall += (orig, x, y, type, mute) => {
-		// 	orig.Invoke(x, y, type, mute);
-		//
-		// 	MirrorPlacementAction(() => {
-		// 		orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, mute);
-		// 	}, true, type);
-		// };
-		
-		On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
+	    On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
 			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
 				//Messing with vanilla behaviour here for the sake of MirrorWand?
@@ -96,14 +78,23 @@ public static class MirrorPlacementDetours
 			return baseReturn;
 		};
 
-		On.Terraria.WorldGen.KillTile += (orig, x, y, fail, only, item) => {
-			orig.Invoke(x, y, fail, only, item);
+		// On.Terraria.WorldGen.KillTile += (orig, x, y, fail, only, item) => {
+		// 	orig.Invoke(x, y, fail, only, item);
+		// 	
+		// 	MirrorPlacementAction(() => {
+		// 		orig.Invoke(Player.tileTargetX, Player.tileTargetY, fail, only, item);
+		// 	});
+		// };
+
+		//Works better than KillTile because of MultiTiles not breaking entirely on KillTile
+		On.Terraria.Player.PickTile += (orig, player, x, y, power) => {
+			orig.Invoke(player, x, y, power);
 			
 			MirrorPlacementAction(() => {
-				orig.Invoke(Player.tileTargetX, Player.tileTargetY, fail, only, item);
+				orig.Invoke(player, Player.tileTargetX, Player.tileTargetY, power);
 			});
 		};
-		
+
 		On.Terraria.WorldGen.KillWall += (orig, x, y, fail) => {
 			orig.Invoke(x, y, fail);
 
@@ -112,26 +103,23 @@ public static class MirrorPlacementDetours
 			});
 		};
 
-		On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += (
-			On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig,
-			Terraria.Player player, Item item, out bool walls, int x, int y) => {
-			orig.Invoke(player, item, out walls, x, y);
+		On.Terraria.Player.ItemCheck_UseMiningTools_TryPoundingTile += (
+			On.Terraria.Player.orig_ItemCheck_UseMiningTools_TryPoundingTile orig, Player player, Item item, int id,
+			ref bool wall, int x, int y) => {
+			orig.Invoke(player, item, id, ref wall, x, y);
 			
 			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-			bool isWall = walls;
+			if (wall) return;
 			
-			//TODO: Add support for AutoHammer custom slope placement
 			MirrorPlacementAction(() => {
 				if (item.hammer > 0) {
 					Tile mirrorTile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-					if (!isWall) {
-						int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
-						AutoHammer.ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
-					}
+					int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+					AutoHammer.ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
 				}
 			});
 		};
-		
+
 		On.Terraria.Player.ItemCheck_UseMiningTools_TryFindingWallToHammer += (
 			On.Terraria.Player.orig_ItemCheck_UseMiningTools_TryFindingWallToHammer orig, out int x, out int y) => {
 			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
