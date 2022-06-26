@@ -80,7 +80,7 @@ public class AutoHammer : BaseItemToggleableUI
         return true;
     }
 
-    //Kirtle: Tile.SmoothSlope for the edge case where it looks glitched?
+    //Kirtle: Tile.SmoothSlope for the edge case (halfBrick) where it looks glitched?
     public static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {

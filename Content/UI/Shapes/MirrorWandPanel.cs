@@ -87,9 +87,9 @@ public class MirrorWandPanel : BaseShapePanel
         
         if (!validMirrorPlacement || !IsMouseWithinSelection()) return result;
         
-        //Check if coords intersect mirror axis
-        if (cs.IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
-            cs.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
+        //Check if coords can be used by current mirror axis
+        if (!cs.IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
+            !cs.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
 
         Tile tile = Framing.GetTileSafely(result);
         TileObjectData data = TileObjectData.GetTileData(tile);
