@@ -33,7 +33,29 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
                 panel.Remove();
                 panel.Deactivate();
             }
+            
+            panel.UpdateRegardlessOfVisibility();
         }
+    }
+    
+    public void UpdateMouseSelectedColor_PaintBrushPanel() {
+        var panel = GetUIPanel<PaintBrushPanel>();
+        if (panel.selectedColorMouse == null) return;
+        
+        if (!panel.IsVisible && (panel.colorIndex != -1 && panel.toolIndex != 2))
+            Append(panel.selectedColorMouse);
+        else if (panel.IsVisible || panel.colorIndex == -1 || panel.toolIndex == 2)
+            panel.selectedColorMouse.Remove();
+    }
+
+    public override void Draw(SpriteBatch spriteBatch) {
+        base.Draw(spriteBatch);
+        
+        var panel = GetUIPanel<PaintBrushPanel>();
+        if (panel.selectedColorMouse == null || panel.IsVisible) return;
+        
+        panel.selectedColorMouse.Left.Set(Main.mouseX - 26f, 0f);
+        panel.selectedColorMouse.Top.Set(Main.mouseY + 6f, 0f);
     }
 }
 
@@ -46,6 +68,11 @@ public abstract class BaseToggleablePanel : UIElement
     public override void OnActivate() {
         canDisplay = true;
     }
+    
+    /// <summary>
+    /// Called after <see cref="Update"/> is called
+    /// </summary>
+    public virtual void UpdateRegardlessOfVisibility() { }
 
     public override void Draw(SpriteBatch spriteBatch) {
         if (canDisplay) {

@@ -20,6 +20,8 @@ public class MultiCraftingStation : BaseCraftingStation
     public override Color MapColor => Color.White * 0.65f;
 
     public override void SetTileObjectData() {
+        DustType = DustID.Sandnado;
+        
         AnimationFrameHeight = 74;
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.Origin = new Point16(1, 3);

@@ -17,6 +17,8 @@ public class PreHMCraftingStation : BaseCraftingStation
     public override Color MapColor => new Color(36, 151, 64);
 
     public override void SetTileObjectData() {
+        DustType = DustID.CursedTorch;
+        
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.Origin = new Point16(1, 2);
         TileObjectData.newTile.CoordinatePadding = 2;

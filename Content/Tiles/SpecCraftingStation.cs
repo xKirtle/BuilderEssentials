@@ -17,6 +17,8 @@ public class SpecCraftingStation : BaseCraftingStation
     public override Color MapColor => new Color(39, 137, 205);
 
     public override void SetTileObjectData() {
+        DustType = DustID.IceTorch;
+        
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.Origin = new Point16(1, 2);
         TileObjectData.newTile.CoordinatePadding = 2;

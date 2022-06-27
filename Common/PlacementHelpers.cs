@@ -20,10 +20,10 @@ public static class PlacementHelpers
         => i >= 0 && i < Main.maxTilesX && j >= 0 && j < Main.maxTilesY;
     
     
-    public static bool CanReduceItemStack(Item item, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
-        if (!ItemLoader.ConsumeItem(item, Main.LocalPlayer)) return true;
+    public static bool CanReduceItemStack(int type, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
+        if (!ItemLoader.ConsumeItem(new Item(type), Main.LocalPlayer)) return true;
 
-        if (shouldBeHeld && Main.LocalPlayer.HeldItem.type == item.type && Main.LocalPlayer.HeldItem.stack >= amount) {
+        if (shouldBeHeld && Main.LocalPlayer.HeldItem.type == type && Main.LocalPlayer.HeldItem.stack >= amount) {
             if (reduceStack)
                 Main.LocalPlayer.HeldItem.stack -= amount;
 
@@ -31,7 +31,7 @@ public static class PlacementHelpers
         }
 
         foreach (Item itemInv in Main.LocalPlayer.inventory) {
-            if (itemInv.type == item.type && itemInv.stack >= amount) {
+            if (itemInv.type == type && itemInv.stack >= amount) {
                 if (reduceStack)
                     itemInv.stack -= amount;
 
@@ -56,12 +56,14 @@ public static class PlacementHelpers
         return TypeOfItem.Air;
     }
 
-    public static void PlaceMultiTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
+    public static bool PlaceMultiTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
         //Call PlaceTile_PlaceIt?
+
+        return false;
     }
 
-    public static Tile PlaceTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
-        if (!ValidTileCoordinates(x, y)) return new Tile();
+    public static bool PlaceTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
+        if (!ValidTileCoordinates(x, y)) return false;
 
         Tile tile = Framing.GetTileSafely(x, y);
         bool replaceTilesEnabled = Main.LocalPlayer.TileReplacementEnabled;
@@ -71,18 +73,17 @@ public static class PlacementHelpers
             TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
 
             if (data != null) {
-                PlaceMultiTile(x, y, item, mute, forced, sync);
-                return tile;
+                return PlaceMultiTile(x, y, item, mute, forced, sync);
             }
         }
         
         //No need to (re)place if the tile is already the desired 
         if ((typeOfItem == TypeOfItem.Tile && tile.TileType == item.createTile) ||
             (typeOfItem == TypeOfItem.Wall && tile.WallType == item.createWall))
-            return tile;
+            return false;
 
         //Check if enough materials
-        if (!CanReduceItemStack(item)) return tile;
+        if (!CanReduceItemStack(item.type)) return false;
         
         if (replaceTilesEnabled) {
             //Can't replace Air
@@ -98,19 +99,22 @@ public static class PlacementHelpers
                     goto noReplacement;
             }
 
-            return tile;
+            return true;
         }
 
         noReplacement:
+        bool tilePlaced = false;
         if (typeOfItem == TypeOfItem.Tile && (forced || !tile.HasTile))
-            WorldGen.PlaceTile(x, y, item.createTile, mute, forced, style: item.placeStyle);
-        else if (typeOfItem == TypeOfItem.Wall)
+            tilePlaced = WorldGen.PlaceTile(x, y, item.createTile, mute, forced, style: item.placeStyle);
+        else if (typeOfItem == TypeOfItem.Wall) {
             WorldGen.PlaceWall(x, y, item.createWall, mute);
+            tilePlaced = true; //LOL, no way of knowing?
+        }
 
         if (sync && Main.netMode == NetmodeID.MultiplayerClient)
             NetMessage.SendTileSquare(-1, x, y, 1);
 
-        return tile;
+        return tilePlaced;
     }
 
     public static void PlaceTilesInArea(Point start, Point end, Item item, bool mute = false, bool forced = false,
@@ -139,7 +143,7 @@ public static class PlacementHelpers
 
         if (!ValidTileCoordinates(x, y)) return false;
 
-        Tile tile = Framing.GetTileSafely(x, y);
+        // Tile tile = Framing.GetTileSafely(x, y);
 
         if (needPickPower && !Main.LocalPlayer.HasEnoughPickPowerToHurtTile(x, y)) return false;
         
@@ -149,10 +153,12 @@ public static class PlacementHelpers
         //Can't not drop items when killing walls for some reason
         if (removeWall)
             WorldGen.KillWall(x, y);
-        
-        if (sync && Main.netMode == NetmodeID.MultiplayerClient)
+
+        if (sync && Main.netMode == NetmodeID.MultiplayerClient) {
             NetMessage.SendTileSquare(-1, x, y, 1);
-        
+            //Sync kill tile dusts?
+        }
+
         return true;
     }
 }

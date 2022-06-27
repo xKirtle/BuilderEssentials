@@ -1,6 +1,8 @@
+using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 
 namespace BuilderEssentials;
@@ -15,5 +17,13 @@ public class BEPlayer : ModPlayer
 
     public override void ResetEffects() {
         InfinitePaint = false;
+    }
+
+    public override void ProcessTriggers(TriggersSet triggersSet) {
+        if (BuilderEssentials.FWIncrease.JustPressed && FillWand.FillSelectionSize < 6)
+            FillWand.FillSelectionSize++;
+        
+        if (BuilderEssentials.FWDecrease.JustPressed && FillWand.FillSelectionSize > 1)
+            FillWand.FillSelectionSize--;
     }
 }

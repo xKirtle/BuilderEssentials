@@ -17,6 +17,8 @@ public class HMCraftingStation : BaseCraftingStation
     public override Color MapColor => new Color(191, 55, 64);
 
     public override void SetTileObjectData() {
+        DustType = DustID.RedTorch;
+        
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.Origin = new Point16(1, 3);
         TileObjectData.newTile.CoordinatePadding = 2;

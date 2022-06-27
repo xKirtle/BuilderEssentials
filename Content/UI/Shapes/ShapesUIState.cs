@@ -100,15 +100,17 @@ public abstract class BaseShapePanel : UIElement
         queuedPlacements = new();
 
         cs.LeftMouse.OnClick += _ => {
-            if (CanPlaceItems()) {
+            if (!Main.LocalPlayer.mouseInterface && CanPlaceItems()) {
                 DequeuePlacement();
                 undo = false;
             }
         };
         
         cs.RightMouse.OnClick += _ => {
-            UndoPlacement();
-            undo = true;
+            if (!Main.LocalPlayer.mouseInterface) {
+                UndoPlacement();
+                undo = true;
+            }
         };
     }
 
@@ -128,7 +130,7 @@ public abstract class BaseShapePanel : UIElement
         queuedPlacements.Clear();
         PlotSelection();
     }
-
+    
     protected void QueuePlacement(Point coords)
         => queuedPlacements.Enqueue(coords);
 
@@ -146,9 +148,10 @@ public abstract class BaseShapePanel : UIElement
             Point coordinate = queuedPlacements.Dequeue(); 
             Tile tile = Framing.GetTileSafely(coordinate);
             MinimalTile previousTile = new(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile));
-            PlacementHelpers.PlaceTile(coordinate.X, coordinate.Y, SelectedItem);
+            bool tilePlaced = PlacementHelpers.PlaceTile(coordinate.X, coordinate.Y, SelectedItem);
             MinimalTile placedTile = new(tile.TileType, tile.WallType, tile.HasTile, SelectedItem.placeStyle);
-            previousPlacement.Add(new(coordinate, previousTile, placedTile, SelectedItem));
+            if (tilePlaced)
+                previousPlacement.Add(new(coordinate, previousTile, placedTile, SelectedItem));
         }
         
         historyPlacements.Push(previousPlacement);

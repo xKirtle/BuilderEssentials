@@ -70,8 +70,17 @@ public class AutoHammer : BaseItemToggleableUI
         if (canChangeSlope) {
             var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             //Can the selected index change between CanUseItem and UseItem at all?
-            if (panel.selectedIndex != -1)
+            if (panel.selectedIndex != -1) {
                 ChangeSlope(panel.slopeType, panel.isHalfBlock);
+                
+                //Add MirrorPlacement logic
+                Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+                MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords => {
+                    Tile mirrorTile = Framing.GetTileSafely(mirroredCoords.X, mirroredCoords.Y);
+                    int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+                    ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
+                });
+            }
 
             Item.hammer = 80;
             canChangeSlope = false;
@@ -80,7 +89,7 @@ public class AutoHammer : BaseItemToggleableUI
         return true;
     }
 
-    //Kirtle: Tile.SmoothSlope for the edge case where it looks glitched?
+    //Kirtle: Tile.SmoothSlope for the edge case (halfBrick) where it looks glitched?
     public static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {
