@@ -75,8 +75,8 @@ public class AutoHammer : BaseItemToggleableUI
                 
                 //Add MirrorPlacement logic
                 Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-                MirrorPlacementDetours.MirrorPlacementAction(() => {
-                    Tile mirrorTile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+                MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords => {
+                    Tile mirrorTile = Framing.GetTileSafely(mirroredCoords.X, mirroredCoords.Y);
                     int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
                     ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
                 });

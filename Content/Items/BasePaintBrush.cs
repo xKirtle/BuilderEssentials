@@ -12,6 +12,7 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(false)]
 public abstract class BasePaintBrush : BaseItemToggleableUI
 {
+    //TODO: Paint scraper requires the exact same color to be selected
     public override ToggleableUiType ToggleableUiType => ToggleableUiType.PaintBrush;
     
     public override void SetDefaults() {
@@ -59,14 +60,14 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
 
             PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedTileCoords.ToPoint());
 
-            MirrorPlacementDetours.MirrorPlacementAction(() =>
-                PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedTileCoords.ToPoint()));
+            MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords =>
+                PaintTileOrWall(selectedColor, toolIndex, mirroredCoords.ToPoint()));
         }
         else {
             ScrapPaint(BEPlayer.PointedTileCoords.ToPoint());
             
-            MirrorPlacementDetours.MirrorPlacementAction(() => 
-                ScrapPaint(BEPlayer.PointedTileCoords.ToPoint()));
+            MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords => 
+                ScrapPaint(mirroredCoords.ToPoint()));
         }
 
         return true;

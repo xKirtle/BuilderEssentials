@@ -4,39 +4,50 @@ using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 
 namespace BuilderEssentials.Common;
 
 public static class MirrorPlacementDetours
 {
-	internal static void MirrorPlacementAction(Action action, bool shouldReduceStack = false, int itemType = 0) {
+	//Prevents infinite loop in ApplyItemTime
+	private static Point16 oldMirror = default;
+	internal static void MirrorPlacementAction(Action<Point16> action, Vector2 tileCoords = default, Item item = null, bool shouldReduceStack = false) {
 		if (WorldGen.gen) return;
 		
 		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 		if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-			Vector2 mirroredCoords = panel.GetMirroredTileTargetCoordinate();
-			Player.tileTargetX = (int) mirroredCoords.X;
-			Player.tileTargetY = (int) mirroredCoords.Y;
+			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords, item?.createTile ?? 0,
+				item?.placeStyle ?? 0, Main.LocalPlayer.direction).ToPoint16();
+			
+			Player.tileTargetX = mirroredCoords.X;
+			Player.tileTargetY = mirroredCoords.Y;
+			oldMirror = mirroredCoords;
 
 			//Paints don't work if there's not enough paint
 			//Tiles are being mirrored even though when stack is only 1
 			
 			//TODO: reducing stack not working -> Check if can invoke action and has enough stack
 			// if (!shouldReduceStack || PlacementHelpers.CanReduceItemStack(itemType, shouldBeHeld: true))
-			action?.Invoke();
+			action?.Invoke(mirroredCoords);
 		}
 	}
 	
     public static void LoadDetours() {
 	    //TODO: ApplyItemTime will remove both items from stack but it's placed/mirrored before stack is checked
+
+	    //Preventing infinite looping with oldMirror
+	    Point16 oldMirror = default;
 	    On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 		    orig.Invoke(player, item, multiplier, useItem);
-
 		    //Only Tile Placements
 		    if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
-		    
-			MirrorPlacementAction(() => {
+
+		    if (oldMirror.X == Player.tileTargetX && oldMirror.Y == Player.tileTargetY) return;
+			MirrorPlacementAction(mirroredCoords => {
+				oldMirror = mirroredCoords;
+
 				int itemTime = player.itemTime;
 				player.itemTime = 0;
 		
@@ -45,15 +56,15 @@ public static class MirrorPlacementDetours
 				player.direction *= -1;
 
 				player.itemTime = itemTime;
-			});
+			}, default, item);
 	    };
 
 	    On.Terraria.WorldGen.PlaceWall += (orig, x, y, type, mute) => {
 		    orig.Invoke(x, y, type, mute);
-		    
-		    MirrorPlacementAction(() => {
-			    orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, mute);
-		    });
+
+		    MirrorPlacementAction(mirroredCoords => {
+			    orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, mute);
+		    }, new Vector2(x, y));
 	    };
 
 	    On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
@@ -70,9 +81,9 @@ public static class MirrorPlacementDetours
 		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
 			bool baseReturn = orig.Invoke(x, y, type, style);
 
-			MirrorPlacementAction(() => {
-				orig.Invoke(Player.tileTargetX, Player.tileTargetY, type, style);
-			}, true, type);
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, style);
+			}, new Vector2(x, y), shouldReduceStack: true);
 
 			return baseReturn;
 		};
@@ -80,9 +91,9 @@ public static class MirrorPlacementDetours
 		On.Terraria.WorldGen.ReplaceWall += (orig, x, y, type) => {
 			bool baseReturn = orig.Invoke(x, y, type);
 
-			MirrorPlacementAction(() => {
-				orig.Invoke(Player.tileTargetX, Player.tileTargetY, type);
-			}, true, type);
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type);
+			}, new Vector2(x, y), shouldReduceStack: true);
 
 			return baseReturn;
 		};
@@ -99,17 +110,17 @@ public static class MirrorPlacementDetours
 		On.Terraria.Player.PickTile += (orig, player, x, y, power) => {
 			orig.Invoke(player, x, y, power);
 			
-			MirrorPlacementAction(() => {
-				orig.Invoke(player, Player.tileTargetX, Player.tileTargetY, power);
-			});
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(player, mirroredCoords.X, mirroredCoords.Y, power);
+			}, new Vector2(x, y));
 		};
 
 		On.Terraria.WorldGen.KillWall += (orig, x, y, fail) => {
 			orig.Invoke(x, y, fail);
 
-			MirrorPlacementAction(() => {
-				orig.Invoke(Player.tileTargetX, Player.tileTargetY, fail);
-			});
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, fail);
+			}, new Vector2(x, y));
 		};
 
 		On.Terraria.Player.ItemCheck_UseMiningTools_TryPoundingTile += (
@@ -120,13 +131,13 @@ public static class MirrorPlacementDetours
 			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
 			if (wall) return;
 			
-			MirrorPlacementAction(() => {
+			MirrorPlacementAction(mirroredCoords => {
 				if (item.hammer > 0) {
-					Tile mirrorTile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+					Tile mirrorTile = Framing.GetTileSafely(mirroredCoords.X, mirroredCoords.Y);
 					int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
 					AutoHammer.ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
 				}
-			});
+			}, new Vector2(x, y));
 		};
 
 		On.Terraria.Player.ItemCheck_UseMiningTools_TryFindingWallToHammer += (
@@ -143,21 +154,21 @@ public static class MirrorPlacementDetours
 		On.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
 			orig.Invoke(player, item, x, y);
 			
-			MirrorPlacementAction(() => {
+			MirrorPlacementAction(mirroredCoords => {
 				player.controlUseItem = true;
 				player.releaseUseItem = false;
 		
-				orig.Invoke(player, item, Player.tileTargetX, Player.tileTargetY);
-			});
+				orig.Invoke(player, item, mirroredCoords.X, mirroredCoords.Y);
+			}, new Vector2(x, y));
 		};
 		
 		//TODO: Not running on vanilla paint tools because they just set tile.color()...
 		On.Terraria.WorldGen.paintTile += (orig, x, y, color, sync) => {
 			bool baseReturn = orig.Invoke(x, y, color, sync);
 
-			MirrorPlacementAction(() => {
-				orig.Invoke(Player.tileTargetX, Player.tileTargetY, color, sync);
-			});
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, color, sync);
+			}, new Vector2(x, y));
 			
 			return baseReturn;
 		};
@@ -165,9 +176,9 @@ public static class MirrorPlacementDetours
 		On.Terraria.WorldGen.paintWall += (orig, x, y, color, sync) => {
 			bool baseReturn = orig.Invoke(x, y, color, sync);
 
-			MirrorPlacementAction(() => {
-				orig.Invoke(Player.tileTargetX, Player.tileTargetY, color, sync);
-			});
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, color, sync);
+			}, new Vector2(x, y));
 			
 			return baseReturn;
 		};

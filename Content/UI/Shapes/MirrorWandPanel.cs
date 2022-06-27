@@ -3,6 +3,7 @@ using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -77,8 +78,8 @@ public class MirrorWandPanel : BaseShapePanel
             ShapesUIState.TogglePanelVisibility<MirrorWandPanel>();
     }
 
-    public Vector2 GetMirroredTileTargetCoordinate() {
-        Vector2 result = new Vector2(Player.tileTargetX, Player.tileTargetY);
+    public Vector2 GetMirroredTileTargetCoordinate(Vector2 tileCoords = default, int tileType = 0, int style = 0, int alternate = 0) {
+        Vector2 result =  tileCoords == default ? new Vector2(Player.tileTargetX, Player.tileTargetY) : tileCoords;
 
         Vector2 selStart = cs.RightMouse.Start;
         Vector2 selEnd = cs.RightMouse.End;
@@ -92,11 +93,23 @@ public class MirrorWandPanel : BaseShapePanel
             !cs.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
 
         Tile tile = Framing.GetTileSafely(result);
-        TileObjectData data = TileObjectData.GetTileData(tile);
+        // TileObjectData data = TileObjectData.GetTileData(tile);
+        TileObjectData data = TileObjectData.GetTileData(tileType, style, alternate);
         
         Vector2 offset = Vector2.Zero;
         if (data != null) {
-            //TODO: figure out multi tile origin offset fix math    
+            //TODO: figure out multi tile origin offset fix math
+            Point16 tileOrigin = data.Origin;
+            Console.WriteLine("origin: " + tileOrigin);
+            Point16 tileSize = new(data.CoordinateFullWidth / 16, data.CoordinateFullHeight / 16);
+            Console.WriteLine("size: " + tileSize);
+            
+            if (tileSize.X % 2 == 0)
+                offset.X = tileOrigin.X - (tileSize.X - 1);
+            offset.Y = 0;
+            Console.WriteLine("Offset: " + offset);
+            
+            Console.WriteLine(result);
         }
         
         if (!horizontalMirror) {
