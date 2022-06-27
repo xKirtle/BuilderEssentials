@@ -53,7 +53,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             // tryPaintMethod.Invoke(player, new object[] {Player.tileTargetX, Player.tileTargetY, toolIndex == 1, true});
 
             Tile tile = Framing.GetTileSafely(BEPlayer.PointedWorldCoords);
-            if (tile.TileColor == selectedColor || tile.WallColor == selectedColor ||
+            if ((toolIndex == 0 && tile.TileColor == selectedColor) || 
+                (toolIndex == 1 && tile.WallColor == selectedColor) ||
                 (toolIndex == 0 && (!tile.HasTile || tile.TileType < 0)) ||
                 (toolIndex == 1 && tile.WallType <= 0)) return true;
 
