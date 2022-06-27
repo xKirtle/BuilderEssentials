@@ -153,10 +153,12 @@ public static class PlacementHelpers
         //Can't not drop items when killing walls for some reason
         if (removeWall)
             WorldGen.KillWall(x, y);
-        
-        if (sync && Main.netMode == NetmodeID.MultiplayerClient)
+
+        if (sync && Main.netMode == NetmodeID.MultiplayerClient) {
             NetMessage.SendTileSquare(-1, x, y, 1);
-        
+            //Sync kill tile dusts?
+        }
+
         return true;
     }
 }

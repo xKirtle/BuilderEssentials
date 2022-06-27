@@ -14,7 +14,7 @@ public static class MirrorPlacementDetours
 	//Prevents infinite loop in ApplyItemTime
 	private static Point16 oldMirror = default;
 	internal static void MirrorPlacementAction(Action<Point16> action, Vector2 tileCoords = default, Item item = null, bool shouldReduceStack = false) {
-		if (WorldGen.gen) return;
+		if (WorldGen.gen || Main.dedServ) return;
 		
 		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 		if (panel.IsVisible && panel.IsMouseWithinSelection()) {

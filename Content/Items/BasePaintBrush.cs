@@ -169,6 +169,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             needSync = true;
         }
 
+        //TODO: Not syncing in MP
         if (needSync && Main.netMode != NetmodeID.SinglePlayer) {
             NetMessage.SendData(MessageID.PaintTile, number: coords.X, number2: coords.Y);
             NetMessage.SendData(MessageID.PaintWall, number: coords.X, number2: coords.Y);
