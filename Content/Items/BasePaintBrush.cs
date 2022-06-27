@@ -155,7 +155,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
     }
 
     public static void ScrapPaint(Point coords) {
-        Tile tile = Framing.GetTileSafely(coords);
+        Tile tile = Framing.GetTileSafely(coords.X, coords.Y);
         bool needSync = false;
 
         if (tile.TileColor != 0) {
