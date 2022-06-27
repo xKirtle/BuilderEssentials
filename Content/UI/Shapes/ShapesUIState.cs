@@ -100,15 +100,17 @@ public abstract class BaseShapePanel : UIElement
         queuedPlacements = new();
 
         cs.LeftMouse.OnClick += _ => {
-            if (CanPlaceItems()) {
+            if (!Main.LocalPlayer.mouseInterface && CanPlaceItems()) {
                 DequeuePlacement();
                 undo = false;
             }
         };
         
         cs.RightMouse.OnClick += _ => {
-            UndoPlacement();
-            undo = true;
+            if (!Main.LocalPlayer.mouseInterface) {
+                UndoPlacement();
+                undo = true;
+            }
         };
     }
 

@@ -12,7 +12,6 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(false)]
 public abstract class BasePaintBrush : BaseItemToggleableUI
 {
-    //TODO: Paint scraper requires the exact same color to be selected
     public override ToggleableUiType ToggleableUiType => ToggleableUiType.PaintBrush;
     
     public override void SetDefaults() {
@@ -164,7 +163,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             needSync = true;
         }
         else if (tile.WallColor != 0) {
-            WorldGen.paintEffect(coords.X,coords.Y, 0, tile.WallColor);
+            WorldGen.paintEffect(coords.X, coords.Y, 0, tile.WallColor);
             tile.WallColor = 0;
             needSync = true;
         }

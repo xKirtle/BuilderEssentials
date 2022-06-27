@@ -18,6 +18,8 @@ namespace BuilderEssentials
 {
 	public class BuilderEssentials : Mod
 	{
+		internal static ModKeybind FWIncrease;
+		internal static ModKeybind FWDecrease;
 		public static Dictionary<int, List<int>> TileToItems;
 		public static Dictionary<int, List<int>> WallToItems;
 		
@@ -30,6 +32,9 @@ namespace BuilderEssentials
 			WallToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(walls);
 			
 			CacheModTiles();
+
+			FWIncrease = KeybindLoader.RegisterKeybind(this, "Increase Fill Wand selection size", "I");
+			FWDecrease = KeybindLoader.RegisterKeybind(this, "Decrease Fill Wand selection size", "O");
 		}
 		
 		private void CacheModTiles() {
