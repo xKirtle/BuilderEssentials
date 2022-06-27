@@ -12,7 +12,8 @@ namespace BuilderEssentials.Content.UI;
 
 public class AutoHammerPanel : BaseToggleablePanel
 {
-    public override int[] ItemBoundToDisplay => new[] { ModContent.ItemType<AutoHammer>() };
+    public override bool IsHoldingBindingItem() =>
+        Main.LocalPlayer.HeldItem.type == ModContent.ItemType<AutoHammer>();
 
     private const float ParentWidth = 160f, ParentHeight = 132f;
     private const int ElementsCount = 6;

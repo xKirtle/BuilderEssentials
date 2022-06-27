@@ -29,7 +29,7 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 
         for (int i = 0; i < PanelTypes().Count; i++) {
             var panel = GetUIPanel(i);
-            if (!panel.ItemBoundToDisplay.Contains(Main.LocalPlayer.HeldItem.type) && panel.IsVisible) {
+            if (!panel.IsHoldingBindingItem() && panel.IsVisible) {
                 panel.Remove();
                 panel.Deactivate();
             }
@@ -44,7 +44,7 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
         
         if (!panel.IsVisible && (panel.colorIndex != -1 && panel.toolIndex != 2))
             Append(panel.selectedColorMouse);
-        else if (panel.IsVisible || panel.colorIndex == -1 || panel.toolIndex == 2)
+        else if (panel.IsVisible || panel.colorIndex == -1 || panel.toolIndex == 2 || !panel.IsHoldingBindingItem())
             panel.selectedColorMouse.Remove();
     }
 
@@ -62,7 +62,7 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 public abstract class BaseToggleablePanel : UIElement
 {
     public bool IsVisible => Parent != null;
-    public virtual int[] ItemBoundToDisplay { get; protected set; } = { -1 };
+    public abstract bool IsHoldingBindingItem();
     
     private bool canDisplay = false;
     public override void OnActivate() {

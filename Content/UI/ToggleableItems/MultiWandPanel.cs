@@ -13,7 +13,8 @@ namespace BuilderEssentials.Content.UI;
 
 public class MultiWandPanel : BaseToggleablePanel
 {
-    public override int[] ItemBoundToDisplay => new[] { ModContent.ItemType<MultiWand>() };
+    public override bool IsHoldingBindingItem() =>
+        Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MultiWand>();
     
     private const float ParentWidth = 180f, ParentHeight = 160f;
     private const int ElementsCount = 6;
