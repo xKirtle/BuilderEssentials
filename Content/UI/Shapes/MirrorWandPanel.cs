@@ -94,22 +94,24 @@ public class MirrorWandPanel : BaseShapePanel
 
         Tile tile = Framing.GetTileSafely(result);
         // TileObjectData data = TileObjectData.GetTileData(tile);
+        
+        //Check if it's not a wall or it'll throw a silent exception -> walls won't be reduced
         TileObjectData data = TileObjectData.GetTileData(tileType, style, alternate);
         
         Vector2 offset = Vector2.Zero;
         if (data != null) {
-            //TODO: figure out multi tile origin offset fix math
             Point16 tileOrigin = data.Origin;
-            Console.WriteLine("origin: " + tileOrigin);
             Point16 tileSize = new(data.CoordinateFullWidth / 16, data.CoordinateFullHeight / 16);
-            Console.WriteLine("size: " + tileSize);
-            
-            if (tileSize.X % 2 == 0)
-                offset.X = tileOrigin.X - (tileSize.X - 1);
-            offset.Y = 0;
-            Console.WriteLine("Offset: " + offset);
-            
-            Console.WriteLine(result);
+
+            if (tileSize.X % 2 == 0) {
+                int middleBiasRight = (int) (tileSize.X / 2f + 0.5f);
+                offset.X = tileOrigin.X >= middleBiasRight ? -1 : 1;
+            }
+
+            if (tileSize.Y % 2 == 0) {
+                int middleBiasBottom = (int) (tileSize.Y / 2f + 0.5f);
+                offset.Y = tileOrigin.Y >= middleBiasBottom ? -1 : 1;
+            }
         }
         
         if (!horizontalMirror) {
