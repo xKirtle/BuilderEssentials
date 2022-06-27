@@ -56,12 +56,14 @@ public static class PlacementHelpers
         return TypeOfItem.Air;
     }
 
-    public static void PlaceMultiTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
+    public static bool PlaceMultiTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
         //Call PlaceTile_PlaceIt?
+
+        return false;
     }
 
-    public static Tile PlaceTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
-        if (!ValidTileCoordinates(x, y)) return new Tile();
+    public static bool PlaceTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
+        if (!ValidTileCoordinates(x, y)) return false;
 
         Tile tile = Framing.GetTileSafely(x, y);
         bool replaceTilesEnabled = Main.LocalPlayer.TileReplacementEnabled;
@@ -71,18 +73,17 @@ public static class PlacementHelpers
             TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
 
             if (data != null) {
-                PlaceMultiTile(x, y, item, mute, forced, sync);
-                return tile;
+                return PlaceMultiTile(x, y, item, mute, forced, sync);
             }
         }
         
         //No need to (re)place if the tile is already the desired 
         if ((typeOfItem == TypeOfItem.Tile && tile.TileType == item.createTile) ||
             (typeOfItem == TypeOfItem.Wall && tile.WallType == item.createWall))
-            return tile;
+            return false;
 
         //Check if enough materials
-        if (!CanReduceItemStack(item.type)) return tile;
+        if (!CanReduceItemStack(item.type)) return false;
         
         if (replaceTilesEnabled) {
             //Can't replace Air
@@ -98,19 +99,22 @@ public static class PlacementHelpers
                     goto noReplacement;
             }
 
-            return tile;
+            return true;
         }
 
         noReplacement:
+        bool tilePlaced = false;
         if (typeOfItem == TypeOfItem.Tile && (forced || !tile.HasTile))
-            WorldGen.PlaceTile(x, y, item.createTile, mute, forced, style: item.placeStyle);
-        else if (typeOfItem == TypeOfItem.Wall)
+            tilePlaced = WorldGen.PlaceTile(x, y, item.createTile, mute, forced, style: item.placeStyle);
+        else if (typeOfItem == TypeOfItem.Wall) {
             WorldGen.PlaceWall(x, y, item.createWall, mute);
+            tilePlaced = true; //LOL, no way of knowing?
+        }
 
         if (sync && Main.netMode == NetmodeID.MultiplayerClient)
             NetMessage.SendTileSquare(-1, x, y, 1);
 
-        return tile;
+        return tilePlaced;
     }
 
     public static void PlaceTilesInArea(Point start, Point end, Item item, bool mute = false, bool forced = false,
