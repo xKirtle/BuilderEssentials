@@ -96,34 +96,31 @@ public class MirrorWandPanel : BaseShapePanel
         //Check if not a wall
         TileObjectData data = tileType != -1 ? TileObjectData.GetTileData(tileType, style, alternate) : null;
         
+        bool leftOfTheMirror = result.X < Math.Min(mirStart.X, mirEnd.X);
+        bool topOfTheMirror = result.Y < Math.Min(mirStart.Y, mirEnd.Y);
+        
         Vector2 offset = Vector2.Zero;
         if (data != null) {
             Point16 tileOrigin = data.Origin;
             Point16 tileSize = new(data.CoordinateFullWidth / 16, data.CoordinateFullHeight / 16);
-
+            
             if (tileSize.X % 2 == 0) {
                 int middleBiasRight = (int) (tileSize.X / 2f + 0.5f);
-                offset.X = tileOrigin.X >= middleBiasRight ? -1 : 1;
+                offset.X = (tileOrigin.X >= middleBiasRight ? -1 : 1) * (leftOfTheMirror ? -1 : 1);
             }
 
             if (tileSize.Y % 2 == 0) {
                 int middleBiasBottom = (int) (tileSize.Y / 2f + 0.5f);
-                offset.Y = tileOrigin.Y >= middleBiasBottom ? -1 : 1;
+                offset.Y = (tileOrigin.Y >= middleBiasBottom ? -1 : 1) * (topOfTheMirror ? -1 : 1);
             }
         }
         
         if (!horizontalMirror) {
-            float minMirrorX = Math.Min(mirStart.X, mirEnd.X);
-            bool leftOfTheMirror = result.X < minMirrorX;
             float distanceToMirror = Math.Min(Math.Abs(result.X - mirStart.X), Math.Abs(result.X - mirEnd.X));
-            
             result.X += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.X) * (leftOfTheMirror ? 1 : -1));
         }
         else {
-            float minMirrorY = Math.Min(mirStart.Y, mirEnd.Y);
-            bool topOfTheMirror = result.Y < minMirrorY;
             float distanceToMirror = Math.Min(Math.Abs(result.Y - mirStart.Y), Math.Abs(result.Y - mirEnd.Y));
-            
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
         
