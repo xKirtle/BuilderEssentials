@@ -281,7 +281,4 @@ public class PaintBrushPanel : BaseToggleablePanel
         var uiState = ToggleableItemsUIState.GetInstance() as ToggleableItemsUIState;
         uiState?.UpdateMouseSelectedColor_PaintBrushPanel();
     }
-
-    //TODO: Draw little circle with selected color under the cursor (down left) like Grand Design
-    
 }
