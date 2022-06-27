@@ -93,10 +93,8 @@ public class MirrorWandPanel : BaseShapePanel
             !cs.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
 
         Tile tile = Framing.GetTileSafely(result);
-        // TileObjectData data = TileObjectData.GetTileData(tile);
-        
-        //Check if it's not a wall or it'll throw a silent exception -> walls won't be reduced
-        TileObjectData data = TileObjectData.GetTileData(tileType, style, alternate);
+        //Check if not a wall
+        TileObjectData data = tileType != -1 ? TileObjectData.GetTileData(tileType, style, alternate) : null;
         
         Vector2 offset = Vector2.Zero;
         if (data != null) {
