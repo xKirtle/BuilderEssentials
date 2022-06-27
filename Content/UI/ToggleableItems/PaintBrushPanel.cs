@@ -26,6 +26,7 @@ public class PaintBrushPanel : BaseToggleablePanel
     private UIImage[] noPaintOverlay;
     private UIImage colorOverlay;
     private UIImage toolOverlay;
+    public UIImage selectedColorMouse;
     private Asset<Texture2D>[] toolTextures;
     private bool[] colorAvailable;
     private bool elementHovered;
@@ -60,6 +61,9 @@ public class PaintBrushPanel : BaseToggleablePanel
         toolOverlay = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushTools)[6]);
         toolOverlay.OnMouseOver += (__, _) => elementHovered = true;
         toolOverlay.OnMouseOut += (__, _) => elementHovered = false;
+
+        selectedColorMouse = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushColors)[0]);
+        selectedColorMouse.ImageScale = 0.4f;
 
         toolElements = new UIImageButton[3];
         for (int i = 0; i < toolElements.Length; i++)
@@ -188,6 +192,9 @@ public class PaintBrushPanel : BaseToggleablePanel
             colorOverlay.Top = colorElements[index].Top;
             Append(colorOverlay);
             colorIndex = index;
+
+            selectedColorMouse = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushColors)[colorIndex]);
+            selectedColorMouse.ImageScale = 0.4f;
         }
         else colorIndex = -1;
     }
@@ -268,6 +275,11 @@ public class PaintBrushPanel : BaseToggleablePanel
         base.Update(gameTime);
         
         EvaluateAvailableColorsInInventory();
+    }
+
+    public override void UpdateRegardlessOfVisibility() {
+        var uiState = ToggleableItemsUIState.GetInstance() as ToggleableItemsUIState;
+        uiState?.UpdateMouseSelectedColor_PaintBrushPanel();
     }
 
     //TODO: Draw little circle with selected color under the cursor (down left) like Grand Design
