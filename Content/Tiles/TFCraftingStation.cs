@@ -17,6 +17,8 @@ public class TFCraftingStation : BaseCraftingStation
     public override Color MapColor => new Color(185, 92, 31);
 
     public override void SetTileObjectData() {
+        DustType = DustID.YellowTorch;
+        
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.Origin = new Point16(1, 3);
         TileObjectData.newTile.CoordinatePadding = 2;
