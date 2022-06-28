@@ -42,7 +42,7 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
         var panel = GetUIPanel<PaintBrushPanel>();
         if (panel.selectedColorMouse == null) return;
         
-        if (!panel.IsVisible && (panel.colorIndex != -1 && panel.toolIndex != 2))
+        if (!panel.IsVisible && (panel.colorIndex != -1 && panel.toolIndex != 2) && panel.IsHoldingBindingItem())
             Append(panel.selectedColorMouse);
         else if (panel.IsVisible || panel.colorIndex == -1 || panel.toolIndex == 2 || !panel.IsHoldingBindingItem())
             panel.selectedColorMouse.Remove();
