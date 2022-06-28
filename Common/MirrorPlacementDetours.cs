@@ -42,6 +42,7 @@ public static class MirrorPlacementDetours
 		}
 	}
 
+	//TODO: Look into an alternative to mirror the objects of the Tilemap itself, and not simulation of placements!
 	public static void LoadDetours() {
 		//Kirtle: implement DataPreview myself to flip spritebatch?
 	    On.Terraria.TileObject.DrawPreview += (orig, sb, previewData, position) => {
