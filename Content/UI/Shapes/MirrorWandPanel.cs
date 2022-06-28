@@ -79,7 +79,8 @@ public class MirrorWandPanel : BaseShapePanel
     }
 
     public Vector2 GetMirroredTileTargetCoordinate(Vector2 tileCoords = default, int tileType = 0, int style = 0, int alternate = 0) {
-        Vector2 result =  tileCoords == default ? new Vector2(Player.tileTargetX, Player.tileTargetY) : tileCoords;
+        Vector2 initial =  tileCoords == default ? new Vector2(Player.tileTargetX, Player.tileTargetY) : tileCoords;
+        Vector2 result = initial;
 
         Vector2 selStart = cs.RightMouse.Start;
         Vector2 selEnd = cs.RightMouse.End;
@@ -123,6 +124,9 @@ public class MirrorWandPanel : BaseShapePanel
             float distanceToMirror = Math.Min(Math.Abs(result.Y - mirStart.Y), Math.Abs(result.Y - mirEnd.Y));
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
+        
+        if (cs.IsWithinRange(result.X, selStart.X, selEnd.X) &&
+            cs.IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
         
         return result;
     }
