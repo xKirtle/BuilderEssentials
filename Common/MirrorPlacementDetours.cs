@@ -14,37 +14,39 @@ public static class MirrorPlacementDetours
 {
 	//Prevents infinite loop in ApplyItemTime
 	private static Point16 oldMirror = default;
-	internal static void MirrorPlacementAction(Action<Point16> action, Vector2 tileCoords = default, Item item = null, 
-		bool shouldReduceStack = false, int amount = 1, bool sync = true) {
-		if (WorldGen.gen || Main.dedServ) return;
 
-		if (item == null)
-			item = Main.LocalPlayer.HeldItem;
-		
+	internal static void MirrorPlacementAction(Action<Point16> action, Vector2 tileCoords = default, Item item = null,
+		bool shouldReduceStack = false, int amount = 1) {
+		//Worldgen check is not necessary?
+		if (WorldGen.gen || Main.dedServ) return;
+		if (item == null) item = Main.LocalPlayer.HeldItem;
+
 		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 		if (panel.IsVisible && panel.IsMouseWithinSelection()) {
 			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords, item.createTile,
 				item.placeStyle, Main.LocalPlayer.direction).ToPoint16();
-			
+
 			Player.tileTargetX = mirroredCoords.X;
 			Player.tileTargetY = mirroredCoords.Y;
 			oldMirror = mirroredCoords;
-
-			//Paints don't work if there's not enough paint
-			//Tiles are being mirrored even though when stack is only 1
-
-			//TODO: Need to somehow stop placements if not enough in stack? -> seems to be doing that??
-			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true))
-				action?.Invoke(mirroredCoords);
 			
-			//TODO: Sync mirrored coord tile
+			//TODO: Need to somehow stop placements if not enough in stack? -> seems to be doing that if applyItemTime uses amount: 2 but them MP is buggy
+			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true)) {
+				action?.Invoke(mirroredCoords);
+				
+				if (Main.netMode == NetmodeID.MultiplayerClient) {
+					NetMessage.SendTileSquare(-1, (int) tileCoords.X, (int) tileCoords.Y, 5);
+					NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 5);
+				}
+			}
 		}
 	}
-	
-    public static void LoadDetours() {
+
+	public static void LoadDetours() {
+		//Kirtle: implement DataPreview myself to flip spritebatch?
 	    On.Terraria.TileObject.DrawPreview += (orig, sb, previewData, position) => {
 		    orig.Invoke(sb, previewData, position);
-
+		    
 		    MirrorPlacementAction(mirroredCoords => {
 			    TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
 			    previewData.Coordinates = mirroredCoords - new Point16(data.Origin.X, data.Origin.Y);
@@ -53,34 +55,45 @@ public static class MirrorPlacementDetours
 	    };
 	    
 	    //Preventing infinite looping with oldMirror
-	    Point16 oldMirror = default;
+	    // Point16 oldMirror = default;
 	    On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
-		    //Kirtle: this is still going to be called a third time but fail because a tile is there already..
 		    orig.Invoke(player, item, multiplier, useItem);
+		    
 		    //Only Tile Placements
-		    if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
+		    if ((item.createTile < TileID.Dirt && item.createWall < WallID.Stone) ||
+		        (oldMirror.X == Player.tileTargetX && oldMirror.Y == Player.tileTargetY)) return;
 
-		    if (oldMirror.X == Player.tileTargetX && oldMirror.Y == Player.tileTargetY) return;
-			MirrorPlacementAction(mirroredCoords => {
+		    int x = Player.tileTargetX;
+		    int y = Player.tileTargetY;
+		    
+		    MirrorPlacementAction(mirroredCoords => {
+				Point oldTileRange = new Point(Player.tileRangeX, Player.tileRangeY);
 				oldMirror = mirroredCoords;
 
+				Player.tileRangeX = Int32.MaxValue;
+				Player.tileRangeY = Int32.MaxValue;
 				int itemTime = player.itemTime;
+				
 				player.itemTime = 0;
-		
 				player.direction *= -1;
+				
 				player.ItemCheck(player.whoAmI); //Would like to skip pre item check but oh well
+				
 				player.direction *= -1;
-
 				player.itemTime = itemTime;
-			}, default, item, false, 2);
+				Player.tileRangeX = oldTileRange.X;
+				Player.tileRangeY = oldTileRange.Y;
+
+			}, new Vector2(x, y), item, false, 1);
 	    };
 
 	    On.Terraria.WorldGen.PlaceWall += (orig, x, y, type, mute) => {
 		    orig.Invoke(x, y, type, mute);
 
+		    if (!Main.LocalPlayer.TileReplacementEnabled) return;
 		    MirrorPlacementAction(mirroredCoords => {
 			    orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, mute);
-		    }, new Vector2(x, y), null,  true, 1);
+		    }, new Vector2(x, y), null, true, 1);
 	    };
 
 	    On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
@@ -96,9 +109,10 @@ public static class MirrorPlacementDetours
 		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
 			bool baseReturn = orig.Invoke(x, y, type, style);
 
+			if (!Main.LocalPlayer.TileReplacementEnabled) return baseReturn;
 			MirrorPlacementAction(mirroredCoords => {
 				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, style);
-			}, new Vector2(x, y), null, true, 1);
+			}, new Vector2(x, y), null, true);
 
 			return baseReturn;
 		};
@@ -106,9 +120,10 @@ public static class MirrorPlacementDetours
 		On.Terraria.WorldGen.ReplaceWall += (orig, x, y, type) => {
 			bool baseReturn = orig.Invoke(x, y, type);
 
+			if (!Main.LocalPlayer.TileReplacementEnabled) return baseReturn;
 			MirrorPlacementAction(mirroredCoords => {
 				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type);
-			}, new Vector2(x, y), null, true, 1);
+			}, new Vector2(x, y), null, true);
 
 			return baseReturn;
 		};
@@ -132,9 +147,13 @@ public static class MirrorPlacementDetours
 
 		On.Terraria.WorldGen.KillWall += (orig, x, y, fail) => {
 			orig.Invoke(x, y, fail);
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+				NetMessage.SendTileSquare(-1, x, y, 1);
 
 			MirrorPlacementAction(mirroredCoords => {
 				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, fail);
+				if (Main.netMode == NetmodeID.MultiplayerClient)
+					NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 1);
 			}, new Vector2(x, y));
 		};
 

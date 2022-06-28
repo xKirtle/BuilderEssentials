@@ -21,7 +21,8 @@ public static class PlacementHelpers
     
     
     public static bool CanReduceItemStack(int type, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
-        if (!ItemLoader.ConsumeItem(new Item(type), Main.LocalPlayer)) return true;
+        Item item = new Item(type);
+        if (!ItemLoader.ConsumeItem(item, Main.LocalPlayer) || item.tileWand >= 0) return true;
 
         if (shouldBeHeld && Main.LocalPlayer.HeldItem.type == type && Main.LocalPlayer.HeldItem.stack >= amount) {
             if (reduceStack)
@@ -156,7 +157,6 @@ public static class PlacementHelpers
 
         if (sync && Main.netMode == NetmodeID.MultiplayerClient) {
             NetMessage.SendTileSquare(-1, x, y, 1);
-            //Sync kill tile dusts?
         }
 
         return true;
