@@ -1,0 +1,45 @@
+﻿using Terraria;
+using Terraria.GameContent.Creative;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace BuilderEssentials.Content.Items.Accessories;
+
+public class BuildInPeace : ModItem
+{
+    public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
+
+    public override void SetStaticDefaults() {
+        Tooltip.SetDefault("Disables all events in the game and sets the clock to 12pm daytime");
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
+    
+    public override void SetDefaults() {
+        Item.accessory = true;
+        Item.vanity = false;
+        Item.width = 42;
+        Item.height = 42;
+        Item.value = Item.sellPrice(0,50, 0, 0);
+        Item.rare = ItemRarityID.Red;
+    }
+
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        Main.bloodMoon = false;
+        Main.StopRain();
+        Main.stopMoonEvent();
+        Main.StopSlimeRain(false);
+        Main.eclipse = false;
+        Main.invasionType = 0; 
+        Main.invasionDelay = 0;
+        Main.invasionSize = 0;
+        Main.dayTime = true;
+        Main.time = 27000; //mid day
+        Main.fastForwardTime = false;
+
+        foreach (var npc in Main.npc) {
+            //Don't want to remove town NPC's
+            if (!npc.townNPC)
+                npc.active = false;
+        }
+    }
+}
