@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ObjectData;
 
 namespace BuilderEssentials.Common;
 
@@ -32,13 +33,25 @@ public static class MirrorPlacementDetours
 			//Paints don't work if there's not enough paint
 			//Tiles are being mirrored even though when stack is only 1
 
-			//TODO: Need to somehow stop placements if not enough in stack?
+			//TODO: Need to somehow stop placements if not enough in stack? -> seems to be doing that??
 			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true))
 				action?.Invoke(mirroredCoords);
+			
+			//TODO: Sync mirrored coord tile
 		}
 	}
 	
     public static void LoadDetours() {
+	    On.Terraria.TileObject.DrawPreview += (orig, sb, previewData, position) => {
+		    orig.Invoke(sb, previewData, position);
+
+		    MirrorPlacementAction(mirroredCoords => {
+			    TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
+			    previewData.Coordinates = mirroredCoords - new Point16(data.Origin.X, data.Origin.Y);
+			    orig.Invoke(sb, previewData, position);
+		    });
+	    };
+	    
 	    //Preventing infinite looping with oldMirror
 	    Point16 oldMirror = default;
 	    On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {

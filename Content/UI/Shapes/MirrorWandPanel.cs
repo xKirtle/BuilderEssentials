@@ -125,8 +125,8 @@ public class MirrorWandPanel : BaseShapePanel
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
         
-        if (cs.IsWithinRange(result.X, selStart.X, selEnd.X) &&
-            cs.IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
+        if (!cs.IsWithinRange(result.X, selStart.X, selEnd.X) ||
+            !cs.IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
         
         return result;
     }
