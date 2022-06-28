@@ -52,6 +52,7 @@ public class FillWand : BuilderEssentialsItem
             Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
             var itemType = ItemPicker.PickItem(tile);
             panel.SetSelectedItem(itemType);
+            Item.tileWand = itemType;
         }
 
         player.cursorItemIconEnabled = true;
