@@ -44,10 +44,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         var panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
         byte selectedColor = (byte) (panel.colorIndex + 1);
         int toolIndex = panel.toolIndex;
-
-        if (selectedColor == 0) return true;
-
-        if (toolIndex != 2) {
+        
+        if (toolIndex != 2 && selectedColor != 0) {
             // MethodInfo tryPaintMethod = player.GetType().GetMethod("TryPainting",
             //     BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance);
             // tryPaintMethod.Invoke(player, new object[] {Player.tileTargetX, Player.tileTargetY, toolIndex == 1, true});
