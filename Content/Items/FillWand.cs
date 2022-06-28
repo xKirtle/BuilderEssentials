@@ -54,9 +54,17 @@ public class FillWand : BuilderEssentialsItem
             panel.SetSelectedItem(itemType);
         }
 
-        player.cursorItemIconEnabled = ItemHasRange();
+        player.cursorItemIconEnabled = true;
         player.cursorItemIconID = Type;
         if (!player.cursorItemIconEnabled) return;
         player.cursorItemIconID = panel.SelectedItem?.type ?? Type;
+    }
+    
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient(ItemID.MoltenHamaxe)
+            .AddIngredient(ItemID.DirtRod)
+            .AddTile(TileID.Anvils)
+            .Register();
     }
 }
