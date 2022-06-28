@@ -7,10 +7,10 @@ namespace BuilderEssentials.Content.Items.Accessories;
 
 public class BuildInPeace : ModItem
 {
-    public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
+    public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
 
     public override void SetStaticDefaults() {
-        Tooltip.SetDefault("Disables all events in the game and sets the clock to 12pm daytime");
+        Tooltip.SetDefault("Disables all events in the game and enemy spawns. Also sets the clock to noon");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
     
