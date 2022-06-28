@@ -10,12 +10,11 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class MirrorWand : BuilderEssentialsItem
 {
-    public override void SetStaticDefaults()
-    {
+    public override void SetStaticDefaults() {
         Tooltip.SetDefault("Mirrors everything!" +
                            "\nRight Click to make a selection area" +
                            "\nLeft Click to make a mirror axis" +
-                           "\n[c/FF0000:This is a work in progress and\ndoes not support multi tiles yet]");
+                           "\n[c/FF0000:Multiplayer usage can be bug prone!]");
             
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
