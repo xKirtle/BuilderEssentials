@@ -175,7 +175,7 @@ public abstract class BaseShapePanel : UIElement
                 int itemType = ItemPicker.PickItem(previousTile);
                 Item item = new Item(itemType);
 
-                //Kirtle: Bug prone?
+                //BUG: bug prone?
                 if (!PlacementHelpers.RemoveTile(coords.X, coords.Y, isTile, !isTile && placedTile.IsWall,
                         needPickPower: true)) {
                     //Undo stack popping

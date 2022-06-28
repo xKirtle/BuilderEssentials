@@ -13,13 +13,17 @@ public static class MirrorPlacementDetours
 {
 	//Prevents infinite loop in ApplyItemTime
 	private static Point16 oldMirror = default;
-	internal static void MirrorPlacementAction(Action<Point16> action, Vector2 tileCoords = default, Item item = null, bool shouldReduceStack = false) {
+	internal static void MirrorPlacementAction(Action<Point16> action, Vector2 tileCoords = default, Item item = null, 
+		bool shouldReduceStack = false, int amount = 1, bool sync = true) {
 		if (WorldGen.gen || Main.dedServ) return;
+
+		if (item == null)
+			item = Main.LocalPlayer.HeldItem;
 		
 		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 		if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords, item?.createTile ?? 0,
-				item?.placeStyle ?? 0, Main.LocalPlayer.direction).ToPoint16();
+			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords, item.createTile,
+				item.placeStyle, Main.LocalPlayer.direction).ToPoint16();
 			
 			Player.tileTargetX = mirroredCoords.X;
 			Player.tileTargetY = mirroredCoords.Y;
@@ -27,19 +31,18 @@ public static class MirrorPlacementDetours
 
 			//Paints don't work if there's not enough paint
 			//Tiles are being mirrored even though when stack is only 1
-			
-			//TODO: reducing stack not working -> Check if can invoke action and has enough stack
-			// if (!shouldReduceStack || PlacementHelpers.CanReduceItemStack(itemType, shouldBeHeld: true))
-			action?.Invoke(mirroredCoords);
+
+			//TODO: Need to somehow stop placements if not enough in stack?
+			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true))
+				action?.Invoke(mirroredCoords);
 		}
 	}
 	
     public static void LoadDetours() {
-	    //TODO: ApplyItemTime will remove both items from stack but it's placed/mirrored before stack is checked
-
 	    //Preventing infinite looping with oldMirror
 	    Point16 oldMirror = default;
 	    On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
+		    //Kirtle: this is still going to be called a third time but fail because a tile is there already..
 		    orig.Invoke(player, item, multiplier, useItem);
 		    //Only Tile Placements
 		    if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
@@ -56,7 +59,7 @@ public static class MirrorPlacementDetours
 				player.direction *= -1;
 
 				player.itemTime = itemTime;
-			}, default, item);
+			}, default, item, false, 2);
 	    };
 
 	    On.Terraria.WorldGen.PlaceWall += (orig, x, y, type, mute) => {
@@ -64,7 +67,7 @@ public static class MirrorPlacementDetours
 
 		    MirrorPlacementAction(mirroredCoords => {
 			    orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, mute);
-		    }, new Vector2(x, y));
+		    }, new Vector2(x, y), null,  true, 1);
 	    };
 
 	    On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
@@ -77,13 +80,12 @@ public static class MirrorPlacementDetours
 			else orig.Invoke(player);
 		};
 
-	    //TODO: Replace tile/wall only removes 1 from stack
 		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
 			bool baseReturn = orig.Invoke(x, y, type, style);
 
 			MirrorPlacementAction(mirroredCoords => {
 				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, style);
-			}, new Vector2(x, y), shouldReduceStack: true);
+			}, new Vector2(x, y), null, true, 1);
 
 			return baseReturn;
 		};
@@ -93,7 +95,7 @@ public static class MirrorPlacementDetours
 
 			MirrorPlacementAction(mirroredCoords => {
 				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type);
-			}, new Vector2(x, y), shouldReduceStack: true);
+			}, new Vector2(x, y), null, true, 1);
 
 			return baseReturn;
 		};
