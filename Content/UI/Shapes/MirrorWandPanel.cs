@@ -130,4 +130,17 @@ public class MirrorWandPanel : BaseShapePanel
         
         return result;
     }
+
+    public void SyncSelection() {
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            Vector2 selStart = cs.RightMouse.Start;
+            Vector2 selEnd = cs.RightMouse.End;
+            Vector2 center = new Vector2((Math.Max(selStart.X, selEnd.X) - Math.Min(selStart.X, selEnd.X) + 1) / 2,
+                (Math.Max(selStart.Y, selEnd.Y) - Math.Min(selStart.Y, selEnd.Y) + 1) / 2);
+
+            float syncSizeX = Math.Max(Math.Max(center.X, selStart.X), selEnd.X);
+            float syncSizeY = Math.Max(Math.Max(center.Y, selStart.Y), selEnd.Y);
+            NetMessage.SendTileSquare(-1, (int) center.X, (int) center.Y, (int) Math.Max(syncSizeX, syncSizeY) + 200);
+        }
+    }
 }
