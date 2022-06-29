@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
+using BuilderEssentials.Common.DataStructures;
 using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.ObjectData;
 
@@ -12,210 +16,143 @@ namespace BuilderEssentials.Common;
 
 public static class MirrorPlacementDetours
 {
-	//Prevents infinite loop in ApplyItemTime
-	private static Point16 oldMirror = default;
-
-	internal static void MirrorPlacementAction(Action<Point16> action, Vector2 tileCoords = default, Item item = null,
+	public static Point16 MirrorPlacementAction(Action<Point16> action, Point16 tileCoords = default, Item item = null,
 		bool shouldReduceStack = false, int amount = 1) {
-		//Worldgen check is not necessary?
-		if (WorldGen.gen || Main.dedServ) return;
-		if (item == null) item = Main.LocalPlayer.HeldItem;
+		if (Main.dedServ) return tileCoords;
+		item ??= Main.LocalPlayer.HeldItem;
 
 		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 		if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords, item.createTile,
+			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords.ToVector2(), item.createTile,
 				item.placeStyle, Main.LocalPlayer.direction).ToPoint16();
 
 			Player.tileTargetX = mirroredCoords.X;
 			Player.tileTargetY = mirroredCoords.Y;
-			oldMirror = mirroredCoords;
 			
-			//TODO: Need to somehow stop placements if not enough in stack? -> seems to be doing that if applyItemTime uses amount: 2 but them MP is buggy
 			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true)) {
-				action?.Invoke(mirroredCoords);
+				if (tileCoords != mirroredCoords)
+					action?.Invoke(mirroredCoords);
+			}
+
+			return mirroredCoords;
+		}
+
+		return tileCoords;
+	}
+	
+	public static void PlayerPostUpdate() {
+		//TODO: MP Sync
+		while (queue.Count != 0) {
+			Tuple<Point, Item> dequeue = queue.Dequeue();
+			Point coord = dequeue.Item1;
+			Item item = dequeue.Item2;
+			
+			Tile tile = Main.tile[coord.X, coord.Y];
+			TypeOfItem typeOfItem = PlacementHelpers.WhatIsThisItem(item);
+			
+			TileObject tileObject = new TileObject() {
+				type = typeOfItem == TypeOfItem.Tile ? item.createTile : item.createWall,
+				style = item.placeStyle,
+			};
+			TileObjectData tileData = TileObjectData.GetTileData(tileObject.type, tileObject.style, tileObject.alternate);
+			
+			TileData[] placedTile = new TileData[1];
+			Point tileSize = Point.Zero;
+			
+			if (tileData != null) {
+				tileSize = new Point(tileData.CoordinateFullWidth / 16, tileData.CoordinateFullHeight / 16);
+				placedTile = new TileData[tileSize.X * tileSize.Y];
 				
-				if (Main.netMode == NetmodeID.MultiplayerClient) {
-					NetMessage.SendTileSquare(-1, (int) tileCoords.X, (int) tileCoords.Y, 5);
-					NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 5);
+				for (int x = 0; x < tileSize.X; x++)
+				for (int y = 0; y < tileSize.Y; y++) {
+					int k = tileSize.X * y + x;
+
+					Point tileCoord = coord - tileData.Origin.ToPoint() + new Point(x, y);
+					Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
+					placedTile[k] = new TileData(iterTile, tileCoord);
 				}
 			}
+			else placedTile[0] = new TileData(tile, coord);
+			
+			MirrorPlacementAction(mirroredCoords => {
+				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
+				
+				if (tileData != null) {
+					Point16 topLeftTile = mirroredCoords - tileData.Origin;
+					
+					for (int x = 0; x < tileSize.X; x++)
+					for (int y = 0; y < tileSize.Y; y++) {
+						int k = tileSize.X * y + x;
+
+						Point16 tileCoord = topLeftTile + new Point16(x, y);
+						Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
+
+						//Mannequin breaking cause send tile square is being called in palcetile, most likely
+						if (tileData.AlternatesCount > 0) {
+							Main.LocalPlayer.direction *= -1;
+							WorldGen.PlaceTile(mirroredCoords.X, mirroredCoords.Y, placedTile[k].TileTypeData.Type,
+								plr: Main.LocalPlayer.whoAmI, style: tileObject.style);
+							Main.LocalPlayer.direction *= -1;
+							
+							goto tileEntitiesCase;
+						}
+						else placedTile[k].CopyToTile(iterTile);
+						
+						// if (tile.TileType == TileID.DisplayDoll) {
+						// 	iterTile.TileFrameX += (short) (18 * -Main.LocalPlayer.direction);
+						// }
+					}
+
+					tileEntitiesCase:
+					//Handling specific cases with Tile Entities -> TEItemFrame, TEFoodPlatter, TEWeaponsRack, TEDisplayDoll, TEHatRack
+					if (tile.TileType == 21)
+						Chest.CreateChest(topLeftTile.X, topLeftTile.Y);
+					
+					if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin || tile.TileType == TileID.Womannequin)
+						TEDisplayDoll.Place(topLeftTile.X, topLeftTile.Y);
+
+					if (tile.TileType == TileID.WeaponsRack || tile.TileType == TileID.WeaponsRack2) {
+						TEWeaponsRack.Place(topLeftTile.X, topLeftTile.Y);
+					}
+				}
+				else {
+					placedTile[0].CopyToTile(mirroredTile);
+					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, true);
+					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, true);
+				}
+			}, new Point16(coord.X, coord.Y));
 		}
 	}
 
-	//TODO: Look into an alternative to mirror the objects of the Tilemap itself, and not simulation of placements!
+	public static UniqueQueue<Tuple<Point, Item>> queue = new();
 	public static void LoadDetours() {
-		//Kirtle: implement DataPreview myself to flip spritebatch?
-	    On.Terraria.TileObject.DrawPreview += (orig, sb, previewData, position) => {
-		    orig.Invoke(sb, previewData, position);
-		    
-		    MirrorPlacementAction(mirroredCoords => {
-			    TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
-			    previewData.Coordinates = mirroredCoords - new Point16(data.Origin.X, data.Origin.Y);
-			    orig.Invoke(sb, previewData, position);
-		    });
-	    };
-	    
-	    //Preventing infinite looping with oldMirror
-	    // Point16 oldMirror = default;
-	    On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
-		    orig.Invoke(player, item, multiplier, useItem);
-		    
-		    //Only Tile Placements
-		    if ((item.createTile < TileID.Dirt && item.createWall < WallID.Stone) ||
-		        (oldMirror.X == Player.tileTargetX && oldMirror.Y == Player.tileTargetY)) return;
+		//ApplyitemTime called, queue mirror placement based on HeldItem.
+		//Tile has not been placed yet when this runs
+		//Dequeue placement in an update method after
 
-		    int x = Player.tileTargetX;
-		    int y = Player.tileTargetY;
-		    
-		    MirrorPlacementAction(mirroredCoords => {
-				Point oldTileRange = new Point(Player.tileRangeX, Player.tileRangeY);
-				oldMirror = mirroredCoords;
+		On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
+			orig.Invoke(player, item, multiplier, useItem);
 
-				Player.tileRangeX = Int32.MaxValue;
-				Player.tileRangeY = Int32.MaxValue;
-				int itemTime = player.itemTime;
-				
-				player.itemTime = 0;
-				player.direction *= -1;
-				
-				player.ItemCheck(player.whoAmI); //Would like to skip pre item check but oh well
-				
-				player.direction *= -1;
-				player.itemTime = itemTime;
-				Player.tileRangeX = oldTileRange.X;
-				Player.tileRangeY = oldTileRange.Y;
-
-			}, new Vector2(x, y), item, false, 1);
-	    };
-
-	    On.Terraria.WorldGen.PlaceWall += (orig, x, y, type, mute) => {
-		    orig.Invoke(x, y, type, mute);
-
-		    if (!Main.LocalPlayer.TileReplacementEnabled) return;
-		    MirrorPlacementAction(mirroredCoords => {
-			    orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, mute);
-		    }, new Vector2(x, y), null, true, 1);
-	    };
-
-	    On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
-			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				//Messing with vanilla behaviour here for the sake of MirrorWand?
-				
-				//Do nothing
-			}
-			else orig.Invoke(player);
+			//Only want tile placements
+			if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
+			queue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
 		};
+	}
+}
 
-		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
-			bool baseReturn = orig.Invoke(x, y, type, style);
+//Thanks jopo
+//https://github.com/JavidPack/CheatSheet/blob/1.4/TileData.cs
+public readonly record struct TileData(TileTypeData TileTypeData, WallTypeData WallTypeData,
+	TileWallWireStateData TileWallWireStateData, LiquidData LiquidData, Point coord)
+{
+	public TileData(Tile tile, Point coord) : this(tile.Get<TileTypeData>(), tile.Get<WallTypeData>(), 
+		tile.Get<TileWallWireStateData>(), tile.Get<LiquidData>(), coord) {
+	}
 
-			if (!Main.LocalPlayer.TileReplacementEnabled) return baseReturn;
-			MirrorPlacementAction(mirroredCoords => {
-				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, style);
-			}, new Vector2(x, y), null, true);
-
-			return baseReturn;
-		};
-		
-		On.Terraria.WorldGen.ReplaceWall += (orig, x, y, type) => {
-			bool baseReturn = orig.Invoke(x, y, type);
-
-			if (!Main.LocalPlayer.TileReplacementEnabled) return baseReturn;
-			MirrorPlacementAction(mirroredCoords => {
-				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type);
-			}, new Vector2(x, y), null, true);
-
-			return baseReturn;
-		};
-
-		// On.Terraria.WorldGen.KillTile += (orig, x, y, fail, only, item) => {
-		// 	orig.Invoke(x, y, fail, only, item);
-		// 	
-		// 	MirrorPlacementAction(() => {
-		// 		orig.Invoke(Player.tileTargetX, Player.tileTargetY, fail, only, item);
-		// 	});
-		// };
-
-		//Works better than KillTile because of MultiTiles not breaking entirely on KillTile
-		On.Terraria.Player.PickTile += (orig, player, x, y, power) => {
-			orig.Invoke(player, x, y, power);
-			
-			MirrorPlacementAction(mirroredCoords => {
-				orig.Invoke(player, mirroredCoords.X, mirroredCoords.Y, power);
-			}, new Vector2(x, y));
-		};
-
-		On.Terraria.WorldGen.KillWall += (orig, x, y, fail) => {
-			orig.Invoke(x, y, fail);
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-				NetMessage.SendTileSquare(-1, x, y, 1);
-
-			MirrorPlacementAction(mirroredCoords => {
-				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, fail);
-				if (Main.netMode == NetmodeID.MultiplayerClient)
-					NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 1);
-			}, new Vector2(x, y));
-		};
-
-		On.Terraria.Player.ItemCheck_UseMiningTools_TryPoundingTile += (
-			On.Terraria.Player.orig_ItemCheck_UseMiningTools_TryPoundingTile orig, Player player, Item item, int id,
-			ref bool wall, int x, int y) => {
-			orig.Invoke(player, item, id, ref wall, x, y);
-			
-			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-			if (wall) return;
-			
-			MirrorPlacementAction(mirroredCoords => {
-				if (item.hammer > 0) {
-					Tile mirrorTile = Framing.GetTileSafely(mirroredCoords.X, mirroredCoords.Y);
-					int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
-					AutoHammer.ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
-				}
-			}, new Vector2(x, y));
-		};
-
-		On.Terraria.Player.ItemCheck_UseMiningTools_TryFindingWallToHammer += (
-			On.Terraria.Player.orig_ItemCheck_UseMiningTools_TryFindingWallToHammer orig, out int x, out int y) => {
-			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-			if (panel.IsVisible && panel.IsMouseWithinSelection()) {
-				//Messing with vanilla behaviour here for the sake of MirrorWand?
-				x = Player.tileTargetX;
-				y = Player.tileTargetY;
-			}
-			else orig.Invoke(out x, out y);
-		};
-		
-		On.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
-			orig.Invoke(player, item, x, y);
-			
-			MirrorPlacementAction(mirroredCoords => {
-				player.controlUseItem = true;
-				player.releaseUseItem = false;
-		
-				orig.Invoke(player, item, mirroredCoords.X, mirroredCoords.Y);
-			}, new Vector2(x, y));
-		};
-		
-		//TODO: Not running on vanilla paint tools because they just set tile.color()...
-		On.Terraria.WorldGen.paintTile += (orig, x, y, color, sync) => {
-			bool baseReturn = orig.Invoke(x, y, color, sync);
-
-			MirrorPlacementAction(mirroredCoords => {
-				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, color, sync);
-			}, new Vector2(x, y));
-			
-			return baseReturn;
-		};
-		
-		On.Terraria.WorldGen.paintWall += (orig, x, y, color, sync) => {
-			bool baseReturn = orig.Invoke(x, y, color, sync);
-
-			MirrorPlacementAction(mirroredCoords => {
-				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, color, sync);
-			}, new Vector2(x, y));
-			
-			return baseReturn;
-		};
-    }
+	public void CopyToTile(Tile tile) {
+		tile.Get<TileTypeData>() = TileTypeData;
+		tile.Get<WallTypeData>() = WallTypeData;
+		tile.Get<TileWallWireStateData>() = TileWallWireStateData;
+		tile.Get<LiquidData>() = LiquidData;
+	}
 }
