@@ -55,7 +55,7 @@ public static class MirrorPlacementDetours
 				style = item.placeStyle,
 			};
 			TileObjectData tileData = TileObjectData.GetTileData(tileObject.type, tileObject.style, tileObject.alternate);
-			
+
 			TileData[] placedTile = new TileData[1];
 			Point tileSize = Point.Zero;
 			
@@ -76,9 +76,18 @@ public static class MirrorPlacementDetours
 			
 			MirrorPlacementAction(mirroredCoords => {
 				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
-				
+
 				if (tileData != null) {
 					Point16 topLeftTile = mirroredCoords - tileData.Origin;
+
+					Console.WriteLine(topLeftTile);
+
+					if (tile.TileType == TileID.TallGateClosed) {
+
+						//iterTile.TileFrameY += (short) (18 * tileSize.Y * -Main.LocalPlayer.direction);
+						
+						return;
+					}
 					
 					for (int x = 0; x < tileSize.X; x++)
 					for (int y = 0; y < tileSize.Y; y++) {
@@ -86,24 +95,24 @@ public static class MirrorPlacementDetours
 
 						Point16 tileCoord = topLeftTile + new Point16(x, y);
 						Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
+						
+						if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin ||
+						    tile.TileType == TileID.Womannequin || tile.TileType == TileID.ClosedDoor) {
+							placedTile[k].CopyToTile(iterTile);
+							iterTile.TileFrameX += (short) (18 * tileSize.X * -Main.LocalPlayer.direction);
+							continue;
+						}
 
-						//Mannequin breaking cause send tile square is being called in palcetile, most likely
 						if (tileData.AlternatesCount > 0) {
 							Main.LocalPlayer.direction *= -1;
+							//PlaceTile's x/y are the tile's placement origin
 							WorldGen.PlaceTile(mirroredCoords.X, mirroredCoords.Y, placedTile[k].TileTypeData.Type,
-								plr: Main.LocalPlayer.whoAmI, style: tileObject.style);
+								plr: Main.LocalPlayer.whoAmI, style: TileObjectData.GetTileStyle(tile));
 							Main.LocalPlayer.direction *= -1;
-							
-							goto tileEntitiesCase;
 						}
 						else placedTile[k].CopyToTile(iterTile);
-						
-						// if (tile.TileType == TileID.DisplayDoll) {
-						// 	iterTile.TileFrameX += (short) (18 * -Main.LocalPlayer.direction);
-						// }
 					}
-
-					tileEntitiesCase:
+					
 					//Handling specific cases with Tile Entities -> TEItemFrame, TEFoodPlatter, TEWeaponsRack, TEDisplayDoll, TEHatRack
 					if (tile.TileType == 21)
 						Chest.CreateChest(topLeftTile.X, topLeftTile.Y);
@@ -120,6 +129,8 @@ public static class MirrorPlacementDetours
 					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, true);
 					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, true);
 				}
+				
+				Console.WriteLine("new: " + GetTopLeftCoordOfTile(mirroredCoords.X, mirroredCoords.Y));
 			}, new Point16(coord.X, coord.Y));
 		}
 	}
@@ -138,21 +149,48 @@ public static class MirrorPlacementDetours
 			queue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
 		};
 	}
-}
 
-//Thanks jopo
-//https://github.com/JavidPack/CheatSheet/blob/1.4/TileData.cs
-public readonly record struct TileData(TileTypeData TileTypeData, WallTypeData WallTypeData,
-	TileWallWireStateData TileWallWireStateData, LiquidData LiquidData, Point coord)
-{
-	public TileData(Tile tile, Point coord) : this(tile.Get<TileTypeData>(), tile.Get<WallTypeData>(), 
-		tile.Get<TileWallWireStateData>(), tile.Get<LiquidData>(), coord) {
+	
+	// if (tileData.AlternatesCount > 0) {
+	// 	//Alternate placements -> tileFrameX?
+	// 	//Styles -> tileFrameY?
+	// 	
+	// }
+	// else {
+	// 	//Styles -> tileFrameX?
+	// 	//Animation frames -> tileFrameY
+	// }
+	
+	//TODO: Innacurate for relic tiles
+	public static Point GetTopLeftCoordOfTile(int x, int y) {
+		Tile tile = Main.tile[x, y];
+		TileObjectData tileData = TileObjectData.GetTileData(tile);
+
+		int tileFrameX = tile.TileFrameX;
+		int tileFrameY = tile.TileFrameY;
+
+		if (tileData != null) {
+			//Ignoring styles
+			tileFrameX %= tileData.CoordinateFullWidth;
+			tileFrameY %= tileData.CoordinateFullHeight; 
+		}
+
+		return new Point(x - tileFrameX / 18, y - tileFrameY / 18);
 	}
+	
+	//Thanks jopo https://github.com/JavidPack/CheatSheet/blob/1.4/TileData.cs
+	public readonly record struct TileData(TileTypeData TileTypeData, WallTypeData WallTypeData,
+		TileWallWireStateData TileWallWireStateData, LiquidData LiquidData, Point coord)
+	{
+		public TileData(Tile tile, Point coord) : this(tile.Get<TileTypeData>(), tile.Get<WallTypeData>(), 
+			tile.Get<TileWallWireStateData>(), tile.Get<LiquidData>(), coord) {
+		}
 
-	public void CopyToTile(Tile tile) {
-		tile.Get<TileTypeData>() = TileTypeData;
-		tile.Get<WallTypeData>() = WallTypeData;
-		tile.Get<TileWallWireStateData>() = TileWallWireStateData;
-		tile.Get<LiquidData>() = LiquidData;
+		public void CopyToTile(Tile tile) {
+			tile.Get<TileTypeData>() = TileTypeData;
+			tile.Get<WallTypeData>() = WallTypeData;
+			tile.Get<TileWallWireStateData>() = TileWallWireStateData;
+			tile.Get<LiquidData>() = LiquidData;
+		}
 	}
 }
