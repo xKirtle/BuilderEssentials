@@ -62,6 +62,7 @@ public static class ShapeHelpers
         int dy = Math.Abs(y0 - y1);
         int minX = Math.Min(x0, x1);
         int minY = Math.Min(y0, y1);
+        color *= 0.6f;
 
         if (dx == 0 && dy == 0) return;
 
@@ -88,7 +89,7 @@ public static class ShapeHelpers
 
         //Middle helper lines
         Color tempColor = color;
-        color *= 0.4f;
+        color *= 0.2f;
 
         //Vertical line
         if (dx % 2 == 0 && dx > 3) {
