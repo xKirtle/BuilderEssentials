@@ -4,6 +4,7 @@ using BuilderEssentials.Common;
 using BuilderEssentials.Content.UI;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -71,41 +72,40 @@ public class AutoHammer : BaseItemToggleableUI
             var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             //Can the selected index change between CanUseItem and UseItem at all?
             if (panel.selectedIndex != -1) {
-                ChangeSlope(panel.slopeType, panel.isHalfBlock);
-                
+                Point16 coords = new Point16(Player.tileTargetX, Player.tileTargetY);
+                ChangeSlope(coords, panel.slopeType, panel.isHalfBlock);
+
                 //Add MirrorPlacement logic
                 Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
                 MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords => {
-                    Tile mirrorTile = Framing.GetTileSafely(mirroredCoords.X, mirroredCoords.Y);
                     int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
-                    ChangeSlope((SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
+                    ChangeSlope(mirroredCoords, (SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
                 });
             }
 
             Item.hammer = 80;
             canChangeSlope = false;
         }
-        
+
         return true;
     }
 
     //Kirtle: Tile.SmoothSlope for the edge case (halfBrick) where it looks glitched?
-    public static void ChangeSlope(SlopeType slopeType, bool isHalfBlock) {
-        Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+    public static void ChangeSlope(Point16 coords, SlopeType slopeType, bool isHalfBlock) {
+        Tile tile = Framing.GetTileSafely(coords.X, coords.Y);
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {
             //Prevent unnecessary changes to the tile and MP sync
-            if ((tile.Slope == slopeType || tile.IsHalfBlock != isHalfBlock) && 
-                tile.IsHalfBlock == isHalfBlock) return;
+            if (tile.Slope == slopeType && tile.IsHalfBlock == isHalfBlock) return;
             
             tile.IsHalfBlock = isHalfBlock;
-            tile.Slope = slopeType;
-            
-            WorldGen.KillTile(Player.tileTargetX, Player.tileTargetY, fail: true, effectOnly: true);
-            WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY, true);
+            tile.Slope = isHalfBlock ? SlopeType.Solid : slopeType;
+
+            WorldGen.KillTile(coords.X, coords.Y, fail: true, effectOnly: true);
+            WorldGen.SquareTileFrame(coords.X, coords.Y, true);
             SoundEngine.PlaySound(SoundID.Dig);
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendTileSquare(-1, Player.tileTargetX, Player.tileTargetY, 1);
+                NetMessage.SendTileSquare(-1, coords.X, coords.Y, 1);
         }
     }
 }
