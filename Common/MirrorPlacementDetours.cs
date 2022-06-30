@@ -37,8 +37,9 @@ public static class MirrorPlacementDetours
 		return tileCoords;
 	}
 
-	public static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new();
+	internal static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new();
 	public static void QueuedTilePlacements() {
+		//TODO: Tile/Wall replacements based on player.TileReplacementEnabled
 		while (tilePlacementsQueue.Count != 0) {
 			Tuple<Point, Item> dequeue = tilePlacementsQueue.Dequeue();
 			Point placementCoords = dequeue.Item1;
@@ -51,8 +52,8 @@ public static class MirrorPlacementDetours
 
 			bool isTilePlacement = typeOfItem == TypeOfItem.Tile;
 			bool isWallPlacement = typeOfItem == TypeOfItem.Wall;
-			bool isWirePlacement = true; //TODO: Hardcode item.types?
-			bool isLiquidPlacement = true; //Also hardocde item.types like buckets?
+			bool isWirePlacement = true; //TODO: Hardcode item.types? ItemCheck_UseWiringTools(item)
+			bool isLiquidPlacement = true; //Also hardocde item.types like buckets? ItemCheck_UseBuckets(item)
 
 			TileObject tileObject = new TileObject() {
 				type = isTilePlacement ? item.createTile : item.createWall,
@@ -180,7 +181,20 @@ public static class MirrorPlacementDetours
 			}, new Point16(placementCoords.X, placementCoords.Y));
 		}
 	}
-	
+
+	internal static UniqueQueue<Tuple<Point, Item>> hammerTileQueue = new();
+
+	public static void QueuedHammerTile() {
+		//How to know if hammering tile or wall?
+		while (hammerTileQueue.Count != 0) {
+			Tuple<Point, Item> dequeue = tilePlacementsQueue.Dequeue();
+            Point coords = dequeue.Item1;
+            Item item = dequeue.Item2;
+
+            Tile tile = Main.tile[coords.X, coords.Y];
+		}
+	}
+
 	public static void LoadDetours() {
 		//ApplyitemTime called, queue mirror placement based on HeldItem.
 		//Tile has not been placed yet when this runs
@@ -194,8 +208,10 @@ public static class MirrorPlacementDetours
 			}
 
 			if (item.hammer > 0) {
-				
+				hammerTileQueue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
 			}
+			
+			//TODO: Hardcode vanilla paint tools here to know when we're painting?
 		};
 
 		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, previewData, position) => {
@@ -212,6 +228,7 @@ public static class MirrorPlacementDetours
 	
 	public static void PlayerPostUpdate() {
     	QueuedTilePlacements();
+        QueuedHammerTile();
     }
 	
 	
