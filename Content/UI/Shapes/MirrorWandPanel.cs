@@ -26,6 +26,10 @@ public class MirrorWandPanel : BaseShapePanel
     public bool IsMouseWithinSelection() =>
         cs.IsWithinRange(Player.tileTargetX, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
         cs.IsWithinRange(Player.tileTargetY, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
+
+    public bool IsMouseAffectedByMirrorAxis() =>
+        cs.IsWithinRange(Player.tileTargetX, cs.LeftMouse.Start.X, cs.LeftMouse.End.X) ||
+        cs.IsWithinRange(Player.tileTargetY, cs.LeftMouse.Start.Y, cs.LeftMouse.End.Y);
     
     public bool IsMirrorAxisInsideSelection() =>
         cs.LeftMouse.Start != cs.LeftMouse.End &&
