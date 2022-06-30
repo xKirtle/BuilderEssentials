@@ -26,9 +26,6 @@ public static class MirrorPlacementDetours
 			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords.ToVector2(), item.createTile,
 				item.placeStyle, Main.LocalPlayer.direction).ToPoint16();
 
-			Player.tileTargetX = mirroredCoords.X;
-			Player.tileTargetY = mirroredCoords.Y;
-			
 			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true)) {
 				if (tileCoords != mirroredCoords)
 					action?.Invoke(mirroredCoords);
@@ -39,20 +36,24 @@ public static class MirrorPlacementDetours
 
 		return tileCoords;
 	}
-	
-	public static void PlayerPostUpdate() {
+
+	public static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new();
+	public static void QueuedTilePlacements() {
 		//TODO: MP Sync
-		while (queue.Count != 0) {
-			Tuple<Point, Item> dequeue = queue.Dequeue();
-			Point coord = dequeue.Item1;
+		while (tilePlacementsQueue.Count != 0) {
+			Tuple<Point, Item> dequeue = tilePlacementsQueue.Dequeue();
+			Point placementCoords = dequeue.Item1;
 			Item item = dequeue.Item2;
 			
-			Tile tile = Main.tile[coord.X, coord.Y];
+			Tile tile = Main.tile[placementCoords.X, placementCoords.Y];
+			int tileStyle = TileObjectData.GetTileStyle(tile);
 			TypeOfItem typeOfItem = PlacementHelpers.WhatIsThisItem(item);
+			Point topLeft = GetTopLeftCoordOfTile(placementCoords.X, placementCoords.Y);
 			
+			//Get rid of TileObject?
 			TileObject tileObject = new TileObject() {
 				type = typeOfItem == TypeOfItem.Tile ? item.createTile : item.createWall,
-				style = item.placeStyle,
+				style = item.placeStyle
 			};
 			TileObjectData tileData = TileObjectData.GetTileData(tileObject.type, tileObject.style, tileObject.alternate);
 
@@ -60,46 +61,52 @@ public static class MirrorPlacementDetours
 			Point tileSize = Point.Zero;
 			
 			if (tileData != null) {
-				tileSize = new Point(tileData.CoordinateFullWidth / 16, tileData.CoordinateFullHeight / 16);
+				tileSize = new Point(tileData.CoordinateFullWidth / 18, tileData.CoordinateFullHeight / 18);
+				Console.WriteLine(tileSize);
 				placedTile = new TileData[tileSize.X * tileSize.Y];
 				
 				for (int x = 0; x < tileSize.X; x++)
 				for (int y = 0; y < tileSize.Y; y++) {
 					int k = tileSize.X * y + x;
 
-					Point tileCoord = coord - tileData.Origin.ToPoint() + new Point(x, y);
+					Point tileCoord = topLeft + new Point(x, y);
 					Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
 					placedTile[k] = new TileData(iterTile, tileCoord);
 				}
 			}
-			else placedTile[0] = new TileData(tile, coord);
+			else placedTile[0] = new TileData(tile, placementCoords);
 			
 			MirrorPlacementAction(mirroredCoords => {
 				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
+				Point mirroredTopLeft = mirroredCoords.ToPoint() - (placementCoords - topLeft);
 
 				if (tileData != null) {
-					Point16 topLeftTile = mirroredCoords - tileData.Origin;
-
-					Console.WriteLine(topLeftTile);
-
-					if (tile.TileType == TileID.TallGateClosed) {
-
-						//iterTile.TileFrameY += (short) (18 * tileSize.Y * -Main.LocalPlayer.direction);
-						
-						return;
-					}
-					
 					for (int x = 0; x < tileSize.X; x++)
 					for (int y = 0; y < tileSize.Y; y++) {
 						int k = tileSize.X * y + x;
 
-						Point16 tileCoord = topLeftTile + new Point16(x, y);
+						Point tileCoord = mirroredTopLeft + new Point(x, y);
 						Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
 						
-						if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin ||
-						    tile.TileType == TileID.Womannequin || tile.TileType == TileID.ClosedDoor) {
+						if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin || 
+						    tile.TileType == TileID.Womannequin || tile.TileType == TileID.HatRack ||
+						    tile.TileType == TileID.TargetDummy) {
 							placedTile[k].CopyToTile(iterTile);
 							iterTile.TileFrameX += (short) (18 * tileSize.X * -Main.LocalPlayer.direction);
+							continue;
+						}
+
+						if (tile.TileType == TileID.ClosedDoor || tile.TileType == TileID.TallGateClosed ||
+						    tile.TileType == TileID.MasterTrophyBase || tile.TileType == TileID.ItemFrame ||
+						    tile.TileType == TileID.WeaponsRack || tile.TileType == TileID.WeaponsRack2 ||
+						    tile.TileType == TileID.LogicSensor) {
+							placedTile[k].CopyToTile(iterTile);
+							continue;
+						}
+
+						if (tile.TileType == TileID.Statues) {
+							placedTile[k].CopyToTile(iterTile);
+							iterTile.TileFrameY += (short) (162 * -Main.LocalPlayer.direction);
 							continue;
 						}
 
@@ -107,35 +114,50 @@ public static class MirrorPlacementDetours
 							Main.LocalPlayer.direction *= -1;
 							//PlaceTile's x/y are the tile's placement origin
 							WorldGen.PlaceTile(mirroredCoords.X, mirroredCoords.Y, placedTile[k].TileTypeData.Type,
-								plr: Main.LocalPlayer.whoAmI, style: TileObjectData.GetTileStyle(tile));
+								plr: Main.LocalPlayer.whoAmI, style: tileStyle);
 							Main.LocalPlayer.direction *= -1;
+							
+							goto specificTileEntitiesCases;
 						}
 						else placedTile[k].CopyToTile(iterTile);
 					}
 					
-					//Handling specific cases with Tile Entities -> TEItemFrame, TEFoodPlatter, TEWeaponsRack, TEDisplayDoll, TEHatRack
+					//Handling specific cases with Tile Entities
+					specificTileEntitiesCases:
 					if (tile.TileType == 21)
-						Chest.CreateChest(topLeftTile.X, topLeftTile.Y);
+						Chest.AfterPlacement_Hook(mirroredTopLeft.X, mirroredTopLeft.Y);
 					
 					if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin || tile.TileType == TileID.Womannequin)
-						TEDisplayDoll.Place(topLeftTile.X, topLeftTile.Y);
+						TEDisplayDoll.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y + 2);
 
-					if (tile.TileType == TileID.WeaponsRack || tile.TileType == TileID.WeaponsRack2) {
-						TEWeaponsRack.Place(topLeftTile.X, topLeftTile.Y);
+					if (tile.TileType == TileID.ItemFrame)
+						TEItemFrame.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y);
+					
+					if (tile.TileType == TileID.WeaponsRack || tile.TileType == TileID.WeaponsRack2)
+						TEWeaponsRack.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y);
+
+					if (tile.TileType == TileID.HatRack)
+						TEHatRack.Hook_AfterPlacement(mirroredTopLeft.X + 1, mirroredTopLeft.Y + 3);
+					
+					if (tile.TileType == TileID.TargetDummy)
+						TETrainingDummy.Hook_AfterPlacement(mirroredTopLeft.X + 1, mirroredTopLeft.Y + 2);
+
+					if (tile.TileType == TileID.LogicSensor)
+						TELogicSensor.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y);
+					
+					if (tile.TileType == TileID.FoodPlatter)
+						TEFoodPlatter.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y);
 					}
-				}
 				else {
 					placedTile[0].CopyToTile(mirroredTile);
 					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, true);
 					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, true);
 				}
-				
-				Console.WriteLine("new: " + GetTopLeftCoordOfTile(mirroredCoords.X, mirroredCoords.Y));
-			}, new Point16(coord.X, coord.Y));
+
+			}, new Point16(placementCoords.X, placementCoords.Y));
 		}
 	}
-
-	public static UniqueQueue<Tuple<Point, Item>> queue = new();
+	
 	public static void LoadDetours() {
 		//ApplyitemTime called, queue mirror placement based on HeldItem.
 		//Tile has not been placed yet when this runs
@@ -146,22 +168,29 @@ public static class MirrorPlacementDetours
 
 			//Only want tile placements
 			if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
-			queue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
+			tilePlacementsQueue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
+		};
+
+		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, previewData, position) => {
+			orig.Invoke(spriteBatch, previewData, position);
+
+			MirrorPlacementAction(mirroredCoords => {
+				Console.WriteLine(previewData.Alternate);
+				TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
+				previewData.Coordinates = mirroredCoords - data.Origin;
+				previewData.Alternate = Main.LocalPlayer.direction == 1 ? 0 : 1;
+				orig.Invoke(spriteBatch, previewData, position);
+			});
 		};
 	}
-
 	
-	// if (tileData.AlternatesCount > 0) {
-	// 	//Alternate placements -> tileFrameX?
-	// 	//Styles -> tileFrameY?
-	// 	
-	// }
-	// else {
-	// 	//Styles -> tileFrameX?
-	// 	//Animation frames -> tileFrameY
-	// }
+	public static void PlayerPostUpdate() {
+    	QueuedTilePlacements();
+    }
 	
-	//TODO: Innacurate for relic tiles
+	
+	
+	//Not sure where to put this yet
 	public static Point GetTopLeftCoordOfTile(int x, int y) {
 		Tile tile = Main.tile[x, y];
 		TileObjectData tileData = TileObjectData.GetTileData(tile);
