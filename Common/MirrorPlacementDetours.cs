@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using BuilderEssentials.Common.DataStructures;
@@ -10,41 +11,31 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace BuilderEssentials.Common;
 
 public static class MirrorPlacementDetours
 {
-	public static Point16 MirrorPlacementAction(Action<Point16> action, Point16 tileCoords = default, Item item = null,
-		bool shouldReduceStack = false, int amount = 1) {
-		if (Main.dedServ) return tileCoords;
-		item ??= Main.LocalPlayer.HeldItem;
-
-		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-		if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
-			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords.ToVector2(), item.createTile,
-				item.placeStyle, Main.LocalPlayer.direction).ToPoint16();
-
-			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true)) {
-				if (tileCoords != mirroredCoords)
-					action?.Invoke(mirroredCoords);
-			}
-
-			return mirroredCoords;
-		}
-
-		return tileCoords;
+	static readonly List<int> PaintToolsItemTypes = new() {
+		ItemID.Paintbrush, ItemID.SpectrePaintbrush,
+		ItemID.PaintRoller, ItemID.SpectrePaintRoller,
+		ItemID.PaintScraper, ItemID.SpectrePaintScraper
+	};
+	
+	public static void PlayerPostUpdate() {
+		QueuedTilePlacements();
+		QueuedHammerTile();
+		QueuedTilePaint();
 	}
 
 	internal static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new();
 	public static void QueuedTilePlacements() {
 		//TODO: Tile/Wall replacements based on player.TileReplacementEnabled
 		while (tilePlacementsQueue.Count != 0) {
-			Tuple<Point, Item> dequeue = tilePlacementsQueue.Dequeue();
-			Point placementCoords = dequeue.Item1;
-			Item item = dequeue.Item2;
-			
+			(Point placementCoords, Item item) = tilePlacementsQueue.Dequeue();
+
 			Point topLeft = GetTopLeftCoordOfTile(placementCoords.X, placementCoords.Y);
 			Tile tile = Main.tile[placementCoords.X, placementCoords.Y];
 			int tileStyle = TileObjectData.GetTileStyle(tile);
@@ -174,7 +165,7 @@ public static class MirrorPlacementDetours
 				}
 
 				if (Main.myPlayer == Main.LocalPlayer.whoAmI && Main.netMode == NetmodeID.MultiplayerClient) {
-					NetMessage.SendObjectPlacment(Main.LocalPlayer.whoAmI, mirroredCoords.X, mirroredCoords.Y,
+					NetMessage.SendObjectPlacment(-1, mirroredCoords.X, mirroredCoords.Y,
 						tileObject.type, tileObject.style, tileObject.alternate, tileObject.random,
 						Main.LocalPlayer.direction * -1);
 				}
@@ -182,36 +173,65 @@ public static class MirrorPlacementDetours
 		}
 	}
 
-	internal static UniqueQueue<Tuple<Point, Item>> hammerTileQueue = new();
-
+	internal static UniqueQueue<MinimalTileData> hammerTileQueue = new();
 	public static void QueuedHammerTile() {
-		//How to know if hammering tile or wall?
 		while (hammerTileQueue.Count != 0) {
-			Tuple<Point, Item> dequeue = tilePlacementsQueue.Dequeue();
-            Point coords = dequeue.Item1;
-            Item item = dequeue.Item2;
-
+			MinimalTileData data = hammerTileQueue.Dequeue();
+			Point coords = data.coord;
             Tile tile = Main.tile[coords.X, coords.Y];
+
+            //Data is the information before the hammer was used
+            if (data.Slope == tile.Slope && data.IsHalfBlock == tile.IsHalfBlock) return;
+
+            MirrorPlacementAction(mirroredCoords => {
+	            int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+	            AutoHammer.ChangeSlope(mirroredCoords, (SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
+            }, new Point16(coords));
+		}
+	}
+
+	internal static UniqueQueue<Tuple<Point, Item>> paintTileQueue = new();
+	public static void QueuedTilePaint() {
+		while (paintTileQueue.Count != 0) {
+			(Point coords, Item item) = paintTileQueue.Dequeue();
+			Tile tile = Main.tile[coords.X, coords.Y];
+			
+			MirrorPlacementAction(mirredCoords => {
+				int paintTool = (PaintToolsItemTypes.IndexOf(item.type) / 2);
+				bool paintTile = paintTool == 0,  paintWall = paintTool == 1, scrapPaint = paintTool == 2;
+				
+				if (paintTile || paintWall)
+					BasePaintBrush.PaintTileOrWall(paintTile ? tile.TileColor : tile.WallColor, paintTool, mirredCoords.ToPoint());
+				else if (scrapPaint)
+					BasePaintBrush.ScrapPaint(mirredCoords.ToPoint());
+			});
 		}
 	}
 
 	public static void LoadDetours() {
-		//ApplyitemTime called, queue mirror placement based on HeldItem.
-		//Tile has not been placed yet when this runs
-		//Dequeue placement in an update method after
-
+		//ApplyItemTime only gets called when interacting with tiles (not walls) ?
 		On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 			orig.Invoke(player, item, multiplier, useItem);
-
+			
+			Point coord = new Point(Player.tileTargetX, Player.tileTargetY);
+			Tile tile = Main.tile[coord.X, coord.Y];
+			MinimalTileData data = new MinimalTileData(tile, coord);
+			TileData tileData = new TileData(tile, coord);
+			
 			if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone) {
-				tilePlacementsQueue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
+				Console.WriteLine("ApplyItemTime");
+				tilePlacementsQueue.Enqueue(new Tuple<Point, Item>(coord, item));
 			}
 
 			if (item.hammer > 0) {
-				hammerTileQueue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
+				//ApplyItemTime not called when hammer breaks walls?
+				hammerTileQueue.Enqueue(data);
 			}
 			
-			//TODO: Hardcode vanilla paint tools here to know when we're painting?
+			if (PaintToolsItemTypes.Contains(item.type)) {
+				//Make it copy tile data paint only
+				paintTileQueue.Enqueue(new Tuple<Point, Item>(coord, item));
+			}
 		};
 
 		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, previewData, position) => {
@@ -224,14 +244,48 @@ public static class MirrorPlacementDetours
 				orig.Invoke(spriteBatch, previewData, position);
 			});
 		};
+		
+		//Remove vanilla behaviour that auto places walls (if available) to fill 3x1 spaces
+		On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
+			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+			if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
+				//Do nothing
+			}
+			else orig.Invoke(player);
+		};
+		
+		//Remove vanilla behaviour that hammers walls around the tile target based on coord inside tile targetted
+		On.Terraria.Player.ItemCheck_UseMiningTools_TryFindingWallToHammer += (
+			On.Terraria.Player.orig_ItemCheck_UseMiningTools_TryFindingWallToHammer orig, out int x, out int y) => {
+			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+			if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
+				x = Player.tileTargetX;
+				y = Player.tileTargetY;
+			}
+			else orig.Invoke(out x, out y);
+		};
 	}
-	
-	public static void PlayerPostUpdate() {
-    	QueuedTilePlacements();
-        QueuedHammerTile();
-    }
-	
-	
+
+	public static Point16 MirrorPlacementAction(Action<Point16> action, Point16 tileCoords = default, Item item = null,
+		bool shouldReduceStack = false, int amount = 1) {
+		if (Main.dedServ) return tileCoords;
+		item ??= Main.LocalPlayer.HeldItem;
+
+		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+		if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
+			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords.ToVector2(), item.createTile,
+				item.placeStyle, Main.LocalPlayer.direction).ToPoint16();
+
+			if (PlacementHelpers.CanReduceItemStack(item.type, amount, shouldReduceStack, true)) {
+				if (tileCoords != mirroredCoords)
+					action?.Invoke(mirroredCoords);
+			}
+
+			return mirroredCoords;
+		}
+
+		return tileCoords;
+	}
 	
 	//Not sure where to put this yet
 	public static Point GetTopLeftCoordOfTile(int x, int y) {
@@ -248,51 +302,5 @@ public static class MirrorPlacementDetours
 		}
 
 		return new Point(x - tileFrameX / 18, y - tileFrameY / 18);
-	}
-	
-	public readonly record struct TileData(TileTypeData TileTypeData, WallTypeData WallTypeData,
-		TileWallWireStateData TileWallWireStateData, LiquidData LiquidData, Point coord)
-	{
-		public TileData(Tile tile, Point coord) : this(tile.Get<TileTypeData>(), tile.Get<WallTypeData>(), 
-			tile.Get<TileWallWireStateData>(), tile.Get<LiquidData>(), coord) {
-		}
-
-		public void CopyToTile(Tile tile, bool tileData = false, bool wallData = false, bool wireData = false, bool liquidData = false) {
-			var newTileData = tile.Get<TileWallWireStateData>();
-			
-			if (tileData) {
-				tile.Get<TileTypeData>() = TileTypeData;
-				newTileData.HasTile = TileWallWireStateData.HasTile;
-				newTileData.IsHalfBlock = TileWallWireStateData.IsHalfBlock;
-				newTileData.Slope = TileWallWireStateData.Slope;
-				newTileData.TileColor = TileWallWireStateData.TileColor;
-				newTileData.TileFrameNumber = TileWallWireStateData.TileFrameNumber;
-				newTileData.TileFrameX = TileWallWireStateData.TileFrameX;
-				newTileData.TileFrameY = TileWallWireStateData.TileFrameY;
-			}
-
-			if (wallData) {
-				tile.Get<WallTypeData>() = WallTypeData;
-				newTileData.WallColor = TileWallWireStateData.WallColor;
-				newTileData.WallFrameNumber = TileWallWireStateData.WallFrameNumber;
-				newTileData.WallFrameX = TileWallWireStateData.WallFrameX;
-				newTileData.WallFrameY = TileWallWireStateData.WallFrameY;
-			}
-
-			if (wireData) {
-				newTileData.IsActuated = TileWallWireStateData.IsActuated;
-				newTileData.HasActuator = TileWallWireStateData.HasActuator;
-				newTileData.WireData = TileWallWireStateData.WireData;
-				newTileData.RedWire = TileWallWireStateData.RedWire;
-				newTileData.BlueWire = TileWallWireStateData.BlueWire;
-				newTileData.GreenWire = TileWallWireStateData.GreenWire;
-				newTileData.YellowWire = TileWallWireStateData.YellowWire;
-			};
-
-			tile.Get<TileWallWireStateData>() = newTileData;
-
-			if (liquidData)
-				tile.Get<LiquidData>() = LiquidData;
-		}
 	}
 }
