@@ -22,7 +22,7 @@ public static class MirrorPlacementDetours
 		item ??= Main.LocalPlayer.HeldItem;
 
 		var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
-		if (panel.IsVisible && panel.IsMouseWithinSelection()) {
+		if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
 			Point16 mirroredCoords = panel.GetMirroredTileTargetCoordinate(tileCoords.ToVector2(), item.createTile,
 				item.placeStyle, Main.LocalPlayer.direction).ToPoint16();
 
@@ -39,32 +39,38 @@ public static class MirrorPlacementDetours
 
 	public static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new();
 	public static void QueuedTilePlacements() {
-		//TODO: MP Sync
 		while (tilePlacementsQueue.Count != 0) {
 			Tuple<Point, Item> dequeue = tilePlacementsQueue.Dequeue();
 			Point placementCoords = dequeue.Item1;
 			Item item = dequeue.Item2;
 			
+			Point topLeft = GetTopLeftCoordOfTile(placementCoords.X, placementCoords.Y);
 			Tile tile = Main.tile[placementCoords.X, placementCoords.Y];
 			int tileStyle = TileObjectData.GetTileStyle(tile);
 			TypeOfItem typeOfItem = PlacementHelpers.WhatIsThisItem(item);
-			Point topLeft = GetTopLeftCoordOfTile(placementCoords.X, placementCoords.Y);
-			
-			//Get rid of TileObject?
+
+			bool isTilePlacement = typeOfItem == TypeOfItem.Tile;
+			bool isWallPlacement = typeOfItem == TypeOfItem.Wall;
+			bool isWirePlacement = true; //TODO: Hardcode item.types?
+			bool isLiquidPlacement = true; //Also hardocde item.types like buckets?
+
 			TileObject tileObject = new TileObject() {
-				type = typeOfItem == TypeOfItem.Tile ? item.createTile : item.createWall,
+				type = isTilePlacement ? item.createTile : item.createWall,
 				style = item.placeStyle
 			};
-			TileObjectData tileData = TileObjectData.GetTileData(tileObject.type, tileObject.style, tileObject.alternate);
+
+			TileObjectData tileData = null;
+			if (isTilePlacement)
+				tileData = TileObjectData.GetTileData(tileObject.type, tileObject.style, tileObject.alternate);
 
 			TileData[] placedTile = new TileData[1];
 			Point tileSize = Point.Zero;
-			
+
 			if (tileData != null) {
 				tileSize = new Point(tileData.CoordinateFullWidth / 18, tileData.CoordinateFullHeight / 18);
-				Console.WriteLine(tileSize);
 				placedTile = new TileData[tileSize.X * tileSize.Y];
 				
+				//Saving tiles data
 				for (int x = 0; x < tileSize.X; x++)
 				for (int y = 0; y < tileSize.Y; y++) {
 					int k = tileSize.X * y + x;
@@ -79,8 +85,9 @@ public static class MirrorPlacementDetours
 			MirrorPlacementAction(mirroredCoords => {
 				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
 				Point mirroredTopLeft = mirroredCoords.ToPoint() - (placementCoords - topLeft);
-
+				
 				if (tileData != null) {
+					//Copying saved tiles data to mirrored coordinates
 					for (int x = 0; x < tileSize.X; x++)
 					for (int y = 0; y < tileSize.Y; y++) {
 						int k = tileSize.X * y + x;
@@ -88,24 +95,30 @@ public static class MirrorPlacementDetours
 						Point tileCoord = mirroredTopLeft + new Point(x, y);
 						Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
 						
+						//Tiles with a rotated variant
 						if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin || 
 						    tile.TileType == TileID.Womannequin || tile.TileType == TileID.HatRack ||
 						    tile.TileType == TileID.TargetDummy) {
-							placedTile[k].CopyToTile(iterTile);
+							placedTile[k].CopyToTile(iterTile, isTilePlacement, 
+								isWallPlacement, isWirePlacement, isLiquidPlacement);
 							iterTile.TileFrameX += (short) (18 * tileSize.X * -Main.LocalPlayer.direction);
 							continue;
 						}
 
+						//Tiles breaking with WorldGen.PlaceTile (why?)
 						if (tile.TileType == TileID.ClosedDoor || tile.TileType == TileID.TallGateClosed ||
 						    tile.TileType == TileID.MasterTrophyBase || tile.TileType == TileID.ItemFrame ||
 						    tile.TileType == TileID.WeaponsRack || tile.TileType == TileID.WeaponsRack2 ||
 						    tile.TileType == TileID.LogicSensor) {
-							placedTile[k].CopyToTile(iterTile);
+							placedTile[k].CopyToTile(iterTile, isTilePlacement, 
+								isWallPlacement, isWirePlacement, isLiquidPlacement);
 							continue;
 						}
 
+						//Spritesheet is different than other tiles with rotated variants
 						if (tile.TileType == TileID.Statues) {
-							placedTile[k].CopyToTile(iterTile);
+							placedTile[k].CopyToTile(iterTile, isTilePlacement, 
+								isWallPlacement, isWirePlacement, isLiquidPlacement);
 							iterTile.TileFrameY += (short) (162 * -Main.LocalPlayer.direction);
 							continue;
 						}
@@ -116,10 +129,12 @@ public static class MirrorPlacementDetours
 							WorldGen.PlaceTile(mirroredCoords.X, mirroredCoords.Y, placedTile[k].TileTypeData.Type,
 								plr: Main.LocalPlayer.whoAmI, style: tileStyle);
 							Main.LocalPlayer.direction *= -1;
-							
+
 							goto specificTileEntitiesCases;
 						}
-						else placedTile[k].CopyToTile(iterTile);
+						else
+							placedTile[k].CopyToTile(iterTile, isTilePlacement, 
+								isWallPlacement, isWirePlacement, isLiquidPlacement);
 					}
 					
 					//Handling specific cases with Tile Entities
@@ -147,13 +162,21 @@ public static class MirrorPlacementDetours
 					
 					if (tile.TileType == TileID.FoodPlatter)
 						TEFoodPlatter.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y);
+					
+					//TODO: Check pylons. Should it be added to map as well?
 					}
 				else {
-					placedTile[0].CopyToTile(mirroredTile);
+					placedTile[0].CopyToTile(mirroredTile, isTilePlacement, 
+						isWallPlacement, isWirePlacement, isLiquidPlacement);
 					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, true);
 					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, true);
 				}
 
+				if (Main.myPlayer == Main.LocalPlayer.whoAmI && Main.netMode == NetmodeID.MultiplayerClient) {
+					NetMessage.SendObjectPlacment(Main.LocalPlayer.whoAmI, mirroredCoords.X, mirroredCoords.Y,
+						tileObject.type, tileObject.style, tileObject.alternate, tileObject.random,
+						Main.LocalPlayer.direction * -1);
+				}
 			}, new Point16(placementCoords.X, placementCoords.Y));
 		}
 	}
@@ -166,16 +189,19 @@ public static class MirrorPlacementDetours
 		On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 			orig.Invoke(player, item, multiplier, useItem);
 
-			//Only want tile placements
-			if (item.createTile < TileID.Dirt && item.createWall < WallID.Stone) return;
-			tilePlacementsQueue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
+			if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone) {
+				tilePlacementsQueue.Enqueue(new Tuple<Point, Item>(new Point(Player.tileTargetX, Player.tileTargetY), item));
+			}
+
+			if (item.hammer > 0) {
+				
+			}
 		};
 
 		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, previewData, position) => {
 			orig.Invoke(spriteBatch, previewData, position);
 
 			MirrorPlacementAction(mirroredCoords => {
-				Console.WriteLine(previewData.Alternate);
 				TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
 				previewData.Coordinates = mirroredCoords - data.Origin;
 				previewData.Alternate = Main.LocalPlayer.direction == 1 ? 0 : 1;
@@ -207,7 +233,6 @@ public static class MirrorPlacementDetours
 		return new Point(x - tileFrameX / 18, y - tileFrameY / 18);
 	}
 	
-	//Thanks jopo https://github.com/JavidPack/CheatSheet/blob/1.4/TileData.cs
 	public readonly record struct TileData(TileTypeData TileTypeData, WallTypeData WallTypeData,
 		TileWallWireStateData TileWallWireStateData, LiquidData LiquidData, Point coord)
 	{
@@ -215,11 +240,42 @@ public static class MirrorPlacementDetours
 			tile.Get<TileWallWireStateData>(), tile.Get<LiquidData>(), coord) {
 		}
 
-		public void CopyToTile(Tile tile) {
-			tile.Get<TileTypeData>() = TileTypeData;
-			tile.Get<WallTypeData>() = WallTypeData;
-			tile.Get<TileWallWireStateData>() = TileWallWireStateData;
-			tile.Get<LiquidData>() = LiquidData;
+		public void CopyToTile(Tile tile, bool tileData = false, bool wallData = false, bool wireData = false, bool liquidData = false) {
+			var newTileData = tile.Get<TileWallWireStateData>();
+			
+			if (tileData) {
+				tile.Get<TileTypeData>() = TileTypeData;
+				newTileData.HasTile = TileWallWireStateData.HasTile;
+				newTileData.IsHalfBlock = TileWallWireStateData.IsHalfBlock;
+				newTileData.Slope = TileWallWireStateData.Slope;
+				newTileData.TileColor = TileWallWireStateData.TileColor;
+				newTileData.TileFrameNumber = TileWallWireStateData.TileFrameNumber;
+				newTileData.TileFrameX = TileWallWireStateData.TileFrameX;
+				newTileData.TileFrameY = TileWallWireStateData.TileFrameY;
+			}
+
+			if (wallData) {
+				tile.Get<WallTypeData>() = WallTypeData;
+				newTileData.WallColor = TileWallWireStateData.WallColor;
+				newTileData.WallFrameNumber = TileWallWireStateData.WallFrameNumber;
+				newTileData.WallFrameX = TileWallWireStateData.WallFrameX;
+				newTileData.WallFrameY = TileWallWireStateData.WallFrameY;
+			}
+
+			if (wireData) {
+				newTileData.IsActuated = TileWallWireStateData.IsActuated;
+				newTileData.HasActuator = TileWallWireStateData.HasActuator;
+				newTileData.WireData = TileWallWireStateData.WireData;
+				newTileData.RedWire = TileWallWireStateData.RedWire;
+				newTileData.BlueWire = TileWallWireStateData.BlueWire;
+				newTileData.GreenWire = TileWallWireStateData.GreenWire;
+				newTileData.YellowWire = TileWallWireStateData.YellowWire;
+			};
+
+			tile.Get<TileWallWireStateData>() = newTileData;
+
+			if (liquidData)
+				tile.Get<LiquidData>() = LiquidData;
 		}
 	}
 }
