@@ -219,6 +219,7 @@ public static class MirrorPlacement
 		
 		On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 			orig.Invoke(player, item, multiplier, useItem);
+			if (Main.netMode == NetmodeID.Server) return;
 			
 			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
 			if (!panel.IsVisible || !panel.validMirrorPlacement || 
