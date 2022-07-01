@@ -34,6 +34,7 @@ public class MultiWand : BaseItemToggleableUI
         Item.rare = ItemRarityID.Red;
         Item.noMelee = true;
         Item.autoReuse = true;
+        Item.tileWand = WandMaterials[0];
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(2, -9);
