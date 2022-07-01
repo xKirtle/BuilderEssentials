@@ -179,7 +179,8 @@ public static class MirrorPlacement
 						NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 1);
 				}
 
-				item.stack--;
+				//Only reduce stack at the end, in case some condition prevents placement
+				PlacementHelpers.CanReduceItemStack(item.type, 1, reduceStack: true, shouldBeHeld: true);
 			}, new Point16(placementCoords.X, placementCoords.Y), item, shouldReduceStack: false);
 		}
 	}
