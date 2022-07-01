@@ -79,6 +79,11 @@ public static class MirrorPlacement
 				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
 				Point mirroredTopLeft = mirroredCoords.ToPoint() - (placementCoords - topLeft);
 				
+				if ((isTilePlacement && mirroredTile.HasTile) ||
+				    (isTilePlacement && mirroredTile.TileType == tile.TileType) ||
+				    (isWallPlacement && mirroredTile.WallType >= WallID.Stone) ||
+				    (isWallPlacement && mirroredTile.WallType == tile.WallType)) return;
+
 				if (tileData != null) {
 					//Copying saved tiles data to mirrored coordinates
 					for (int x = 0; x < tileSize.X; x++)
@@ -174,8 +179,8 @@ public static class MirrorPlacement
 						NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 1);
 				}
 
-				
-			}, new Point16(placementCoords.X, placementCoords.Y), item, shouldReduceStack: true);
+				item.stack--;
+			}, new Point16(placementCoords.X, placementCoords.Y), item, shouldReduceStack: false);
 		}
 	}
 
