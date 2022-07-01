@@ -57,12 +57,12 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
                 (toolIndex == 1 && tile.WallType <= 0)) return true;
 
             PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedTileCoords.ToPoint());
-            MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords =>
+            MirrorPlacement.MirrorPlacementAction(mirroredCoords =>
                 PaintTileOrWall(selectedColor, toolIndex, mirroredCoords.ToPoint()));
         }
         else {
             ScrapPaint(BEPlayer.PointedTileCoords.ToPoint());
-            MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords => 
+            MirrorPlacement.MirrorPlacementAction(mirroredCoords => 
                 ScrapPaint(mirroredCoords.ToPoint()));
         }
 

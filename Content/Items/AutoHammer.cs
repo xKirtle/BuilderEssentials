@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.UI;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -77,7 +78,7 @@ public class AutoHammer : BaseItemToggleableUI
 
                 //Add MirrorPlacement logic
                 Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-                MirrorPlacementDetours.MirrorPlacementAction(mirroredCoords => {
+                MirrorPlacement.MirrorPlacementAction(mirroredCoords => {
                     int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
                     ChangeSlope(mirroredCoords, (SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
                 });

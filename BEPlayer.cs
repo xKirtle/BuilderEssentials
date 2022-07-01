@@ -29,6 +29,6 @@ public class BEPlayer : ModPlayer
     }
 
     public override void PostUpdate() {
-        MirrorPlacementDetours.PlayerPostUpdate();
+        MirrorPlacement.PlayerPostUpdate();
     }
 }

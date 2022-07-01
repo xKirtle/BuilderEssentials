@@ -18,7 +18,7 @@ using Terraria.ObjectData;
 
 namespace BuilderEssentials.Common;
 
-public static class MirrorPlacementDetours
+public static class MirrorPlacement
 {
 	static readonly List<int> PaintToolsItemTypes = new() {
 		ItemID.Paintbrush, ItemID.SpectrePaintbrush,
