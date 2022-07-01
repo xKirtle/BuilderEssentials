@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
@@ -23,7 +25,12 @@ public static class PlacementHelpers
     
     public static bool CanReduceItemStack(int type, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
         Item item = new Item(type);
-        if (!ItemLoader.ConsumeItem(item, Main.LocalPlayer) || item.tileWand >= 0) return true;
+        if (!ItemLoader.ConsumeItem(item, Main.LocalPlayer)) return true;
+
+        if (item.tileWand >= 0) {
+            int wandIndex = MultiWand.WandPlacedTiles.ToList().IndexOf(item.createTile);
+            type = MultiWand.WandMaterials[wandIndex];
+        }
 
         if (shouldBeHeld && Main.LocalPlayer.HeldItem.type == type && Main.LocalPlayer.HeldItem.stack >= amount) {
             if (reduceStack)
