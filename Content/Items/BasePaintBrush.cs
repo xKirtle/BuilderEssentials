@@ -24,6 +24,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         Item.value = Item.sellPrice(silver: 80);
         Item.rare = ItemRarityID.Red;
         Item.autoReuse = true;
+        // ItemID.Sets.IsPaintScraper[Type] = true;
     }
     
     public override Vector2? HoldoutOffset() => new Vector2(5, -8);
@@ -126,7 +127,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             tile.TileColor = color;
             
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.PaintTile, number: coords.X, number2: coords.Y);
+                NetMessage.SendData(MessageID.PaintTile, number: coords.X, number2: coords.Y, number3: (int) color);
         }
         else if (selectedTool == 1 && tile.WallType > 0 && tile.WallColor != color) {
             if (!ConsumePaint(color)) return;
@@ -134,7 +135,7 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             tile.WallColor = color;
             
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.PaintWall, number: coords.X, number2: coords.Y);
+                NetMessage.SendData(MessageID.PaintWall, number: coords.X, number2: coords.Y, number3: (int) color);
         }
     }
 
@@ -146,14 +147,14 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             tile.TileColor = 0;
             
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.PaintTile, number: coords.X, number2: coords.Y);
+                NetMessage.SendData(MessageID.PaintTile, number: coords.X, number2: coords.Y, number3: 0);
         }
         else if (tile.WallColor != 0) {
             WorldGen.paintEffect(coords.X, coords.Y, 0, tile.WallColor);
             tile.WallColor = 0;
             
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.PaintWall, number: coords.X, number2: coords.Y);
+                NetMessage.SendData(MessageID.PaintWall, number: coords.X, number2: coords.Y, number3: 0);
         }
     }
 
