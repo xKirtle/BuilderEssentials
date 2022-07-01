@@ -129,7 +129,7 @@ public static class MirrorPlacement
 							placedTile[k].CopyToTile(iterTile, isTilePlacement, 
 								isWallPlacement, isWirePlacement, isLiquidPlacement);
 					}
-					
+
 					//Handling specific cases with Tile Entities
 					specificTileEntitiesCases:
 					if (tile.TileType == 21)
@@ -157,19 +157,24 @@ public static class MirrorPlacement
 						TEFoodPlatter.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y);
 					
 					//TODO: Check pylons. Should it be added to map as well?
+					
+					if (Main.netMode == NetmodeID.MultiplayerClient) {
+						NetMessage.SendObjectPlacment(-1, mirroredCoords.X, mirroredCoords.Y,
+							tileObject.type, tileObject.style, tileObject.alternate, tileObject.random,
+							Main.LocalPlayer.direction * -1);
 					}
+				}
 				else {
 					placedTile[0].CopyToTile(mirroredTile, isTilePlacement, 
 						isWallPlacement, isWirePlacement, isLiquidPlacement);
 					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, true);
 					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, true);
+					
+					if (Main.netMode == NetmodeID.MultiplayerClient)
+						NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 1);
 				}
 
-				if (Main.myPlayer == Main.LocalPlayer.whoAmI && Main.netMode == NetmodeID.MultiplayerClient) {
-					NetMessage.SendObjectPlacment(-1, mirroredCoords.X, mirroredCoords.Y,
-						tileObject.type, tileObject.style, tileObject.alternate, tileObject.random,
-						Main.LocalPlayer.direction * -1);
-				}
+				
 			}, new Point16(placementCoords.X, placementCoords.Y), item, shouldReduceStack: true);
 		}
 	}
