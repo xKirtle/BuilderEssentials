@@ -6,6 +6,7 @@ using Terraria.GameContent.Creative;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace BuilderEssentials.Content.Items;
 
@@ -50,9 +51,13 @@ public class FillWand : BuilderEssentialsItem
 
         if (Main.mouseMiddle && Main.mouseMiddleRelease && !player.mouseInterface) {
             Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-            var itemType = ItemPicker.PickItem(tile);
-            panel.SetSelectedItem(itemType);
-            Item.tileWand = itemType;
+
+            //Does not support multi tiles
+            if (TileObjectData.GetTileData(tile) == null) {
+                var itemType = ItemPicker.PickItem(tile);
+                panel.SetSelectedItem(itemType);
+                Item.tileWand = itemType;
+            }
         }
 
         player.cursorItemIconEnabled = true;
