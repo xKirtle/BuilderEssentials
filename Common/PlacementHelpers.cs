@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -143,10 +144,15 @@ public static class PlacementHelpers
         int itemToDrop = -1, bool sync = true, bool needPickPower = false) {
 
         if (!ValidTileCoordinates(x, y)) return false;
-
-        // Tile tile = Framing.GetTileSafely(x, y);
-
         if (needPickPower && !Main.LocalPlayer.HasEnoughPickPowerToHurtTile(x, y)) return false;
+        
+        Tile tile = Framing.GetTileSafely(x, y);
+        int itemType =ItemPicker.PickItem(tile);
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            int itemID = Item.NewItem(new EntitySource_DropAsItem(null), x * 16, y * 16, 16, 16, itemType, noBroadcast: true);
+            NetMessage.SendData(MessageID.SyncItem, number: itemID);
+        }
         
         if (removeTile && (WorldGen.CanKillTile(x, y, out _)))
             WorldGen.KillTile(x, y, noItem: !dropItem);
