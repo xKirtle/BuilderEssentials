@@ -147,7 +147,7 @@ public static class PlacementHelpers
         if (needPickPower && !Main.LocalPlayer.HasEnoughPickPowerToHurtTile(x, y)) return false;
         
         Tile tile = Framing.GetTileSafely(x, y);
-        int itemType =ItemPicker.PickItem(tile);
+        int itemType = ItemPicker.PickItem(tile);
 
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             int itemID = Item.NewItem(new EntitySource_DropAsItem(null), x * 16, y * 16, 16, 16, itemType, noBroadcast: true);

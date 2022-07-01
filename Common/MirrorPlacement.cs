@@ -247,6 +247,10 @@ public static class MirrorPlacement
 		};
 
 		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
+			//Getting tile info before the replacement
+			Tile tile = Main.tile[x, y];
+			int itemType = ItemPicker.PickItem(tile);
+			
 			bool baseReturn = orig.Invoke(x, y, type, style);
 			
 			//Hacky solution since stack was not yet decreased from above call
@@ -256,6 +260,13 @@ public static class MirrorPlacement
 			item.stack -= 1;
 			MirrorPlacementAction(mirroredCoords => {
 				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, style);
+				
+				//Why are vanilla replace methods not dropping items in MP :(
+				if (Main.netMode == NetmodeID.MultiplayerClient) {
+					int itemID = Item.NewItem(new EntitySource_DropAsItem(null), mirroredCoords.X * 16,
+						mirroredCoords.Y * 16, 16, 16, itemType, noBroadcast: true);
+					NetMessage.SendData(MessageID.SyncItem, number: itemID);
+				}
 			}, new Point16(x, y), item, false, 1);
 			item.stack += 1;
 
@@ -263,13 +274,24 @@ public static class MirrorPlacement
 		};
 
 		On.Terraria.WorldGen.ReplaceWall += (orig, x, y, type) => {
+			//Getting tile info before the replacement
+			Tile tile = Main.tile[x, y];
+			int itemType = ItemPicker.PickItem(tile);
+			
 			bool baseReturn = orig.Invoke(x, y, type);
 			
-			//Same as above
+			//Same hacky method as above
 			Item item = Main.LocalPlayer.HeldItem;
 			item.stack -= 1;
 			MirrorPlacementAction(mirroredCoords => {
 				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type);
+				
+				//Why are vanilla replace methods not dropping items in MP :(
+				if (Main.netMode == NetmodeID.MultiplayerClient) {
+					int itemID = Item.NewItem(new EntitySource_DropAsItem(null), mirroredCoords.X * 16,
+						mirroredCoords.Y * 16, 16, 16, itemType, noBroadcast: true);
+					NetMessage.SendData(MessageID.SyncItem, number: itemID);
+				}
 			}, new Point16(x, y), item, false, 1);
 			item.stack += 1;
 			
