@@ -1,3 +1,4 @@
+using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
@@ -25,5 +26,9 @@ public class BEPlayer : ModPlayer
         
         if (BuilderEssentials.FWDecrease.JustPressed && FillWand.FillSelectionSize > 1)
             FillWand.FillSelectionSize--;
+    }
+
+    public override void PostUpdate() {
+        MirrorPlacement.PlayerPostUpdate();
     }
 }

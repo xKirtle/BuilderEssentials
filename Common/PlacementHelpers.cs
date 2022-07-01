@@ -49,9 +49,9 @@ public static class PlacementHelpers
     }
 
     public static TypeOfItem WhatIsThisItem(Item item) {
-        if (item.createTile >= TileID.Dirt && item.createWall <= WallID.Stone)
+        if (item.createTile >= TileID.Dirt && item.createWall < WallID.Stone)
             return TypeOfItem.Tile;
-        else if (item.createTile < TileID.Dirt && item.createWall > WallID.Stone)
+        else if (item.createTile < TileID.Dirt && item.createWall >= WallID.Stone)
             return TypeOfItem.Wall;
 
         return TypeOfItem.Air;

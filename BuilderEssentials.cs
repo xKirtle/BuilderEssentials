@@ -25,6 +25,14 @@ namespace BuilderEssentials
 		
 		//Kirtle: Not running after all mods finished loading. PR on the way
 		public override void PostSetupContent() {
+			
+
+			FWIncrease = KeybindLoader.RegisterKeybind(this, "Increase Fill Wand selection size", "I");
+			FWDecrease = KeybindLoader.RegisterKeybind(this, "Decrease Fill Wand selection size", "O");
+		}
+
+		public override void AddRecipes() {
+			//Best place to run this, for now
 			string tiles = Encoding.UTF8.GetString(GetFileBytes("CachedTiles.json"));
 			TileToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(tiles);
 			
@@ -32,11 +40,8 @@ namespace BuilderEssentials
 			WallToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(walls);
 			
 			CacheModTiles();
-
-			FWIncrease = KeybindLoader.RegisterKeybind(this, "Increase Fill Wand selection size", "I");
-			FWDecrease = KeybindLoader.RegisterKeybind(this, "Decrease Fill Wand selection size", "O");
 		}
-		
+
 		private void CacheModTiles() {
 			Item item = new();
 			for (int i = TileToItems.Count; i < TileLoader.TileCount; i++) {
@@ -64,7 +69,8 @@ namespace BuilderEssentials
 
 		public override void Load() {
 			//TODO: Add config to disable MirrorWand stuff, as it can cause compatibility issues
-			MirrorPlacementDetours.LoadDetours();
+			// MirrorPlacementDetours.LoadDetours();
+			MirrorPlacement.LoadDetours();
 		}
 
 		public override void Unload() {
