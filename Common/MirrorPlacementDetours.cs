@@ -7,8 +7,10 @@ using BuilderEssentials.Common.DataStructures;
 using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -32,7 +34,6 @@ public static class MirrorPlacementDetours
 
 	internal static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new();
 	public static void QueuedTilePlacements() {
-		//TODO: Tile/Wall replacements based on player.TileReplacementEnabled
 		while (tilePlacementsQueue.Count != 0) {
 			(Point placementCoords, Item item) = tilePlacementsQueue.Dequeue();
 
@@ -169,7 +170,7 @@ public static class MirrorPlacementDetours
 						tileObject.type, tileObject.style, tileObject.alternate, tileObject.random,
 						Main.LocalPlayer.direction * -1);
 				}
-			}, new Point16(placementCoords.X, placementCoords.Y));
+			}, new Point16(placementCoords.X, placementCoords.Y), item, shouldReduceStack: true);
 		}
 	}
 
@@ -208,43 +209,67 @@ public static class MirrorPlacementDetours
 		}
 	}
 
+
 	public static void LoadDetours() {
-		//ApplyItemTime only gets called when interacting with tiles (not walls) ?
+		//Runs before ApplyItemTime
+		// On.Terraria.Player.ApplyItemAnimation_Item += (orig, player, item) => {
+		// 	orig.Invoke(player, item);
+		// 	Console.WriteLine("Apply Item Animation");
+		// };
+		
 		On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
 			orig.Invoke(player, item, multiplier, useItem);
+			
+			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
+			if (!panel.IsVisible || !panel.validMirrorPlacement || 
+			    !panel.IsMouseWithinSelection() || !panel.IsMouseAffectedByMirrorAxis()) return;
 			
 			Point coord = new Point(Player.tileTargetX, Player.tileTargetY);
 			Tile tile = Main.tile[coord.X, coord.Y];
 			MinimalTileData data = new MinimalTileData(tile, coord);
 			TileData tileData = new TileData(tile, coord);
 			
-			if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone) {
-				Console.WriteLine("ApplyItemTime");
+			if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone)
 				tilePlacementsQueue.Enqueue(new Tuple<Point, Item>(coord, item));
-			}
 
-			if (item.hammer > 0) {
-				//ApplyItemTime not called when hammer breaks walls?
+			//ApplyItemTime not called when hammer breaks walls?
+			if (item.hammer > 0)
 				hammerTileQueue.Enqueue(data);
-			}
-			
-			if (PaintToolsItemTypes.Contains(item.type)) {
-				//Make it copy tile data paint only
+
+			if (PaintToolsItemTypes.Contains(item.type))
 				paintTileQueue.Enqueue(new Tuple<Point, Item>(coord, item));
-			}
 		};
 
-		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, previewData, position) => {
-			orig.Invoke(spriteBatch, previewData, position);
-
+		On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
+			bool baseReturn = orig.Invoke(x, y, type, style);
+			
+			//Hacky solution since stack was not yet decreased from above call
+			//Going with the queue route seems to not be working/dropping items?
+			//Perhaps it's got to do with call order but idc
+			Item item = Main.LocalPlayer.HeldItem;
+			item.stack -= 1;
 			MirrorPlacementAction(mirroredCoords => {
-				TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
-				previewData.Coordinates = mirroredCoords - data.Origin;
-				previewData.Alternate = Main.LocalPlayer.direction == 1 ? 0 : 1;
-				orig.Invoke(spriteBatch, previewData, position);
-			});
+				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type, style);
+			}, new Point16(x, y), item, false, 1);
+			item.stack += 1;
+
+			return baseReturn;
 		};
-		
+
+		On.Terraria.WorldGen.ReplaceWall += (orig, x, y, type) => {
+			bool baseReturn = orig.Invoke(x, y, type);
+			
+			//Same as above
+			Item item = Main.LocalPlayer.HeldItem;
+			item.stack -= 1;
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(mirroredCoords.X, mirroredCoords.Y, type);
+			}, new Point16(x, y), item, false, 1);
+			item.stack += 1;
+			
+			return baseReturn;
+		};
+
 		//Remove vanilla behaviour that auto places walls (if available) to fill 3x1 spaces
 		On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
 			var panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
@@ -263,6 +288,36 @@ public static class MirrorPlacementDetours
 				y = Player.tileTargetY;
 			}
 			else orig.Invoke(out x, out y);
+		};
+		
+		On.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
+			orig.Invoke(player, item, x, y);
+			
+			MirrorPlacementAction(mirroredCoords => {
+				player.controlUseItem = true;
+				player.releaseUseItem = false;
+		
+				orig.Invoke(player, item, mirroredCoords.X, mirroredCoords.Y);
+			}, new Point16(x, y));
+		};
+		
+		On.Terraria.Player.PickTile += (orig, player, x, y, power) => {
+			orig.Invoke(player, x, y, power);
+			
+			MirrorPlacementAction(mirroredCoords => {
+				orig.Invoke(player, mirroredCoords.X, mirroredCoords.Y, power);
+			}, new Point16(x, y));
+		};
+		
+		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, previewData, position) => {
+			orig.Invoke(spriteBatch, previewData, position);
+
+			MirrorPlacementAction(mirroredCoords => {
+				TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
+				previewData.Coordinates = mirroredCoords - data.Origin;
+				previewData.Alternate = Main.LocalPlayer.direction == 1 ? 0 : 1;
+				orig.Invoke(spriteBatch, previewData, position);
+			});
 		};
 	}
 
