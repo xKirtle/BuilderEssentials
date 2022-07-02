@@ -57,10 +57,10 @@ public static class MirrorPlacement
 				tileData = TileObjectData.GetTileData(tileObject.type, tileObject.style, tileObject.alternate);
 
 			TileData[] placedTile = new TileData[1];
-			Point tileSize = Point.Zero;
+			Point tileSize = new Point(1, 1);
 
 			if (tileData != null) {
-				tileSize = new Point(tileData.CoordinateFullWidth / 18, tileData.CoordinateFullHeight / 18);
+				tileSize = new Point(tileData.CoordinateFullWidth / 16, tileData.CoordinateFullHeight / 16);
 				placedTile = new TileData[tileSize.X * tileSize.Y];
 				
 				//Saving tiles data
@@ -79,11 +79,19 @@ public static class MirrorPlacement
 				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
 				Point mirroredTopLeft = mirroredCoords.ToPoint() - (placementCoords - topLeft);
 				
-				if ((isTilePlacement && mirroredTile.HasTile) ||
-				    (isTilePlacement && mirroredTile.TileType == tile.TileType) ||
-				    (isWallPlacement && mirroredTile.WallType >= WallID.Stone) ||
-				    (isWallPlacement && mirroredTile.WallType == tile.WallType)) return;
+				//Check for overlap with existing tiles
+				for (int x = 0; x < tileSize.X; x++)
+				for (int y = 0; y < tileSize.Y; y++) {
+					Point tileCoord = mirroredTopLeft + new Point(x, y);
+					Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
 
+					if ((isTilePlacement && iterTile.HasTile) ||
+					    (isTilePlacement && iterTile.TileType == tile.TileType) ||
+					    (isWallPlacement && iterTile.WallType >= WallID.Stone) ||
+					    (isWallPlacement && iterTile.WallType == tile.WallType)) return;
+				}
+				
+				//Do walls have tile data?
 				if (tileData != null) {
 					//Copying saved tiles data to mirrored coordinates
 					for (int x = 0; x < tileSize.X; x++)
@@ -347,9 +355,36 @@ public static class MirrorPlacement
 			orig.Invoke(spriteBatch, previewData, position);
 
 			MirrorPlacementAction(mirroredCoords => {
-				TileObjectData data = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
-				previewData.Coordinates = mirroredCoords - data.Origin;
+				TileObjectData tileData = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
+				previewData.Coordinates = mirroredCoords - tileData.Origin;
 				previewData.Alternate = Main.LocalPlayer.direction == 1 ? 0 : 1;
+
+				//TODO: Fix canPlace indicator on mirrored counter part
+				//TODO: Fix some coordinate disparity between visuals and actual placement
+				// Point placementCoords = new Point(Player.tileTargetX, Player.tileTargetY);
+				// Point topLeft = GetTopLeftCoordOfTile(placementCoords.X, placementCoords.Y, isPlaced: false);
+				// Point mirroredTopLeft = mirroredCoords.ToPoint() - (placementCoords - topLeft);
+				// if (tileData != null) {
+				// 	Point tileSize = new Point(tileData.CoordinateFullWidth / 16, tileData.CoordinateFullHeight / 16);
+				//
+				// 	bool canPreview = true;
+				// 	for (int x = 0; x < tileSize.X; x++)
+				// 	for (int y = 0; y < tileSize.Y; y++) {
+				// 		Point tileCoord = mirroredTopLeft + new Point(x, y);
+				// 		Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
+				//
+				// 		if (iterTile.HasTile || iterTile.TileType == previewData.Type) {
+				// 			canPreview = false;
+				// 		}
+				// 	}
+				//
+				// 	for (int x = 0; x < tileSize.X; x++)
+				// 	for (int y = 0; y < tileSize.Y; y++) {
+				// 		Point tileCoord = mirroredTopLeft + new Point(x, y);
+				// 		TileObject.objectPreview[tileCoord.X, tileCoord.Y] = canPreview ? 1 : 2;
+				// 	}
+				// }
+				
 				orig.Invoke(spriteBatch, previewData, position);
 			});
 		};
@@ -377,9 +412,12 @@ public static class MirrorPlacement
 	}
 	
 	//Not sure where to put this yet
-	public static Point GetTopLeftCoordOfTile(int x, int y) {
+	public static Point GetTopLeftCoordOfTile(int x, int y, bool isPlaced = true) {
 		Tile tile = Main.tile[x, y];
 		TileObjectData tileData = TileObjectData.GetTileData(tile);
+
+		if (!isPlaced)
+			return new Point(x - tileData.Origin.X, y - tileData.Origin.Y);
 
 		int tileFrameX = tile.TileFrameX;
 		int tileFrameY = tile.TileFrameY;
