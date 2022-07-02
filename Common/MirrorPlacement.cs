@@ -138,7 +138,7 @@ public static class MirrorPlacement
 					//Handling specific cases with Tile Entities
 					specificTileEntitiesCases:
 					if (tile.TileType == 21)
-						Chest.AfterPlacement_Hook(mirroredTopLeft.X, mirroredTopLeft.Y);
+						Chest.AfterPlacement_Hook(mirroredCoords.X, mirroredCoords.Y);
 					
 					if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin || tile.TileType == TileID.Womannequin)
 						TEDisplayDoll.Hook_AfterPlacement(mirroredTopLeft.X, mirroredTopLeft.Y + 2);
