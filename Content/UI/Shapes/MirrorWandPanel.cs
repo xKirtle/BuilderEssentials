@@ -1,12 +1,13 @@
 using System;
-using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using static BuilderEssentials.Common.CoordSelection;
 
 namespace BuilderEssentials.Content.UI;
 
@@ -15,7 +16,12 @@ public class MirrorWandPanel : BaseShapePanel
     public bool wideMirror;
     public bool validMirrorPlacement;
     public bool horizontalMirror;
-    
+
+    private Vector2 selStart => cs.RightMouse.Start;
+    private Vector2 selEnd => cs.RightMouse.End;
+    private Vector2 mirStart => cs.LeftMouse.Start;
+    private Vector2 mirEnd => cs.LeftMouse.End;
+
     public override bool IsHoldingBindingItem()
         => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();
 
@@ -24,35 +30,43 @@ public class MirrorWandPanel : BaseShapePanel
     public override bool SelectionHasChanged() => false;
 
     public bool IsMouseWithinSelection() =>
-        CoordSelection.IsWithinRange(Player.tileTargetX, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
-        CoordSelection.IsWithinRange(Player.tileTargetY, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
+        IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
+        IsWithinRange(Player.tileTargetY, selStart.Y, selEnd.Y);
 
     public bool IsMouseAffectedByMirrorAxis() =>
-        CoordSelection.IsWithinRange(Player.tileTargetX, cs.LeftMouse.Start.X, cs.LeftMouse.End.X, true) ||
-        CoordSelection.IsWithinRange(Player.tileTargetY, cs.LeftMouse.Start.Y, cs.LeftMouse.End.Y, true);
+        validMirrorPlacement &&
+        (IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
+         (Player.tileTargetY != mirStart.Y || Player.tileTargetY != mirEnd.Y)) ||
+        (IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) &&
+         (Player.tileTargetX != mirStart.X || Player.tileTargetX != mirEnd.X));
     
     public bool IsMirrorAxisInsideSelection() =>
-        cs.LeftMouse.Start != cs.LeftMouse.End &&
-        CoordSelection.IsWithinRange(cs.LeftMouse.Start.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
-        CoordSelection.IsWithinRange(cs.LeftMouse.End.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
-        CoordSelection.IsWithinRange(cs.LeftMouse.Start.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y) &&
-        CoordSelection.IsWithinRange(cs.LeftMouse.End.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
-    
+        mirStart != mirEnd &&
+        IsWithinRange(mirStart.X, selStart.X, selEnd.X) &&
+        IsWithinRange(mirEnd.X, selStart.X, selEnd.X) &&
+        IsWithinRange(mirStart.Y, selStart.Y, selEnd.Y) &&
+        IsWithinRange(mirEnd.Y, selStart.Y, selEnd.Y);
+
+    public bool IsMouseLeftOrTopOfSelection() {
+        if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis()) return false;
+        return !horizontalMirror ? Player.tileTargetX < mirStart.X : Player.tileTargetY < mirStart.Y;
+    }
+
     public override void PlotSelection() {
         //Selected area
-        ShapeHelpers.PlotRectangle(cs.RightMouse.Start, cs.RightMouse.End, ShapeHelpers.Blue, 0.90f, false);
+        ShapeHelpers.PlotRectangle(selStart, selEnd, ShapeHelpers.Blue, 0.90f, false);
         
         //Mirror
         LimitMirrorSize();
         validMirrorPlacement = IsMirrorAxisInsideSelection();
         Color color = validMirrorPlacement ? ShapeHelpers.Yellow : ShapeHelpers.Red;
-        ShapeHelpers.PlotRectangle(cs.LeftMouse.Start, cs.LeftMouse.End, color, 0.90f, false);
+        ShapeHelpers.PlotRectangle(mirStart, mirEnd, color, 0.90f, false);
     }
 
     private void LimitMirrorSize() {
-        Vector2 start = cs.LeftMouse.Start;
-        Vector2 end = cs.LeftMouse.End;
-        
+        Vector2 start = mirStart;
+        Vector2 end = mirEnd;
+
         int dx = (int) Math.Abs(start.X - end.X);
         int dy = (int) Math.Abs(start.Y - end.Y);
         horizontalMirror = dx > dy;
@@ -86,16 +100,11 @@ public class MirrorWandPanel : BaseShapePanel
         Vector2 initial =  tileCoords == default ? new Vector2(Player.tileTargetX, Player.tileTargetY) : tileCoords;
         Vector2 result = initial;
 
-        Vector2 selStart = cs.RightMouse.Start;
-        Vector2 selEnd = cs.RightMouse.End;
-        Vector2 mirStart = cs.LeftMouse.Start;
-        Vector2 mirEnd = cs.LeftMouse.End;
-        
         if (!validMirrorPlacement || !IsMouseWithinSelection()) return result;
         
         //Check if coords can be used by current mirror axis
-        if (!CoordSelection.IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
-            !CoordSelection.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
+        if (!IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
+            !IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
 
         Tile tile = Framing.GetTileSafely(result);
         //Check if not a wall
@@ -129,16 +138,15 @@ public class MirrorWandPanel : BaseShapePanel
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
         
-        if (!CoordSelection.IsWithinRange(result.X, selStart.X, selEnd.X) ||
-            !CoordSelection.IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
+        if (!IsWithinRange(result.X, selStart.X, selEnd.X) ||
+            !IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
         
         return result;
     }
 
+    //Unused
     public void SyncSelection() {
-        if (Main.netMode != NetmodeID.SinglePlayer) {
-            Vector2 selStart = cs.RightMouse.Start;
-            Vector2 selEnd = cs.RightMouse.End;
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
             Vector2 center = new Vector2((Math.Max(selStart.X, selEnd.X) - Math.Min(selStart.X, selEnd.X) + 1) / 2,
                 (Math.Max(selStart.Y, selEnd.Y) - Math.Min(selStart.Y, selEnd.Y) + 1) / 2);
 
