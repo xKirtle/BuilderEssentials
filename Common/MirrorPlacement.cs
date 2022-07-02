@@ -173,8 +173,8 @@ public static class MirrorPlacement
 				else {
 					placedTile[0].CopyToTile(mirroredTile, isTilePlacement, 
 						isWallPlacement, isWirePlacement, isLiquidPlacement);
-					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, true);
-					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, true);
+					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, false);
+					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, false);
 					
 					if (Main.netMode == NetmodeID.MultiplayerClient)
 						NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 1);
@@ -274,7 +274,7 @@ public static class MirrorPlacement
 						mirroredCoords.Y * 16, 16, 16, itemType, noBroadcast: true);
 					NetMessage.SendData(MessageID.SyncItem, number: itemID);
 				}
-			}, new Point16(x, y), item, false, 1);
+			}, new Point16(x, y), item, true, 1);
 			item.stack += 1;
 
 			return baseReturn;
@@ -299,7 +299,7 @@ public static class MirrorPlacement
 						mirroredCoords.Y * 16, 16, 16, itemType, noBroadcast: true);
 					NetMessage.SendData(MessageID.SyncItem, number: itemID);
 				}
-			}, new Point16(x, y), item, false, 1);
+			}, new Point16(x, y), item, true, 1);
 			item.stack += 1;
 			
 			return baseReturn;
@@ -406,6 +406,7 @@ public static class MirrorPlacement
 		Point16 tileCoords = pData.Coordinates;
 		Texture2D tileTexture = TextureAssets.Tile[pData.Type].Value;
 		TileObjectData tData = TileObjectData.GetTileData(pData.Type, pData.Style, pData.Alternate);
+		if (tData == null) return;
 		
 		int tileWidth = 0, tileHeight = 0, styleMultiplier = 0, alternateMultiplier = 0;
 		styleMultiplier = tData.CalculatePlacementStyle(pData.Style, pData.Alternate, pData.Random) + tData.DrawStyleOffset;
