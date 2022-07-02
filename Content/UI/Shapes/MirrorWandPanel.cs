@@ -24,19 +24,19 @@ public class MirrorWandPanel : BaseShapePanel
     public override bool SelectionHasChanged() => false;
 
     public bool IsMouseWithinSelection() =>
-        cs.IsWithinRange(Player.tileTargetX, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
-        cs.IsWithinRange(Player.tileTargetY, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
+        CoordSelection.IsWithinRange(Player.tileTargetX, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
+        CoordSelection.IsWithinRange(Player.tileTargetY, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
 
     public bool IsMouseAffectedByMirrorAxis() =>
-        cs.IsWithinRange(Player.tileTargetX, cs.LeftMouse.Start.X, cs.LeftMouse.End.X, true) ||
-        cs.IsWithinRange(Player.tileTargetY, cs.LeftMouse.Start.Y, cs.LeftMouse.End.Y, true);
+        CoordSelection.IsWithinRange(Player.tileTargetX, cs.LeftMouse.Start.X, cs.LeftMouse.End.X, true) ||
+        CoordSelection.IsWithinRange(Player.tileTargetY, cs.LeftMouse.Start.Y, cs.LeftMouse.End.Y, true);
     
     public bool IsMirrorAxisInsideSelection() =>
         cs.LeftMouse.Start != cs.LeftMouse.End &&
-        cs.IsWithinRange(cs.LeftMouse.Start.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
-        cs.IsWithinRange(cs.LeftMouse.End.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
-        cs.IsWithinRange(cs.LeftMouse.Start.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y) &&
-        cs.IsWithinRange(cs.LeftMouse.End.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
+        CoordSelection.IsWithinRange(cs.LeftMouse.Start.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
+        CoordSelection.IsWithinRange(cs.LeftMouse.End.X, cs.RightMouse.Start.X, cs.RightMouse.End.X) &&
+        CoordSelection.IsWithinRange(cs.LeftMouse.Start.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y) &&
+        CoordSelection.IsWithinRange(cs.LeftMouse.End.Y, cs.RightMouse.Start.Y, cs.RightMouse.End.Y);
     
     public override void PlotSelection() {
         //Selected area
@@ -94,8 +94,8 @@ public class MirrorWandPanel : BaseShapePanel
         if (!validMirrorPlacement || !IsMouseWithinSelection()) return result;
         
         //Check if coords can be used by current mirror axis
-        if (!cs.IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
-            !cs.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
+        if (!CoordSelection.IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
+            !CoordSelection.IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
 
         Tile tile = Framing.GetTileSafely(result);
         //Check if not a wall
@@ -129,8 +129,8 @@ public class MirrorWandPanel : BaseShapePanel
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
         
-        if (!cs.IsWithinRange(result.X, selStart.X, selEnd.X) ||
-            !cs.IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
+        if (!CoordSelection.IsWithinRange(result.X, selStart.X, selEnd.X) ||
+            !CoordSelection.IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
         
         return result;
     }

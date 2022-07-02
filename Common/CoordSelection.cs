@@ -102,7 +102,7 @@ public class CoordSelection
         MiddleMouse.UpdateCoords(shiftDown);
     }
     
-    public bool IsWithinRange(float number, float value1, float value2, bool equal = false) {
+    public static bool IsWithinRange(float number, float value1, float value2, bool equal = false) {
         if (!equal)
             return (number > value1 && number < value2) || (number < value1 && number > value2);
         else
