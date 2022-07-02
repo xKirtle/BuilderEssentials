@@ -79,19 +79,12 @@ public static class MirrorPlacement
 				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
 				Point mirroredTopLeft = mirroredCoords.ToPoint() - (placementCoords - topLeft);
 				
-				//Check for overlap with existing tiles
-				for (int x = 0; x < tileSize.X; x++)
-				for (int y = 0; y < tileSize.Y; y++) {
-					Point tileCoord = mirroredTopLeft + new Point(x, y);
-					Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
-
-					if ((isTilePlacement && iterTile.HasTile) ||
-					    (isTilePlacement && iterTile.TileType == tile.TileType) ||
-					    (isWallPlacement && iterTile.WallType >= WallID.Stone) ||
-					    (isWallPlacement && iterTile.WallType == tile.WallType)) return;
-				}
+				//Check for overlap with other existing tiles
+				TileObject canPlaceObject = TileObject.Empty;
+				if (isTilePlacement && (mirroredTile.HasTile || (!TileObject.CanPlace(mirroredCoords.X, mirroredCoords.Y, tileObject.type,
+					    tileObject.style, Main.LocalPlayer.direction, out canPlaceObject, onlyCheck: true) && canPlaceObject.type != 0)) ||
+				    isWallPlacement && mirroredTile.WallType >= WallID.Stone) return;
 				
-				//Do walls have tile data?
 				if (tileData != null) {
 					//Copying saved tiles data to mirrored coordinates
 					for (int x = 0; x < tileSize.X; x++)
@@ -351,41 +344,17 @@ public static class MirrorPlacement
 			}, new Point16(x, y));
 		};
 		
-		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, previewData, position) => {
-			orig.Invoke(spriteBatch, previewData, position);
+		On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, pData, position) => {
+			DrawPreview(spriteBatch, pData, position);
 
 			MirrorPlacementAction(mirroredCoords => {
-				TileObjectData tileData = TileObjectData.GetTileData(previewData.Type, previewData.Style, previewData.Alternate);
-				previewData.Coordinates = mirroredCoords - tileData.Origin;
-				previewData.Alternate = Main.LocalPlayer.direction == 1 ? 0 : 1;
-
-				//TODO: Fix canPlace indicator on mirrored counter part
-				//TODO: Fix some coordinate disparity between visuals and actual placement
-				// Point placementCoords = new Point(Player.tileTargetX, Player.tileTargetY);
-				// Point topLeft = GetTopLeftCoordOfTile(placementCoords.X, placementCoords.Y, isPlaced: false);
-				// Point mirroredTopLeft = mirroredCoords.ToPoint() - (placementCoords - topLeft);
-				// if (tileData != null) {
-				// 	Point tileSize = new Point(tileData.CoordinateFullWidth / 16, tileData.CoordinateFullHeight / 16);
-				//
-				// 	bool canPreview = true;
-				// 	for (int x = 0; x < tileSize.X; x++)
-				// 	for (int y = 0; y < tileSize.Y; y++) {
-				// 		Point tileCoord = mirroredTopLeft + new Point(x, y);
-				// 		Tile iterTile = Main.tile[tileCoord.X, tileCoord.Y];
-				//
-				// 		if (iterTile.HasTile || iterTile.TileType == previewData.Type) {
-				// 			canPreview = false;
-				// 		}
-				// 	}
-				//
-				// 	for (int x = 0; x < tileSize.X; x++)
-				// 	for (int y = 0; y < tileSize.Y; y++) {
-				// 		Point tileCoord = mirroredTopLeft + new Point(x, y);
-				// 		TileObject.objectPreview[tileCoord.X, tileCoord.Y] = canPreview ? 1 : 2;
-				// 	}
-				// }
+				TileObjectData tileData = TileObjectData.GetTileData(pData.Type, pData.Style, pData.Alternate);
+				pData.Coordinates = mirroredCoords - tileData.Origin;
+				pData.Alternate = Main.LocalPlayer.direction == 1 ? 0 : 1;
+				TileObject.CanPlace(mirroredCoords.X, mirroredCoords.Y, pData.Type, 
+					pData.Style, pData.Alternate, out _, onlyCheck: true);
 				
-				orig.Invoke(spriteBatch, previewData, position);
+				DrawPreview(spriteBatch, pData, position, 0.5f);
 			});
 		};
 	}
@@ -414,20 +383,87 @@ public static class MirrorPlacement
 	//Not sure where to put this yet
 	public static Point GetTopLeftCoordOfTile(int x, int y, bool isPlaced = true) {
 		Tile tile = Main.tile[x, y];
-		TileObjectData tileData = TileObjectData.GetTileData(tile);
+		TileObjectData tData = TileObjectData.GetTileData(tile);
 
 		if (!isPlaced)
-			return new Point(x - tileData.Origin.X, y - tileData.Origin.Y);
+			return new Point(x - tData?.Origin.X ?? 0, y - tData?.Origin.Y ?? 0);
 
 		int tileFrameX = tile.TileFrameX;
 		int tileFrameY = tile.TileFrameY;
+		Point drawOffset = Point.Zero;
 
-		if (tileData != null) {
+		if (tData != null) {
 			//Ignoring styles
-			tileFrameX %= tileData.CoordinateFullWidth;
-			tileFrameY %= tileData.CoordinateFullHeight; 
+			tileFrameX %= tData.CoordinateFullWidth;
+			tileFrameY %= tData.CoordinateFullHeight;
+			drawOffset = new Point(0, tData.DrawStepDown);
 		}
 
-		return new Point(x - tileFrameX / 18, y - tileFrameY / 18);
+		return new Point(x - tileFrameX / 16 - drawOffset.X, y - tileFrameY / 16 - drawOffset.Y);
+	}
+	
+	public static void DrawPreview(SpriteBatch sb, TileObjectPreviewData pData, Vector2 pos, float colorMultiplier = 1f) {
+		Point16 tileCoords = pData.Coordinates;
+		Texture2D tileTexture = TextureAssets.Tile[pData.Type].Value;
+		TileObjectData tData = TileObjectData.GetTileData(pData.Type, pData.Style, pData.Alternate);
+		
+		int tileWidth = 0, tileHeight = 0, styleMultiplier = 0, alternateMultiplier = 0;
+		styleMultiplier = tData.CalculatePlacementStyle(pData.Style, pData.Alternate, pData.Random) + tData.DrawStyleOffset;
+		int drawXOffset = tData.DrawXOffset, drawYOffset = tData.DrawYOffset;
+
+		int styleWrapLimit = tData.StyleWrapLimitVisualOverride.HasValue
+			? tData.StyleWrapLimitVisualOverride.Value : tData.StyleWrapLimit;
+
+		int styleLineSkip = tData.styleLineSkipVisualOverride.HasValue
+			? tData.styleLineSkipVisualOverride.Value : tData.StyleLineSkip;
+
+		if (styleWrapLimit > 0) {
+			alternateMultiplier = styleMultiplier / styleWrapLimit * styleLineSkip;
+			styleMultiplier %= styleWrapLimit;
+		}
+
+		tileWidth = tData.CoordinateFullWidth * (tData.StyleHorizontal ? styleMultiplier : alternateMultiplier);
+		tileHeight = tData.CoordinateFullHeight * (tData.StyleHorizontal ? alternateMultiplier : styleMultiplier);
+
+		for (int i = 0; i < pData.Size.X; i++) {
+			int x = tileWidth + (i - pData.ObjectStart.X) * (tData.CoordinateWidth + tData.CoordinatePadding);
+			int y = tileHeight;
+
+			for (int j = 0; j < pData.Size.Y; j++) {
+				Point pCoord = new Point(tileCoords.X + i, tileCoords.Y + j);
+				
+				//DrawStepDown messing me with banners?
+				if (j == 0 && tData.DrawStepDown != 0 && WorldGen.SolidTile(Main.tile[pCoord.X, pCoord.Y - 1]))
+					drawYOffset += tData.DrawStepDown;
+
+				if (pData.Type == TileID.GardenGnome)
+					drawYOffset = ((j != 0) ? tData.DrawYOffset : (tData.DrawYOffset - 2));
+				
+				//Uses preview's data size, not tile coordinates
+				Color drawColor = (pData[i, j] == 1 ? Color.White : Color.Red * 0.7f) * 0.5f * colorMultiplier;
+
+				if (CoordSelection.IsWithinRange(i, pData.ObjectStart.X, pData.ObjectStart.X + tData.Width - 1, true) &&
+				    CoordSelection.IsWithinRange(j, pData.ObjectStart.Y, pData.ObjectStart.Y + tData.Height - 1, true)) {
+					SpriteEffects spriteEffects = SpriteEffects.None;
+					if (tData.DrawFlipHorizontal && pCoord.X % 2 == 0)
+						spriteEffects |= SpriteEffects.FlipHorizontally;
+
+					if (tData.DrawFlipVertical && pCoord.Y % 2 == 0)
+						spriteEffects |= SpriteEffects.FlipVertically;
+
+					int currentCoordHeight = tData.CoordinateHeights[j - pData.ObjectStart.Y];
+					if (pData.Type == TileID.TinkerersWorkbench && j == 1)
+						currentCoordHeight += 2;
+
+					Vector2 position = (pCoord.ToVector2() * 16) - pos +
+					                   new Vector2((tData.CoordinateWidth - 16) / 2f, 0) +
+					                   new Vector2(drawXOffset, drawYOffset);
+
+					Rectangle sourceRectangle = new Rectangle(x, y, tData.CoordinateWidth, currentCoordHeight);
+					sb.Draw(tileTexture, position, sourceRectangle, drawColor, 0f, Vector2.Zero, 1f, spriteEffects, 0f);
+					y += currentCoordHeight + tData.CoordinatePadding;
+				}
+			}
+		}
 	}
 }
