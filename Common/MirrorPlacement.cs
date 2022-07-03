@@ -333,10 +333,6 @@ public static class MirrorPlacement
 			orig.Invoke(player, item, x, y);
 			
 			MirrorPlacementAction(mirroredCoords => {
-				//TODO: Check if this is needed
-				player.controlUseItem = true;
-				player.releaseUseItem = false;
-		
 				orig.Invoke(player, item, mirroredCoords.X, mirroredCoords.Y);
 			}, new Point16(x, y));
 		};
