@@ -34,10 +34,8 @@ public class MultiCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() => new int[0];
+    public override int[] AdjacentTiles() => Enumerable.Range(0, TileLoader.TileCount).ToArray();
     
-    public override void PostSetDefaults() => AdjTiles = Enumerable.Range(0, TileLoader.TileCount).ToArray();
-
     public override void AnimateTile(ref int frame, ref int frameCounter) {
         frameNumber = frame;
         //new frame each 5 ticks
