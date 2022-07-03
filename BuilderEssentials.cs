@@ -45,11 +45,7 @@ namespace BuilderEssentials
 			string walls = Encoding.UTF8.GetString(GetFileBytes("CachedWalls.json"));
 			WallToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(walls);
 			
-			Console.WriteLine($"Before: {TileToItems.Count} {WallToItems.Count}");
-			
 			CacheModTiles();
-
-			Console.WriteLine($"After: {TileToItems.Count} {WallToItems.Count}");
 		}
 
 		private void CacheModTiles() {
