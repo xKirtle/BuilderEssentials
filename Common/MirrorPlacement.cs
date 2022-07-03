@@ -97,7 +97,7 @@ public static class MirrorPlacement
 						//Tiles with a rotated variant
 						if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin || 
 						    tile.TileType == TileID.Womannequin || tile.TileType == TileID.HatRack ||
-						    tile.TileType == TileID.TargetDummy) {
+						    tile.TileType == TileID.TargetDummy || tile.TileType == TileID.Traps) {
 							placedTile[k].CopyToTile(iterTile, isTilePlacement, 
 								isWallPlacement, isWirePlacement, isLiquidPlacement);
 							iterTile.TileFrameX += (short) (18 * tileSize.X * -Main.LocalPlayer.direction);
@@ -121,6 +121,10 @@ public static class MirrorPlacement
 							iterTile.TileFrameY += (short) (162 * -Main.LocalPlayer.direction);
 							continue;
 						}
+						
+						//Platforms
+						if (tile.TileType == TileID.Platforms)
+							WorldGen.PlatformProperSides(mirroredCoords.X, mirroredCoords.Y);
 
 						if (tileData.AlternatesCount > 0) {
 							Main.LocalPlayer.direction *= -1;
@@ -173,8 +177,8 @@ public static class MirrorPlacement
 				else {
 					placedTile[0].CopyToTile(mirroredTile, isTilePlacement, 
 						isWallPlacement, isWirePlacement, isLiquidPlacement);
-					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, false);
-					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, false);
+					WorldGen.SquareTileFrame(mirroredCoords.X, mirroredCoords.Y, true);
+					WorldGen.SquareWallFrame(mirroredCoords.X, mirroredCoords.Y, true);
 					
 					if (Main.netMode == NetmodeID.MultiplayerClient)
 						NetMessage.SendTileSquare(-1, mirroredCoords.X, mirroredCoords.Y, 1);
