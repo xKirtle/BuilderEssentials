@@ -23,23 +23,33 @@ namespace BuilderEssentials
 		public static Dictionary<int, List<int>> TileToItems;
 		public static Dictionary<int, List<int>> WallToItems;
 		
-		//Kirtle: Not running after all mods finished loading. PR on the way
+#if TML_2022_06
+		public override void AddRecipes() {
+			ReadAndCacheLocally();
+		}
+#endif
+		
 		public override void PostSetupContent() {
-			
+#if !TML_2022_06
+			ReadAndCacheLocally();
+#endif
 
 			FWIncrease = KeybindLoader.RegisterKeybind(this, "Increase Fill Wand selection size", "I");
 			FWDecrease = KeybindLoader.RegisterKeybind(this, "Decrease Fill Wand selection size", "O");
 		}
 
-		public override void AddRecipes() {
-			//Best place to run this, for now
+		public void ReadAndCacheLocally() {
 			string tiles = Encoding.UTF8.GetString(GetFileBytes("CachedTiles.json"));
 			TileToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(tiles);
 			
 			string walls = Encoding.UTF8.GetString(GetFileBytes("CachedWalls.json"));
 			WallToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(walls);
 			
+			Console.WriteLine($"Before: {TileToItems.Count} {WallToItems.Count}");
+			
 			CacheModTiles();
+
+			Console.WriteLine($"After: {TileToItems.Count} {WallToItems.Count}");
 		}
 
 		private void CacheModTiles() {
