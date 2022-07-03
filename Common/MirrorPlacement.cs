@@ -333,6 +333,7 @@ public static class MirrorPlacement
 			orig.Invoke(player, item, x, y);
 			
 			MirrorPlacementAction(mirroredCoords => {
+				//TODO: Check if this is needed
 				player.controlUseItem = true;
 				player.releaseUseItem = false;
 		
@@ -344,6 +345,10 @@ public static class MirrorPlacement
 			orig.Invoke(player, x, y, power);
 			
 			MirrorPlacementAction(mirroredCoords => {
+				Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
+				if (TileID.Sets.IsATreeTrunk[mirroredTile.TileType] ||
+				    TileID.Sets.CountsAsGemTree[mirroredTile.TileType]) return;
+				
 				orig.Invoke(player, mirroredCoords.X, mirroredCoords.Y, power);
 			}, new Point16(x, y));
 		};
