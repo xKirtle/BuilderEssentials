@@ -74,8 +74,6 @@ namespace BuilderEssentials
 		}
 
 		public override void Load() {
-			//TODO: Add config to disable MirrorWand stuff, as it can cause compatibility issues
-			// MirrorPlacementDetours.LoadDetours();
 			MirrorPlacement.LoadDetours();
 		}
 

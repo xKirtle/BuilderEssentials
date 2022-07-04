@@ -387,9 +387,9 @@ public static class MirrorPlacement
 	}
 	
 	//Not sure where to put this yet
-	public static Point GetTopLeftCoordOfTile(int x, int y, bool isPlaced = true) {
+	public static Point GetTopLeftCoordOfTile(int x, int y, bool isPlaced = true, TileObjectData tileData = null) {
 		Tile tile = Main.tile[x, y];
-		TileObjectData tData = TileObjectData.GetTileData(tile);
+		TileObjectData tData = tileData ?? TileObjectData.GetTileData(tile);
 
 		if (!isPlaced)
 			return new Point(x - tData?.Origin.X ?? 0, y - tData?.Origin.Y ?? 0);

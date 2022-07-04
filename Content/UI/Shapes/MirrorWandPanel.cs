@@ -1,4 +1,5 @@
 using System;
+using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -47,6 +48,7 @@ public class MirrorWandPanel : BaseShapePanel
         IsWithinRange(mirStart.Y, selStart.Y, selEnd.Y) &&
         IsWithinRange(mirEnd.Y, selStart.Y, selEnd.Y);
 
+    //TODO: Check against wide Mirror scenarios
     public bool IsMouseLeftOrTopOfSelection() {
         if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis()) return false;
         return !horizontalMirror ? Player.tileTargetX < mirStart.X : Player.tileTargetY < mirStart.Y;
@@ -97,10 +99,10 @@ public class MirrorWandPanel : BaseShapePanel
     }
 
     public Vector2 GetMirroredTileTargetCoordinate(Vector2 tileCoords = default, int tileType = 0, int style = 0, int alternate = 0) {
-        Vector2 initial =  tileCoords == default ? new Vector2(Player.tileTargetX, Player.tileTargetY) : tileCoords;
+        Vector2 initial = tileCoords == default ? new Vector2(Player.tileTargetX, Player.tileTargetY) : tileCoords;
         Vector2 result = initial;
 
-        if (!validMirrorPlacement || !IsMouseWithinSelection()) return result;
+        if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis()) return result;
         
         //Check if coords can be used by current mirror axis
         if (!IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
@@ -112,11 +114,12 @@ public class MirrorWandPanel : BaseShapePanel
         
         bool leftOfTheMirror = result.X < Math.Min(mirStart.X, mirEnd.X);
         bool topOfTheMirror = result.Y < Math.Min(mirStart.Y, mirEnd.Y);
-        
+        Point16 tileSize = Point16.Zero;
+
         Vector2 offset = Vector2.Zero;
         if (data != null) {
             Point16 tileOrigin = data.Origin;
-            Point16 tileSize = new(data.CoordinateFullWidth / 16, data.CoordinateFullHeight / 16);
+            tileSize = new(data.CoordinateFullWidth / 16, data.CoordinateFullHeight / 16);
             
             if (tileSize.X % 2 == 0) {
                 int middleBiasRight = (int) (tileSize.X / 2f + 0.5f);
@@ -128,7 +131,7 @@ public class MirrorWandPanel : BaseShapePanel
                 offset.Y = (tileOrigin.Y >= middleBiasBottom ? -1 : 1) * (topOfTheMirror ? -1 : 1);
             }
         }
-        
+
         if (!horizontalMirror) {
             float distanceToMirror = Math.Min(Math.Abs(result.X - mirStart.X), Math.Abs(result.X - mirEnd.X));
             result.X += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.X) * (leftOfTheMirror ? 1 : -1));
@@ -137,7 +140,17 @@ public class MirrorWandPanel : BaseShapePanel
             float distanceToMirror = Math.Min(Math.Abs(result.Y - mirStart.Y), Math.Abs(result.Y - mirEnd.Y));
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
-        
+
+        //Check if result placement will overlap with the mirror axis
+        Point initialTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) initial.X, (int) initial.Y, tileData: data);
+        Point resultTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) result.X, (int) result.Y, tileData: data);
+        if ((!horizontalMirror && (leftOfTheMirror && (resultTopLeft.X <= (initialTopLeft.X + tileSize.X)) || 
+                                   (!leftOfTheMirror && (resultTopLeft.X + tileSize.X) >= initialTopLeft.X))) ||
+            (horizontalMirror && (topOfTheMirror && (resultTopLeft.Y <= (initialTopLeft.Y + tileSize.Y)) ||
+                                  (!topOfTheMirror && (resultTopLeft.Y + tileSize.Y) >= initialTopLeft.Y))))
+            return initial;
+
+        //Check if result placement is within the selection
         if (!IsWithinRange(result.X, selStart.X, selEnd.X) ||
             !IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
         
