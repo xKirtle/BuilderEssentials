@@ -87,7 +87,7 @@ public static class PlacementHelpers
         }
         
         //No need to (re)place if the tile is already the desired 
-        if ((typeOfItem == TypeOfItem.Tile && tile.TileType == item.createTile) ||
+        if ((typeOfItem == TypeOfItem.Tile && tile.TileType == item.createTile && tile.HasTile) ||
             (typeOfItem == TypeOfItem.Wall && tile.WallType == item.createWall))
             return false;
 
