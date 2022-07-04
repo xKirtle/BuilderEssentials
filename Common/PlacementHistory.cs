@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BuilderEssentials.Common.DataStructures;
+using Microsoft.Xna.Framework;
 using Terraria;
 
 namespace BuilderEssentials.Common;

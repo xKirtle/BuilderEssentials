@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BuilderEssentials.Common.DataStructures;
 using Terraria;
 using Terraria.ID;
 using Terraria.ObjectData;

@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ID;
 
-namespace BuilderEssentials.Common;
+namespace BuilderEssentials.Common.DataStructures;
 
 //TODO: Unified solution instead of scattered structs?
 
