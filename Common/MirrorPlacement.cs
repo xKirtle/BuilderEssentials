@@ -97,13 +97,14 @@ public static class MirrorPlacement
 						//Tiles with a rotated variant
 						if (tile.TileType == TileID.DisplayDoll || tile.TileType == TileID.Mannequin || 
 						    tile.TileType == TileID.Womannequin || tile.TileType == TileID.HatRack ||
-						    tile.TileType == TileID.TargetDummy || tile.TileType == TileID.Traps) {
+						    tile.TileType == TileID.TargetDummy || tile.TileType == TileID.Traps ||
+						    tile.TileType == TileID.CatBast) {
 							placedTile[k].CopyToTile(iterTile, isTilePlacement, 
 								isWallPlacement, isWirePlacement, isLiquidPlacement);
 							iterTile.TileFrameX += (short) (18 * tileSize.X * -Main.LocalPlayer.direction);
 							continue;
 						}
-
+						
 						//Tiles breaking with WorldGen.PlaceTile (why?)
 						if (tile.TileType == TileID.ClosedDoor || tile.TileType == TileID.TallGateClosed ||
 						    tile.TileType == TileID.MasterTrophyBase || tile.TileType == TileID.ItemFrame ||
