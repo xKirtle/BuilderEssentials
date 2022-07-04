@@ -12,18 +12,18 @@ public struct MinimalTile
     public int WallType;
     public bool HasTile;
     public int PlaceStyle;
-    public bool IsWall { get; }
+    public bool HasWall { get; }
 
     public MinimalTile(int tileType, int wallType, bool hasTile, int placeStyle) {
         TileType = tileType;
         WallType = wallType;
         HasTile = hasTile;
         PlaceStyle = placeStyle;
-        IsWall = WallType > 0 && !HasTile && TileType <= 0;
+        HasWall = WallType > 0;
     }
 
     public override string ToString() {
-        return $"TileType: {TileType} WallType: {WallType} HasTile: {HasTile} IsWall: {IsWall}";
+        return $"TileType: {TileType} WallType: {WallType} HasTile: {HasTile} IsWall: {HasWall}";
     }
 }
 

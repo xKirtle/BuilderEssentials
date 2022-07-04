@@ -162,28 +162,25 @@ public abstract class BaseShapePanel : UIElement
         if (historyPlacements.Count == 0) return;
         
         List<PlacementHistory> lastPlacement = historyPlacements.Pop();
+        
         for (int i = 0; i < lastPlacement.Count; i++) {
             PlacementHistory last = lastPlacement[i];
             Point coords = last.Coordinate;
-            MinimalTile previousTile = last.PreviousTile;
+            MinimalTile beforePlacementTile = last.PreviousTile;
             MinimalTile placedTile = last.PlacedTile;
+            Item placeItem = last.SelectedItem;
 
-            Tile tile = Framing.GetTileSafely(coords);
-            bool isTile = tile.TileType == placedTile.TileType && placedTile.HasTile;
-            bool isWall = tile.WallType == placedTile.WallType && placedTile.IsWall;
-            if (isTile || isWall) {
-                int itemType = ItemPicker.PickItem(previousTile);
-                Item item = new Item(itemType);
-
-                //BUG: bug prone?
-                if (!PlacementHelpers.RemoveTile(coords.X, coords.Y, isTile, !isTile && placedTile.IsWall,
-                        needPickPower: true)) {
-                    //Undo stack popping
-                    historyPlacements.Push(lastPlacement);
-                }
-                else {
-                    if (previousTile.HasTile && item.type > ItemID.None)
-                        PlacementHelpers.PlaceTile(coords.X, coords.Y, item);
+            Tile currentTile = Main.tile[coords.X, coords.Y];
+            Item beforePlacementItem = new Item(ItemPicker.PickItem(beforePlacementTile));
+            bool canUndoTile = currentTile.HasTile && currentTile.TileType == placedTile.TileType &&
+                               (currentTile.TileType == placeItem.createTile || beforePlacementItem.IsAir);
+            bool canUndoWall = placedTile.HasWall && currentTile.WallType == placedTile.WallType &&
+                               (currentTile.WallType == placeItem.createWall || beforePlacementItem.IsAir);
+            
+            if (canUndoTile || canUndoWall) {
+                if (PlacementHelpers.RemoveTile(coords.X, coords.Y, canUndoTile, canUndoWall, needPickPower: true) &&
+                    (beforePlacementTile.HasTile || beforePlacementTile.HasWall) && beforePlacementItem.type > ItemID.None) {
+                    PlacementHelpers.PlaceTile(coords.X, coords.Y, beforePlacementItem);
                 }
             }
         }
