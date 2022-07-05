@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.UI;
 
-namespace BuilderEssentials.Common;
+namespace BuilderEssentials.Common.DataStructures;
 
 public class MouseSelection
 {

@@ -8,7 +8,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using static BuilderEssentials.Common.CoordSelection;
+using static BuilderEssentials.Common.DataStructures.CoordSelection;
 
 namespace BuilderEssentials.Content.UI;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using BuilderEssentials.Common.DataStructures;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -9,13 +10,6 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace BuilderEssentials.Common;
-
-public enum TypeOfItem
-{
-    Air,
-    Tile,
-    Wall
-}
 
 public static class PlacementHelpers
 {

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 
-namespace BuilderEssentials.Common;
+namespace BuilderEssentials.Common.DataStructures;
 
 public struct PlacementHistory
 {

@@ -1,4 +1,4 @@
-namespace BuilderEssentials.Common;
+namespace BuilderEssentials.Common.Enums;
 
 public enum ToggleableUiType
 {

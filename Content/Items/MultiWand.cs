@@ -1,5 +1,6 @@
 ﻿using System;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Enums;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;

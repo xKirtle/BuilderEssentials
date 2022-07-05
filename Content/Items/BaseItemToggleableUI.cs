@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Enums;
 using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
