@@ -56,5 +56,8 @@
     <Compile Update="Content\UI\Shapes\MirrorWandPanel.cs">
       <DependentUpon>ShapesUIState.cs</DependentUpon>
     </Compile>
+    <Compile Update="Content\UI\ToggleableItems\WrenchUpgradesPanel.cs">
+      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

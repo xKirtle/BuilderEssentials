@@ -5,5 +5,6 @@ public enum ToggleableUiType
     AutoHammer,
     MultiWand,
     PaintBrush,
+    WrenchUpgrades,
     Count
 }
