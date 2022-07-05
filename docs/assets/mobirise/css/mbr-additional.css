@@ -41,6 +41,9 @@ body {
 .display-7 > .mbr-iconfont {
   font-size: 1.5rem;
 }
+#footer > * {
+  display: none;
+}
 /* ---- Fluid typography for mobile devices ---- */
 /* 1.4 - font scale ratio ( bootstrap == 1.42857 ) */
 /* 100vw - current viewport width */
