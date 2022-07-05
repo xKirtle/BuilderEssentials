@@ -16,7 +16,8 @@ public static class AssetsLoader
         {AssetsID.AutoHammer, new Asset<Texture2D>[6]},
         {AssetsID.MultiWand, new Asset<Texture2D>[6]},
         {AssetsID.PaintBrushColors, new Asset<Texture2D>[33]},
-        {AssetsID.PaintBrushTools, new Asset<Texture2D>[7]}
+        {AssetsID.PaintBrushTools, new Asset<Texture2D>[7]},
+        {AssetsID.WrenchUpgradesToggle, new Asset<Texture2D>[1]}
     };
 
     public static Asset<Texture2D>[] GetAssets(string key) => texturesDictionary[key];
