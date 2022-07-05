@@ -18,16 +18,17 @@ public class ToggleableItemsUISystem : UISystem<ToggleableItemsUIState> { }
 
 public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 {
-    public override List<Type> PanelTypes() => new() {
+    public override List<Type> PanelTypes => new() {
         typeof(AutoHammerPanel),
         typeof(MultiWandPanel),
-        typeof(PaintBrushPanel)
+        typeof(PaintBrushPanel),
+        typeof(WrenchUpgradesPanel)
     };
     
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
 
-        for (int i = 0; i < PanelTypes().Count; i++) {
+        for (int i = 0; i < PanelTypes.Count; i++) {
             var panel = GetUIPanel(i);
             if (!panel.IsHoldingBindingItem() && panel.IsVisible) {
                 panel.Remove();

@@ -18,7 +18,6 @@ public abstract class BaseItemToggleableUI : BuilderEssentialsItem
 {
     private static ToggleableItemsUISystem UiSystem = ModContent.GetInstance<ToggleableItemsUISystem>();
     public virtual ToggleableUiType ToggleableUiType { get; private set; }
-    public virtual bool CloseUIOnItemSwap { get; protected set; } = true;
 
     public override void SetDefaults() { //TODO: Check if updating tile range in holdItem is a better solution
         Item.tileBoost = ItemRange - 18; //So that ItemRange is accurate per tiles

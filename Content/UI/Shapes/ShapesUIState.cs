@@ -23,7 +23,7 @@ public class ShapesUISystem : UISystem<ShapesUIState>
 
 public class ShapesUIState : ManagedUIState<BaseShapePanel>
 {
-    public override List<Type> PanelTypes() => new() {
+    public override List<Type> PanelTypes => new() {
         typeof(FillWandPanel),
         typeof(MirrorWandPanel)
     };
@@ -32,7 +32,7 @@ public class ShapesUIState : ManagedUIState<BaseShapePanel>
         base.Update(gameTime);
         
         // Only happens after Update() tries to run on each Panel
-        for (int i = 0; i < PanelTypes().Count; i++) {
+        for (int i = 0; i < PanelTypes.Count; i++) {
             var panel = GetUIPanel(i);
             panel.UpdateRegardlessOfVisibility();
         }

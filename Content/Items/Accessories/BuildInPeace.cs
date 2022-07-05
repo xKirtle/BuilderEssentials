@@ -17,8 +17,7 @@ public class BuildInPeace : ModItem
     public override void SetDefaults() {
         Item.accessory = true;
         Item.vanity = false;
-        Item.width = 42;
-        Item.height = 42;
+        Item.width = Item.height = 42;
         Item.value = Item.sellPrice(0,50, 0, 0);
         Item.rare = ItemRarityID.Red;
     }

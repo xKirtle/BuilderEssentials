@@ -12,13 +12,13 @@ public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIEleme
 {
     private static ManagedUIState<T> instance;
     private List<T> uiStateElements = new();
-    public abstract List<Type> PanelTypes();
+    public abstract List<Type> PanelTypes { get; }
 
     public override void OnInitialize() {
         instance = this;
     
-        for (var i = 0; i < PanelTypes().Count; i++)
-            uiStateElements.Add((T) Activator.CreateInstance(PanelTypes()[i]));
+        for (var i = 0; i < PanelTypes.Count; i++)
+            uiStateElements.Add((T) Activator.CreateInstance(PanelTypes[i]));
     }
 
     public virtual void Dispose() {
@@ -34,7 +34,7 @@ public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIEleme
     public static ManagedUIState<T> GetInstance() => instance;
 
     private static int IndexOfPanelType<U>()
-        => GetInstance().PanelTypes().IndexOf(typeof(U));
+        => GetInstance().PanelTypes.IndexOf(typeof(U));
     
     private static T GetElementAtIndex(int index) => (T) GetInstance().uiStateElements[index];
 
@@ -62,5 +62,5 @@ public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIEleme
     }
 
     //ModConfig OnChanged ends up calling this, where instance might be null at that point
-    public static int GetPanelCount() => GetInstance()?.PanelTypes().Count ?? 0;
+    public static int GetPanelCount() => GetInstance()?.PanelTypes.Count ?? 0;
 }
