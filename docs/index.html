@@ -11,7 +11,10 @@
   <link rel="shortcut icon" href="assets/images/icon-big.png" type="image/x-icon">
   <meta name="description" content="A mod designed to improve the Terraria building experience!">
   
-  
+  <script>
+    function preventDefault(e) { e.preventDefault(); }
+    window.addEventListener(WheelEvent, preventDefault, false);
+  </script>
   <title>Builder Essentials</title>
   <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
@@ -296,7 +299,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <p class="mbr-text mbr-fonts-style display-7">
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="PreHardmodeCraftingStation">
                                         <div class="container">
                                             <div class="row align-items-center">
                                                 <div class="col-12 col-lg-4">
@@ -336,7 +339,7 @@
                                         </div>
                                     </section>
 
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="HardmodeCraftingStation">
                                         <div class="container">
                                             <div class="row align-items-center">
                                                 <div class="col-12 col-lg-4">
@@ -368,7 +371,7 @@
                                         </div>
                                     </section>
 
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="SpecializedCraftingStation">
                                         <div class="container">
                                             <div class="row align-items-center">
                                                 <div class="col-12 col-lg-4">
@@ -399,7 +402,7 @@
                                         </div>
                                     </section>
 
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="ThemedFurnitureCraftingStation">
                                         <div class="container">
                                             <div class="row align-items-center">
                                                 <div class="col-12 col-lg-4">
@@ -436,7 +439,7 @@
                                         </div>
                                     </section>
 
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="MultiCraftingStation">
                                         <div class="container">
                                             <div class="row align-items-center">
                                                 <div class="col-12 col-lg-4">
@@ -475,7 +478,7 @@
                                     <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
                                         <div class="container">
                                             <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6">
+                                                <div class="col-12 col-lg-6" id="BuildInPeace">
                                                     <div class="text-wrapper">
                                                         <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/BuildInPeace.png" alt="Build In Peace" style="width: 42px; height: 42px; margin-top: 6px; margin-bottom: 20px;"><strong> Build In Peace</strong></h5><hr>
                                                         <p class="mbr-text mbr-fonts-style display-7">Disables all hostile events, invasions, bosses, NPCs (except for Town NPCs) and keeps the time fixed at 12pm.</p>
@@ -485,7 +488,7 @@
                                                         </table>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-lg-6">
+                                                <div class="col-12 col-lg-6" id="BuildingWrench">
                                                     <div class="text-wrapper">
                                                         <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/BuildingWrench.png" alt="Building Wrench" style="width: 48px; height: 48px; margin-bottom: 20px;"><strong> Building Wrench</strong></h5><hr>
                                                         <p class="mbr-text mbr-fonts-style display-7">An accessory that does nothing by itself but it allows upgrades to be added.Upgrades can be toggled from the UI that's located in the bottom left corner.
@@ -504,7 +507,7 @@
                                             </div>
 
                                             <div class="row align-items-start">
-                                                <div class="col-12 col-lg-8">
+                                                <div class="col-12 col-lg-8" id="UpgradeModules">
                                                     <div class="text-wrapper">
                                                         <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/WrenchUpgrades/Upgrades.gif" alt="Building Wrench Upgrade Modules" style="width: 38px; height: 38px; margin-bottom: 20px;"><strong> Building Wrench Upgrade Modules</strong></h5><hr>
                                                         <p class="mbr-text mbr-fonts-style display-7">Modules that can be attached to a Building Wrench [<img title="Building Wrench" src="assets/images/Accessories/BuildingWrench.png" style="width: 24px; height: 24px; margin: 0px 4px;" class="titleItem"/>].<br>Each module is crafted differently and unlocks a different upgrade.</p>
@@ -577,6 +580,7 @@
 <script src="assets/smoothscroll/smooth-scroll.js"></script>
 <script src="assets/ytplayer/index.js"></script>
 <script src="assets/mbr-tabs/mbr-tabs.js"></script>
+<script src="assets/mbr-tabs/script.js"></script>
 <script src="assets/playervimeo/vimeo_player.js"></script>
 <script src="assets/theme/js/script.js"></script>
 <script>window.onload = () => ["footer", "top-1", "top-2"].forEach(x => document.getElementById(x).remove());document.scripts[document.scripts.length-1].remove();</script>
