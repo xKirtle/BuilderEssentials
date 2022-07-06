@@ -17,6 +17,7 @@ public class BEPlayer : ModPlayer
     
     public bool InfinitePaint { get; set; }
     public bool IsWrenchEquipped { get; set; }
+    public bool IsImprovedRulerEquipped { get; set; }
     public bool FastPlacement { get; set; }
     public bool InfiniteRange { get; set; }
     public bool InfinitePlacement { get; set; }

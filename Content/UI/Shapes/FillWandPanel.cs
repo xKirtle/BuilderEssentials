@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
@@ -15,11 +16,13 @@ public class FillWandPanel : BaseShapePanel
 
     public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
     
+    public override HashSet<Vector2> VisitedPlottedPixels => null;
+    
     public override void PlotSelection() {
         int size = FillWand.FillSelectionSize;
         for (int x = 0; x < size; x++)
         for (int y = 0; y < size; y++) {
-            ShapeHelpers.PlotPixel(Player.tileTargetX + y, Player.tileTargetY + x - size + 1, ShapeHelpers.Blue, 0.9f);
+            ShapeHelpers.PlotPixel(Player.tileTargetX + y, Player.tileTargetY + x - size + 1, ShapeHelpers.Blue, null, 0.9f);
             QueuePlacement(new Point(Player.tileTargetX + y, Player.tileTargetY + x - size + 1));
         }
     }
@@ -32,6 +35,7 @@ public class FillWandPanel : BaseShapePanel
         oldTileCoords = newTileCoords;
         return true;
     }
+    
 
     public override void UpdateRegardlessOfVisibility() {
         if ((IsHoldingBindingItem() && !IsVisible) || (!IsHoldingBindingItem() && IsVisible))
