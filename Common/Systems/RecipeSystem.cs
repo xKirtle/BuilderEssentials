@@ -68,11 +68,12 @@ public class RecipeSystem : ModSystem
         int[] hardmodeAnvils = {ItemID.MythrilAnvil, ItemID.OrichalcumAnvil};
         CreateRecipeGroup(hardmodeAnvils, "Hardmode Anvil");
 
-        int[] alchemy = {
-            ItemID.Bottle, ItemID.PinkVase, ItemID.PinkDungeonVase, ItemID.Mug,
-            ItemID.DynastyCup, ItemID.HoneyCup, ItemID.SteampunkCup, ItemID.AlchemyTable
-        };
-        CreateRecipeGroup(alchemy, "Bottle/Alchemy Item");
+        //Not used
+        // int[] alchemy = {
+        //     ItemID.Bottle, ItemID.PinkVase, ItemID.PinkDungeonVase, ItemID.Mug,
+        //     ItemID.DynastyCup, ItemID.HoneyCup, ItemID.SteampunkCup, ItemID.AlchemyTable
+        // };
+        // CreateRecipeGroup(alchemy, "Bottle/Alchemy Item");
 
         int[] sinks = {
             ItemID.MetalSink, ItemID.BlueDungeonSink, ItemID.BoneSink, ItemID.BorealWoodSink,

@@ -30,6 +30,14 @@ public class HMCraftingItem : ModItem
     }
 
     public override void AddRecipes() {
-        
+        CreateRecipe()
+            .AddRecipeGroup("BuilderEssentials:Hardmode Anvil")
+            .AddRecipeGroup("BuilderEssentials:Forge")
+            .AddRecipeGroup("BuilderEssentials:Bookcase")
+            .AddIngredient(ItemID.CrystalBall)
+            .AddIngredient(ItemID.Autohammer)
+            .AddIngredient(ItemID.LunarCraftingStation)
+            .AddTile(TileID.DemonAltar)
+            .Register();
     }
 }

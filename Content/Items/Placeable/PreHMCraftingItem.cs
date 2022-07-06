@@ -30,6 +30,22 @@ public class PreHMCraftingItem : ModItem
     }
 
     public override void AddRecipes() {
-        
+        CreateRecipe()
+            .AddRecipeGroup("BuilderEssentials:Chair")
+            .AddRecipeGroup("BuilderEssentials:Workbench")
+            .AddRecipeGroup("BuilderEssentials:Table")
+            .AddRecipeGroup("BuilderEssentials:Sink")
+            .AddRecipeGroup("BuilderEssentials:Anvil")
+            .AddRecipeGroup("BuilderEssentials:Furnace")
+            .AddIngredient(ItemID.AlchemyTable)
+            .AddIngredient(ItemID.Sawmill)
+            .AddIngredient(ItemID.Loom)
+            .AddRecipeGroup("BuilderEssentials:Cooking Pot")
+            .AddIngredient(ItemID.TinkerersWorkshop)
+            .AddIngredient(ItemID.ImbuingStation)
+            .AddIngredient(ItemID.DyeVat)
+            .AddIngredient(ItemID.HeavyWorkBench)
+            .AddTile(TileID.DemonAltar)
+            .Register();
     }
 }

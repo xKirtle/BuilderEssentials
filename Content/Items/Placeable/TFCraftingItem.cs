@@ -30,6 +30,19 @@ public class TFCraftingItem : ModItem
     }
 
     public override void AddRecipes() {
-        
+        CreateRecipe()
+            .AddIngredient(ItemID.BoneWelder)
+            .AddIngredient(ItemID.GlassKiln)
+            .AddIngredient(ItemID.HoneyDispenser)
+            .AddIngredient(ItemID.IceMachine)
+            .AddIngredient(ItemID.LivingLoom)
+            .AddIngredient(ItemID.SkyMill)
+            .AddIngredient(ItemID.Solidifier)
+            .AddIngredient(ItemID.LesionStation)
+            .AddIngredient(ItemID.FleshCloningVaat)
+            .AddIngredient(ItemID.SteampunkBoiler)
+            .AddIngredient(ItemID.LihzahrdFurnace)
+            .AddTile(TileID.MythrilAnvil)
+            .Register();
     }
 }

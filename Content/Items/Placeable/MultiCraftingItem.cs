@@ -30,6 +30,12 @@ public class MultiCraftingItem : ModItem
     }
 
     public override void AddRecipes() {
-        
+        CreateRecipe()
+            .AddIngredient<PreHMCraftingItem>()
+            .AddIngredient<HMCraftingItem>()
+            .AddIngredient<SpecCraftingItem>()
+            .AddIngredient<TFCraftingItem>()
+            .AddTile(TileID.TinkerersWorkbench)
+            .Register();
     }
 }

@@ -30,6 +30,13 @@ public class SpecCraftingItem : ModItem
     }
 
     public override void AddRecipes() {
-        
+        CreateRecipe()
+            .AddIngredient(ItemID.Keg)
+            .AddIngredient(ItemID.TeaKettle)
+            .AddIngredient(ItemID.BlendOMatic)
+            .AddIngredient(ItemID.MeatGrinder)
+            .AddRecipeGroup("BuilderEssentials:Campfire")
+            .AddTile(TileID.MythrilAnvil)
+            .Register();
     }
 }
