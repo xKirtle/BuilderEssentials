@@ -25,7 +25,8 @@ public class ShapesUIState : ManagedUIState<BaseShapePanel>
 {
     public override List<Type> PanelTypes => new() {
         typeof(FillWandPanel),
-        typeof(MirrorWandPanel)
+        typeof(MirrorWandPanel),
+        typeof(ImprovedRulerPanel)
     };
 
     public override void Update(GameTime gameTime) {
@@ -44,6 +45,18 @@ public class ShapesUIState : ManagedUIState<BaseShapePanel>
             panel.UpdateMaxUndoNum(value);
         }
     }
+
+    public override void Draw(SpriteBatch spriteBatch) {
+        ClearVisitedPlottedPixels();
+        base.Draw(spriteBatch);
+    }
+
+    private static void ClearVisitedPlottedPixels() {
+        for (int i = 0; i < GetPanelCount(); i++) {
+            var panel = GetUIPanel(i);
+            panel.VisitedPlottedPixels?.Clear();
+        }
+    }
 }
 
 public abstract class BaseShapePanel : UIElement
@@ -51,7 +64,7 @@ public abstract class BaseShapePanel : UIElement
     public bool IsVisible => Parent != null;
     
     /// <summary>
-    /// Whether the panel will be removed from the Parent UIState or not
+    /// Whether the panel will update its <see cref="CoordSelection"/> instance <see cref="cs"/>
     /// </summary>
     /// <returns>True if it's not going to be removed</returns>
     public abstract bool IsHoldingBindingItem();
@@ -89,6 +102,8 @@ public abstract class BaseShapePanel : UIElement
     /// <returns>True if it can be undoable</returns>
     public abstract bool SelectionHasChanged();
 
+    public abstract HashSet<Vector2> VisitedPlottedPixels { get; }
+
     internal CoordSelection cs;
     private HistoryStack<List<PlacementHistory>> historyPlacements;
     private UniqueQueue<Point> queuedPlacements;
@@ -125,6 +140,7 @@ public abstract class BaseShapePanel : UIElement
 
     public override void Draw(SpriteBatch spriteBatch) {
         base.Draw(spriteBatch);
+        // ShapeHelpers.drawnCoordinates.Clear();
         cs.UpdateCoords();
         
         queuedPlacements.Clear();

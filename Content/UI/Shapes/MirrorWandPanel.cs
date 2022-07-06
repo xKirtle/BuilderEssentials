@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
@@ -29,6 +30,8 @@ public class MirrorWandPanel : BaseShapePanel
     public override bool CanPlaceItems() => true;
 
     public override bool SelectionHasChanged() => false;
+    
+    public override HashSet<Vector2> VisitedPlottedPixels => null;
 
     public bool IsMouseWithinSelection() =>
         IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
@@ -56,13 +59,13 @@ public class MirrorWandPanel : BaseShapePanel
 
     public override void PlotSelection() {
         //Selected area
-        ShapeHelpers.PlotRectangle(selStart, selEnd, ShapeHelpers.Blue, 0.90f, false);
+        ShapeHelpers.PlotRectangle(selStart, selEnd, ShapeHelpers.Blue * 0.6f, null, 0.90f, false);
         
         //Mirror
         LimitMirrorSize();
         validMirrorPlacement = IsMirrorAxisInsideSelection();
         Color color = validMirrorPlacement ? ShapeHelpers.Yellow : ShapeHelpers.Red;
-        ShapeHelpers.PlotRectangle(mirStart, mirEnd, color, 0.90f, false);
+        ShapeHelpers.PlotRectangle(mirStart, mirEnd, color * 0.6f, null, 0.90f, false);
     }
 
     private void LimitMirrorSize() {
