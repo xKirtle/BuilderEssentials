@@ -5,8 +5,10 @@ using BuilderEssentials.Common.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.UI;
 using Terraria.UI.Chat;
 
@@ -60,13 +62,16 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
     }
 
     public void ToggleUpgrade(int index) {
-        //TODO: add sound
         enabledUpgrades[index] = !enabledUpgrades[index];
 
-        if (!enabledUpgrades[index])
+        if (!enabledUpgrades[index]) {
             elements[index].SetVisibility(.75f, .4f);
-        else
+            SoundEngine.PlaySound(SoundID.MenuClose);
+        }
+        else {
             elements[index].SetVisibility(1f, 1f);
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+        }
     }
 
     public override void Update(GameTime gameTime) {
