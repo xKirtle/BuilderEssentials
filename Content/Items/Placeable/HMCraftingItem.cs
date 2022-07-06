@@ -32,7 +32,7 @@ public class HMCraftingItem : ModItem
     public override void AddRecipes() {
         CreateRecipe()
             .AddRecipeGroup("BuilderEssentials:Hardmode Anvil")
-            .AddRecipeGroup("BuilderEssentials:Forge")
+            .AddRecipeGroup("BuilderEssentials:Hardmode Forge")
             .AddRecipeGroup("BuilderEssentials:Bookcase")
             .AddIngredient(ItemID.CrystalBall)
             .AddIngredient(ItemID.Autohammer)
