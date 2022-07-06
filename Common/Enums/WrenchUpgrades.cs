@@ -12,6 +12,5 @@ public enum WrenchUpgrades
 public enum UpgradeState
 {
     Locked,
-    Disabled,
-    Enabled
+    Unlocked
 }

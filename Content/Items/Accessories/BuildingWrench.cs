@@ -17,11 +17,8 @@ namespace BuilderEssentials.Content.Items.Accessories;
 public class BuildingWrench : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
-    public int[] upgrades;
-    private bool isEquipped;
+    public int[] unlockedUpgrades;
 
-    public override void SetStaticDefaults() => Tooltip.SetDefault("Just a simple wrench. What did you expect it to do?");
-    
     public override void SetDefaults() {
         Item.accessory = true;
         Item.vanity = false;
@@ -29,11 +26,10 @@ public class BuildingWrench : ModItem
         Item.value = Item.sellPrice(silver: 20);
         Item.rare = ItemRarityID.Red;
         
-        if (upgrades == null) upgrades = Enumerable.Repeat((int) UpgradeState.Locked, (int) WrenchUpgrades.Count).ToArray();
+        if (unlockedUpgrades == null) unlockedUpgrades = Enumerable.Repeat((int) UpgradeState.Locked, (int) WrenchUpgrades.Count).ToArray();
     }
 
     public override void Load() {
-        
         //Programmatically add the wrench item upgrades
         for (int i = 0; i < (int) WrenchUpgrades.Count; i++)
             Mod.AddContent(new WrenchItemUpgrade(i));
@@ -41,26 +37,21 @@ public class BuildingWrench : ModItem
 
     public override ModItem Clone(Item newEntity) {
         BuildingWrench newInstance = (BuildingWrench)base.Clone(newEntity);
-        newInstance.upgrades = (int[]) upgrades?.Clone();
+        newInstance.unlockedUpgrades = (int[]) unlockedUpgrades?.Clone();
         return newInstance;
     }
 
-    public override void OnCreate(ItemCreationContext context) {
-        // upgrades = Enumerable.Repeat((int) UpgradeState.Locked, (int) WrenchUpgrades.Count).ToArray();
-    }
-
-    //Called on item hover, for example
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
         tooltips.Remove(tooltips.Find(x => x.Name == "Material"));
 
-        if (upgrades == null) return;
+        if (unlockedUpgrades == null) return;
 
-        if (upgrades.All(x => x == 0)) {
+        if (unlockedUpgrades.All(x => x == 0)) {
             tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:NoUpgradesAdded", "Just a simple wrench. What did you expect it to do?"));
             return;
         }
 
-        if (!isEquipped)
+        if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().IsWrenchEquipped)
             tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:UIToggleMenu",
             "[c/FFCC00:Equip this item to enable/disable upgrades!]"));
         else
@@ -68,7 +59,7 @@ public class BuildingWrench : ModItem
                 "[c/FFCC00:Enable/Disable wrench upgrades in the bottom left menu!]"));
 
         for (int i = 0; i < (int) WrenchUpgrades.Count; i++) {
-            if (upgrades[i] != 0) {
+            if (unlockedUpgrades[i] != 0) {
                 string upgradeType = ((WrenchUpgrades) i).ToString();
                 string tooltip = string.Concat(upgradeType.Select(c => Char.IsUpper(c) ? $" {c}" : $"{c}")).TrimStart(' ');
                 tooltips.Add(new TooltipLine(Mod, $"BuilderEssentials:{upgradeType}", tooltip));
@@ -76,37 +67,28 @@ public class BuildingWrench : ModItem
         }
     }
     
-    public override void SaveData(TagCompound tag) => tag[nameof(upgrades)] = upgrades.ToList();
-    public override void LoadData(TagCompound tag) => upgrades = tag.Get<List<int>>(nameof(upgrades)).ToArray();
+    public override void SaveData(TagCompound tag) => tag[nameof(unlockedUpgrades)] = unlockedUpgrades.ToList();
+    public override void LoadData(TagCompound tag) => unlockedUpgrades = tag.Get<List<int>>(nameof(unlockedUpgrades)).ToArray();
 
     public void UnlockUpgrade(WrenchUpgrades upgrade) {
         if (upgrade == WrenchUpgrades.Count) return;
-
-        if (upgrades[(int) upgrade] == (int) UpgradeState.Locked)
-            upgrades[(int) upgrade] = (int) UpgradeState.Disabled;
+        unlockedUpgrades[(int) upgrade] = (int) UpgradeState.Unlocked;
     }
-
-    public bool ToggleUpgrade(WrenchUpgrades upgrade) {
-        if (upgrade == WrenchUpgrades.Count || upgrades[(int) upgrade] == (int) UpgradeState.Locked) return false;
-
-        int newState = ((int) upgrades[(int) upgrade] % 2) + 1;
-        upgrades[(int) upgrade] = newState;
-
-        return upgrades[(int) upgrade] == (int) UpgradeState.Enabled;
-    }
-
+    
     public override void UpdateAccessory(Player player, bool hideVisual) {
         if (player.whoAmI != Main.myPlayer) return;
-        player.GetModPlayer<BEPlayer>().IsWrenchEquipped = true;
+        BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
+        mp.IsWrenchEquipped = true;
 
         var panel = ToggleableItemsUIState.GetUIPanel<WrenchUpgradesPanel>();
         if (!panel.IsVisible)
             ToggleableItemsUIState.TogglePanelVisibility<WrenchUpgradesPanel>();
         
-        isEquipped = true;
+        mp.FastPlacement = panel.enabledUpgrades[0];
+        mp.InfiniteRange = panel.enabledUpgrades[1];
+        mp.InfinitePlacement = panel.enabledUpgrades[2];
+        mp.InfinitePickupRange = panel.enabledUpgrades[3];
     }
-
-    public override void UpdateInventory(Player player) => isEquipped = false;
 
     public static List<Recipe> upgradeRecipes = new ((int) WrenchUpgrades.Count);
     
@@ -123,8 +105,6 @@ public class BuildingWrench : ModItem
 
         for (int i = 0; i < (int) WrenchUpgrades.Count; i++) {
             int index = i;
-            
-            //Literally impossible to access the item instance before it is consumed..
             Recipe recipe = CreateRecipe()
                 .AddIngredient(Type)
                 .AddIngredient(Mod, ((WrenchUpgrades) index).ToString() + "Module")
@@ -137,7 +117,7 @@ public class BuildingWrench : ModItem
                         if (item.type == Item.type) {
                             WrenchUpgrades.TryParse(recipe.requiredItem[1].Name.Replace(" ", "").Replace("Module", ""),
                                 out WrenchUpgrades upgrade);
-                            int[] previousUpgrades = (int[]) (item.ModItem as BuildingWrench).upgrades.Clone();
+                            int[] previousUpgrades = (int[]) (item.ModItem as BuildingWrench).unlockedUpgrades.Clone();
                             queuedRecipeChanges.Enqueue(new Tuple<int[], WrenchUpgrades>(previousUpgrades, upgrade));
                             break;
                         }
@@ -188,7 +168,7 @@ public class BuildingWrench : ModItem
             (int[] previousUpgrades, WrenchUpgrades upgrade) = queuedRecipeChanges.Dequeue();
             
             Item resultItem = Main.mouseItem;
-            (resultItem.ModItem as BuildingWrench).upgrades = previousUpgrades;
+            (resultItem.ModItem as BuildingWrench).unlockedUpgrades = previousUpgrades;
             (resultItem.ModItem as BuildingWrench).UnlockUpgrade(upgrade);
         }
         
@@ -197,7 +177,7 @@ public class BuildingWrench : ModItem
         Item wrench = Main.LocalPlayer.inventory.SkipLast(1).FirstOrDefault(x => x.type == ModContent.ItemType<BuildingWrench>());
         if (wrench == null) return;
 
-        int[] upgrades = (int[]) (wrench.ModItem as BuildingWrench).upgrades.Clone();
+        int[] upgrades = (int[]) (wrench.ModItem as BuildingWrench).unlockedUpgrades.Clone();
 
         for (int i = 0; i < upgrades.Length; i++) {
             if (upgrades[i] != (int) UpgradeState.Locked && !upgradeRecipes[i].HasCondition(FalseCondition)) {
@@ -209,7 +189,7 @@ public class BuildingWrench : ModItem
                 
                 upgradeRecipes[i].requiredItem[0] = wrench;
                 Item resultItem = new Item(wrench.type);
-                (resultItem.ModItem as BuildingWrench).upgrades = (int[]) upgrades.Clone();
+                (resultItem.ModItem as BuildingWrench).unlockedUpgrades = (int[]) upgrades.Clone();
                 (resultItem.ModItem as BuildingWrench).UnlockUpgrade((WrenchUpgrades)i);
                 upgradeRecipes[i].createItem = resultItem;
                 

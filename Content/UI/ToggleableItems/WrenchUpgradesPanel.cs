@@ -22,16 +22,17 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
     private UIImageButton[] elements;
     private bool elementHovered;
     private string text = "";
+    public bool[] enabledUpgrades;
     
     public override void OnInitialize() {
         Width.Set(ParentWidth, 0);
         Height.Set(ParentHeight, 0);
-        Left.Set(-ParentWidth / 2, .5f);
-        Top.Set(15f, 0);
+        Left.Set(15f, 0f);
+        Top.Set(-ParentHeight - 15f, 1f);
         SetPadding(0);
         SetPadding(0);
 
-        
+        enabledUpgrades = new bool[ElementsCount];
         elements = new UIImageButton[ElementsCount];
         for (int i = 0; i < ElementsCount; i++) {
             int index = i;
@@ -51,11 +52,23 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
                 elementHovered = false;
                 text = "";
             };
+
+            elements[i].OnClick += (__, _) => ToggleUpgrade(index);
             
             Append(elements[i]);
         }
     }
-    
+
+    public void ToggleUpgrade(int index) {
+        //TODO: add sound
+        enabledUpgrades[index] = !enabledUpgrades[index];
+
+        if (!enabledUpgrades[index])
+            elements[index].SetVisibility(.75f, .4f);
+        else
+            elements[index].SetVisibility(1f, 1f);
+    }
+
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
 
