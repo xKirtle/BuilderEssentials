@@ -33,13 +33,13 @@ public class MirrorWandPanel : BaseShapePanel
     public bool IsMouseWithinSelection() =>
         IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
         IsWithinRange(Player.tileTargetY, selStart.Y, selEnd.Y);
-
+    
     public bool IsMouseAffectedByMirrorAxis() =>
         validMirrorPlacement &&
-        (IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
-         (Player.tileTargetY != mirStart.Y || Player.tileTargetY != mirEnd.Y)) ||
-        (IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) &&
-         (Player.tileTargetX != mirStart.X || Player.tileTargetX != mirEnd.X));
+        (horizontalMirror && IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
+         (Player.tileTargetY != mirStart.Y && Player.tileTargetY != mirEnd.Y)) ||
+        (!horizontalMirror && IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) &&
+         (Player.tileTargetX != mirStart.X && Player.tileTargetX != mirEnd.X));
     
     public bool IsMirrorAxisInsideSelection() =>
         mirStart != mirEnd &&
@@ -140,19 +140,22 @@ public class MirrorWandPanel : BaseShapePanel
             float distanceToMirror = Math.Min(Math.Abs(result.Y - mirStart.Y), Math.Abs(result.Y - mirEnd.Y));
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
+        
+        //Check if result placement is within the selection -> for single tiles
+        if (!IsWithinRange(result.X, selStart.X, selEnd.X) ||
+            !IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
+        
+        if (data == null) 
+            return result;
 
-        //Check if result placement will overlap with the mirror axis
+        //Check if result placement will overlap with the mirror axis -> for multi tiles
         Point initialTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) initial.X, (int) initial.Y, tileData: data);
-        Point resultTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) result.X, (int) result.Y, tileData: data);
+        Point resultTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) result.X, (int) result.Y, isPlaced: false, tileData: data);
         if ((!horizontalMirror && (leftOfTheMirror && (resultTopLeft.X <= (initialTopLeft.X + tileSize.X)) || 
                                    (!leftOfTheMirror && (resultTopLeft.X + tileSize.X) >= initialTopLeft.X))) ||
             (horizontalMirror && (topOfTheMirror && (resultTopLeft.Y <= (initialTopLeft.Y + tileSize.Y)) ||
                                   (!topOfTheMirror && (resultTopLeft.Y + tileSize.Y) >= initialTopLeft.Y))))
             return initial;
-
-        //Check if result placement is within the selection
-        if (!IsWithinRange(result.X, selStart.X, selEnd.X) ||
-            !IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
         
         return result;
     }
