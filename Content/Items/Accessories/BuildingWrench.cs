@@ -133,6 +133,7 @@ public class BuildingWrench : ModItem
         CreateRecipe()
             .AddIngredient(ItemID.BrickLayer)
             .AddIngredient(ItemID.PortableCementMixer)
+            .AddIngredient(ItemID.Sapphire, 5)
             .AddTile(TileID.Anvils)
             .Register().ReplaceResult(Mod, WrenchUpgrades.FastPlacement.ToString() + "Module");
         
@@ -140,6 +141,7 @@ public class BuildingWrench : ModItem
         CreateRecipe()
             .AddIngredient(ItemID.ExtendoGrip)
             .AddIngredient(ItemID.Toolbelt)
+            .AddIngredient(ItemID.Ruby, 5)
             .AddTile(TileID.MythrilAnvil)
             .Register().ReplaceResult(Mod, WrenchUpgrades.InfiniteRange.ToString() + "Module");
         
@@ -147,12 +149,14 @@ public class BuildingWrench : ModItem
         CreateRecipe()
             .AddIngredient(ItemID.TempleKey, 3)
             .AddIngredient(ItemID.LihzahrdPowerCell, 5)
+            .AddIngredient(ItemID.Emerald, 5)
             .AddTile(TileID.AdamantiteForge)
             .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePlacement.ToString() + "Module");
         
         //Infinite Pickup Range
         CreateRecipe()
             .AddIngredient(ItemID.DemoniteOre, 20)
+            .AddIngredient(ItemID.Topaz, 5)
             .AddTile(TileID.Anvils)
             .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePickupRange.ToString() + "Module");
         
