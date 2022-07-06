@@ -17,9 +17,15 @@ public class BEPlayer : ModPlayer
     
     public bool InfinitePaint { get; set; }
     public bool IsWrenchEquipped { get; set; }
+    public bool FastPlacement { get; set; }
+    public bool InfiniteRange { get; set; }
+    public bool InfinitePlacement { get; set; }
+    public bool InfinitePickupRange { get; set; }
 
     public override void ResetEffects() {
-        InfinitePaint = IsWrenchEquipped = false;
+        InfinitePaint = IsWrenchEquipped = FastPlacement = 
+            InfiniteRange = InfinitePlacement = InfinitePickupRange = false;
+        Player.defaultItemGrabRange = 42;
     }
 
     public override void ProcessTriggers(TriggersSet triggersSet) {
@@ -33,5 +39,21 @@ public class BEPlayer : ModPlayer
     public override void PostUpdate() {
         MirrorPlacement.PlayerPostUpdate();
         BuildingWrench.DequeueRecipeChanges();
+    }
+
+    public override void PostUpdateEquips() {
+        if (InfiniteRange) {
+            Player.tileRangeX += Main.screenWidth / 16 / 2;
+            Player.tileRangeY += Main.screenHeight / 16 / 2;
+            Player.blockRange += Main.screenWidth / 16 / 2;
+        }
+        
+        if (FastPlacement) {
+            Player.tileSpeed += 500;
+            Player.wallSpeed += 500;
+        }
+        
+        if (InfinitePickupRange)
+            Player.defaultItemGrabRange += 2000;
     }
 }

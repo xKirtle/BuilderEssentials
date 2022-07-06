@@ -8,13 +8,14 @@ public class InfiniteGlobalItem : GlobalItem
 {
     public override bool ConsumeItem(Item item, Player player) {
         if (player.whoAmI != Main.myPlayer) return base.ConsumeItem(item, player);
-        //Kirtle: Return false for infinite items! Works for tile wands as well
+        BEPlayer mp = player.GetModPlayer<BEPlayer>();
 
-        if (player.GetModPlayer<BEPlayer>().InfinitePaint) {
-            if (item.paint > 0)
-                return false;
-        }
-        
+        if (mp.InfinitePlacement)
+            return false;
+
+        if (mp.InfinitePaint && item.paint > 0)
+            return false;
+
         return base.ConsumeItem(item, player);
     }
 }
