@@ -14,7 +14,12 @@ namespace BuilderEssentials.Content.Items;
 public abstract class BasePaintBrush : BaseItemToggleableUI
 {
     public override ToggleableUiType ToggleableUiType => ToggleableUiType.PaintBrush;
-    
+
+    public override void SetStaticDefaults() {
+        Tooltip.SetDefault("Able to paint and remove paint from tiles and walls!\n" +
+                           "Right Click to open selection menu");
+    }
+
     public override void SetDefaults() {
         base.SetDefaults();
         
