@@ -26,7 +26,8 @@ public class ShapesUIState : ManagedUIState<BaseShapePanel>
     public override List<Type> PanelTypes => new() {
         typeof(FillWandPanel),
         typeof(MirrorWandPanel),
-        typeof(ImprovedRulerPanel)
+        typeof(ImprovedRulerPanel),
+        typeof(ShapesDrawerPanel)
     };
 
     public override void Update(GameTime gameTime) {
@@ -47,8 +48,8 @@ public class ShapesUIState : ManagedUIState<BaseShapePanel>
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
-        ClearVisitedPlottedPixels();
         base.Draw(spriteBatch);
+        ClearVisitedPlottedPixels();
     }
 
     private static void ClearVisitedPlottedPixels() {

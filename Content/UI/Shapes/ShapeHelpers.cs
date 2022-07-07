@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 
@@ -57,13 +58,16 @@ public static class ShapeHelpers
         }
     }
 
-    public static void PlotRectangle(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords, float scale = 1f, bool isFill = false)
-        => PlotRectangle(start.X, start.Y, end.X, end.Y, color, visitedCoords, scale, isFill);
+    public static void PlotRectangle(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords,
+        float scale = 1f, bool isFill = false, bool displaySize = true)
+        => PlotRectangle(start.X, start.Y, end.X, end.Y, color, visitedCoords, scale, isFill, displaySize);
 
-    public static void PlotRectangle(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords, float scale = 1f, bool isFill = false)
-        => PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, scale, isFill);
+    public static void PlotRectangle(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords,
+        float scale = 1f, bool isFill = false, bool displaySize = true)
+        => PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, scale, isFill, displaySize);
 
-    public static void PlotRectangle(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords, float scale = 1f, bool isFill = false) {
+    public static void PlotRectangle(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords,
+        float scale = 1f, bool isFill = false, bool displaySize = true) {
         int dx = Math.Abs(x0 - x1);
         int dy = Math.Abs(y0 - y1);
         int minX = Math.Min(x0, x1), maxX = Math.Max(x0, x1);
@@ -110,11 +114,12 @@ public static class ShapeHelpers
         
         color = tempColor;
 
-        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{dx + 1}x{dy + 1}",
+        if (displaySize)
+            ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{dx + 1}x{dy + 1}",
             new Vector2(maxX, maxY) * 16 - Main.screenPosition + new Vector2(18f, 18f), Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
     }
 
-    //Quadratic Bezier
+#region Quadratic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint, 
         Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
         List<Vector2> points = new List<Vector2>();
@@ -140,7 +145,17 @@ public static class ShapeHelpers
         return new Vector2(x, y);
     }
     
-    //Cubic Bezier
+    //Ellipses have their control points be rectangle and then call below method on each control point to get the real control point
+    public static Vector2 GetControlPointOfTheoricalControlPoint(Vector2 startPoint, 
+        Vector2 controlPoint, Vector2 endPoint) {
+        float theoricalX = (4 * controlPoint.X - startPoint.X - endPoint.X) * 0.5f;
+        float theoricalY = (4 * controlPoint.Y - startPoint.Y - endPoint.Y) * 0.5f;
+        
+        return new Vector2(theoricalX, theoricalY);
+    }
+#endregion
+
+#region Cubic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2, 
         Vector2 endPoint, Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
         List<Vector2> points = new List<Vector2>();
@@ -167,39 +182,31 @@ public static class ShapeHelpers
         float y = Y(t, startPoint.Y, controlPoint.Y, controlPoint2.Y, endPoint.Y);
         return new Vector2(x, y);
     }
-    
-    //Ellipses have their control points be rectangle and then call below method on each control point to get the real control point
-    public static Vector2 GetControlPointOfTheoricalControlPoint(Vector2 startPoint, 
-        Vector2 controlPoint, Vector2 endPoint) {
-        float theoricalX = (4 * controlPoint.X - startPoint.X - endPoint.X) * 0.5f;
-        float theoricalY = (4 * controlPoint.Y - startPoint.Y - endPoint.Y) * 0.5f;
-        
-        return new Vector2(theoricalX, theoricalY);
-    }
-    
+#endregion
+
     public static void PlotEllipse(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords, 
-        ShapeSides shape = ShapeSides.All, float scale = 1f, bool isFill = false)
+        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
         => PlotEllipse(start.X, start.Y, end.X, end.Y, color, visitedCoords, shape, scale, isFill);
 
     public static void PlotEllipse(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords, 
-        ShapeSides shape = ShapeSides.All, float scale = 1f, bool isFill = false)
+        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
         => PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, shape, scale, isFill);
 
-    public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords, 
-        ShapeSides shape = ShapeSides.All, float scale = 1f, bool isFill = false) {
+    //TODO: Make half shapes be drawn with beziers instead? start/end in corners, control points in opposite corners
+    public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords,
+        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
         int width = Math.Abs(x0 - x1);
         int height = Math.Abs(y0 - y1);
-        
         if (width == 0 && height == 0) return;
 
-        if ((shape & ShapeSides.All) == 0) {
-            if ((shape & ShapeSides.Left) != 0)
+        if ((shape & ShapeSide.All) == 0) {
+            if ((shape & ShapeSide.Left) != 0)
                 x0 += width;
-            if ((shape & ShapeSides.Bottom) != 0)
+            if ((shape & ShapeSide.Bottom) != 0)
                 y0 += height;
-            if ((shape & ShapeSides.Right) != 0)
+            if ((shape & ShapeSide.Right) != 0)
                 x0 -= width;
-            if ((shape & ShapeSides.Top) != 0)
+            if ((shape & ShapeSide.Top) != 0)
                 y0 -= height;
         }
         
@@ -213,18 +220,39 @@ public static class ShapeHelpers
         a *= 8*a; b1 = 8*b*b;
 
         do {
-            if ((shape & ShapeSides.Right) != 0 || (shape & ShapeSides.Top) != 0)
+            bool quadOne = false, quadTwo = false, quadThree = false, quadFour = false;
+            
+            if ((shape & ShapeSide.Top) != 0) {
                 PlotPixel(x1, y0, color, visitedCoords, scale); //   I. Quadrant
-            if ((shape & ShapeSides.Top) != 0 || (shape & ShapeSides.Left) != 0)
                 PlotPixel(x0, y0, color, visitedCoords, scale); //  II. Quadrant
-            if ((shape & ShapeSides.Left) != 0 || (shape & ShapeSides.Bottom) != 0)
-                PlotPixel(x0, y1, color, visitedCoords, scale); // III. Quadrant
-            if ((shape & ShapeSides.Bottom) != 0 || (shape & ShapeSides.Right) != 0)
+                quadOne = quadTwo = true;
+            }
+
+            if ((shape & ShapeSide.Right) != 0) {
+                if (!quadOne)
+                    PlotPixel(x1, y0, color, visitedCoords, scale); //   I. Quadrant
                 PlotPixel(x1, y1, color, visitedCoords, scale); //  IV. Quadrant
+                quadOne = quadFour = true;
+            }
+
+            if ((shape & ShapeSide.Bottom) != 0) {
+                PlotPixel(x0, y1, color, visitedCoords, scale); // III. Quadrant
+                if (!quadFour)
+                    PlotPixel(x1, y1, color, visitedCoords, scale); //  IV. Quadrant
+                quadThree = quadFour = true;
+            }
+            
+            if ((shape & ShapeSide.Left) != 0) {
+                if (!quadTwo)
+                    PlotPixel(x0, y0, color, visitedCoords, scale); //  II. Quadrant
+                if (!quadThree)
+                    PlotPixel(x0, y1, color, visitedCoords, scale); // III. Quadrant
+                quadTwo = quadThree = true;
+            }
 
             if (isFill) {
                 //No half shape selected
-                if ((shape & ShapeSides.All) != 0) {
+                if ((shape & ShapeSide.All) != 0) {
                     //Horizontal
                     PlotLine(x0, y0, x1, y0, color, visitedCoords, scale);
                     PlotLine(x0, y1, x1, y1, color, visitedCoords, scale);
@@ -238,18 +266,18 @@ public static class ShapeHelpers
                 }
                 
                 // Half Shapes
-                if ((shape & ShapeSides.Bottom) != 0 || (shape & ShapeSides.Top) != 0) {
-                    int tempY = (shape & ShapeSides.Bottom) != 0 ? y0 : y1;
-                    bool condition = (shape & ShapeSides.Bottom) != 0 ? tempY < y1 : tempY > y1;
+                if ((shape & ShapeSide.Bottom) != 0 || (shape & ShapeSide.Top) != 0) {
+                    int tempY = (shape & ShapeSide.Bottom) != 0 ? y0 : y1;
+                    bool condition = (shape & ShapeSide.Bottom) != 0 ? tempY < y1 : tempY > y1;
 
                     do {
                         PlotLine(x0, tempY, x1, tempY, color, visitedCoords, scale);
                         tempY += condition ? 1 : -1;
                     } while (condition);
                 }
-                else if ((shape & ShapeSides.Left) != 0 || (shape & ShapeSides.Right) != 0) {
-                    int tempX = (shape & ShapeSides.Left) != 0 ? x0 : x1;
-                    bool condition = (shape & ShapeSides.Left) != 0 ? tempX > x1 : tempX < x1;
+                else if ((shape & ShapeSide.Left) != 0 || (shape & ShapeSide.Right) != 0) {
+                    int tempX = (shape & ShapeSide.Left) != 0 ? x0 : x1;
+                    bool condition = (shape & ShapeSide.Left) != 0 ? tempX > x1 : tempX < x1;
 
                     do {
                         PlotLine(tempX, y0, tempX, y1, color, visitedCoords, scale);
