@@ -108,4 +108,6 @@ public class CoordSelection
         else
             return (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
     }
+    
+    //TODO: A way to know in which quadrant the end of the selection is (based on starting point)
 }

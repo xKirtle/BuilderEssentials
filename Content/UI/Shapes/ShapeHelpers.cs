@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BuilderEssentials.Common.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -113,6 +114,7 @@ public static class ShapeHelpers
             new Vector2(maxX, maxY) * 16 - Main.screenPosition + new Vector2(18f, 18f), Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
     }
 
+    //Quadratic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint, 
         Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
         List<Vector2> points = new List<Vector2>();
@@ -124,36 +126,54 @@ public static class ShapeHelpers
         for (int i = 0; i < points.Count - 1; i++)
             PlotLine(points[i], points[i+1], color, visitedCoords, scale);
     }
+    
+    private static float X(float t, float x0, float x1, float x2)
+        => (float) ((x0 * Math.Pow(1 - t, 2)) + (x1 * 2 * t * (1 - t)) + (x2 * Math.Pow(t, 2)));
 
-    //Quadratic Bezier
-    private static float X(float t, float x0, float x1, float x2) {
-        return (float) ((x0 * Math.Pow(1 - t, 2)) + (x1 * 2 * t * (1 - t)) + (x2 * Math.Pow(t, 2)));
-    }
-
-    private static float Y(float t, float y0, float y1, float y2) {
-        return (float) (y0 * Math.Pow(1 - t, 2) + (y1 * 2 * t * (1 - t)) + (y2 * Math.Pow(t, 2)));
-    }
+    private static float Y(float t, float y0, float y1, float y2)
+        => (float) (y0 * Math.Pow(1 - t, 2) + (y1 * 2 * t * (1 - t)) + (y2 * Math.Pow(t, 2)));
 
     private static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint, float t) {
         Vector2 newControlPoint = GetControlPointOfTheoricalControlPoint(startPoint, controlPoint, endPoint);
-        
         float x = X(t, startPoint.X, newControlPoint.X, endPoint.X);
         float y = Y(t, startPoint.Y, newControlPoint.Y, endPoint.Y);
         return new Vector2(x, y);
     }
     
+    //Cubic Bezier
+    public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2, 
+        Vector2 endPoint, Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
+        List<Vector2> points = new List<Vector2>();
+        for (float t = 0.0f; t < 1.0f; t += dt)
+            points.Add(TraverseBezier(startPoint, controlPoint, controlPoint2, endPoint, t));
+
+        points.Add(TraverseBezier(startPoint, controlPoint, controlPoint2, endPoint, 1.0f));
+
+        for (int i = 0; i < points.Count - 1; i++)
+            PlotLine(points[i], points[i+1], color, visitedCoords, scale);
+    }
+    
+    private static float X(float t, float x0, float x1, float x2, float x3)
+        => (float) ((x0 * Math.Pow((1 - t), 3)) + (x1 * 3 * t * Math.Pow((1 - t), 2)) +
+                    (x2 * 3 * Math.Pow(t, 2) * (1 - t)) + (x3 * Math.Pow(t, 3)));
+
+    private static float Y(float t, float y0, float y1, float y2, float y3)
+        => (float) ((y0 * Math.Pow((1 - t), 3)) + (y1 * 3 * t * Math.Pow((1 - t), 2)) +
+                    (y2 * 3 * Math.Pow(t, 2) * (1 - t)) + (y3 * Math.Pow(t, 3)));
+
+    private static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint, 
+        Vector2 controlPoint2, Vector2 endPoint, float t) {
+        float x = X(t, startPoint.X, controlPoint.X, controlPoint2.X, endPoint.X);
+        float y = Y(t, startPoint.Y, controlPoint.Y, controlPoint2.Y, endPoint.Y);
+        return new Vector2(x, y);
+    }
+    
     //Ellipses have their control points be rectangle and then call below method on each control point to get the real control point
-    public static Vector2 GetControlPointOfTheoricalControlPoint(Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint) {
+    public static Vector2 GetControlPointOfTheoricalControlPoint(Vector2 startPoint, 
+        Vector2 controlPoint, Vector2 endPoint) {
         float theoricalX = (4 * controlPoint.X - startPoint.X - endPoint.X) * 0.5f;
         float theoricalY = (4 * controlPoint.Y - startPoint.Y - endPoint.Y) * 0.5f;
         
         return new Vector2(theoricalX, theoricalY);
-    }
-
-    public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, float scale = 1f, bool isFill = false) {
-        int dx = Math.Abs(x0 - x1);
-        int dy = Math.Abs(y0 - y1);
-        int minX = Math.Min(x0, x1), maxX = Math.Max(x0, x1);
-        int minY = Math.Min(y0, y1), maxY = Math.Max(y0, y1);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BuilderEssentials.Common.Enums;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent;
@@ -25,9 +26,15 @@ public class ImprovedRulerPanel : BaseShapePanel
     
     private Color color = ShapeHelpers.Blue * 0.6f;
     public override void PlotSelection() {
-        float maxX = Math.Max(rulerStart.X, rulerEnd.X), maxY = Math.Max(rulerStart.Y, rulerEnd.Y);
-        string text = "";
+        //Reset curve if ruler selection changes
+        if (rulerStart == rulerEnd) {
+            cs.LeftMouse.Start = curveEnd;
+            return;
+        }
 
+        float minX = Math.Min(rulerStart.X, rulerEnd.X), minY = Math.Min(rulerStart.Y, rulerEnd.Y);
+        string text = "";
+        
         if (curveStart == curveEnd) {
             ShapeHelpers.PlotLine(rulerStart, rulerEnd, color, visitedPlottedPixels, 0.90f);
             text += "Length: ";
@@ -37,8 +44,8 @@ public class ImprovedRulerPanel : BaseShapePanel
             text += "Number of tiles: ";
         }
         
-        // ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{text}{ShapeHelpers.drawnCoordinates.Count}",
-        //     new Vector2(maxX, maxY) * 16 - Main.screenPosition + new Vector2(18f, 18f), ShapeHelpers.Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
+        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{text}{visitedPlottedPixels.Count}",
+            curveEnd * 16 - Main.screenPosition + new Vector2(18f, 18f), ShapeHelpers.Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
     }
 
     public override void UpdateRegardlessOfVisibility() {
