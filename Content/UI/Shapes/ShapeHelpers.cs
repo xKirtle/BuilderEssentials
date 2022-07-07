@@ -176,4 +176,99 @@ public static class ShapeHelpers
         
         return new Vector2(theoricalX, theoricalY);
     }
+    
+    public static void PlotEllipse(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords, 
+        ShapeSides shape = ShapeSides.All, float scale = 1f, bool isFill = false)
+        => PlotEllipse(start.X, start.Y, end.X, end.Y, color, visitedCoords, shape, scale, isFill);
+
+    public static void PlotEllipse(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords, 
+        ShapeSides shape = ShapeSides.All, float scale = 1f, bool isFill = false)
+        => PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, shape, scale, isFill);
+
+    public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords, 
+        ShapeSides shape = ShapeSides.All, float scale = 1f, bool isFill = false) {
+        int width = Math.Abs(x0 - x1);
+        int height = Math.Abs(y0 - y1);
+        
+        if (width == 0 && height == 0) return;
+
+        if ((shape & ShapeSides.All) == 0) {
+            if ((shape & ShapeSides.Left) != 0)
+                x0 += width;
+            if ((shape & ShapeSides.Bottom) != 0)
+                y0 += height;
+            if ((shape & ShapeSides.Right) != 0)
+                x0 -= width;
+            if ((shape & ShapeSides.Top) != 0)
+                y0 -= height;
+        }
+        
+        int a = Math.Abs(x1-x0), b = Math.Abs(y1-y0), b1 = b&1;
+        long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a;
+        long err = dx+dy+b1*a*a, e2;
+        
+        if (x0 > x1) { x0 = x1; x1 += a; }
+        if (y0 > y1) y0 = y1;
+        y0 += (b+1)/2; y1 = y0-b1;
+        a *= 8*a; b1 = 8*b*b;
+
+        do {
+            if ((shape & ShapeSides.Right) != 0 || (shape & ShapeSides.Top) != 0)
+                PlotPixel(x1, y0, color, visitedCoords, scale); //   I. Quadrant
+            if ((shape & ShapeSides.Top) != 0 || (shape & ShapeSides.Left) != 0)
+                PlotPixel(x0, y0, color, visitedCoords, scale); //  II. Quadrant
+            if ((shape & ShapeSides.Left) != 0 || (shape & ShapeSides.Bottom) != 0)
+                PlotPixel(x0, y1, color, visitedCoords, scale); // III. Quadrant
+            if ((shape & ShapeSides.Bottom) != 0 || (shape & ShapeSides.Right) != 0)
+                PlotPixel(x1, y1, color, visitedCoords, scale); //  IV. Quadrant
+
+            if (isFill) {
+                //No half shape selected
+                if ((shape & ShapeSides.All) != 0) {
+                    //Horizontal
+                    PlotLine(x0, y0, x1, y0, color, visitedCoords, scale);
+                    PlotLine(x0, y1, x1, y1, color, visitedCoords, scale);
+                    //Vertical
+                    PlotLine(x0, y0, x0, y1, color, visitedCoords, scale);
+                    PlotLine(x1, y0, x1, y1, color, visitedCoords, scale);
+                    //Diagonals (sometimes a few blocks are left to be placed and this fills the remaining)
+                    PlotLine(x0, y0, x1, y1, color, visitedCoords, scale);
+                    PlotLine(x0, y1, x1, y0, color, visitedCoords, scale);
+                    goto end;
+                }
+                
+                // Half Shapes
+                if ((shape & ShapeSides.Bottom) != 0 || (shape & ShapeSides.Top) != 0) {
+                    int tempY = (shape & ShapeSides.Bottom) != 0 ? y0 : y1;
+                    bool condition = (shape & ShapeSides.Bottom) != 0 ? tempY < y1 : tempY > y1;
+
+                    do {
+                        PlotLine(x0, tempY, x1, tempY, color, visitedCoords, scale);
+                        tempY += condition ? 1 : -1;
+                    } while (condition);
+                }
+                else if ((shape & ShapeSides.Left) != 0 || (shape & ShapeSides.Right) != 0) {
+                    int tempX = (shape & ShapeSides.Left) != 0 ? x0 : x1;
+                    bool condition = (shape & ShapeSides.Left) != 0 ? tempX > x1 : tempX < x1;
+
+                    do {
+                        PlotLine(tempX, y0, tempX, y1, color, visitedCoords, scale);
+                        tempX += condition ? -1 : 1;
+                    } while (condition);
+                }
+            }
+            
+            end:
+            e2 = 2*err;
+            if (e2 <= dy) { y0++; y1--; err += dy += a; }
+            if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; }
+        } while (x0 <= x1);
+
+        while (y0-y1 < b) {
+            PlotPixel(x0-1, y0, color, visitedCoords, scale);
+            PlotPixel(x1+1, y0++, color, visitedCoords, scale);
+            PlotPixel(x0-1, y1, color, visitedCoords, scale);
+            PlotPixel(x1+1, y1--, color, visitedCoords, scale);
+        }
+    }
 }
