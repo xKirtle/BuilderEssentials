@@ -16,8 +16,7 @@ public class FillWand : BuilderEssentialsItem
     public static int FillSelectionSize = 3;
 
     protected override bool CloneNewInstances => true;
-    public override int ItemRange => 10;
-
+    
     public override void SetStaticDefaults() {
         Tooltip.SetDefault(
             "Fills or creates holes!" +

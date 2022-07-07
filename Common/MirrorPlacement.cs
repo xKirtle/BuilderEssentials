@@ -18,6 +18,7 @@ using Terraria.ObjectData;
 
 namespace BuilderEssentials.Common;
 
+//TODO: Lookup WorldGen.PlaceObject?
 public static class MirrorPlacement
 {
 	static readonly List<int> PaintToolsItemTypes = new() {

@@ -63,6 +63,11 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 public abstract class BaseToggleablePanel : UIElement
 {
     public bool IsVisible => Parent != null;
+    
+    /// <summary>
+    /// Whether the panel will update its <see cref="CoordSelection"/> instance <see cref="cs"/>
+    /// </summary>
+    /// <returns>True if it's not going to be removed</returns>
     public abstract bool IsHoldingBindingItem();
     
     private bool canDisplay = false;

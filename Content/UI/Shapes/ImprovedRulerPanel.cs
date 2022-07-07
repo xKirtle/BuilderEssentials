@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BuilderEssentials.Common.Enums;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent;
@@ -40,7 +39,7 @@ public class ImprovedRulerPanel : BaseShapePanel
             text += "Length: ";
         }
         else {
-            ShapeHelpers.PlotBezier(0.1f, rulerStart, curveEnd, rulerEnd, color, visitedPlottedPixels, 0.90f);
+            ShapeHelpers.PlotBezier(0.1f, rulerStart, curveEnd, rulerEnd, color, visitedPlottedPixels, 0.9f);
             text += "Number of tiles: ";
         }
         
