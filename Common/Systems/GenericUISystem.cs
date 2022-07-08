@@ -24,8 +24,6 @@ public abstract class UISystem<T> : ModSystem where T : UIState, new()
     protected GameTime lastUpdateUiGameTime;
 
     public override void Load() {
-        AssetsLoader.LoadTextures();
-        
         userInterface = new();
         uiState = new();
         userInterface.SetState(uiState);

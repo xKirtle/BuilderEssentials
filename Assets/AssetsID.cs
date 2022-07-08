@@ -2,9 +2,8 @@
 
 public static class AssetsID
 {
-    public static string AutoHammer => "UI/AutoHammer/AH";
-    public static string MultiWand => "UI/MultiWand/MW";
-    public static string PaintBrushColors => "UI/PaintBrush/Paint";
-    public static string PaintBrushTools => "UI/PaintBrush/Tool";
-    public static string WrenchUpgradesToggle => "UI/WrenchUpgrades/Toggle";
+    public static string AutoHammer => "UI/AutoHammer";
+    public static string MultiWand => "UI/MultiWand";
+    public static string PaintBrush => "UI/PaintBrush";
+    public static string WrenchUpgradesToggle => "UI/WrenchUpgrades";
 }

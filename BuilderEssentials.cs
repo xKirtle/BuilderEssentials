@@ -75,6 +75,7 @@ namespace BuilderEssentials
 
 		public override void Load() {
 			MirrorPlacement.LoadDetours();
+			AssetsLoader.LoadTextures();
 		}
 
 		public override void Unload() {

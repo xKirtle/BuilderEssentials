@@ -7,6 +7,7 @@ using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using On.Terraria.GameContent;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -50,20 +51,23 @@ public class PaintBrushPanel : BaseToggleablePanel
         noPaintOverlay = new UIImage[31];
         colorAvailable = new bool[31];
         for (int i = 0; i < paints.Length; i++) {
-            colorElements[i] = new UIImageButton(AssetsLoader.GetAssets(AssetsID.PaintBrushColors)[i]);
-            noPaintOverlay[i] = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushColors)[31]);
+            colorElements[i] = new UIImageButton(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Paint{i}"));
+            noPaintOverlay[i] = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Paint31"));
         }
 
-        colorOverlay = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushColors)[32]);
+        colorOverlay = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Paint32"));
         colorOverlay.OnMouseOver += (__, _) => elementHovered = true;
         colorOverlay.OnMouseOut += (__, _) => elementHovered = false;
+
+        toolTextures = new Asset<Texture2D>[6];
+        for (int i = 0; i < toolTextures.Length; i++)
+            toolTextures[i] = AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Tool{i}");
         
-        toolTextures = AssetsLoader.GetAssets(AssetsID.PaintBrushTools)[..6];
-        toolOverlay = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushTools)[6]);
+        toolOverlay = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Tool6"));
         toolOverlay.OnMouseOver += (__, _) => elementHovered = true;
         toolOverlay.OnMouseOut += (__, _) => elementHovered = false;
 
-        selectedColorMouse = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushColors)[0]);
+        selectedColorMouse = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Paint0"));
         selectedColorMouse.ImageScale = 0.4f;
 
         toolElements = new UIImageButton[3];
@@ -194,7 +198,7 @@ public class PaintBrushPanel : BaseToggleablePanel
             Append(colorOverlay);
             colorIndex = index;
 
-            selectedColorMouse = new UIImage(AssetsLoader.GetAssets(AssetsID.PaintBrushColors)[colorIndex]);
+            selectedColorMouse = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Tool{colorIndex}"));
             selectedColorMouse.ImageScale = 0.4f;
         }
         else colorIndex = -1;

@@ -32,13 +32,12 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
         Left.Set(15f, 0f);
         Top.Set(-ParentHeight - 15f, 1f);
         SetPadding(0);
-        SetPadding(0);
 
         enabledUpgrades = new bool[ElementsCount];
         elements = new UIImageButton[ElementsCount];
         for (int i = 0; i < ElementsCount; i++) {
             int index = i;
-            elements[i] = new UIImageButton(AssetsLoader.GetAssets(AssetsID.WrenchUpgradesToggle)[0]);
+            elements[i] = new UIImageButton(AssetsLoader.GetAssets($"{AssetsID.WrenchUpgradesToggle}/Toggle0"));
             elements[i].Width.Set(14f, 0);
             elements[i].Height.Set(14f, 0);
             elements[i].Left.Set(16f * i + 27f, 0);
@@ -87,6 +86,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
     public override void Draw(SpriteBatch spriteBatch) {
         base.Draw(spriteBatch);
         
-        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, BEPlayer.PointedScreenCoords + new Vector2(18f, 18f), Color.White, 0f, Vector2.Zero, Vector2.One);
+        if (!String.IsNullOrEmpty(text))
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, BEPlayer.PointedScreenCoords + new Vector2(18f, 18f), Color.White, 0f, Vector2.Zero, Vector2.One);
     }
 }

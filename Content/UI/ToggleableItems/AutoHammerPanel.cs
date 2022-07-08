@@ -32,7 +32,7 @@ public class AutoHammerPanel : BaseToggleablePanel
 
         elements = new UIImageButton[ElementsCount];
         for (int i = 0; i < ElementsCount; i++)
-            elements[i] = new UIImageButton(AssetsLoader.GetAssets(AssetsID.AutoHammer)[i]);
+            elements[i] = new UIImageButton(AssetsLoader.GetAssets($"{AssetsID.AutoHammer}/AH{i}"));
 
         //Define our shape
         Vector2[] buttonPositions = new[] {

@@ -32,7 +32,7 @@ public class MultiWandPanel : BaseToggleablePanel
         
         elements = new UIImageButton[ElementsCount];
         for (int i = 0; i < ElementsCount; i++)
-            elements[i] = new UIImageButton(AssetsLoader.GetAssets(AssetsID.MultiWand)[i]);
+            elements[i] = new UIImageButton(AssetsLoader.GetAssets($"{AssetsID.MultiWand}/MW{i}"));
         
         //Define our shape
         float offsetX = ParentWidth / 3f;
