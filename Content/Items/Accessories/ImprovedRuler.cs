@@ -25,8 +25,7 @@ public class ImprovedRuler : ModItem
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         if (player.whoAmI != Main.myPlayer) return;
-        Main.LocalPlayer.GetModPlayer<BEPlayer>().IsWrenchEquipped = true;
-        
+
         var panel = ShapesUIState.GetUIPanel<ImprovedRulerPanel>();
         if (!panel.IsVisible)
             ShapesUIState.TogglePanelVisibility<ImprovedRulerPanel>();

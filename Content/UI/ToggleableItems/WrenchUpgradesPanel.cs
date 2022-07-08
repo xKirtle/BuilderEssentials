@@ -21,10 +21,10 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
 
     private const float ParentWidth = 90f, ParentHeight = 40f;
     private const int ElementsCount = (int) WrenchUpgrades.Count;
-    private UIImageButton[] elements;
+    private UIImageButton[] elements = new UIImageButton[ElementsCount];
     private bool elementHovered;
     private string text = "";
-    public bool[] enabledUpgrades;
+    public bool[] enabledUpgrades = new bool[ElementsCount];
     
     public override void OnInitialize() {
         Width.Set(ParentWidth, 0);
@@ -32,9 +32,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
         Left.Set(15f, 0f);
         Top.Set(-ParentHeight - 15f, 1f);
         SetPadding(0);
-
-        enabledUpgrades = new bool[ElementsCount];
-        elements = new UIImageButton[ElementsCount];
+        
         for (int i = 0; i < ElementsCount; i++) {
             int index = i;
             elements[i] = new UIImageButton(AssetsLoader.GetAssets($"{AssetsID.WrenchUpgradesToggle}/Toggle0"));
@@ -81,6 +79,11 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
         
         if (IsMouseHovering && elementHovered)
             Main.LocalPlayer.mouseInterface = true;
+    }
+
+    public override void UpdateRegardlessOfVisibility() {
+        if ((IsHoldingBindingItem() && !IsVisible) || (!IsHoldingBindingItem() && IsVisible))
+            ToggleableItemsUIState.TogglePanelVisibility<WrenchUpgradesPanel>();
     }
 
     public override void Draw(SpriteBatch spriteBatch) {

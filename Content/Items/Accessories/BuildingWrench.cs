@@ -81,9 +81,6 @@ public class BuildingWrench : ModItem
         mp.IsWrenchEquipped = true;
 
         var panel = ToggleableItemsUIState.GetUIPanel<WrenchUpgradesPanel>();
-        if (!panel.IsVisible)
-            ToggleableItemsUIState.TogglePanelVisibility<WrenchUpgradesPanel>();
-        
         mp.FastPlacement = panel.enabledUpgrades[0];
         mp.InfiniteRange = panel.enabledUpgrades[1];
         mp.InfinitePlacement = panel.enabledUpgrades[2];
