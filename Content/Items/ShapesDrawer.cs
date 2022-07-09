@@ -15,9 +15,9 @@ public class ShapesDrawer : BuilderEssentialsItem
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Used to draw shapes" +
            "\nOpen its menu by clicking the arrow on the left of your screen when equipped" +
-           "\nRight Click to make selection" +
+           "\nLeft Click to make selection" +
            "\nMiddle Click to select working tile" +
-           "\nLeft Click to place blocks in the selection" +
+           "\nRight Click to place blocks in the selection" +
            "\n[c/FFCC00:Press LShift to make circles/squares]" +
            "\n[c/FFCC00:Enables a selection menu on the left of the screen]");
     

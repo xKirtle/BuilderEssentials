@@ -16,8 +16,7 @@ public class ShapesDrawerPanel : BaseShapePanel
     public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
 
     public override void PlotSelection() {
-        //Depending on what's on the menu
-        ShapeHelpers.PlotEllipse(cs.LeftMouse.Start, cs.LeftMouse.End, ShapeHelpers.Blue, visitedPlottedPixels, ShapeSide.All, 0.9f);
+        // ShapeHelpers.PlotEllipse(cs.LeftMouse.Start, cs.LeftMouse.End, ShapeHelpers.Blue, visitedPlottedPixels, ShapeSide.All, 0.9f);
     }
 
     private HashSet<Vector2> oldVisitedCoords;
@@ -32,7 +31,8 @@ public class ShapesDrawerPanel : BaseShapePanel
     public override HashSet<Vector2> VisitedPlottedPixels => visitedPlottedPixels;
 
     public override void UpdateRegardlessOfVisibility() {
-        if ((IsHoldingBindingItem() && !IsVisible) || (!IsHoldingBindingItem() && IsVisible))
+        bool hasItemInInventory = Main.LocalPlayer.HasItem(ModContent.ItemType<ShapesDrawer>());
+        if ((hasItemInInventory && !IsVisible) || (!hasItemInInventory && IsVisible))
             ShapesUIState.TogglePanelVisibility<ShapesDrawerPanel>();
     }
 }

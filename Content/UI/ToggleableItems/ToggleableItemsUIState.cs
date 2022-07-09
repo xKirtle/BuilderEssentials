@@ -22,7 +22,8 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
         typeof(AutoHammerPanel),
         typeof(MultiWandPanel),
         typeof(PaintBrushPanel),
-        typeof(WrenchUpgradesPanel)
+        typeof(WrenchUpgradesPanel),
+        typeof(ShapesDrawerMenuPanel)
     };
     
     public override void Update(GameTime gameTime) {
