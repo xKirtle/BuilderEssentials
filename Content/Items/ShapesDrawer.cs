@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.Common;
+﻿using System;
+using BuilderEssentials.Common;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
@@ -57,6 +58,9 @@ public class ShapesDrawer : BuilderEssentialsItem
             player.cursorItemIconID = Type;
             if (!player.cursorItemIconEnabled) return;
             player.cursorItemIconID = panel.SelectedItem?.type ?? Type;
+
+
+            var menuPanel = ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>();
         }
         
         public override void AddRecipes() {

@@ -19,6 +19,8 @@ public static class AssetsLoader
         paths.Sort(new NaturalComparer());
         
         paths.ForEach(path => {
+            if (path.Contains(".ase")) return;
+            
             path = path.Replace(".rawimg", "");
             string key = path.Replace("Assets/", "");
             path = path.Replace("Assets/", AssetsPath);
