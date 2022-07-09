@@ -18,33 +18,36 @@ public class ImprovedRulerPanel : BaseShapePanel
     private HashSet<Vector2> visitedPlottedPixels = new();
     public override HashSet<Vector2> VisitedPlottedPixels => visitedPlottedPixels;
 
-    private Vector2 rulerStart => cs.RightMouse.Start;
-    private Vector2 rulerEnd => cs.RightMouse.End;
-    private Vector2 curveStart => cs.LeftMouse.Start;
-    private Vector2 curveEnd => cs.LeftMouse.End;
+    private Vector2 rulerStart => cs.LeftMouse.Start;
+    private Vector2 rulerEnd => cs.LeftMouse.End;
+    private Vector2 curveStart => cs.RightMouse.Start;
+    private Vector2 curveEnd => cs.RightMouse.End;
     
     private Color color = ShapeHelpers.Blue * 0.6f;
     public override void PlotSelection() {
         //Reset curve if ruler selection changes
         if (rulerStart == rulerEnd) {
-            cs.LeftMouse.Start = curveEnd;
+            cs.RightMouse.Start = curveEnd;
             return;
         }
 
         float minX = Math.Min(rulerStart.X, rulerEnd.X), minY = Math.Min(rulerStart.Y, rulerEnd.Y);
         string text = "";
-        
+        Vector2 pos = Vector2.Zero;
+
         if (curveStart == curveEnd) {
             ShapeHelpers.PlotLine(rulerStart, rulerEnd, color, visitedPlottedPixels, 0.90f);
             text += "Length: ";
+            pos = rulerEnd;
         }
         else {
             ShapeHelpers.PlotBezier(0.1f, rulerStart, curveEnd, rulerEnd, color, visitedPlottedPixels, 0.9f);
             text += "Number of tiles: ";
+            pos = curveEnd;
         }
         
         ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{text}{visitedPlottedPixels.Count}",
-            curveEnd * 16 - Main.screenPosition + new Vector2(18f, 18f), ShapeHelpers.Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
+            pos * 16 - Main.screenPosition + new Vector2(18f, 18f), ShapeHelpers.Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
     }
 
     public override void UpdateRegardlessOfVisibility() {
