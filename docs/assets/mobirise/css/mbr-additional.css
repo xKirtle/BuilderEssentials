@@ -870,8 +870,8 @@ a {
 }
 
 .cid-taA9FtRyWF {
-  padding-top: 6rem;
-  padding-bottom: 6rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
   background-color: #ffffff;
 }
 .cid-taA9FtRyWF .mbr-fallback-image.disabled {
@@ -922,7 +922,7 @@ a {
   }
 
   .cid-taA9FtRyWF {
-    margin-top: -60px !important;
+    margin-top: -45px !important;
   }
 
   .cid-ksdTR49aS {
@@ -930,6 +930,14 @@ a {
   }
 
   #BuildingWrench {
+    margin-top: 60px !important;
+  }
+
+  #UpgradeModules {
+    margin-top: 30px !important;
+  }
+
+  #ImprovedRuler {
     margin-top: 60px !important;
   }
 }
