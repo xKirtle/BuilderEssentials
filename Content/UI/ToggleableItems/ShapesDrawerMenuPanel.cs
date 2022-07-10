@@ -30,6 +30,8 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
     private bool isMenuOpen = false;
     private ShapesMenuOption[] menuOptions;
     public Shapes SelectedShape { get; private set; }
+    public ShapeSide SelectedShapeSide { get; private set; }
+    public bool IsFilled { get; private set; }
 
     public override void OnInitialize() {
         Width.Set(ParentWidth, 0);
@@ -94,44 +96,37 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
             menuOptions[i].Top.Set(43f, 0);
             menuOptions[i].Left.Set(50f + 43f * (i-3) + 4f, 0);
         }
+
+        void ClearAllSelections(int startIndex = 0) {
+            for (int i = startIndex; i < menuOptions.Length; i++)
+                if (menuOptions[i].IsSelected)
+                    menuOptions[i].ToggleSelection();
+        }
+
+        void ToggleHalfShapesVisibility(bool removeOnly = false) {
+            for (int i = 3; i < menuOptions.Length; i++)
+                if (menuOptions[i].Parent != null || removeOnly)
+                    menuOptions[i].Remove();
+                else
+                    Append(menuOptions[i]);
+        }
         
         //Ellipse
         menuOptions[0].OnClick += (__, _) => {
-            if (!menuOptions[0].IsSelected) {
-                menuOptions[0].ToggleSelection();
-                SelectedShape = Shapes.Ellipse;
-            }
-
-            if (menuOptions[0].IsSelected) {
-                for (int i = 3; i < menuOptions.Length; i++)
-                    Append(menuOptions[i]);
-            }
-            else {
-                for (int i = 3; i < menuOptions.Length; i++)
-                    menuOptions[i].Remove();
-            }
-            
-            if (menuOptions[1].IsSelected)
-                menuOptions[1].ToggleSelection();
+            ClearAllSelections();
+            menuOptions[0].ToggleSelection();
+            SelectedShape = Shapes.Ellipse;
+            SelectedShapeSide = ShapeSide.All;
+            ToggleHalfShapesVisibility();
         };
         
         //Rectangle
         menuOptions[1].OnClick += (__, _) => {
-            if (!menuOptions[1].IsSelected) {
-                menuOptions[1].ToggleSelection();
-                SelectedShape = Shapes.Rectangle;
-            }
-
-            if (menuOptions[0].IsSelected) {
-                menuOptions[0].ToggleSelection();
-
-                for (int i = 3; i < menuOptions.Length; i++) {
-                    if (menuOptions[i].IsSelected)
-                        menuOptions[i].ToggleSelection();
-                    
-                    menuOptions[i].Remove();
-                }
-            }
+            ClearAllSelections();
+            menuOptions[1].ToggleSelection();
+            SelectedShape = Shapes.Rectangle;
+            SelectedShapeSide = ShapeSide.All;
+            ToggleHalfShapesVisibility(removeOnly: true);
         };
         
         //Fill
@@ -140,6 +135,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
                 if (i != 2) menuOptions[i].ToggleFill();
             
             menuOptions[2].ToggleSelection();
+            IsFilled = menuOptions[2].IsSelected;
         };
         
         //Half Ellipses
@@ -148,28 +144,25 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
             menuOptions[i].OnClick += (__, _) => {
                 if (menuOptions[index].IsSelected) {
                     menuOptions[index].ToggleSelection();
-                    SelectedShape = Shapes.Ellipse;
+                    SelectedShapeSide = ShapeSide.All;
                     return;
                 }
-
-                for (int j = 3; j < menuOptions.Length; j++)
-                    if (menuOptions[j].IsSelected)
-                        menuOptions[j].ToggleSelection();
                 
+                ClearAllSelections(startIndex: 3);
                 menuOptions[index].ToggleSelection();
                 
                 switch (index) {
                     case 3:
-                        SelectedShape = Shapes.TopHalfEllipse;
+                        SelectedShapeSide = ShapeSide.Top;
                         break;
                     case 4:
-                        SelectedShape = Shapes.RightHalfEllipse;
+                        SelectedShapeSide = ShapeSide.Right;
                         break;
                     case 5:
-                        SelectedShape = Shapes.BottomHalfEllipse;
+                        SelectedShapeSide = ShapeSide.Bottom;
                         break;
                     case 6:
-                        SelectedShape = Shapes.LeftHalfEllipse;
+                        SelectedShapeSide = ShapeSide.Left;
                         break;
                 }
             };

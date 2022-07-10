@@ -199,6 +199,10 @@ public static class ShapeHelpers
         int height = Math.Abs(y0 - y1);
         if (width == 0 && height == 0) return;
 
+        // Console.WriteLine($"All: {((shape & ShapeSide.All) != 0)} | Top: {((shape & ShapeSide.Top) != 0)} | " +
+        //                   $"Right: {((shape & ShapeSide.Right) != 0)} | Bottom: {((shape & ShapeSide.Bottom) != 0)} | " +
+        //                   $"Left: {((shape & ShapeSide.Left) != 0)}");
+        
         if ((shape & ShapeSide.All) == 0) {
             if ((shape & ShapeSide.Left) != 0)
                 x0 += width;
@@ -222,7 +226,8 @@ public static class ShapeHelpers
         do {
             bool quadOne = false, quadTwo = false, quadThree = false, quadFour = false;
             
-            if ((shape & ShapeSide.Top) != 0) {
+            //Kirtle: Not sure why bottom and top have to be reversed.. am I dumb?
+            if ((shape & ShapeSide.Bottom) != 0) {
                 PlotPixel(x1, y0, color, visitedCoords, scale); //   I. Quadrant
                 PlotPixel(x0, y0, color, visitedCoords, scale); //  II. Quadrant
                 quadOne = quadTwo = true;
@@ -235,7 +240,7 @@ public static class ShapeHelpers
                 quadOne = quadFour = true;
             }
 
-            if ((shape & ShapeSide.Bottom) != 0) {
+            if ((shape & ShapeSide.Top) != 0) {
                 PlotPixel(x0, y1, color, visitedCoords, scale); // III. Quadrant
                 if (!quadFour)
                     PlotPixel(x1, y1, color, visitedCoords, scale); //  IV. Quadrant

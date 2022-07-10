@@ -16,13 +16,24 @@ public class ShapesDrawerPanel : BaseShapePanel
     public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
 
     public override void PlotSelection() {
-        // ShapeHelpers.PlotEllipse(cs.LeftMouse.Start, cs.LeftMouse.End, ShapeHelpers.Blue, visitedPlottedPixels, ShapeSide.All, 0.9f);
+        //Get info directly from ShapesDrawerMenuPanel?
+        var menuPanel = ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>();
+        Shapes shape = menuPanel.SelectedShape;
+        ShapeSide drawSide = menuPanel.SelectedShapeSide;
+        bool isFilled = menuPanel.IsFilled;
+        Color color = isFilled ? ShapeHelpers.Yellow : ShapeHelpers.Blue;
+        
+        if (shape == Shapes.Rectangle)
+            ShapeHelpers.PlotRectangle(cs.LeftMouse.Start, cs.LeftMouse.End, color, visitedPlottedPixels, 0.9f, isFilled);
+        else if (shape == Shapes.Ellipse)
+            ShapeHelpers.PlotEllipse(cs.LeftMouse.Start, cs.LeftMouse.End, color, visitedPlottedPixels, drawSide, 0.9f, isFilled);
     }
 
     private HashSet<Vector2> oldVisitedCoords;
     public override bool SelectionHasChanged() {
         if (oldVisitedCoords == visitedPlottedPixels) return false;
         
+        //TODO: Troublesome?
         oldVisitedCoords = visitedPlottedPixels;
         return true;
     }
