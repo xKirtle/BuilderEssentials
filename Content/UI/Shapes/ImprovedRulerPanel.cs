@@ -9,7 +9,8 @@ namespace BuilderEssentials.Content.UI;
 
 public class ImprovedRulerPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.IsAir;
+    public override bool IsHoldingBindingItem() 
+        => Main.LocalPlayer.HeldItem.IsAir && Main.LocalPlayer.GetModPlayer<BEPlayer>().IsImprovedRulerEquipped;
 
     public override bool CanPlaceItems() => false;
     
