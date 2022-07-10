@@ -16,17 +16,18 @@ public class BEPlayer : ModPlayer
     public static Vector2 PointedTileCoords => new Vector2(Player.tileTargetX, Player.tileTargetY);
     
     public bool InfinitePaint { get; set; }
-    public bool IsWrenchEquipped { get; set; }
     public bool IsImprovedRulerEquipped { get; set; }
     public bool FastPlacement { get; set; }
     public bool InfiniteRange { get; set; }
     public bool InfinitePlacement { get; set; }
     public bool InfinitePickupRange { get; set; }
+    public ModItem EquippedWrenchInstance { get; set; }
 
     public override void ResetEffects() {
-        InfinitePaint = IsWrenchEquipped = FastPlacement = 
-            InfiniteRange = InfinitePlacement = InfinitePickupRange = false;
+        InfinitePaint = FastPlacement = InfiniteRange = 
+            InfinitePlacement = InfinitePickupRange = false;
         Player.defaultItemGrabRange = 42;
+        EquippedWrenchInstance = null;
     }
 
     public override void ProcessTriggers(TriggersSet triggersSet) {

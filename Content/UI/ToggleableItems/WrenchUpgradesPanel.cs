@@ -2,6 +2,7 @@
 using System.Linq;
 using BuilderEssentials.Assets;
 using BuilderEssentials.Common.Enums;
+using BuilderEssentials.Content.Items.Accessories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -17,7 +18,7 @@ namespace BuilderEssentials.Content.UI;
 //Kirtle: Replace this with BuilderToggles whenever those get merged :(
 public class WrenchUpgradesPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem() => Main.LocalPlayer.GetModPlayer<BEPlayer>().IsWrenchEquipped;
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance != null;
 
     private const float ParentWidth = 90f, ParentHeight = 40f;
     private const int ElementsCount = (int) WrenchUpgrades.Count;
@@ -59,8 +60,10 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
     }
 
     public void ToggleUpgrade(int index) {
-        enabledUpgrades[index] = !enabledUpgrades[index];
-
+        BuildingWrench wrench = Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance as BuildingWrench;
+        if (wrench?.unlockedUpgrades[index] != (int) UpgradeState.Locked)
+            enabledUpgrades[index] = !enabledUpgrades[index];
+        
         if (!enabledUpgrades[index]) {
             elements[index].SetVisibility(.75f, .4f);
             SoundEngine.PlaySound(SoundID.MenuClose);
@@ -89,6 +92,14 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
     public override void Draw(SpriteBatch spriteBatch) {
         base.Draw(spriteBatch);
         
+        //Attempting to visually reset enabled toggles in case the wrench is switched to a different one
+        BuildingWrench wrench = Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance as BuildingWrench;
+        for (int i = 0; i < wrench?.unlockedUpgrades.Length; i++) {
+            enabledUpgrades[i] = false;
+            if (wrench.unlockedUpgrades[i] == (int) UpgradeState.Locked)
+                elements[i].SetVisibility(.75f, .4f);
+        }
+
         if (!String.IsNullOrEmpty(text))
             ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, BEPlayer.PointedScreenCoords + new Vector2(18f, 18f), Color.White, 0f, Vector2.Zero, Vector2.One);
     }

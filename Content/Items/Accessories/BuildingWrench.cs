@@ -51,7 +51,7 @@ public class BuildingWrench : ModItem
             return;
         }
 
-        if (!Main.LocalPlayer.GetModPlayer<BEPlayer>().IsWrenchEquipped)
+        if (Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance == null)
             tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:UIToggleMenu",
             "[c/FFCC00:Equip this item to enable/disable upgrades!]"));
         else
@@ -78,7 +78,7 @@ public class BuildingWrench : ModItem
     public override void UpdateAccessory(Player player, bool hideVisual) {
         if (player.whoAmI != Main.myPlayer) return;
         BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
-        mp.IsWrenchEquipped = true;
+        mp.EquippedWrenchInstance = this;
 
         var panel = ToggleableItemsUIState.GetUIPanel<WrenchUpgradesPanel>();
         mp.FastPlacement = panel.enabledUpgrades[0];
