@@ -39,9 +39,11 @@ public class MultiWand : BaseItemToggleableUI
         
         //I'm not sure why, but this is required for the tileWand to be the correct value when I access it..?
         //Updating it in UpdateInventory doesn't seem to do it. Maybe call order is at stake?
-        var panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
-        Item.tileWand = WandMaterials[panel?.selectedIndex ?? 0];
-        Item.createTile = WandPlacedTiles[panel?.selectedIndex ?? 0];
+        if (Main.netMode != NetmodeID.Server && !Main.dedServ) {
+            var panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
+            Item.tileWand = WandMaterials[panel?.selectedIndex ?? 0];
+            Item.createTile = WandPlacedTiles[panel?.selectedIndex ?? 0];
+        }
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(2, -9);
