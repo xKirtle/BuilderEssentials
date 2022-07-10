@@ -906,3 +906,30 @@ a {
   background-color: #40b0bf;
   overflow: hidden;
 }
+
+/* Fully hardcoded, it is what it is */
+@media (max-width: 992px) {
+  .cid-tauVgoN9GX { 
+    margin-top: 60px !important;
+  }
+
+  .cid-tauVg9ZFxa {
+    margin-top: 60px !important;
+  }
+
+  #PaintBrush {
+    margin-top: -40px !important;
+  }
+
+  .cid-taA9FtRyWF {
+    margin-top: -60px !important;
+  }
+
+  .cid-ksdTR49aS {
+    margin-top: -60px !important;
+  }
+
+  #BuildingWrench {
+    margin-top: 60px !important;
+  }
+}
