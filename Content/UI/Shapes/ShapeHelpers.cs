@@ -202,18 +202,18 @@ public static class ShapeHelpers
         // Console.WriteLine($"All: {((shape & ShapeSide.All) != 0)} | Top: {((shape & ShapeSide.Top) != 0)} | " +
         //                   $"Right: {((shape & ShapeSide.Right) != 0)} | Bottom: {((shape & ShapeSide.Bottom) != 0)} | " +
         //                   $"Left: {((shape & ShapeSide.Left) != 0)}");
+        // Console.WriteLine(isFill);
         
-        if ((shape & ShapeSide.All) == 0) {
-            if ((shape & ShapeSide.Left) != 0)
-                x0 += width;
-            if ((shape & ShapeSide.Bottom) != 0)
-                y0 += height;
-            if ((shape & ShapeSide.Right) != 0)
-                x0 -= width;
-            if ((shape & ShapeSide.Top) != 0)
-                y0 -= height;
-        }
-        
+        //Fixing halfshapes difference.. -> solve with bezier curves?
+        if ((shape & ShapeSide.Left) != 0)
+            x0 += width;
+        if ((shape & ShapeSide.Bottom) != 0)
+            y0 -= height;
+        if ((shape & ShapeSide.Right) != 0)
+            x0 -= width;
+        if ((shape & ShapeSide.Top) != 0)
+            y0 += height;
+
         int a = Math.Abs(x1-x0), b = Math.Abs(y1-y0), b1 = b&1;
         long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a;
         long err = dx+dy+b1*a*a, e2;
@@ -257,7 +257,7 @@ public static class ShapeHelpers
 
             if (isFill) {
                 //No half shape selected
-                if ((shape & ShapeSide.All) != 0) {
+                if (quadOne && quadTwo && quadThree && quadFour) {
                     //Horizontal
                     PlotLine(x0, y0, x1, y0, color, visitedCoords, scale);
                     PlotLine(x0, y1, x1, y1, color, visitedCoords, scale);

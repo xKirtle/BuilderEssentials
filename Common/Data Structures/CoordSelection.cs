@@ -17,7 +17,7 @@ public class MouseSelection
     public Func<bool> CanUpdateCoords = (() => true);
     
     public void MouseDown(UIMouseEvent evt, UIElement element) {
-        if (CanUpdateCoords()) {
+        if (CanUpdateCoords() && !Main.LocalPlayer.mouseInterface) {
             Start = End = new Vector2(Player.tileTargetX, Player.tileTargetY);
             IsDown = true;
             // OnMouseDown?.Invoke(element);
@@ -26,17 +26,18 @@ public class MouseSelection
     }
 
     public void MouseUp(UIMouseEvent evt, UIElement element) {
-        if (CanUpdateCoords()) {
+        if (CanUpdateCoords() && !Main.LocalPlayer.mouseInterface) {
             End = new Vector2(Player.tileTargetX, Player.tileTargetY);
+            if (Main.keyState.IsKeyDown(Keys.LeftShift)) SquareCoords();
             IsDown = false;
             OnClick?.Invoke(element);
         }
     }
 
-    public void UpdateCoords(bool shiftDown) {
-        if (IsDown && CanUpdateCoords()) {
+    public void UpdateCoords() {
+        if (IsDown && CanUpdateCoords() && !Main.LocalPlayer.mouseInterface) {
             End = new Vector2(Player.tileTargetX, Player.tileTargetY);
-            if (shiftDown) SquareCoords();
+            if (Main.keyState.IsKeyDown(Keys.LeftShift)) SquareCoords();
         }
     }
 
@@ -96,10 +97,9 @@ public class CoordSelection
     }
 
     public void UpdateCoords() {
-        shiftDown = Main.keyState.IsKeyDown(Keys.LeftShift);
-        RightMouse.UpdateCoords(shiftDown);
-        LeftMouse.UpdateCoords(shiftDown);
-        MiddleMouse.UpdateCoords(shiftDown);
+        RightMouse.UpdateCoords();
+        LeftMouse.UpdateCoords();
+        MiddleMouse.UpdateCoords();
     }
     
     public static bool IsWithinRange(float number, float value1, float value2, bool equal = false) {

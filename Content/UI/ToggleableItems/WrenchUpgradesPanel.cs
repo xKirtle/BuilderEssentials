@@ -100,7 +100,10 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
                 elements[i].SetVisibility(.75f, .4f);
         }
 
-        if (!String.IsNullOrEmpty(text))
-            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, BEPlayer.PointedScreenCoords + new Vector2(18f, 18f), Color.White, 0f, Vector2.Zero, Vector2.One);
+        if (!String.IsNullOrEmpty(text)) {
+            Main.LocalPlayer.cursorItemIconEnabled = false;
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text,
+                BEPlayer.PointedScreenCoords + new Vector2(18f, 18f), Color.White, 0f, Vector2.Zero, Vector2.One);
+        }
     }
 }
