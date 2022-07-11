@@ -30,9 +30,8 @@ public static class ShapeHelpers
                 color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
         }
     }
-
-    //TODO: Make this chain of methods require an hashset to be passed as a ref, and if it is null, do nothing
-    //if it exists, check if can add to it before drawing
+    
+#region Plot Line
     public static void PlotLine(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords, float scale = 1f)
         => PlotLine(start.X, start.Y, end.X, end.Y, color, visitedCoords, scale);
     public static void PlotLine(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords, float scale = 1f) 
@@ -57,7 +56,9 @@ public static class ShapeHelpers
             }
         }
     }
+#endregion
 
+#region Plot Rectangle
     public static void PlotRectangle(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords,
         float scale = 1f, bool isFill = false, bool displaySize = true)
         => PlotRectangle(start.X, start.Y, end.X, end.Y, color, visitedCoords, scale, isFill, displaySize);
@@ -118,6 +119,7 @@ public static class ShapeHelpers
             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{dx + 1}x{dy + 1}",
             new Vector2(maxX, maxY) * 16 - Main.screenPosition + new Vector2(18f, 18f), Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
     }
+#endregion
 
 #region Quadratic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint, 
@@ -184,6 +186,7 @@ public static class ShapeHelpers
     }
 #endregion
 
+#region Plot Ellipse
     public static void PlotEllipse(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords, 
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
         => PlotEllipse(start.X, start.Y, end.X, end.Y, color, visitedCoords, shape, scale, isFill);
@@ -192,9 +195,9 @@ public static class ShapeHelpers
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
         => PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, shape, scale, isFill);
 
-    //TODO: Make half shapes be drawn with beziers instead? start/end in corners, control points in opposite corners
     public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords,
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
+        FixHalfShapesOffset(ref x0, ref y0, ref x1, ref y1, shape);
         int width = Math.Abs(x0 - x1);
         int height = Math.Abs(y0 - y1);
         if (width == 0 && height == 0) return;
@@ -204,7 +207,7 @@ public static class ShapeHelpers
         //                   $"Left: {((shape & ShapeSide.Left) != 0)}");
         // Console.WriteLine(isFill);
         
-        //Fixing halfshapes difference.. -> solve with bezier curves?
+        //Fixing halfshapes difference..
         if ((shape & ShapeSide.Left) != 0)
             x0 += width;
         if ((shape & ShapeSide.Bottom) != 0)
@@ -304,4 +307,17 @@ public static class ShapeHelpers
             PlotPixel(x1+1, y1--, color, visitedCoords, scale);
         }
     }
+    
+    private static void FixHalfShapesOffset(ref int x0, ref int y0, ref int x1, ref int y1, ShapeSide shape) {
+        //Preventing half shape from "mirroring" to the other quadrant
+        if ((shape & ShapeSide.Bottom) != 0 || (shape & ShapeSide.Top) != 0) {
+            if (((shape & ShapeSide.Top) != 0 && y1 >= y0) || ((shape & ShapeSide.Bottom) != 0 && y1 <= y0))
+                y1 = y0;
+        }
+        else if ((shape & ShapeSide.Left) != 0 || (shape & ShapeSide.Right) != 0) {
+            if (((shape & ShapeSide.Right) != 0 && x1 <= x0) || ((shape & ShapeSide.Left) != 0 && x1 >= x0))
+                x1 = x0;
+        }
+    }
+#endregion
 }

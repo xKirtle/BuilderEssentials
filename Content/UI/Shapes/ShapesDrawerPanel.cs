@@ -16,7 +16,6 @@ public class ShapesDrawerPanel : BaseShapePanel
     public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
 
     public override void PlotSelection() {
-        //Get info directly from ShapesDrawerMenuPanel?
         var menuPanel = ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>();
         Shapes shape = menuPanel.SelectedShape;
         ShapeSide drawSide = menuPanel.SelectedShapeSide;

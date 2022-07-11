@@ -71,8 +71,6 @@ public class MouseSelection
 
 public class CoordSelection
 {
-    //Kirtle: Allow this to be changed in a ModConfig?
-    private bool shiftDown;
     public MouseSelection LeftMouse { get; }
     public MouseSelection RightMouse { get; }
     public MouseSelection MiddleMouse { get; }
