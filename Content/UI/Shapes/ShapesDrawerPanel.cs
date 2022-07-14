@@ -23,17 +23,17 @@ public class ShapesDrawerPanel : BaseShapePanel
         Color color = isFilled ? ShapeHelpers.Yellow : ShapeHelpers.Blue;
         
         if (shape == Shapes.Rectangle)
-            ShapeHelpers.PlotRectangle(cs.LeftMouse.Start, cs.LeftMouse.End, color, visitedPlottedPixels, 0.9f, isFilled);
+            ShapeHelpers.PlotRectangle(cs.RightMouse.Start, cs.RightMouse.End, color, this, 0.9f, isFilled);
         else if (shape == Shapes.Ellipse)
-            ShapeHelpers.PlotEllipse(cs.LeftMouse.Start, cs.LeftMouse.End, color, visitedPlottedPixels, drawSide, 0.9f, isFilled);
+            ShapeHelpers.PlotEllipse(cs.RightMouse.Start, cs.RightMouse.End, color, this, drawSide, 0.9f, isFilled);
     }
 
-    private HashSet<Vector2> oldVisitedCoords;
+    private Vector2 oldSelStart, oldSelEnd;
     public override bool SelectionHasChanged() {
-        if (oldVisitedCoords == visitedPlottedPixels) return false;
-        
-        //TODO: Troublesome?
-        oldVisitedCoords = visitedPlottedPixels;
+        if (oldSelStart == cs.RightMouse.Start && oldSelEnd == cs.RightMouse.End) return false;
+
+        oldSelStart = cs.RightMouse.Start;
+        oldSelEnd = cs.RightMouse.End;
         return true;
     }
 

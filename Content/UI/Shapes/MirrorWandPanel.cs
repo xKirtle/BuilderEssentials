@@ -19,10 +19,10 @@ public class MirrorWandPanel : BaseShapePanel
     public bool validMirrorPlacement;
     public bool horizontalMirror;
 
-    private Vector2 selStart => cs.LeftMouse.Start;
-    private Vector2 selEnd => cs.LeftMouse.End;
-    private Vector2 mirStart => cs.RightMouse.Start;
-    private Vector2 mirEnd => cs.RightMouse.End;
+    private Vector2 selStart => cs.RightMouse.Start;
+    private Vector2 selEnd => cs.RightMouse.End;
+    private Vector2 mirStart => cs.LeftMouse.Start;
+    private Vector2 mirEnd => cs.LeftMouse.End;
 
     public override bool IsHoldingBindingItem()
         => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();

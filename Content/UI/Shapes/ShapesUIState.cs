@@ -141,7 +141,7 @@ public abstract class BaseShapePanel : UIElement
         PlotSelection();
     }
     
-    protected void QueuePlacement(Point coords)
+    public void QueuePlacement(Point coords)
         => queuedPlacements.Enqueue(coords);
 
     public void DequeuePlacement() {

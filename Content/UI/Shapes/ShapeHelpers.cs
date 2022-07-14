@@ -22,9 +22,11 @@ public static class ShapeHelpers
     private static Asset<Texture2D> PixelTexture = TextureAssets.Extra[2];
     private static Rectangle Rectangle = new Rectangle(0, 0, 16, 16);
 
-    public static void PlotPixel(int tileX, int tileY, Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
+    public static void PlotPixel(int tileX, int tileY, Color color, BaseShapePanel instance, float scale = 1f) {
         Vector2 position = Main.ReverseGravitySupport(new Vector2(tileX, tileY) * 16 - Main.screenPosition);
-        if (visitedCoords?.Add(position) ?? true) {
+        if (instance.VisitedPlottedPixels?.Add(position) ?? true) {
+            if (color == Blue) //Could maybe add a property to a BaseShapePanel instance that defined whether it places tiles or not?
+                instance.QueuePlacement(new Point(tileX, tileY));
             position += new Vector2(8 - 8 * scale); //Make it not fix on the top left corner
             Main.spriteBatch.Draw(PixelTexture.Value, position, Rectangle,
                 color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
@@ -32,16 +34,16 @@ public static class ShapeHelpers
     }
     
 #region Plot Line
-    public static void PlotLine(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords, float scale = 1f)
-        => PlotLine(start.X, start.Y, end.X, end.Y, color, visitedCoords, scale);
-    public static void PlotLine(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords, float scale = 1f) 
-        => PlotLine((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, scale);
-    public static void PlotLine(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
+    public static void PlotLine(Vector2 start, Vector2 end, Color color, BaseShapePanel instance, float scale = 1f)
+        => PlotLine(start.X, start.Y, end.X, end.Y, color, instance, scale);
+    public static void PlotLine(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance, float scale = 1f) 
+        => PlotLine((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale);
+    public static void PlotLine(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance, float scale = 1f) {
         int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
         int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
         int err = dx + dy, e2;
         while (true) {
-            PlotPixel(x0, y0, color, visitedCoords, scale);
+            PlotPixel(x0, y0, color, instance, scale);
             e2 = 2 * err;
             if (e2 >= dy) {
                 if (x0 == x1) break;
@@ -59,15 +61,15 @@ public static class ShapeHelpers
 #endregion
 
 #region Plot Rectangle
-    public static void PlotRectangle(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords,
+    public static void PlotRectangle(Vector2 start, Vector2 end, Color color, BaseShapePanel instance,
         float scale = 1f, bool isFill = false, bool displaySize = true)
-        => PlotRectangle(start.X, start.Y, end.X, end.Y, color, visitedCoords, scale, isFill, displaySize);
+        => PlotRectangle(start.X, start.Y, end.X, end.Y, color, instance, scale, isFill, displaySize);
 
-    public static void PlotRectangle(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords,
+    public static void PlotRectangle(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance,
         float scale = 1f, bool isFill = false, bool displaySize = true)
-        => PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, scale, isFill, displaySize);
+        => PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale, isFill, displaySize);
 
-    public static void PlotRectangle(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords,
+    public static void PlotRectangle(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance,
         float scale = 1f, bool isFill = false, bool displaySize = true) {
         int dx = Math.Abs(x0 - x1);
         int dy = Math.Abs(y0 - y1);
@@ -77,24 +79,24 @@ public static class ShapeHelpers
         if (dx == 0 && dy == 0) return;
 
         if ((dx == 0 && dy != 0) || (dx != 0 && dy == 0)) {
-            PlotLine(x0, y0, x1, y1, color, visitedCoords, scale);
+            PlotLine(x0, y0, x1, y1, color, instance, scale);
             return;
         }
 
         for (int x = minX; x <= minX + dx; x++) {
-            PlotPixel(x, minY, color, visitedCoords, scale);
-            PlotPixel(x, minY + dy, color, visitedCoords, scale);
+            PlotPixel(x, minY, color, instance, scale);
+            PlotPixel(x, minY + dy, color, instance, scale);
         }
 
         for (int y = minY + 1; y <= minY + dy - 1; y++) {
-            PlotPixel(minX , y, color, visitedCoords, scale);
-            PlotPixel(minX + dx, y, color, visitedCoords, scale);
+            PlotPixel(minX , y, color, instance, scale);
+            PlotPixel(minX + dx, y, color, instance, scale);
         }
 
         if (isFill) {
             for (int x = minX + 1; x <= minX + dx - 1; x++)
             for (int y = minY + 1; y <= minY + dy - 1; y++)
-                PlotPixel(x, y, color, visitedCoords, scale);
+                PlotPixel(x, y, color, instance, scale);
         }
 
         //Middle helper lines
@@ -104,13 +106,13 @@ public static class ShapeHelpers
         //Vertical line
         if (dx % 2 == 0 && dx > 3) {
             int fixedX = minX + dx / 2;
-            PlotLine(fixedX, minY, fixedX, minY + dy, color, visitedCoords, scale);
+            PlotLine(fixedX, minY, fixedX, minY + dy, color, instance, scale);
         }
         
         //Horizontal line
         if (dy % 2 == 0 && dy > 3) {
             int fixedY = minY + dy / 2;
-            PlotLine(minX, fixedY, minX + dx, fixedY, color, visitedCoords, scale);
+            PlotLine(minX, fixedY, minX + dx, fixedY, color, instance, scale);
         }
         
         color = tempColor;
@@ -123,7 +125,7 @@ public static class ShapeHelpers
 
 #region Quadratic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint, 
-        Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
+        Color color, BaseShapePanel instance, float scale = 1f) {
         List<Vector2> points = new List<Vector2>();
         for (float t = 0.0f; t < 1.0f; t += dt)
             points.Add(TraverseBezier(startPoint, controlPoint, endPoint, t));
@@ -131,7 +133,7 @@ public static class ShapeHelpers
         points.Add(TraverseBezier(startPoint, controlPoint, endPoint, 1.0f));
 
         for (int i = 0; i < points.Count - 1; i++)
-            PlotLine(points[i], points[i+1], color, visitedCoords, scale);
+            PlotLine(points[i], points[i+1], color, instance, scale);
     }
     
     private static float X(float t, float x0, float x1, float x2)
@@ -159,7 +161,7 @@ public static class ShapeHelpers
 
 #region Cubic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2, 
-        Vector2 endPoint, Color color, HashSet<Vector2> visitedCoords, float scale = 1f) {
+        Vector2 endPoint, Color color, BaseShapePanel instance, float scale = 1f) {
         List<Vector2> points = new List<Vector2>();
         for (float t = 0.0f; t < 1.0f; t += dt)
             points.Add(TraverseBezier(startPoint, controlPoint, controlPoint2, endPoint, t));
@@ -167,7 +169,7 @@ public static class ShapeHelpers
         points.Add(TraverseBezier(startPoint, controlPoint, controlPoint2, endPoint, 1.0f));
 
         for (int i = 0; i < points.Count - 1; i++)
-            PlotLine(points[i], points[i+1], color, visitedCoords, scale);
+            PlotLine(points[i], points[i+1], color, instance, scale);
     }
     
     private static float X(float t, float x0, float x1, float x2, float x3)
@@ -187,15 +189,15 @@ public static class ShapeHelpers
 #endregion
 
 #region Plot Ellipse
-    public static void PlotEllipse(Vector2 start, Vector2 end, Color color, HashSet<Vector2> visitedCoords, 
+    public static void PlotEllipse(Vector2 start, Vector2 end, Color color, BaseShapePanel instance, 
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
-        => PlotEllipse(start.X, start.Y, end.X, end.Y, color, visitedCoords, shape, scale, isFill);
+        => PlotEllipse(start.X, start.Y, end.X, end.Y, color, instance, shape, scale, isFill);
 
-    public static void PlotEllipse(float x0, float y0, float x1, float y1, Color color, HashSet<Vector2> visitedCoords, 
+    public static void PlotEllipse(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance, 
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
-        => PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, visitedCoords, shape, scale, isFill);
+        => PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, instance, shape, scale, isFill);
 
-    public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, HashSet<Vector2> visitedCoords,
+    public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance,
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
         FixHalfShapesOffset(ref x0, ref y0, ref x1, ref y1, shape);
         int width = Math.Abs(x0 - x1);
@@ -231,30 +233,30 @@ public static class ShapeHelpers
             
             //Kirtle: Not sure why bottom and top have to be reversed.. am I dumb?
             if ((shape & ShapeSide.Bottom) != 0) {
-                PlotPixel(x1, y0, color, visitedCoords, scale); //   I. Quadrant
-                PlotPixel(x0, y0, color, visitedCoords, scale); //  II. Quadrant
+                PlotPixel(x1, y0, color, instance, scale); //   I. Quadrant
+                PlotPixel(x0, y0, color, instance, scale); //  II. Quadrant
                 quadOne = quadTwo = true;
             }
 
             if ((shape & ShapeSide.Right) != 0) {
                 if (!quadOne)
-                    PlotPixel(x1, y0, color, visitedCoords, scale); //   I. Quadrant
-                PlotPixel(x1, y1, color, visitedCoords, scale); //  IV. Quadrant
+                    PlotPixel(x1, y0, color, instance, scale); //   I. Quadrant
+                PlotPixel(x1, y1, color, instance, scale); //  IV. Quadrant
                 quadOne = quadFour = true;
             }
 
             if ((shape & ShapeSide.Top) != 0) {
-                PlotPixel(x0, y1, color, visitedCoords, scale); // III. Quadrant
+                PlotPixel(x0, y1, color, instance, scale); // III. Quadrant
                 if (!quadFour)
-                    PlotPixel(x1, y1, color, visitedCoords, scale); //  IV. Quadrant
+                    PlotPixel(x1, y1, color, instance, scale); //  IV. Quadrant
                 quadThree = quadFour = true;
             }
             
             if ((shape & ShapeSide.Left) != 0) {
                 if (!quadTwo)
-                    PlotPixel(x0, y0, color, visitedCoords, scale); //  II. Quadrant
+                    PlotPixel(x0, y0, color, instance, scale); //  II. Quadrant
                 if (!quadThree)
-                    PlotPixel(x0, y1, color, visitedCoords, scale); // III. Quadrant
+                    PlotPixel(x0, y1, color, instance, scale); // III. Quadrant
                 quadTwo = quadThree = true;
             }
 
@@ -262,14 +264,14 @@ public static class ShapeHelpers
                 //No half shape selected
                 if (quadOne && quadTwo && quadThree && quadFour) {
                     //Horizontal
-                    PlotLine(x0, y0, x1, y0, color, visitedCoords, scale);
-                    PlotLine(x0, y1, x1, y1, color, visitedCoords, scale);
+                    PlotLine(x0, y0, x1, y0, color, instance, scale);
+                    PlotLine(x0, y1, x1, y1, color, instance, scale);
                     //Vertical
-                    PlotLine(x0, y0, x0, y1, color, visitedCoords, scale);
-                    PlotLine(x1, y0, x1, y1, color, visitedCoords, scale);
+                    PlotLine(x0, y0, x0, y1, color, instance, scale);
+                    PlotLine(x1, y0, x1, y1, color, instance, scale);
                     //Diagonals (sometimes a few blocks are left to be placed and this fills the remaining)
-                    PlotLine(x0, y0, x1, y1, color, visitedCoords, scale);
-                    PlotLine(x0, y1, x1, y0, color, visitedCoords, scale);
+                    PlotLine(x0, y0, x1, y1, color, instance, scale);
+                    PlotLine(x0, y1, x1, y0, color, instance, scale);
                     goto end;
                 }
                 
@@ -279,7 +281,7 @@ public static class ShapeHelpers
                     bool condition = (shape & ShapeSide.Bottom) != 0 ? tempY < y1 : tempY > y1;
 
                     do {
-                        PlotLine(x0, tempY, x1, tempY, color, visitedCoords, scale);
+                        PlotLine(x0, tempY, x1, tempY, color, instance, scale);
                         tempY += condition ? 1 : -1;
                     } while (condition);
                 }
@@ -288,7 +290,7 @@ public static class ShapeHelpers
                     bool condition = (shape & ShapeSide.Left) != 0 ? tempX > x1 : tempX < x1;
 
                     do {
-                        PlotLine(tempX, y0, tempX, y1, color, visitedCoords, scale);
+                        PlotLine(tempX, y0, tempX, y1, color, instance, scale);
                         tempX += condition ? -1 : 1;
                     } while (condition);
                 }
@@ -301,10 +303,10 @@ public static class ShapeHelpers
         } while (x0 <= x1);
 
         while (y0-y1 < b) {
-            PlotPixel(x0-1, y0, color, visitedCoords, scale);
-            PlotPixel(x1+1, y0++, color, visitedCoords, scale);
-            PlotPixel(x0-1, y1, color, visitedCoords, scale);
-            PlotPixel(x1+1, y1--, color, visitedCoords, scale);
+            PlotPixel(x0-1, y0, color, instance, scale);
+            PlotPixel(x1+1, y0++, color, instance, scale);
+            PlotPixel(x0-1, y1, color, instance, scale);
+            PlotPixel(x1+1, y1--, color, instance, scale);
         }
     }
     

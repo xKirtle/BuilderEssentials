@@ -37,12 +37,12 @@ public class ImprovedRulerPanel : BaseShapePanel
         Vector2 pos = Vector2.Zero;
 
         if (curveStart == curveEnd) {
-            ShapeHelpers.PlotLine(rulerStart, rulerEnd, color, visitedPlottedPixels, 0.90f);
+            ShapeHelpers.PlotLine(rulerStart, rulerEnd, color, this, 0.90f);
             text += "Length: ";
             pos = rulerEnd;
         }
         else {
-            ShapeHelpers.PlotBezier(0.1f, rulerStart, curveEnd, rulerEnd, color, visitedPlottedPixels, 0.9f);
+            ShapeHelpers.PlotBezier(0.1f, rulerStart, curveEnd, rulerEnd, color, this, 0.9f);
             text += "Number of tiles: ";
             pos = curveEnd;
         }
