@@ -311,6 +311,10 @@ public static class ShapeHelpers
     }
     
     private static void FixHalfShapesOffset(ref int x0, ref int y0, ref int x1, ref int y1, ShapeSide shape) {
+        if ((shape & ShapeSide.Top) != 0 && (shape & ShapeSide.Right) != 0 &&
+            (shape & ShapeSide.Bottom) != 0 && (shape & ShapeSide.Left) != 0)
+            return;
+        
         //Preventing half shape from "mirroring" to the other quadrant
         if ((shape & ShapeSide.Bottom) != 0 || (shape & ShapeSide.Top) != 0) {
             if (((shape & ShapeSide.Top) != 0 && y1 >= y0) || ((shape & ShapeSide.Bottom) != 0 && y1 <= y0))
