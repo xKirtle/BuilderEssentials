@@ -170,6 +170,11 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
 
         for (int i = 0; i < menuOptions.Length; i++)
             menuOptions[i].OnInitialize();
+        
+        //Leaving rectangle as the default selection
+        menuOptions[1].ToggleSelection();
+        SelectedShape = Shapes.Rectangle;
+        SelectedShapeSide = ShapeSide.All;
     }
     
     public override void UpdateRegardlessOfVisibility() {

@@ -20,7 +20,7 @@ public class ShapesDrawerPanel : BaseShapePanel
         Shapes shape = menuPanel.SelectedShape;
         ShapeSide drawSide = menuPanel.SelectedShapeSide;
         bool isFilled = menuPanel.IsFilled;
-        Color color = isFilled ? ShapeHelpers.Yellow : ShapeHelpers.Blue;
+        Color color = /* isFilled ? ShapeHelpers.Yellow : */ ShapeHelpers.Blue;
         
         if (shape == Shapes.Rectangle)
             ShapeHelpers.PlotRectangle(cs.RightMouse.Start, cs.RightMouse.End, color, this, 0.9f, isFilled);

@@ -27,7 +27,7 @@ public class MirrorWandPanel : BaseShapePanel
     public override bool IsHoldingBindingItem()
         => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();
 
-    public override bool CanPlaceItems() => true;
+    public override bool CanPlaceItems() => false;
 
     public override bool SelectionHasChanged() => false;
     
@@ -59,13 +59,13 @@ public class MirrorWandPanel : BaseShapePanel
 
     public override void PlotSelection() {
         //Selected area
-        ShapeHelpers.PlotRectangle(selStart, selEnd, ShapeHelpers.Blue * 0.6f, null, 0.90f, false);
+        ShapeHelpers.PlotRectangle(selStart, selEnd, ShapeHelpers.Blue * 0.6f, this, 0.90f, false);
         
         //Mirror
         LimitMirrorSize();
         validMirrorPlacement = IsMirrorAxisInsideSelection();
         Color color = validMirrorPlacement ? ShapeHelpers.Yellow : ShapeHelpers.Red;
-        ShapeHelpers.PlotRectangle(mirStart, mirEnd, color * 0.6f, null, 0.90f, false, false);
+        ShapeHelpers.PlotRectangle(mirStart, mirEnd, color * 0.6f, this, 0.90f, false, false);
     }
 
     private void LimitMirrorSize() {
@@ -88,8 +88,8 @@ public class MirrorWandPanel : BaseShapePanel
         else if (horizontalMirror && end.Y > start.Y + 1)
             end.Y = start.Y + 1;
 
-        cs.RightMouse.Start = new Vector2(start.X, start.Y);
-        cs.RightMouse.End = new Vector2(end.X, end.Y);
+        cs.LeftMouse.Start = new Vector2(start.X, start.Y);
+        cs.LeftMouse.End = new Vector2(end.X, end.Y);
         
         wideMirror = end.X == start.X - 1 || end.X == start.X + 1 || 
                      end.Y == start.Y - 1 || end.Y == start.Y + 1;
