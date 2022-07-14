@@ -20,6 +20,7 @@ namespace BuilderEssentials
 	{
 		internal static ModKeybind FWIncrease;
 		internal static ModKeybind FWDecrease;
+		internal static ModKeybind UndoPlacement;
 		public static Dictionary<int, List<int>> TileToItems;
 		public static Dictionary<int, List<int>> WallToItems;
 		
@@ -36,6 +37,7 @@ namespace BuilderEssentials
 
 			FWIncrease = KeybindLoader.RegisterKeybind(this, "Increase Fill Wand selection size", "I");
 			FWDecrease = KeybindLoader.RegisterKeybind(this, "Decrease Fill Wand selection size", "O");
+			UndoPlacement = KeybindLoader.RegisterKeybind(this, "Undo last placement with a tool that supports it", "P");
 		}
 
 		public void ReadAndCacheLocally() {

@@ -1,3 +1,4 @@
+using System;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.Items.Accessories;
@@ -36,6 +37,16 @@ public class BEPlayer : ModPlayer
         
         if (BuilderEssentials.FWDecrease.JustPressed && FillWand.FillSelectionSize > 1)
             FillWand.FillSelectionSize--;
+
+        if (BuilderEssentials.UndoPlacement.JustPressed) {
+            Item heldItem = Main.LocalPlayer.HeldItem;
+
+            //Hardcoded.. get a way to bind keybind to an item that's not being held..?
+            if (heldItem.ModItem is FillWand)
+                ShapesUIState.GetUIPanel<FillWandPanel>().UndoPlacement();
+            else if (heldItem.ModItem is ShapesDrawer)
+                ShapesUIState.GetUIPanel<ShapesDrawerPanel>().UndoPlacement();
+        }
     }
 
     public override void PostUpdate() {

@@ -121,13 +121,6 @@ public abstract class BaseShapePanel : UIElement
                 undo = false;
             }
         };
-        
-        cs.RightMouse.OnClick += _ => {
-            if (!Main.LocalPlayer.mouseInterface) {
-                UndoPlacement();
-                undo = true;
-            }
-        };
     }
 
     public void UpdateMaxUndoNum(int value) {
@@ -178,6 +171,7 @@ public abstract class BaseShapePanel : UIElement
         //Kirtle: Do UI that allows a specific historyPlacement to be removed rather than behaving like a Stack?
         if (historyPlacements.Count == 0) return;
         
+        undo = true;
         List<PlacementHistory> lastPlacement = historyPlacements.Pop();
         
         for (int i = 0; i < lastPlacement.Count; i++) {
