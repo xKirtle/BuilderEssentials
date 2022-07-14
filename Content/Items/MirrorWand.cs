@@ -12,8 +12,8 @@ public class MirrorWand : BuilderEssentialsItem
 {
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Mirrors everything!" +
-                           "\nLeft Click to make a selection area" +
-                           "\nRight Click to make a mirror axis" +
+                           "\nMirror Click to make a selection area" +
+                           "\nLeft Click to make a mirror axis" +
                            "\n[c/FF0000:Multiplayer usage can be bug prone!]");
             
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

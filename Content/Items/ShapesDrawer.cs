@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
@@ -16,9 +17,9 @@ public class ShapesDrawer : BuilderEssentialsItem
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Used to draw shapes" +
            "\nOpen its menu by clicking the arrow on the left of your screen when equipped" +
-           "\nLeft Click to make selection" +
+           "\nRight Click to make selection" +
            "\nMiddle Click to select working tile" +
-           "\nRight Click to place blocks in the selection" +
+           "\nLeft Click to place blocks in the selection" +
            "\n[c/FFCC00:Press LShift to make circles/squares]" +
            "\n[c/FFCC00:Enables a selection menu on the left of the screen]");
     
@@ -34,6 +35,11 @@ public class ShapesDrawer : BuilderEssentialsItem
             Item.rare = ItemRarityID.Red;
             Item.autoReuse = true;
             Item.noMelee = true;
+        }
+        
+        public override void ModifyTooltips(List<TooltipLine> tooltips) {
+            tooltips.Insert(7, new TooltipLine(Mod, "BuilderEssentials:FillWand", 
+                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
         }
     
         public override Vector2? HoldoutOffset() => new Vector2(-2, -9);

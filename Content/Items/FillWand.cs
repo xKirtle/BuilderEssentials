@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
@@ -21,7 +22,6 @@ public class FillWand : BuilderEssentialsItem
         Tooltip.SetDefault(
             "Fills or creates holes!" +
             "\nLeft Click to place" +
-            "\nRigth Click to remove" +
             "\nMiddle Click to select working tile" +
             "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]" +
             "\n[c/FF0000:Does not support multi tiles]"
@@ -39,6 +39,11 @@ public class FillWand : BuilderEssentialsItem
         Item.rare = ItemRarityID.Red;
         Item.autoReuse = true;
         Item.noMelee = true;
+    }
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips) {
+        tooltips.Insert(4, new TooltipLine(Mod, "BuilderEssentials:FillWand", 
+        $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
