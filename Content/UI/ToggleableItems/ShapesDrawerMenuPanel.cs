@@ -99,7 +99,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
 
         void ClearAllSelections(int startIndex = 0) {
             for (int i = startIndex; i < menuOptions.Length; i++)
-                if (menuOptions[i].IsSelected)
+                if (menuOptions[i].IsSelected && i != 2)
                     menuOptions[i].ToggleSelection();
         }
 
@@ -189,7 +189,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         
         Left.Set(Main.GameMode == GameModeID.Creative ? 75f : 32f, 0);
         
-        if (IsMouseHovering && elementHovered)
+        if (IsMouseHovering || elementHovered)
             Main.LocalPlayer.mouseInterface = true;
     }
 

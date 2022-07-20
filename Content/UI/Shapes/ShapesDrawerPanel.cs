@@ -28,6 +28,7 @@ public class ShapesDrawerPanel : BaseShapePanel
             ShapeHelpers.PlotEllipse(cs.RightMouse.Start, cs.RightMouse.End, color, this, drawSide, 0.9f, isFilled);
     }
 
+    //TODO: Also check if menu options changed, since that's a valid change..
     private Vector2 oldSelStart, oldSelEnd;
     public override bool SelectionHasChanged() {
         if (oldSelStart == cs.RightMouse.Start && oldSelEnd == cs.RightMouse.End) return false;

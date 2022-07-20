@@ -199,6 +199,9 @@ public static class ShapeHelpers
 
     public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance,
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
+        int minX = Math.Min(x0, x1), minY = Math.Min(y0, y1);
+        int maxX = Math.Max(x0, x1), maxY = Math.Max(y0, y1);
+        
         FixHalfShapesOffset(ref x0, ref y0, ref x1, ref y1, shape);
         int width = Math.Abs(x0 - x1);
         int height = Math.Abs(y0 - y1);
@@ -227,7 +230,7 @@ public static class ShapeHelpers
         if (y0 > y1) y0 = y1;
         y0 += (b+1)/2; y1 = y0-b1;
         a *= 8*a; b1 = 8*b*b;
-
+        
         do {
             bool quadOne = false, quadTwo = false, quadThree = false, quadFour = false;
             
@@ -308,6 +311,27 @@ public static class ShapeHelpers
             PlotPixel(x0-1, y1, color, instance, scale);
             PlotPixel(x1+1, y1--, color, instance, scale);
         }
+        
+        //Middle helper lines
+        Color tempColor = color;
+        color *= 0.2f;
+
+        //Vertical line
+        if (width % 2 == 0 && width > 3 && ((shape & ShapeSide.Top) != 0 || (shape & ShapeSide.Bottom) != 0)) {
+            int fixedX = minX + width / 2;
+            PlotLine(fixedX, minY, fixedX, minY + height, color, instance, scale);
+        }
+        
+        //Horizontal line
+        if (height % 2 == 0 && height > 3 && ((shape & ShapeSide.Left) != 0 || (shape & ShapeSide.Right) != 0)) {
+            int fixedY = minY + height / 2;
+            PlotLine(minX, fixedY, minX + width, fixedY, color, instance, scale);
+        }
+        
+        color = tempColor;
+        
+        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{width + 1}x{height + 1}",
+            new Vector2(maxX, maxY) * 16 - Main.screenPosition + new Vector2(18f, 18f), Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
     }
     
     private static void FixHalfShapesOffset(ref int x0, ref int y0, ref int x1, ref int y1, ShapeSide shape) {
