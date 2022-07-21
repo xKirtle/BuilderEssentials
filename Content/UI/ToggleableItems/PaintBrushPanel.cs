@@ -198,7 +198,7 @@ public class PaintBrushPanel : BaseToggleablePanel
             Append(colorOverlay);
             colorIndex = index;
 
-            selectedColorMouse = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Tool{colorIndex}"));
+            selectedColorMouse = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Paint{colorIndex}"));
             selectedColorMouse.ImageScale = 0.4f;
         }
         else colorIndex = -1;

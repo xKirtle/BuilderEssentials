@@ -53,7 +53,7 @@ public class BEPlayer : ModPlayer
         MirrorPlacement.PlayerPostUpdate();
         BuildingWrench.DequeueRecipeChanges();
     }
-
+    
     public override void PostUpdateEquips() {
         if (InfiniteRange) {
             Player.tileRangeX += Main.screenWidth / 16 / 2;

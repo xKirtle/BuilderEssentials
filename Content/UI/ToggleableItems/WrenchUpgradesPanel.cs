@@ -95,9 +95,10 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
         //Attempting to visually reset enabled toggles in case the wrench is switched to a different one
         BuildingWrench wrench = Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance as BuildingWrench;
         for (int i = 0; i < wrench?.unlockedUpgrades.Length; i++) {
-            enabledUpgrades[i] = false;
-            if (wrench.unlockedUpgrades[i] == (int) UpgradeState.Locked)
+            if (wrench.unlockedUpgrades[i] == (int) UpgradeState.Locked) {
+                enabledUpgrades[i] = false;
                 elements[i].SetVisibility(.75f, .4f);
+            }
         }
 
         if (!String.IsNullOrEmpty(text)) {
