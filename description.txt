@@ -2,11 +2,12 @@ Builder Essentials aims to improve the building experience in Terraria tackling 
 
 This mod uses keybinds that tModLoader turns off by default, please make sure you set them for the best experience!
 
-For more info/previews check the mod's Homepage!
-
-Happy Building!
+For more info/previews check our Discord server ( https://discord.com/invite/wQYMbQq )
+or our wiki here ( https://xkirtle.github.io/BuilderEssentials )
 
 If you find any bug/weird behaviour please report it in our mod's homepage. Thank you!
+
+Happy Building!
 
 Dev Team
   - Kirtle (Programmer)

@@ -25,7 +25,7 @@ public class BEPlayer : ModPlayer
     public ModItem EquippedWrenchInstance { get; set; }
 
     public override void ResetEffects() {
-        InfinitePaint = FastPlacement = InfiniteRange = 
+        InfinitePaint = IsImprovedRulerEquipped = FastPlacement = InfiniteRange = 
             InfinitePlacement = InfinitePickupRange = false;
         Player.defaultItemGrabRange = 42;
         EquippedWrenchInstance = null;

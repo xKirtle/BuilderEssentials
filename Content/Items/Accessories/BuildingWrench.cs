@@ -159,6 +159,7 @@ public class BuildingWrench : ModItem
         
         CreateRecipe()
             .AddIngredient(ItemID.CrimtaneOre, 20)
+            .AddIngredient(ItemID.Topaz, 5)
             .AddTile(TileID.Anvils)
             .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePickupRange.ToString() + "Module");
     }

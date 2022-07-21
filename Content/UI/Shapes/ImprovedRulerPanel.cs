@@ -19,16 +19,16 @@ public class ImprovedRulerPanel : BaseShapePanel
     private HashSet<Vector2> visitedPlottedPixels = new();
     public override HashSet<Vector2> VisitedPlottedPixels => visitedPlottedPixels;
 
-    private Vector2 rulerStart => cs.LeftMouse.Start;
-    private Vector2 rulerEnd => cs.LeftMouse.End;
-    private Vector2 curveStart => cs.RightMouse.Start;
-    private Vector2 curveEnd => cs.RightMouse.End;
+    private Vector2 rulerStart => cs.RightMouse.Start;
+    private Vector2 rulerEnd => cs.RightMouse.End;
+    private Vector2 curveStart => cs.LeftMouse.Start;
+    private Vector2 curveEnd => cs.LeftMouse.End;
     
     private Color color = ShapeHelpers.Blue * 0.6f;
     public override void PlotSelection() {
         //Reset curve if ruler selection changes
         if (rulerStart == rulerEnd) {
-            cs.RightMouse.Start = curveEnd;
+            cs.LeftMouse.Start = curveEnd;
             return;
         }
 
