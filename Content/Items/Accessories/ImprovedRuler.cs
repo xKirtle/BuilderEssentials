@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.Content.UI;
+﻿using BuilderEssentials.Common.Configs;
+using BuilderEssentials.Content.UI;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,6 +9,9 @@ namespace BuilderEssentials.Content.Items.Accessories;
 public class ImprovedRuler : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledAccessories.ImprovedRuler;
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Only works when equipped and player's empty handed." +

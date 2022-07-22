@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
@@ -14,6 +15,9 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class ShapesDrawer : BuilderEssentialsItem
 {
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledItems.ShapesDrawer;
+
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Used to draw shapes" +
            "\nOpen its menu by clicking the arrow on the left of your screen when equipped" +

@@ -1,4 +1,5 @@
 ﻿using System;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.Items.Placeable;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -15,6 +16,9 @@ public class TFCraftingStation : BaseCraftingStation
 {
     public override string DisplayName =>"Themed Furniture Crafting Station";
     public override Color MapColor => new Color(185, 92, 31);
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.YellowTorch;

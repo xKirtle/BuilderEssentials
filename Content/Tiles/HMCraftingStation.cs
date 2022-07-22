@@ -1,4 +1,5 @@
 ﻿using System;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.Items.Placeable;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -15,6 +16,9 @@ public class HMCraftingStation : BaseCraftingStation
 {
     public override string DisplayName =>"Hardmode Crafting Station";
     public override Color MapColor => new Color(191, 55, 64);
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.RedTorch;

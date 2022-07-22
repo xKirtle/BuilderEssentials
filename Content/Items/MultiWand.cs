@@ -1,5 +1,6 @@
 ﻿using System;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Common.Enums;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
@@ -16,6 +17,9 @@ public class MultiWand : BaseItemToggleableUI
     public override ToggleableUiType ToggleableUiType => ToggleableUiType.MultiWand;
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledItems.MultiWand;
     
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Wand");

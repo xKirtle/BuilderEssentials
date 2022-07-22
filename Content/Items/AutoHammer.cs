@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Common.Enums;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
@@ -19,6 +20,9 @@ public class AutoHammer : BaseItemToggleableUI
     public override ToggleableUiType ToggleableUiType => ToggleableUiType.AutoHammer;
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
+
+    public override bool IsLoadingEnabled(Mod mod) 
+        => ModContent.GetInstance<MainConfig>().EnabledItems.AutoHammer;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Auto Hammer");

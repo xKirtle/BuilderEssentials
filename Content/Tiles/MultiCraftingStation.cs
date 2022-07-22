@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.Items.Placeable;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,9 @@ public class MultiCraftingStation : BaseCraftingStation
 {
     public override string DisplayName =>"Multi Crafting Station";
     public override Color MapColor => Color.White * 0.65f;
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.Sandnado;

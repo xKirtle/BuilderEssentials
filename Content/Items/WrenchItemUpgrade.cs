@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Common.Enums;
 using Terraria;
 using Terraria.ID;
@@ -19,6 +20,9 @@ public class WrenchItemUpgrade : ModItem
     //Can't have repeated internal names when adding content
     public override string Name => ((WrenchUpgrades) UpgradeNumber).ToString() + "Module";
 
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
+    
     public override void SetDefaults() {
         Item.width = Item.height = 38;
         Item.value = Item.sellPrice(0);

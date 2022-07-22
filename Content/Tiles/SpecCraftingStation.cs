@@ -1,4 +1,5 @@
 ﻿using System;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.Items.Placeable;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -15,6 +16,9 @@ public class SpecCraftingStation : BaseCraftingStation
 {
     public override string DisplayName =>"Specialized Crafting Station";
     public override Color MapColor => new Color(39, 137, 205);
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.IceTorch;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Common.DataStructures;
 using BuilderEssentials.Common.Enums;
 using BuilderEssentials.Content.UI;
@@ -18,6 +19,9 @@ public class BuildingWrench : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
     public int[] unlockedUpgrades;
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
 
     public override void SetDefaults() {
         Item.accessory = true;

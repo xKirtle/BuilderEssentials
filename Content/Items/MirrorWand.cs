@@ -1,4 +1,5 @@
 ﻿using BuilderEssentials.Common;
+using BuilderEssentials.Common.Configs;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
 using Terraria;
@@ -10,6 +11,9 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class MirrorWand : BuilderEssentialsItem
 {
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledItems.MirrorWand;
+
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Mirrors everything!" +
                            "\nMirror Click to make a selection area" +

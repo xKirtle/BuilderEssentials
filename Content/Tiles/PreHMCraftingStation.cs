@@ -1,4 +1,5 @@
 ﻿using System;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.Items.Placeable;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -15,6 +16,9 @@ public class PreHMCraftingStation : BaseCraftingStation
 {
     public override string DisplayName =>"Pre Hardmode Crafting Station";
     public override Color MapColor => new Color(36, 151, 64);
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledTiles.PreHMCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.CursedTorch;

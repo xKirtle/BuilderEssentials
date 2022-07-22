@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.Content.Tiles;
+﻿using BuilderEssentials.Common.Configs;
+using BuilderEssentials.Content.Tiles;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,6 +10,9 @@ public class SpecCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
+    
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Specialized Crafting Station");
         Tooltip.SetDefault("Used to craft Specialized items");

@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using BuilderEssentials.Common.Configs;
+using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,6 +14,9 @@ public class BuildInPeace : ModItem
         Tooltip.SetDefault("Disables all events in the game and enemy spawns. Also sets the clock to noon");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildInPeace;
     
     public override void SetDefaults() {
         Item.accessory = true;

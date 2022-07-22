@@ -1,4 +1,5 @@
-﻿using BuilderEssentials.Content.UI;
+﻿using BuilderEssentials.Common.Configs;
+using BuilderEssentials.Content.UI;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,6 +12,9 @@ public class SpectrePaintBrush : BasePaintBrush
     public override int ItemRange => 16;
     protected override bool CloneNewInstances => true;
 
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledItems.SpectrePaintBrush;
+    
     public override void SetDefaults() {
         base.SetDefaults();
         

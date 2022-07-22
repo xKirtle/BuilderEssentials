@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.UI;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
@@ -17,6 +18,9 @@ public class FillWand : BuilderEssentialsItem
     public static int FillSelectionSize = 3;
 
     protected override bool CloneNewInstances => true;
+
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
     
     public override void SetStaticDefaults() {
         Tooltip.SetDefault(
