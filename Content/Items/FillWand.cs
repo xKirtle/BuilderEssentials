@@ -42,8 +42,14 @@ public class FillWand : BuilderEssentialsItem
     }
 
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
-        tooltips.Insert(4, new TooltipLine(Mod, "BuilderEssentials:FillWand", 
+        int insertIndex = tooltips.FindIndex(x => x.Text.Contains("Middle Click to select working tile"));
+        
+        if (insertIndex == -1)
+            tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:FillWand", 
         $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
+        else
+            tooltips.Insert(insertIndex + 1, new TooltipLine(Mod, "BuilderEssentials:FillWand",
+                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(-2, -7);

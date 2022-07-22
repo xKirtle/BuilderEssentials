@@ -11,8 +11,8 @@ public class ImprovedRuler : ModItem
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Only works when equipped and player's empty handed." +
-                           "\nHold Left Click to draw a line." +
-                           "\nHold Right Click to curve the line.");
+                           "\nHold Right Click to draw a line." +
+                           "\nHold Left Click to curve the line.");
     }
 
     public override void SetDefaults() {

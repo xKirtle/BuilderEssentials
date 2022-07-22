@@ -31,7 +31,7 @@ public abstract class BaseItemToggleableUI : BuilderEssentialsItem
         if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server) 
             TogglePanel();
 
-        return false;
+        return true; //Overhaul compatibility?
     }
 
     public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel((int) ToggleableUiType).IsVisible;
