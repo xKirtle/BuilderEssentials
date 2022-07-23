@@ -1,0 +1,1 @@
+- Opening the manage mods window should no longer require a mod reload unless some option in the config changed

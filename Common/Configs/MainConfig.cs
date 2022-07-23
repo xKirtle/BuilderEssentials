@@ -61,6 +61,23 @@ public class MainConfig : ModConfig
 
         [Label("Shapes Drawer"), DefaultValue(true), ReloadRequired] 
         public bool ShapesDrawer = true;
+
+        public override bool Equals(object obj) {
+            if (obj is EnabledItemsConfig config)
+                return AutoHammer == config.AutoHammer && FillWand == config.FillWand &&
+                       InfinitePaintBucket == config.InfinitePaintBucket && PaintBrush == config.PaintBrush &&
+                       SpectrePaintBrush == config.SpectrePaintBrush && MultiWand == config.MultiWand &&
+                       MirrorWand == config.MirrorWand && ShapesDrawer == config.ShapesDrawer;
+            
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return new {
+                AutoHammer, FillWand, InfinitePaintBucket, PaintBrush, 
+                SpectrePaintBrush, MultiWand, MirrorWand, ShapesDrawer
+            }.GetHashCode();
+        }
     }
 
     [SeparatePage]
@@ -80,6 +97,23 @@ public class MainConfig : ModConfig
         
         [Label("Multi Crafting Station"), DefaultValue(true), ReloadRequired] 
         public bool MultiCraftingStation = true;
+        
+        public override bool Equals(object obj) {
+            if (obj is EnabledTilesConfig config)
+                return PreHMCraftingStation == config.PreHMCraftingStation &&
+                       HMCraftingStation == config.HMCraftingStation &&
+                       SpecCraftingStation == config.SpecCraftingStation &&
+                       TFCraftingStation == config.TFCraftingStation &&
+                       MultiCraftingStation == config.MultiCraftingStation;
+            
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return new {
+                PreHMCraftingStation, HMCraftingStation, SpecCraftingStation, TFCraftingStation, MultiCraftingStation
+            }.GetHashCode();
+        }
     }
     
     [SeparatePage]
@@ -93,5 +127,18 @@ public class MainConfig : ModConfig
 
         [Label("Improved Ruler"), DefaultValue(true), ReloadRequired] 
         public bool ImprovedRuler = true;
+        
+        public override bool Equals(object obj) {
+            if (obj is EnabledAccessoriesConfig config)
+                return BuildInPeace == config.BuildInPeace &&
+                       BuildingWrench == config.BuildingWrench &&
+                       ImprovedRuler == config.ImprovedRuler;
+
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
+        }
     }
 }
