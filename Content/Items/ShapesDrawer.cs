@@ -19,13 +19,12 @@ public class ShapesDrawer : BuilderEssentialsItem
         => ModContent.GetInstance<MainConfig>().EnabledItems.ShapesDrawer;
 
     public override void SetStaticDefaults() {
-        Tooltip.SetDefault("Used to draw shapes" +
-           "\nOpen its menu by clicking the arrow on the left of your screen when equipped" +
+        Tooltip.SetDefault("Used to draw shapes" + 
            "\nRight Click to make selection" +
-           "\nMiddle Click to select working tile" +
            "\nLeft Click to place blocks in the selection" +
+           "\nMiddle Click to select working tile" +
            "\n[c/FFCC00:Press LShift to make circles/squares]" +
-           "\n[c/FFCC00:Enables a selection menu on the left of the screen]");
+           "\n[c/FFCC00:Open its menu by clicking the squirrel builder under your opened inventory (must be being held)]");
     
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
