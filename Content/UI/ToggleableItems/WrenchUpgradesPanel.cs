@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using BuilderEssentials.Assets;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Common.Enums;
 using BuilderEssentials.Content.Items.Accessories;
 using Microsoft.Xna.Framework;
@@ -10,6 +11,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 
@@ -46,6 +48,9 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
                 elementHovered = true;
                 string upgradeType = ((WrenchUpgrades) index).ToString();
                 text = string.Concat(upgradeType.Select(c => Char.IsUpper(c) ? $" {c}" : $"{c}")).TrimStart(' ');
+
+                if (!ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
+                    text += "[c/FF0000: [Disabled by config][c/FF0000:]]";
             };
             
             elements[i].OnMouseOut += (__, _) => {
@@ -53,7 +58,10 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
                 text = "";
             };
 
-            elements[i].OnClick += (__, _) => ToggleUpgrade(index);
+            elements[i].OnClick += (__, _) => {
+                if (ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
+                    ToggleUpgrade(index);
+            };
             
             Append(elements[i]);
         }

@@ -19,6 +19,7 @@ public class BuildingWrench : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
     public int[] unlockedUpgrades;
+    private MainConfig.EnabledUpgradeModulesConfig upgradesConfig => ModContent.GetInstance<MainConfig>().EnabledUpgradeModules;
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
@@ -63,6 +64,8 @@ public class BuildingWrench : ModItem
                 "[c/FFCC00:Enable/Disable wrench upgrades in the bottom left menu!]"));
 
         for (int i = 0; i < (int) WrenchUpgrades.Count; i++) {
+            if (!upgradesConfig.EnabledUpgrades[i]) continue;
+            
             if (unlockedUpgrades[i] != 0) {
                 string upgradeType = ((WrenchUpgrades) i).ToString();
                 string tooltip = string.Concat(upgradeType.Select(c => Char.IsUpper(c) ? $" {c}" : $"{c}")).TrimStart(' ');
@@ -85,10 +88,10 @@ public class BuildingWrench : ModItem
         mp.EquippedWrenchInstance = this;
 
         var panel = ToggleableItemsUIState.GetUIPanel<WrenchUpgradesPanel>();
-        mp.FastPlacement = panel.enabledUpgrades[0];
-        mp.InfiniteRange = panel.enabledUpgrades[1];
-        mp.InfinitePlacement = panel.enabledUpgrades[2];
-        mp.InfinitePickupRange = panel.enabledUpgrades[3];
+        mp.FastPlacement = panel.enabledUpgrades[0] && upgradesConfig.FastPlacement;
+        mp.InfiniteRange = panel.enabledUpgrades[1] && upgradesConfig.InfiniteRange;
+        mp.InfinitePlacement = panel.enabledUpgrades[2] && upgradesConfig.InfinitePlacement;
+        mp.InfinitePickupRange = panel.enabledUpgrades[3] && upgradesConfig.InfinitePickupRange;
     }
 
     public static List<Recipe> upgradeRecipes = new ((int) WrenchUpgrades.Count);
@@ -105,6 +108,8 @@ public class BuildingWrench : ModItem
             .Register();
 
         for (int i = 0; i < (int) WrenchUpgrades.Count; i++) {
+            if (!upgradesConfig.EnabledUpgrades[i]) continue;
+
             int index = i;
             Recipe recipe = CreateRecipe()
                 .AddIngredient(Type)
@@ -131,41 +136,50 @@ public class BuildingWrench : ModItem
         }
         
         //Fast Placement
-        CreateRecipe()
-            .AddIngredient(ItemID.BrickLayer)
-            .AddIngredient(ItemID.PortableCementMixer)
-            .AddIngredient(ItemID.Sapphire, 5)
-            .AddTile(TileID.Anvils)
-            .Register().ReplaceResult(Mod, WrenchUpgrades.FastPlacement.ToString() + "Module");
-        
+        if (upgradesConfig.FastPlacement) {
+            CreateRecipe()
+                .AddIngredient(ItemID.BrickLayer)
+                .AddIngredient(ItemID.PortableCementMixer)
+                .AddIngredient(ItemID.Sapphire, 5)
+                .AddTile(TileID.Anvils)
+                .Register().ReplaceResult(Mod, WrenchUpgrades.FastPlacement.ToString() + "Module");
+        }
+
         //Infinite Range
-        CreateRecipe()
-            .AddIngredient(ItemID.ExtendoGrip)
-            .AddIngredient(ItemID.Toolbelt)
-            .AddIngredient(ItemID.Ruby, 5)
-            .AddTile(TileID.MythrilAnvil)
-            .Register().ReplaceResult(Mod, WrenchUpgrades.InfiniteRange.ToString() + "Module");
+        if (upgradesConfig.InfiniteRange) {
+            CreateRecipe()
+                .AddIngredient(ItemID.ExtendoGrip)
+                .AddIngredient(ItemID.Toolbelt)
+                .AddIngredient(ItemID.Ruby, 5)
+                .AddTile(TileID.MythrilAnvil)
+                .Register().ReplaceResult(Mod, WrenchUpgrades.InfiniteRange.ToString() + "Module");
+        }
+
         
         //Infinite Placement
-        CreateRecipe()
-            .AddIngredient(ItemID.TempleKey, 3)
-            .AddIngredient(ItemID.LihzahrdPowerCell, 5)
-            .AddIngredient(ItemID.Emerald, 5)
-            .AddTile(TileID.AdamantiteForge)
-            .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePlacement.ToString() + "Module");
-        
+        if (upgradesConfig.InfinitePlacement) {
+            CreateRecipe()
+                .AddIngredient(ItemID.TempleKey, 3)
+                .AddIngredient(ItemID.LihzahrdPowerCell, 5)
+                .AddIngredient(ItemID.Emerald, 5)
+                .AddTile(TileID.AdamantiteForge)
+                .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePlacement.ToString() + "Module");
+        }
+
         //Infinite Pickup Range
-        CreateRecipe()
-            .AddIngredient(ItemID.DemoniteOre, 20)
-            .AddIngredient(ItemID.Topaz, 5)
-            .AddTile(TileID.Anvils)
-            .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePickupRange.ToString() + "Module");
-        
-        CreateRecipe()
-            .AddIngredient(ItemID.CrimtaneOre, 20)
-            .AddIngredient(ItemID.Topaz, 5)
-            .AddTile(TileID.Anvils)
-            .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePickupRange.ToString() + "Module");
+        if (upgradesConfig.InfinitePickupRange) {
+            CreateRecipe()
+                .AddIngredient(ItemID.DemoniteOre, 20)
+                .AddIngredient(ItemID.Topaz, 5)
+                .AddTile(TileID.Anvils)
+                .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePickupRange.ToString() + "Module");
+
+            CreateRecipe()
+                .AddIngredient(ItemID.CrimtaneOre, 20)
+                .AddIngredient(ItemID.Topaz, 5)
+                .AddTile(TileID.Anvils)
+                .Register().ReplaceResult(Mod, WrenchUpgrades.InfinitePickupRange.ToString() + "Module");
+        }
     }
 
     public static UniqueQueue<Tuple<int[], WrenchUpgrades>> queuedRecipeChanges = new();

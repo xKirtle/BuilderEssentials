@@ -18,7 +18,6 @@ public class MainConfig : ModConfig
     public int MaxUndoNum = 20;
     
     [Label("Range % of the Inf. Pickup Range Upgrade Module")]
-    // [Label("[i/s1:54]")]
     [Tooltip("Anything above 20% will start picking up items offscreen")]
     [Range(1, 100), DefaultValue(20)]
     public int InfinitePickupRangeFloat = 20;
@@ -47,6 +46,9 @@ public class MainConfig : ModConfig
     
     [Label("Accessories"), ReloadRequired] 
     public EnabledAccessoriesConfig EnabledAccessories = new EnabledAccessoriesConfig();
+
+    [Label("Upgrade Modules"), ReloadRequired]
+    public EnabledUpgradeModulesConfig EnabledUpgradeModules = new EnabledUpgradeModulesConfig();
 
     [SeparatePage]
     public class EnabledItemsConfig
@@ -152,6 +154,40 @@ public class MainConfig : ModConfig
 
         public override int GetHashCode() {
             return new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
+        }
+    }
+
+    [SeparatePage]
+    public class EnabledUpgradeModulesConfig
+    {
+        [JsonIgnore] 
+        public bool[] EnabledUpgrades 
+            => new bool[] { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange };
+        
+        [Label("Fast Placement Upgrade Module"), DefaultValue(true), ReloadRequired]
+        public bool FastPlacement = true;
+        
+        [Label("Infinite Range Upgrade Module"), DefaultValue(true), ReloadRequired]
+        public bool InfiniteRange = true;
+        
+        [Label("Infinite Placement Upgrade Module"), DefaultValue(true), ReloadRequired]
+        public bool InfinitePlacement = true;
+        
+        [Label("Infinite Pickup Range Upgrade Module"), DefaultValue(true), ReloadRequired]
+        public bool InfinitePickupRange = true;
+        
+        public override bool Equals(object obj) {
+            if (obj is EnabledUpgradeModulesConfig config)
+                return FastPlacement == config.FastPlacement &&
+                       InfiniteRange == config.InfiniteRange &&
+                       InfinitePlacement == config.InfinitePlacement &&
+                       InfinitePickupRange == config.InfinitePickupRange;
+
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return new { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange }.GetHashCode();
         }
     }
 }

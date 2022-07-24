@@ -21,7 +21,7 @@ public class WrenchItemUpgrade : ModItem
     public override string Name => ((WrenchUpgrades) UpgradeNumber).ToString() + "Module";
 
     public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
+        => ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[UpgradeNumber];
     
     public override void SetDefaults() {
         Item.width = Item.height = 38;
