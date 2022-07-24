@@ -1,1 +1,1 @@
-- Opening the manage mods window should no longer require a mod reload unless some option in the config changed
+- The range used by the Infinite Pickup Range Upgrade Module can now be specified in the mod's config

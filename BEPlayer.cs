@@ -1,5 +1,6 @@
 using System;
 using BuilderEssentials.Common;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.Items;
 using BuilderEssentials.Content.Items.Accessories;
 using BuilderEssentials.Content.UI;
@@ -67,6 +68,6 @@ public class BEPlayer : ModPlayer
         }
         
         if (InfinitePickupRange)
-            Player.defaultItemGrabRange += 2000;
+            Player.defaultItemGrabRange += ModContent.GetInstance<MainConfig>().InfinitePickupRangeValue;
     }
 }

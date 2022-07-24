@@ -1,6 +1,8 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using BuilderEssentials.Content.UI;
+using Newtonsoft.Json;
 using Terraria;
 using Terraria.ModLoader.Config;
 
@@ -12,8 +14,18 @@ public class MainConfig : ModConfig
 
     [Label("Max Undo Times")]
     [Tooltip("The maximum amount of placements the game will remember and be able to undo")]
-    [Range(0, 100), DefaultValue(20), DrawTicks]
+    [Range(0, 100), DefaultValue(20)]
     public int MaxUndoNum = 20;
+    
+    [Label("Range % of the Inf. Pickup Range Upgrade Module")]
+    // [Label("[i/s1:54]")]
+    [Tooltip("Anything above 20% will start picking up items offscreen")]
+    [Range(1, 100), DefaultValue(20)]
+    public int InfinitePickupRangeFloat = 20;
+
+    [JsonIgnore]
+    public int InfinitePickupRangeValue => (int) (((float) InfinitePickupRangeFloat / 100f) * MaxPickupRange);
+    private const int MaxPickupRange = 3500;
 
     public override void OnChanged() {
         ShapesUIState.UpdateMaxUndoNum(MaxUndoNum);
@@ -22,6 +34,7 @@ public class MainConfig : ModConfig
     [OnDeserialized]
     internal void OnDeserializedMethod(StreamingContext context) {
         MaxUndoNum = Utils.Clamp(MaxUndoNum, 0, 100);
+        InfinitePickupRangeFloat = Utils.Clamp(InfinitePickupRangeFloat, 0, 100);
     }
 
     [Header("Enable or disable content from this mod")]
