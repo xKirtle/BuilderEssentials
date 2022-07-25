@@ -40,7 +40,11 @@ public class HistoryStack<T> where T : class
         return ls == null ? default : ls.Value;
     }
 
-    public T Peek() => items.Last?.Value ?? null;
+    public T Peek() {
+        return items.Last?.Value ?? null;
+    }
 
-    public void AddRange(List<T> list) => list.ForEach(item => Push(item));
+    public void AddRange(List<T> list) {
+        list.ForEach(item => Push(item));
+    }
 }

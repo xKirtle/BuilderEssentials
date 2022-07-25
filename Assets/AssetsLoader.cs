@@ -28,7 +28,11 @@ public static class AssetsLoader
         });
     }
 
-    public static Asset<Texture2D> GetAssets(string key) => texturesDictionary[key];
+    public static Asset<Texture2D> GetAssets(string key) {
+        return texturesDictionary[key];
+    }
 
-    internal static void UnloadTextures() => texturesDictionary = null;
+    internal static void UnloadTextures() {
+        texturesDictionary = null;
+    }
 }

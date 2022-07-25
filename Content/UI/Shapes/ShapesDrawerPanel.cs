@@ -10,10 +10,13 @@ namespace BuilderEssentials.Content.UI;
 
 public class ShapesDrawerPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem()
-        => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
+    public override bool IsHoldingBindingItem() {
+        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
+    }
 
-    public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
+    public override bool CanPlaceItems() {
+        return SelectedItem.type != ItemID.None;
+    }
 
     public override void PlotSelection() {
         ShapesDrawerMenuPanel menuPanel = ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>();

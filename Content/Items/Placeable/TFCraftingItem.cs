@@ -10,8 +10,9 @@ public class TFCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
+    }
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Themed Furniture Crafting Station");

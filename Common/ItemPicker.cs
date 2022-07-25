@@ -8,8 +8,9 @@ namespace BuilderEssentials.Common;
 
 public static class ItemPicker
 {
-    public static int PickItem(Tile tile)
-        => PickItem(new MinimalTile(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile)));
+    public static int PickItem(Tile tile) {
+        return PickItem(new MinimalTile(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile)));
+    }
 
     public static int PickItem(MinimalTile tile) {
         List<int> itemIDs = new List<int>();

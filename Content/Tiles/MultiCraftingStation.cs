@@ -20,8 +20,9 @@ public class MultiCraftingStation : BaseCraftingStation
     public override string DisplayName => "Multi Crafting Station";
     public override Color MapColor => Color.White * 0.65f;
 
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
+    }
 
     public override void SetTileObjectData() {
         DustType = DustID.Sandnado;
@@ -38,7 +39,9 @@ public class MultiCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() => Enumerable.Range(0, TileLoader.TileCount).ToArray();
+    public override int[] AdjacentTiles() {
+        return Enumerable.Range(0, TileLoader.TileCount).ToArray();
+    }
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
         frameNumber = frame;

@@ -84,11 +84,12 @@ public class MainConfig : ModConfig
             return base.Equals(obj);
         }
 
-        public override int GetHashCode()
-            => new {
+        public override int GetHashCode() {
+            return new {
                 AutoHammer, FillWand, InfinitePaintBucket, PaintBrush,
                 SpectrePaintBrush, MultiWand, MirrorWand, ShapesDrawer
             }.GetHashCode();
+        }
     }
 
     [SeparatePage]
@@ -121,10 +122,11 @@ public class MainConfig : ModConfig
             return base.Equals(obj);
         }
 
-        public override int GetHashCode()
-            => new {
+        public override int GetHashCode() {
+            return new {
                 PreHMCraftingStation, HMCraftingStation, SpecCraftingStation, TFCraftingStation, MultiCraftingStation
             }.GetHashCode();
+        }
     }
 
     [SeparatePage]
@@ -149,8 +151,9 @@ public class MainConfig : ModConfig
             return base.Equals(obj);
         }
 
-        public override int GetHashCode()
-            => new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
+        public override int GetHashCode() {
+            return new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
+        }
     }
 
     [SeparatePage]
@@ -183,7 +186,8 @@ public class MainConfig : ModConfig
             return base.Equals(obj);
         }
 
-        public override int GetHashCode()
-            => new { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange }.GetHashCode();
+        public override int GetHashCode() {
+            return new { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange }.GetHashCode();
+        }
     }
 }

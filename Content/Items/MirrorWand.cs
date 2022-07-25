@@ -11,8 +11,9 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class MirrorWand : BuilderEssentialsItem
 {
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledItems.MirrorWand;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledItems.MirrorWand;
+    }
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Mirrors everything!" +
@@ -35,7 +36,9 @@ public class MirrorWand : BuilderEssentialsItem
         Item.noMelee = true;
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(5, -7);
+    public override Vector2? HoldoutOffset() {
+        return new Vector2(5, -7);
+    }
 
     public override void AddRecipes() {
         CreateRecipe()

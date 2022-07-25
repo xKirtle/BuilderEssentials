@@ -11,10 +11,13 @@ namespace BuilderEssentials.Content.UI;
 
 public class FillWandPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem() =>
-        Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>();
+    public override bool IsHoldingBindingItem() {
+        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>();
+    }
 
-    public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
+    public override bool CanPlaceItems() {
+        return SelectedItem.type != ItemID.None;
+    }
 
     public override HashSet<Vector2> VisitedPlottedPixels => null;
 

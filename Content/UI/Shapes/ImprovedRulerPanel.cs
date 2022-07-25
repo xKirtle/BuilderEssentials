@@ -9,12 +9,17 @@ namespace BuilderEssentials.Content.UI;
 
 public class ImprovedRulerPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem()
-        => Main.LocalPlayer.HeldItem.IsAir && Main.LocalPlayer.GetModPlayer<BEPlayer>().IsImprovedRulerEquipped;
+    public override bool IsHoldingBindingItem() {
+        return Main.LocalPlayer.HeldItem.IsAir && Main.LocalPlayer.GetModPlayer<BEPlayer>().IsImprovedRulerEquipped;
+    }
 
-    public override bool CanPlaceItems() => false;
+    public override bool CanPlaceItems() {
+        return false;
+    }
 
-    public override bool SelectionHasChanged() => false;
+    public override bool SelectionHasChanged() {
+        return false;
+    }
 
     private HashSet<Vector2> visitedPlottedPixels = new HashSet<Vector2>();
     public override HashSet<Vector2> VisitedPlottedPixels => visitedPlottedPixels;

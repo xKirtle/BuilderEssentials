@@ -19,8 +19,9 @@ public class FillWand : BuilderEssentialsItem
 
     protected override bool CloneNewInstances => true;
 
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
+    }
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault(
@@ -58,7 +59,9 @@ public class FillWand : BuilderEssentialsItem
         }
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
+    public override Vector2? HoldoutOffset() {
+        return new Vector2(-2, -7);
+    }
 
     public override void HoldItem(Player player) {
         if (player.whoAmI != Main.myPlayer) return;

@@ -21,8 +21,9 @@ public class BuildingWrench : ModItem
     public int[] unlockedUpgrades;
     private MainConfig.EnabledUpgradeModulesConfig upgradesConfig => ModContent.GetInstance<MainConfig>().EnabledUpgradeModules;
 
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
+    }
 
     public override void SetDefaults() {
         Item.accessory = true;
@@ -76,8 +77,12 @@ public class BuildingWrench : ModItem
         }
     }
 
-    public override void SaveData(TagCompound tag) => tag[nameof(unlockedUpgrades)] = unlockedUpgrades.ToList();
-    public override void LoadData(TagCompound tag) => unlockedUpgrades = tag.Get<List<int>>(nameof(unlockedUpgrades)).ToArray();
+    public override void SaveData(TagCompound tag) {
+        tag[nameof(unlockedUpgrades)] = unlockedUpgrades.ToList();
+    }
+    public override void LoadData(TagCompound tag) {
+        unlockedUpgrades = tag.Get<List<int>>(nameof(unlockedUpgrades)).ToArray();
+    }
 
     public void UnlockUpgrade(WrenchUpgrades upgrade) {
         if (upgrade == WrenchUpgrades.Count) return;

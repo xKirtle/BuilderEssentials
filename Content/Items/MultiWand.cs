@@ -18,8 +18,9 @@ public class MultiWand : BaseItemToggleableUI
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledItems.MultiWand;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledItems.MultiWand;
+    }
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Wand");
@@ -50,7 +51,9 @@ public class MultiWand : BaseItemToggleableUI
         }
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(2, -9);
+    public override Vector2? HoldoutOffset() {
+        return new Vector2(2, -9);
+    }
 
     public override void AddRecipes() {
         CreateRecipe()

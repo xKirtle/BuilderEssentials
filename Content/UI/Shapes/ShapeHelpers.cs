@@ -34,10 +34,12 @@ public static class ShapeHelpers
     }
 
 #region Plot Line
-    public static void PlotLine(Vector2 start, Vector2 end, Color color, BaseShapePanel instance, float scale = 1f)
-        => PlotLine(start.X, start.Y, end.X, end.Y, color, instance, scale);
-    public static void PlotLine(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance, float scale = 1f)
-        => PlotLine((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale);
+    public static void PlotLine(Vector2 start, Vector2 end, Color color, BaseShapePanel instance, float scale = 1f) {
+        PlotLine(start.X, start.Y, end.X, end.Y, color, instance, scale);
+    }
+    public static void PlotLine(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance, float scale = 1f) {
+        PlotLine((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale);
+    }
     public static void PlotLine(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance, float scale = 1f) {
         int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
         int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
@@ -62,12 +64,14 @@ public static class ShapeHelpers
 
 #region Plot Rectangle
     public static void PlotRectangle(Vector2 start, Vector2 end, Color color, BaseShapePanel instance,
-        float scale = 1f, bool isFill = false, bool displaySize = true)
-        => PlotRectangle(start.X, start.Y, end.X, end.Y, color, instance, scale, isFill, displaySize);
+        float scale = 1f, bool isFill = false, bool displaySize = true) {
+        PlotRectangle(start.X, start.Y, end.X, end.Y, color, instance, scale, isFill, displaySize);
+    }
 
     public static void PlotRectangle(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance,
-        float scale = 1f, bool isFill = false, bool displaySize = true)
-        => PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale, isFill, displaySize);
+        float scale = 1f, bool isFill = false, bool displaySize = true) {
+        PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale, isFill, displaySize);
+    }
 
     public static void PlotRectangle(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance,
         float scale = 1f, bool isFill = false, bool displaySize = true) {
@@ -137,11 +141,13 @@ public static class ShapeHelpers
             PlotLine(points[i], points[i + 1], color, instance, scale);
     }
 
-    private static float X(float t, float x0, float x1, float x2)
-        => (float) (x0 * Math.Pow(1 - t, 2) + x1 * 2 * t * (1 - t) + x2 * Math.Pow(t, 2));
+    private static float X(float t, float x0, float x1, float x2) {
+        return (float) (x0 * Math.Pow(1 - t, 2) + x1 * 2 * t * (1 - t) + x2 * Math.Pow(t, 2));
+    }
 
-    private static float Y(float t, float y0, float y1, float y2)
-        => (float) (y0 * Math.Pow(1 - t, 2) + y1 * 2 * t * (1 - t) + y2 * Math.Pow(t, 2));
+    private static float Y(float t, float y0, float y1, float y2) {
+        return (float) (y0 * Math.Pow(1 - t, 2) + y1 * 2 * t * (1 - t) + y2 * Math.Pow(t, 2));
+    }
 
     private static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint, float t) {
         Vector2 newControlPoint = GetControlPointOfTheoricalControlPoint(startPoint, controlPoint, endPoint);
@@ -173,13 +179,15 @@ public static class ShapeHelpers
             PlotLine(points[i], points[i + 1], color, instance, scale);
     }
 
-    private static float X(float t, float x0, float x1, float x2, float x3)
-        => (float) (x0 * Math.Pow(1 - t, 3) + x1 * 3 * t * Math.Pow(1 - t, 2) +
-                    x2 * 3 * Math.Pow(t, 2) * (1 - t) + x3 * Math.Pow(t, 3));
+    private static float X(float t, float x0, float x1, float x2, float x3) {
+        return (float) (x0 * Math.Pow(1 - t, 3) + x1 * 3 * t * Math.Pow(1 - t, 2) +
+                        x2 * 3 * Math.Pow(t, 2) * (1 - t) + x3 * Math.Pow(t, 3));
+    }
 
-    private static float Y(float t, float y0, float y1, float y2, float y3)
-        => (float) (y0 * Math.Pow(1 - t, 3) + y1 * 3 * t * Math.Pow(1 - t, 2) +
-                    y2 * 3 * Math.Pow(t, 2) * (1 - t) + y3 * Math.Pow(t, 3));
+    private static float Y(float t, float y0, float y1, float y2, float y3) {
+        return (float) (y0 * Math.Pow(1 - t, 3) + y1 * 3 * t * Math.Pow(1 - t, 2) +
+                        y2 * 3 * Math.Pow(t, 2) * (1 - t) + y3 * Math.Pow(t, 3));
+    }
 
     private static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint,
         Vector2 controlPoint2, Vector2 endPoint, float t) {
@@ -191,12 +199,14 @@ public static class ShapeHelpers
 
 #region Plot Ellipse
     public static void PlotEllipse(Vector2 start, Vector2 end, Color color, BaseShapePanel instance,
-        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
-        => PlotEllipse(start.X, start.Y, end.X, end.Y, color, instance, shape, scale, isFill);
+        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
+        PlotEllipse(start.X, start.Y, end.X, end.Y, color, instance, shape, scale, isFill);
+    }
 
     public static void PlotEllipse(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance,
-        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
-        => PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, instance, shape, scale, isFill);
+        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
+        PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, instance, shape, scale, isFill);
+    }
 
     public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance,
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {

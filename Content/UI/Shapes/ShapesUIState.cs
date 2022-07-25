@@ -90,7 +90,9 @@ public abstract class BaseShapePanel : UIElement
     /// <summary>
     /// Sets <see cref="SelectedItem"/>
     /// </summary>
-    public void SetSelectedItem(int itemType) => SelectedItem.SetDefaults(itemType);
+    public void SetSelectedItem(int itemType) {
+        SelectedItem.SetDefaults(itemType);
+    }
 
     /// <summary>
     /// Define draw behaviour here
@@ -141,8 +143,9 @@ public abstract class BaseShapePanel : UIElement
         PlotSelection();
     }
 
-    public void QueuePlacement(Point coords)
-        => queuedPlacements.Enqueue(coords);
+    public void QueuePlacement(Point coords) {
+        queuedPlacements.Enqueue(coords);
+    }
 
     public void DequeuePlacement() {
         if (queuedPlacements.Count == 0) return;

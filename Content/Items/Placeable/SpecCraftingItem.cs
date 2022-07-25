@@ -10,8 +10,9 @@ public class SpecCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
+    }
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Specialized Crafting Station");

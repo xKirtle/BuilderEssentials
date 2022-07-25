@@ -18,9 +18,10 @@ namespace BuilderEssentials.Content.UI;
 
 public class PaintBrushPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem() =>
-        Main.LocalPlayer.HeldItem.type == ModContent.ItemType<PaintBrush>() ||
-        Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintBrush>();
+    public override bool IsHoldingBindingItem() {
+        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<PaintBrush>() ||
+               Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintBrush>();
+    }
 
     private const float ParentWidth = 430f, ParentHeight = 360f;
     private UIImageButton[] colorElements;

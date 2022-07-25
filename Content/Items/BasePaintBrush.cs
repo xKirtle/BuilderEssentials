@@ -33,7 +33,9 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         // ItemID.Sets.IsPaintScraper[Type] = true;
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(5, -8);
+    public override Vector2? HoldoutOffset() {
+        return new Vector2(5, -8);
+    }
 
     public override void UpdateInventory(Player player) {
         if (player.whoAmI != Main.myPlayer) return;

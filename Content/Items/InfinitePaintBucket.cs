@@ -10,8 +10,9 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class InfinitePaintBucket : BuilderEssentialsItem
 {
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledItems.InfinitePaintBucket;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledItems.InfinitePaintBucket;
+    }
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Allows infinite painting while in the inventory!");
@@ -31,7 +32,9 @@ public class InfinitePaintBucket : BuilderEssentialsItem
         Item.noUseGraphic = true;
     }
 
-    public override bool ConsumeItem(Player player) => false;
+    public override bool ConsumeItem(Player player) {
+        return false;
+    }
 
     public override void UpdateInventory(Player player) {
         if (player.whoAmI != Main.myPlayer) return;

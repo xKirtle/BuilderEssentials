@@ -15,8 +15,9 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class ShapesDrawer : BuilderEssentialsItem
 {
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledItems.ShapesDrawer;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledItems.ShapesDrawer;
+    }
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Used to draw shapes" +
@@ -53,7 +54,9 @@ public class ShapesDrawer : BuilderEssentialsItem
         }
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(-2, -9);
+    public override Vector2? HoldoutOffset() {
+        return new Vector2(-2, -9);
+    }
 
     public override void HoldItem(Player player) {
         if (player.whoAmI != Main.myPlayer) return;

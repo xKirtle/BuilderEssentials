@@ -24,31 +24,39 @@ public class MirrorWandPanel : BaseShapePanel
     private Vector2 mirStart => cs.LeftMouse.Start;
     private Vector2 mirEnd => cs.LeftMouse.End;
 
-    public override bool IsHoldingBindingItem()
-        => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();
+    public override bool IsHoldingBindingItem() {
+        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();
+    }
 
-    public override bool CanPlaceItems() => false;
+    public override bool CanPlaceItems() {
+        return false;
+    }
 
-    public override bool SelectionHasChanged() => false;
+    public override bool SelectionHasChanged() {
+        return false;
+    }
 
     public override HashSet<Vector2> VisitedPlottedPixels => null;
 
-    public bool IsMouseWithinSelection() =>
-        IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
-        IsWithinRange(Player.tileTargetY, selStart.Y, selEnd.Y);
+    public bool IsMouseWithinSelection() {
+        return IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
+               IsWithinRange(Player.tileTargetY, selStart.Y, selEnd.Y);
+    }
 
-    public bool IsMouseAffectedByMirrorAxis() =>
-        validMirrorPlacement && horizontalMirror && IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
-        Player.tileTargetY != mirStart.Y && Player.tileTargetY != mirEnd.Y ||
-        !horizontalMirror && IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) && Player.tileTargetX != mirStart.X &&
-        Player.tileTargetX != mirEnd.X;
+    public bool IsMouseAffectedByMirrorAxis() {
+        return validMirrorPlacement && horizontalMirror && IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
+               Player.tileTargetY != mirStart.Y && Player.tileTargetY != mirEnd.Y ||
+               !horizontalMirror && IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) && Player.tileTargetX != mirStart.X &&
+               Player.tileTargetX != mirEnd.X;
+    }
 
-    public bool IsMirrorAxisInsideSelection() =>
-        mirStart != mirEnd &&
-        IsWithinRange(mirStart.X, selStart.X, selEnd.X) &&
-        IsWithinRange(mirEnd.X, selStart.X, selEnd.X) &&
-        IsWithinRange(mirStart.Y, selStart.Y, selEnd.Y) &&
-        IsWithinRange(mirEnd.Y, selStart.Y, selEnd.Y);
+    public bool IsMirrorAxisInsideSelection() {
+        return mirStart != mirEnd &&
+               IsWithinRange(mirStart.X, selStart.X, selEnd.X) &&
+               IsWithinRange(mirEnd.X, selStart.X, selEnd.X) &&
+               IsWithinRange(mirStart.Y, selStart.Y, selEnd.Y) &&
+               IsWithinRange(mirEnd.Y, selStart.Y, selEnd.Y);
+    }
 
     //TODO: Check against wide Mirror scenarios
     public bool IsMouseLeftOrTopOfSelection() {

@@ -13,8 +13,9 @@ namespace BuilderEssentials.Common;
 
 public static class PlacementHelpers
 {
-    public static bool ValidTileCoordinates(int i, int j)
-        => i >= 0 && i < Main.maxTilesX && j >= 0 && j < Main.maxTilesY;
+    public static bool ValidTileCoordinates(int i, int j) {
+        return i >= 0 && i < Main.maxTilesX && j >= 0 && j < Main.maxTilesY;
+    }
 
 
     public static bool CanReduceItemStack(int type, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
@@ -60,8 +61,10 @@ public static class PlacementHelpers
     }
 
     public static bool PlaceMultiTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true)
-        //Call PlaceTile_PlaceIt?
-        => false;
+    //Call PlaceTile_PlaceIt?
+    {
+    return false;
+    }
 
     public static bool PlaceTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
         if (!ValidTileCoordinates(x, y)) return false;

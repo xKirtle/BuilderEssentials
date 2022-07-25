@@ -17,8 +17,9 @@ public class HMCraftingStation : BaseCraftingStation
     public override string DisplayName => "Hardmode Crafting Station";
     public override Color MapColor => new Color(191, 55, 64);
 
-    public override bool IsLoadingEnabled(Mod mod)
-        => ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) {
+        return ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
+    }
 
     public override void SetTileObjectData() {
         DustType = DustID.RedTorch;
@@ -34,10 +35,12 @@ public class HMCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() => new int[] {
-        TileID.MythrilAnvil, TileID.AdamantiteForge,
-        TileID.Bookcases, TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation
-    };
+    public override int[] AdjacentTiles() {
+        return new int[] {
+            TileID.MythrilAnvil, TileID.AdamantiteForge,
+            TileID.Bookcases, TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation
+        };
+    }
 
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {

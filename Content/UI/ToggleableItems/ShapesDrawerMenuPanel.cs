@@ -19,8 +19,9 @@ namespace BuilderEssentials.Content.UI;
 //This might be one of the worst pieces of code I ever wrote
 public class ShapesDrawerMenuPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem()
-        => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
+    public override bool IsHoldingBindingItem() {
+        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
+    }
 
     private const float ParentWidth = 230f, ParentHeight = 120f;
     private UIImage builderSquirrel;
@@ -98,17 +99,19 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         }
 
         void ClearAllSelections(int startIndex = 0) {
-            for (int i = startIndex; i < menuOptions.Length; i++)
+            for (int i = startIndex; i < menuOptions.Length; i++) {
                 if (menuOptions[i].IsSelected && i != 2)
                     menuOptions[i].ToggleSelection();
+            }
         }
 
         void ToggleHalfShapesVisibility(bool removeOnly = false) {
-            for (int i = 3; i < menuOptions.Length; i++)
+            for (int i = 3; i < menuOptions.Length; i++) {
                 if (menuOptions[i].Parent != null || removeOnly)
                     menuOptions[i].Remove();
                 else
                     Append(menuOptions[i]);
+            }
         }
 
         //Ellipse
@@ -131,9 +134,10 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
 
         //Fill
         menuOptions[2].OnClick += (__, _) => {
-            for (int i = 0; i < menuOptions.Length; i++)
+            for (int i = 0; i < menuOptions.Length; i++) {
                 if (i != 2)
                     menuOptions[i].ToggleFill();
+            }
 
             menuOptions[2].ToggleSelection();
             IsFilled = menuOptions[2].IsSelected;
@@ -255,9 +259,10 @@ public class ShapesMenuOption : UIImage
         UpdateTexture();
     }
 
-    public void UpdateTexture() =>
+    public void UpdateTexture() {
         actualOption.SetImage(AssetsLoader.GetAssets(
             $"{AssetsID.ShapesMenu}/{(IsFilled ? "Filled" : "")}{(IsSelected ? "Selected" : "")}Shape{OptionIndex}"));
+    }
 
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
