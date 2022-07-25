@@ -12,7 +12,7 @@ public class HMCraftingItem : ModItem
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
-    
+
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Hardmode Crafting Station");
         Tooltip.SetDefault("Used to craft Hardmode items");

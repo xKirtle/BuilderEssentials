@@ -10,9 +10,9 @@ public abstract class BuilderEssentialsItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/" + GetType().Name;
     // public override string Texture => $"{GetType().Namespace.Replace(".", "/").Replace("Content", "Assets")}/{GetType().Name}";
-    
+
     public virtual int ItemRange { get; protected set; } = 8;
-    
+
     public override void HoldItem(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
 
@@ -21,7 +21,7 @@ public abstract class BuilderEssentialsItem : ModItem
             player.cursorItemIconID = Type;
         }
     }
-    
+
     //TODO: Player.IsTargetTileInItemRange
     public bool ItemHasRange(float itemRangeInTiles = default) {
         Vector2 screenPosition = Main.screenPosition.ToTileCoordinates().ToVector2();

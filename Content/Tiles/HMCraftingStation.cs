@@ -14,7 +14,7 @@ namespace BuilderEssentials.Content.Tiles;
 [Autoload(true)]
 public class HMCraftingStation : BaseCraftingStation
 {
-    public override string DisplayName =>"Hardmode Crafting Station";
+    public override string DisplayName => "Hardmode Crafting Station";
     public override Color MapColor => new Color(191, 55, 64);
 
     public override bool IsLoadingEnabled(Mod mod)
@@ -22,11 +22,11 @@ public class HMCraftingStation : BaseCraftingStation
 
     public override void SetTileObjectData() {
         DustType = DustID.RedTorch;
-        
+
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.Origin = new Point16(1, 3);
         TileObjectData.newTile.CoordinatePadding = 2;
-        TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16};
+        TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16 };
         TileObjectData.newTile.Height = 4;
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.Width = 4;
@@ -34,10 +34,12 @@ public class HMCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() => new int[] { TileID.MythrilAnvil, TileID.AdamantiteForge, 
-        TileID.Bookcases, TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation };
+    public override int[] AdjacentTiles() => new int[] {
+        TileID.MythrilAnvil, TileID.AdamantiteForge,
+        TileID.Bookcases, TileID.CrystalBall, TileID.Autohammer, TileID.LunarCraftingStation
+    };
 
-    
+
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
         Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ModContent.ItemType<HMCraftingItem>());
     }

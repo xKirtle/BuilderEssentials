@@ -21,7 +21,7 @@ public class FillWand : BuilderEssentialsItem
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
-    
+
     public override void SetStaticDefaults() {
         Tooltip.SetDefault(
             "Fills or creates holes!" +
@@ -47,13 +47,15 @@ public class FillWand : BuilderEssentialsItem
 
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
         int insertIndex = tooltips.FindIndex(x => x.Text.Contains("Middle Click to select working tile"));
-        
-        if (insertIndex == -1)
-            tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:FillWand", 
-        $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
-        else
+
+        if (insertIndex == -1) {
+            tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:FillWand",
+                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
+        }
+        else {
             tooltips.Insert(insertIndex + 1, new TooltipLine(Mod, "BuilderEssentials:FillWand",
                 $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
+        }
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
@@ -61,14 +63,14 @@ public class FillWand : BuilderEssentialsItem
     public override void HoldItem(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
 
-        var panel = ShapesUIState.GetUIPanel<FillWandPanel>();
+        FillWandPanel panel = ShapesUIState.GetUIPanel<FillWandPanel>();
 
         if (Main.mouseMiddle && Main.mouseMiddleRelease && !player.mouseInterface) {
             Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
 
             //Does not support multi tiles
             if (TileObjectData.GetTileData(tile) == null) {
-                var itemType = ItemPicker.PickItem(tile);
+                int itemType = ItemPicker.PickItem(tile);
                 panel.SetSelectedItem(itemType);
                 Item.tileWand = itemType;
             }
@@ -79,7 +81,7 @@ public class FillWand : BuilderEssentialsItem
         if (!player.cursorItemIconEnabled) return;
         player.cursorItemIconID = panel.SelectedItem?.type ?? Type;
     }
-    
+
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient(ItemID.MoltenHamaxe)

@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\tModLoader.targets" />
-  <PropertyGroup>
-    <AssemblyName>BuilderEssentials</AssemblyName>
-    <TargetFramework>net6.0</TargetFramework>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Content\Items\PaintBrush.cs">
-      <DependentUpon>BasePaintBrush.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Items\SpectrePaintBrush.cs">
-      <DependentUpon>BasePaintBrush.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Items\AutoHammer.cs">
-      <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Items\MultiWand.cs">
-      <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Items\BasePaintBrush.cs">
-      <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Tiles\HMCraftingStation.cs">
-      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Tiles\MultiCraftingStation.cs">
-      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Tiles\PreHMCraftingStation.cs">
-      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Tiles\SpecCraftingStation.cs">
-      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\Tiles\TFCraftingStation.cs">
-      <DependentUpon>BaseCraftingStation.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\Shapes\FillWandPanel.cs">
-      <DependentUpon>ShapesUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\ToggleableItems\PaintBrushPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\ToggleableItems\MultiWandPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\ToggleableItems\AutoHammerPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\Shapes\MirrorWandPanel.cs">
-      <DependentUpon>ShapesUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\ToggleableItems\WrenchUpgradesPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\Shapes\ImprovedRulerPanel.cs">
-      <DependentUpon>ShapesUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\Shapes\ShapesDrawerPanel.cs">
-      <DependentUpon>ShapesUIState.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Content\UI\ToggleableItems\ShapesDrawerMenuPanel.cs">
-      <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <Import Project="..\tModLoader.targets"/>
+    <PropertyGroup>
+        <AssemblyName>BuilderEssentials</AssemblyName>
+        <TargetFramework>net6.0</TargetFramework>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Content\Items\PaintBrush.cs">
+            <DependentUpon>BasePaintBrush.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Items\SpectrePaintBrush.cs">
+            <DependentUpon>BasePaintBrush.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Items\AutoHammer.cs">
+            <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Items\MultiWand.cs">
+            <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Items\BasePaintBrush.cs">
+            <DependentUpon>BaseItemToggleableUI.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Tiles\HMCraftingStation.cs">
+            <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Tiles\MultiCraftingStation.cs">
+            <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Tiles\PreHMCraftingStation.cs">
+            <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Tiles\SpecCraftingStation.cs">
+            <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\Tiles\TFCraftingStation.cs">
+            <DependentUpon>BaseCraftingStation.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\Shapes\FillWandPanel.cs">
+            <DependentUpon>ShapesUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\ToggleableItems\PaintBrushPanel.cs">
+            <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\ToggleableItems\MultiWandPanel.cs">
+            <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\ToggleableItems\AutoHammerPanel.cs">
+            <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\Shapes\MirrorWandPanel.cs">
+            <DependentUpon>ShapesUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\ToggleableItems\WrenchUpgradesPanel.cs">
+            <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\Shapes\ImprovedRulerPanel.cs">
+            <DependentUpon>ShapesUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\Shapes\ShapesDrawerPanel.cs">
+            <DependentUpon>ShapesUIState.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Content\UI\ToggleableItems\ShapesDrawerMenuPanel.cs">
+            <DependentUpon>ToggleableItemsUIState.cs</DependentUpon>
+        </Compile>
+    </ItemGroup>
 </Project>

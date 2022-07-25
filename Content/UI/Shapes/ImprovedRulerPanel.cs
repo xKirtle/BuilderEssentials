@@ -9,21 +9,21 @@ namespace BuilderEssentials.Content.UI;
 
 public class ImprovedRulerPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem() 
+    public override bool IsHoldingBindingItem()
         => Main.LocalPlayer.HeldItem.IsAir && Main.LocalPlayer.GetModPlayer<BEPlayer>().IsImprovedRulerEquipped;
 
     public override bool CanPlaceItems() => false;
-    
+
     public override bool SelectionHasChanged() => false;
 
-    private HashSet<Vector2> visitedPlottedPixels = new();
+    private HashSet<Vector2> visitedPlottedPixels = new HashSet<Vector2>();
     public override HashSet<Vector2> VisitedPlottedPixels => visitedPlottedPixels;
 
     private Vector2 rulerStart => cs.RightMouse.Start;
     private Vector2 rulerEnd => cs.RightMouse.End;
     private Vector2 curveStart => cs.LeftMouse.Start;
     private Vector2 curveEnd => cs.LeftMouse.End;
-    
+
     private Color color = ShapeHelpers.Blue * 0.6f;
     public override void PlotSelection() {
         //Reset curve if ruler selection changes
@@ -46,13 +46,13 @@ public class ImprovedRulerPanel : BaseShapePanel
             text += "Number of tiles: ";
             pos = curveEnd;
         }
-        
-        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value,$"{text}{visitedPlottedPixels.Count}",
+
+        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, $"{text}{visitedPlottedPixels.Count}",
             pos * 16 - Main.screenPosition + new Vector2(18f, 18f), ShapeHelpers.Blue * 1.25f, 0f, Vector2.Zero, Vector2.One);
     }
 
     public override void UpdateRegardlessOfVisibility() {
-        if ((IsHoldingBindingItem() && !IsVisible) || (!IsHoldingBindingItem() && IsVisible))
+        if (IsHoldingBindingItem() && !IsVisible || !IsHoldingBindingItem() && IsVisible)
             ShapesUIState.TogglePanelVisibility<ImprovedRulerPanel>();
     }
 }

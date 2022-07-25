@@ -30,15 +30,15 @@ public class InfinitePaintBucket : BuilderEssentialsItem
         Item.noMelee = true;
         Item.noUseGraphic = true;
     }
-    
+
     public override bool ConsumeItem(Player player) => false;
-    
+
     public override void UpdateInventory(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
-        
+
         player.GetModPlayer<BEPlayer>().InfinitePaint = true;
     }
-    
+
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient(ItemID.DeepRedPaint, 999)

@@ -28,14 +28,14 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
     private bool elementHovered;
     private string text = "";
     public bool[] enabledUpgrades = new bool[ElementsCount];
-    
+
     public override void OnInitialize() {
         Width.Set(ParentWidth, 0);
         Height.Set(ParentHeight, 0);
         Left.Set(15f, 0f);
         Top.Set(-ParentHeight - 15f, 1f);
         SetPadding(0);
-        
+
         for (int i = 0; i < ElementsCount; i++) {
             int index = i;
             elements[i] = new UIImageButton(AssetsLoader.GetAssets($"{AssetsID.WrenchUpgradesToggle}/Toggle0"));
@@ -47,12 +47,12 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
             elements[i].OnMouseOver += (__, _) => {
                 elementHovered = true;
                 string upgradeType = ((WrenchUpgrades) index).ToString();
-                text = string.Concat(upgradeType.Select(c => Char.IsUpper(c) ? $" {c}" : $"{c}")).TrimStart(' ');
+                text = string.Concat(upgradeType.Select(c => char.IsUpper(c) ? $" {c}" : $"{c}")).TrimStart(' ');
 
                 if (!ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
                     text += "[c/FF0000: [Disabled by config][c/FF0000:]]";
             };
-            
+
             elements[i].OnMouseOut += (__, _) => {
                 elementHovered = false;
                 text = "";
@@ -62,7 +62,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
                 if (ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
                     ToggleUpgrade(index);
             };
-            
+
             Append(elements[i]);
         }
     }
@@ -71,7 +71,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
         BuildingWrench wrench = Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance as BuildingWrench;
         if (wrench?.unlockedUpgrades[index] != (int) UpgradeState.Locked)
             enabledUpgrades[index] = !enabledUpgrades[index];
-        
+
         if (!enabledUpgrades[index]) {
             elements[index].SetVisibility(.75f, .4f);
             SoundEngine.PlaySound(SoundID.MenuClose);
@@ -87,19 +87,19 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
 
         Left.Set(15f, 0f);
         Top.Set(-ParentHeight - 15f, 1f);
-        
+
         if (IsMouseHovering && elementHovered)
             Main.LocalPlayer.mouseInterface = true;
     }
 
     public override void UpdateRegardlessOfVisibility() {
-        if ((IsHoldingBindingItem() && !IsVisible) || (!IsHoldingBindingItem() && IsVisible))
+        if (IsHoldingBindingItem() && !IsVisible || !IsHoldingBindingItem() && IsVisible)
             ToggleableItemsUIState.TogglePanelVisibility<WrenchUpgradesPanel>();
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
         base.Draw(spriteBatch);
-        
+
         //Attempting to visually reset enabled toggles in case the wrench is switched to a different one
         BuildingWrench wrench = Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance as BuildingWrench;
         for (int i = 0; i < wrench?.unlockedUpgrades.Length; i++) {
@@ -109,7 +109,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
             }
         }
 
-        if (!String.IsNullOrEmpty(text)) {
+        if (!string.IsNullOrEmpty(text)) {
             Main.LocalPlayer.cursorItemIconEnabled = false;
             ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text,
                 BEPlayer.PointedScreenCoords + new Vector2(18f, 18f), Color.White, 0f, Vector2.Zero, Vector2.One);

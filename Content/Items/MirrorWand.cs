@@ -20,7 +20,7 @@ public class MirrorWand : BuilderEssentialsItem
                            "\nLeft Click to make a mirror axis" +
                            "\n[c/FFCC00:Press LShift to make circles/squares]" +
                            "\n[c/FF0000:Multiplayer usage can be bug prone!]");
-            
+
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
@@ -34,9 +34,9 @@ public class MirrorWand : BuilderEssentialsItem
         Item.autoReuse = true;
         Item.noMelee = true;
     }
-    
+
     public override Vector2? HoldoutOffset() => new Vector2(5, -7);
-    
+
     public override void AddRecipes() {
         CreateRecipe()
             .AddRecipeGroup("BuilderEssentials:Magic Mirror")

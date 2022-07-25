@@ -16,7 +16,7 @@ public class BEPlayer : ModPlayer
     public static Vector2 PointedWorldCoords => Main.MouseWorld;
     public static Vector2 PointedScreenCoords => Main.MouseScreen;
     public static Vector2 PointedTileCoords => new Vector2(Player.tileTargetX, Player.tileTargetY);
-    
+
     public bool InfinitePaint { get; set; }
     public bool IsImprovedRulerEquipped { get; set; }
     public bool FastPlacement { get; set; }
@@ -26,7 +26,7 @@ public class BEPlayer : ModPlayer
     public ModItem EquippedWrenchInstance { get; set; }
 
     public override void ResetEffects() {
-        InfinitePaint = IsImprovedRulerEquipped = FastPlacement = InfiniteRange = 
+        InfinitePaint = IsImprovedRulerEquipped = FastPlacement = InfiniteRange =
             InfinitePlacement = InfinitePickupRange = false;
         Player.defaultItemGrabRange = 42;
         EquippedWrenchInstance = null;
@@ -35,7 +35,7 @@ public class BEPlayer : ModPlayer
     public override void ProcessTriggers(TriggersSet triggersSet) {
         if (BuilderEssentials.FWIncrease.JustPressed && FillWand.FillSelectionSize < 6)
             FillWand.FillSelectionSize++;
-        
+
         if (BuilderEssentials.FWDecrease.JustPressed && FillWand.FillSelectionSize > 1)
             FillWand.FillSelectionSize--;
 
@@ -54,19 +54,19 @@ public class BEPlayer : ModPlayer
         MirrorPlacement.PlayerPostUpdate();
         BuildingWrench.DequeueRecipeChanges();
     }
-    
+
     public override void PostUpdateEquips() {
         if (InfiniteRange) {
             Player.tileRangeX += Main.screenWidth / 16 / 2;
             Player.tileRangeY += Main.screenHeight / 16 / 2;
             Player.blockRange += Main.screenWidth / 16 / 2;
         }
-        
+
         if (FastPlacement) {
             Player.tileSpeed += 500;
             Player.wallSpeed += 500;
         }
-        
+
         if (InfinitePickupRange)
             Player.defaultItemGrabRange += ModContent.GetInstance<MainConfig>().InfinitePickupRangeValue;
     }

@@ -12,7 +12,7 @@ public class MultiCraftingItem : ModItem
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
-    
+
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Crafting Station");
         Tooltip.SetDefault("Used to craft all items in the game");

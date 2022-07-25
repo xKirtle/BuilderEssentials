@@ -14,8 +14,8 @@ public class MouseSelection
     public bool IsDown { get; private set; }
     public event UIElement.ElementEvent OnClick;
     public event UIElement.ElementEvent OnMouseDown;
-    public Func<bool> CanUpdateCoords = (() => true);
-    
+    public Func<bool> CanUpdateCoords = () => true;
+
     public void MouseDown(UIMouseEvent evt, UIElement element) {
         if (CanUpdateCoords() && !Main.LocalPlayer.mouseInterface) {
             Start = End = new Vector2(Player.tileTargetX, Player.tileTargetY);
@@ -41,7 +41,7 @@ public class MouseSelection
         }
     }
 
-    void SquareCoords() {
+    private void SquareCoords() {
         int distanceX = (int) (End.X - Start.X);
         int distanceY = (int) (End.Y - Start.Y);
 
@@ -77,10 +77,10 @@ public class CoordSelection
     public Func<bool> CanUpdateCoords;
 
     public CoordSelection(UIState instance, Func<bool> canUpdateCoords = null) {
-        LeftMouse = new();
-        RightMouse = new();
-        MiddleMouse = new();
-        
+        LeftMouse = new MouseSelection();
+        RightMouse = new MouseSelection();
+        MiddleMouse = new MouseSelection();
+
         instance.OnMouseDown += LeftMouse.MouseDown;
         instance.OnMouseUp += LeftMouse.MouseUp;
         instance.OnRightMouseDown += RightMouse.MouseDown;
@@ -99,13 +99,13 @@ public class CoordSelection
         LeftMouse.UpdateCoords();
         MiddleMouse.UpdateCoords();
     }
-    
+
     public static bool IsWithinRange(float number, float value1, float value2, bool equal = false) {
         if (!equal)
-            return (number > value1 && number < value2) || (number < value1 && number > value2);
+            return number > value1 && number < value2 || number < value1 && number > value2;
         else
-            return (number >= value1 && number <= value2) || (number <= value1 && number >= value2);
+            return number >= value1 && number <= value2 || number <= value1 && number >= value2;
     }
-    
+
     //TODO: A way to know in which quadrant the end of the selection is (based on starting point)
 }

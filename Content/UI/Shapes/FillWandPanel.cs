@@ -15,9 +15,9 @@ public class FillWandPanel : BaseShapePanel
         Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>();
 
     public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
-    
+
     public override HashSet<Vector2> VisitedPlottedPixels => null;
-    
+
     public override void PlotSelection() {
         int size = FillWand.FillSelectionSize;
         for (int x = 0; x < size; x++)
@@ -30,14 +30,14 @@ public class FillWandPanel : BaseShapePanel
     public override bool SelectionHasChanged() {
         Vector2 newTileCoords = new Vector2(Player.tileTargetX, Player.tileTargetY);
         if (oldTileCoords == newTileCoords) return false;
-        
+
         oldTileCoords = newTileCoords;
         return true;
     }
-    
+
 
     public override void UpdateRegardlessOfVisibility() {
-        if ((IsHoldingBindingItem() && !IsVisible) || (!IsHoldingBindingItem() && IsVisible))
+        if (IsHoldingBindingItem() && !IsVisible || !IsHoldingBindingItem() && IsVisible)
             ShapesUIState.TogglePanelVisibility<FillWandPanel>();
     }
 }

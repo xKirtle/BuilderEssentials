@@ -14,7 +14,7 @@ namespace BuilderEssentials.Content.Tiles;
 [Autoload(true)]
 public class PreHMCraftingStation : BaseCraftingStation
 {
-    public override string DisplayName =>"Pre Hardmode Crafting Station";
+    public override string DisplayName => "Pre Hardmode Crafting Station";
     public override Color MapColor => new Color(36, 151, 64);
 
     public override bool IsLoadingEnabled(Mod mod)
@@ -22,7 +22,7 @@ public class PreHMCraftingStation : BaseCraftingStation
 
     public override void SetTileObjectData() {
         DustType = DustID.CursedTorch;
-        
+
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.Origin = new Point16(1, 2);
         TileObjectData.newTile.CoordinatePadding = 2;
@@ -34,12 +34,14 @@ public class PreHMCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() => new int[] { TileID.WorkBenches, TileID.Furnaces, TileID.Hellforge, 
-        TileID.Anvils, TileID.Bottles, TileID.Pots, TileID.AlchemyTable, TileID.Sinks, TileID.Sawmill, TileID.Loom, 
-        TileID.Chairs, TileID.Tables, TileID.Tables2, TileID.CookingPots, TileID.TinkerersWorkbench, TileID.ImbuingStation, 
-        TileID.DyeVat, TileID.HeavyWorkBench, TileID.DemonAltar };
+    public override int[] AdjacentTiles() => new int[] {
+        TileID.WorkBenches, TileID.Furnaces, TileID.Hellforge,
+        TileID.Anvils, TileID.Bottles, TileID.Pots, TileID.AlchemyTable, TileID.Sinks, TileID.Sawmill, TileID.Loom,
+        TileID.Chairs, TileID.Tables, TileID.Tables2, TileID.CookingPots, TileID.TinkerersWorkbench, TileID.ImbuingStation,
+        TileID.DyeVat, TileID.HeavyWorkBench, TileID.DemonAltar
+    };
 
-    
+
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
         Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ModContent.ItemType<PreHMCraftingItem>());
     }

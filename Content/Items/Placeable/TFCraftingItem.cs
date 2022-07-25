@@ -12,7 +12,7 @@ public class TFCraftingItem : ModItem
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
-    
+
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Themed Furniture Crafting Station");
         Tooltip.SetDefault("Used to craft Themed Furniture items");

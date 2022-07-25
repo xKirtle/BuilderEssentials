@@ -13,7 +13,7 @@ namespace BuilderEssentials.Content.Items;
 public class WrenchItemUpgrade : ModItem
 {
     public int UpgradeNumber { get; set; }
-    string ItemTexture = "BuilderEssentials/Assets/Items/WrenchUpgrades/Upgrade";
+    private string ItemTexture = "BuilderEssentials/Assets/Items/WrenchUpgrades/Upgrade";
     public override string Texture => ItemTexture + UpgradeNumber;
     protected override bool CloneNewInstances => true;
 
@@ -22,7 +22,7 @@ public class WrenchItemUpgrade : ModItem
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[UpgradeNumber];
-    
+
     public override void SetDefaults() {
         Item.width = Item.height = 38;
         Item.value = Item.sellPrice(0);
@@ -30,7 +30,9 @@ public class WrenchItemUpgrade : ModItem
     }
 
     public WrenchItemUpgrade() { }
-    public WrenchItemUpgrade(int upgradeNumber) => UpgradeNumber = upgradeNumber;
+    public WrenchItemUpgrade(int upgradeNumber) {
+        UpgradeNumber = upgradeNumber;
+    }
 
     public override ModItem Clone(Item newEntity) {
         WrenchItemUpgrade newInstance = (WrenchItemUpgrade) base.Clone(newEntity);

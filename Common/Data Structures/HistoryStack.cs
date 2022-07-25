@@ -19,7 +19,7 @@ public class HistoryStack<T> where T : class
         //So we don't need to reload the mod in case the capacity changes
         while (capacity < items.Count)
             items.RemoveFirst();
-        
+
         Capacity = capacity;
     }
 
@@ -27,15 +27,15 @@ public class HistoryStack<T> where T : class
         if (items.Count == Capacity) {
             items.RemoveFirst();
         }
-        
+
         items.AddLast(item);
     }
 
     public T Pop() {
         if (items.Count == 0)
             return default;
-        
-        var ls = items.Last;
+
+        LinkedListNode<T> ls = items.Last;
         items.RemoveLast();
         return ls == null ? default : ls.Value;
     }

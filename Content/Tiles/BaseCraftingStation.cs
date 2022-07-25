@@ -29,9 +29,9 @@ public abstract class BaseCraftingStation : ModTile
         TileObjectData.newTile.WaterDeath = true;
         TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
         TileObjectData.newTile.LavaPlacement = LiquidPlacement.NotAllowed;
-        
+
         SetTileObjectData();
-        
+
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
@@ -51,12 +51,12 @@ public abstract class BaseCraftingStation : ModTile
         float distance = Math.Min(Math.Abs(Vector2.Subtract(player, tile).Length()), 500f);
         float fluctuation = 1 - distance / 500;
         if (Framing.GetTileSafely(i, j).TileType == Type) {
-            r = ((float)MapColor.R / 255f) * fluctuation;
-            g = ((float)MapColor.G / 255f) * fluctuation;
-            b = ((float)MapColor.B / 255f) * fluctuation;
+            r = (float) MapColor.R / 255f * fluctuation;
+            g = (float) MapColor.G / 255f * fluctuation;
+            b = (float) MapColor.B / 255f * fluctuation;
         }
     }
-    
+
     public abstract void SetTileObjectData();
 
     public abstract int[] AdjacentTiles();

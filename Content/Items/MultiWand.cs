@@ -20,7 +20,7 @@ public class MultiWand : BaseItemToggleableUI
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledItems.MultiWand;
-    
+
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Wand");
         Tooltip.SetDefault("Contains all building wands into one!\n" +
@@ -30,7 +30,7 @@ public class MultiWand : BaseItemToggleableUI
 
     public override void SetDefaults() {
         base.SetDefaults();
-        
+
         Item.width = Item.height = 44;
         Item.useTime = Item.useAnimation = 10;
         Item.useStyle = ItemUseStyleID.Shoot;
@@ -40,11 +40,11 @@ public class MultiWand : BaseItemToggleableUI
         Item.noMelee = true;
         Item.autoReuse = true;
         Item.tileWand = WandMaterials[0];
-        
+
         //I'm not sure why, but this is required for the tileWand to be the correct value when I access it..?
         //Updating it in UpdateInventory doesn't seem to do it. Maybe call order is at stake?
         if (Main.netMode != NetmodeID.Server && !Main.dedServ) {
-            var panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
+            MultiWandPanel panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
             Item.tileWand = WandMaterials[panel?.selectedIndex ?? 0];
             Item.createTile = WandPlacedTiles[panel?.selectedIndex ?? 0];
         }
@@ -63,12 +63,12 @@ public class MultiWand : BaseItemToggleableUI
             .AddTile(TileID.TinkerersWorkbench)
             .Register();
     }
-    
+
     public static readonly int[] WandTypes = {
-        ItemID.LivingWoodWand, ItemID.BoneWand, ItemID.LeafWand, 
+        ItemID.LivingWoodWand, ItemID.BoneWand, ItemID.LeafWand,
         ItemID.HiveWand, ItemID.LivingMahoganyWand, ItemID.LivingMahoganyLeafWand
     };
-        
+
     public static readonly int[] WandMaterials = {
         ItemID.Wood, ItemID.Bone, ItemID.Wood,
         ItemID.Hive, ItemID.RichMahogany, ItemID.RichMahogany
@@ -88,8 +88,8 @@ public class MultiWand : BaseItemToggleableUI
 
     public override void UpdateInventory(Player player) {
         if (player.whoAmI != Main.myPlayer) return;
-        
-        var panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
+
+        MultiWandPanel panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
         Item.tileWand = WandMaterials[panel.selectedIndex];
         Item.createTile = WandPlacedTiles[panel.selectedIndex];
     }

@@ -21,7 +21,7 @@ public class AutoHammer : BaseItemToggleableUI
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 
-    public override bool IsLoadingEnabled(Mod mod) 
+    public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledItems.AutoHammer;
 
     public override void SetStaticDefaults() {
@@ -33,7 +33,7 @@ public class AutoHammer : BaseItemToggleableUI
 
     public override void SetDefaults() {
         base.SetDefaults();
-        
+
         Item.width = Item.height = 44;
         Item.useTime = Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.Swing;
@@ -61,7 +61,7 @@ public class AutoHammer : BaseItemToggleableUI
     public override bool CanUseItem(Player player) {
         if (player.whoAmI != Main.myPlayer || !ItemHasRange()) return true;
 
-        var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
+        AutoHammerPanel panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
         if (panel.selectedIndex != -1) {
             Item.hammer = 0;
             canChangeSlope = true;
@@ -69,13 +69,13 @@ public class AutoHammer : BaseItemToggleableUI
 
         return true;
     }
-    
+
     public override bool? UseItem(Player player) {
         if (player.whoAmI == Main.myPlayer && IsPanelVisible())
             TogglePanel();
-        
+
         if (canChangeSlope) {
-            var panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
+            AutoHammerPanel panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             //Can the selected index change between CanUseItem and UseItem at all?
             if (panel.selectedIndex != -1) {
                 Point16 coords = new Point16(Player.tileTargetX, Player.tileTargetY);
@@ -84,7 +84,7 @@ public class AutoHammer : BaseItemToggleableUI
                 //Add MirrorPlacement logic
                 Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
                 MirrorPlacement.MirrorPlacementAction(mirroredCoords => {
-                    int[] mirroredSlopes = new[] {0, 2, 1, 4, 3};
+                    int[] mirroredSlopes = new[] { 0, 2, 1, 4, 3 };
                     ChangeSlope(mirroredCoords, (SlopeType) mirroredSlopes[(int) tile.Slope], tile.IsHalfBlock);
                 });
             }
@@ -102,11 +102,11 @@ public class AutoHammer : BaseItemToggleableUI
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {
             //Prevent unnecessary changes to the tile and MP sync
             if (tile.Slope == slopeType && tile.IsHalfBlock == isHalfBlock) return;
-            
+
             tile.IsHalfBlock = isHalfBlock;
             tile.Slope = isHalfBlock ? SlopeType.Solid : slopeType;
 
-            WorldGen.KillTile(coords.X, coords.Y, fail: true, effectOnly: true);
+            WorldGen.KillTile(coords.X, coords.Y, true, true);
             WorldGen.SquareTileFrame(coords.X, coords.Y, true);
             SoundEngine.PlaySound(SoundID.Dig);
 

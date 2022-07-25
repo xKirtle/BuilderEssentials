@@ -17,12 +17,12 @@ public class BuildInPeace : ModItem
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildInPeace;
-    
+
     public override void SetDefaults() {
         Item.accessory = true;
         Item.vanity = false;
         Item.width = Item.height = 42;
-        Item.value = Item.sellPrice(0,50, 0, 0);
+        Item.value = Item.sellPrice(0, 50, 0, 0);
         Item.rare = ItemRarityID.Red;
     }
 
@@ -32,14 +32,14 @@ public class BuildInPeace : ModItem
         Main.stopMoonEvent();
         Main.StopSlimeRain(false);
         Main.eclipse = false;
-        Main.invasionType = 0; 
+        Main.invasionType = 0;
         Main.invasionDelay = 0;
         Main.invasionSize = 0;
         Main.dayTime = true;
         Main.time = 27000; //mid day
         Main.fastForwardTime = false;
 
-        foreach (var npc in Main.npc) {
+        foreach (NPC npc in Main.npc) {
             //Don't want to remove town NPC's
             if (!npc.townNPC)
                 npc.active = false;

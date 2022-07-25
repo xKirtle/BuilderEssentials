@@ -26,8 +26,8 @@ public abstract class UISystem<T> : ModSystem where T : UIState, new()
     protected GameTime lastUpdateUiGameTime;
 
     public override void Load() {
-        userInterface = new();
-        uiState = new();
+        userInterface = new UserInterface();
+        uiState = new T();
         userInterface.SetState(uiState);
     }
 

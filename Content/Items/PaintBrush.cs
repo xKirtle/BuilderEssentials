@@ -16,14 +16,14 @@ public class PaintBrush : BasePaintBrush
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledItems.PaintBrush;
-    
+
     public override void HoldItem(Player player) {
         base.HoldItem(player);
         if (player.whoAmI != Main.myPlayer) return;
 
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-        var panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
-        
+        PaintBrushPanel panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
+
         switch (panel.toolIndex) {
             case 0:
                 if (tile.TileType >= 0 && tile.HasTile)

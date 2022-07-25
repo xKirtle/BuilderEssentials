@@ -14,10 +14,10 @@ public class SpectrePaintBrush : BasePaintBrush
 
     public override bool IsLoadingEnabled(Mod mod)
         => ModContent.GetInstance<MainConfig>().EnabledItems.SpectrePaintBrush;
-    
+
     public override void SetDefaults() {
         base.SetDefaults();
-        
+
         Item.useTime = Item.useAnimation = 7;
     }
 
@@ -26,8 +26,8 @@ public class SpectrePaintBrush : BasePaintBrush
         if (player.whoAmI != Main.myPlayer) return;
 
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-        var panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
-        
+        PaintBrushPanel panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
+
         switch (panel.toolIndex) {
             case 0:
                 if (tile.TileType >= 0 && tile.HasTile)
@@ -43,7 +43,7 @@ public class SpectrePaintBrush : BasePaintBrush
                 break;
         }
     }
-    
+
     public override void AddRecipes() {
         CreateRecipe()
             .AddIngredient(ItemID.SpectrePaintbrush)

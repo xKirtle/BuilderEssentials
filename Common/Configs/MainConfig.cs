@@ -12,39 +12,35 @@ public class MainConfig : ModConfig
 {
     public override ConfigScope Mode => ConfigScope.ServerSide;
 
-    [Label("Max Undo Times")]
-    [Tooltip("The maximum amount of placements the game will remember and be able to undo")]
-    [Range(0, 100), DefaultValue(20)]
+    [Label("Max Undo Times"), Tooltip("The maximum amount of placements the game will remember and be able to undo"), Range(0, 100),
+     DefaultValue(20)]
     public int MaxUndoNum = 20;
-    
-    [Label("Range % of the Inf. Pickup Range Upgrade Module")]
-    [Tooltip("Anything above 20% will start picking up items offscreen")]
-    [Range(1, 100), DefaultValue(20)]
+
+    [Label("Range % of the Inf. Pickup Range Upgrade Module"), Tooltip("Anything above 20% will start picking up items offscreen"),
+     Range(1, 100), DefaultValue(20)]
     public int InfinitePickupRangeFloat = 20;
 
     [JsonIgnore]
-    public int InfinitePickupRangeValue => (int) (((float) InfinitePickupRangeFloat / 100f) * MaxPickupRange);
+    public int InfinitePickupRangeValue => (int) ((float) InfinitePickupRangeFloat / 100f * MaxPickupRange);
     private const int MaxPickupRange = 3500;
 
     public override void OnChanged() {
         ShapesUIState.UpdateMaxUndoNum(MaxUndoNum);
     }
-    
+
     [OnDeserialized]
     internal void OnDeserializedMethod(StreamingContext context) {
         MaxUndoNum = Utils.Clamp(MaxUndoNum, 0, 100);
         InfinitePickupRangeFloat = Utils.Clamp(InfinitePickupRangeFloat, 0, 100);
     }
 
-    [Header("Enable or disable content from this mod")]
-    
-    [Label("Items"), ReloadRequired]
+    [Header("Enable or disable content from this mod"), Label("Items"), ReloadRequired]
     public EnabledItemsConfig EnabledItems = new EnabledItemsConfig();
 
-    [Label("Tiles"), ReloadRequired] 
+    [Label("Tiles"), ReloadRequired]
     public EnabledTilesConfig EnabledTiles = new EnabledTilesConfig();
-    
-    [Label("Accessories"), ReloadRequired] 
+
+    [Label("Accessories"), ReloadRequired]
     public EnabledAccessoriesConfig EnabledAccessories = new EnabledAccessoriesConfig();
 
     [Label("Upgrade Modules"), ReloadRequired]
@@ -53,141 +49,141 @@ public class MainConfig : ModConfig
     [SeparatePage]
     public class EnabledItemsConfig
     {
-        [Label("Auto Hammer"), DefaultValue(true), ReloadRequired] 
+        [Label("Auto Hammer"), DefaultValue(true), ReloadRequired]
         public bool AutoHammer = true;
 
-        [Label("Fill Wand"), DefaultValue(true), ReloadRequired] 
+        [Label("Fill Wand"), DefaultValue(true), ReloadRequired]
         public bool FillWand = true;
 
-        [Label("Infinite Paint Bucket"), DefaultValue(true), ReloadRequired] 
+        [Label("Infinite Paint Bucket"), DefaultValue(true), ReloadRequired]
         public bool InfinitePaintBucket = true;
 
-        [Label("Paint Brush"), DefaultValue(true), ReloadRequired] 
+        [Label("Paint Brush"), DefaultValue(true), ReloadRequired]
         public bool PaintBrush = true;
 
-        [Label("Spectre Paint Brush"), DefaultValue(true), ReloadRequired] 
+        [Label("Spectre Paint Brush"), DefaultValue(true), ReloadRequired]
         public bool SpectrePaintBrush = true;
 
-        [Label("Multi Wand"), DefaultValue(true), ReloadRequired] 
+        [Label("Multi Wand"), DefaultValue(true), ReloadRequired]
         public bool MultiWand = true;
 
-        [Label("Mirror Wand"), DefaultValue(true), ReloadRequired] 
+        [Label("Mirror Wand"), DefaultValue(true), ReloadRequired]
         public bool MirrorWand = true;
 
-        [Label("Shapes Drawer"), DefaultValue(true), ReloadRequired] 
+        [Label("Shapes Drawer"), DefaultValue(true), ReloadRequired]
         public bool ShapesDrawer = true;
 
         public override bool Equals(object obj) {
-            if (obj is EnabledItemsConfig config)
+            if (obj is EnabledItemsConfig config) {
                 return AutoHammer == config.AutoHammer && FillWand == config.FillWand &&
                        InfinitePaintBucket == config.InfinitePaintBucket && PaintBrush == config.PaintBrush &&
                        SpectrePaintBrush == config.SpectrePaintBrush && MultiWand == config.MultiWand &&
                        MirrorWand == config.MirrorWand && ShapesDrawer == config.ShapesDrawer;
-            
+            }
+
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new {
-                AutoHammer, FillWand, InfinitePaintBucket, PaintBrush, 
+        public override int GetHashCode()
+            => new {
+                AutoHammer, FillWand, InfinitePaintBucket, PaintBrush,
                 SpectrePaintBrush, MultiWand, MirrorWand, ShapesDrawer
             }.GetHashCode();
-        }
     }
 
     [SeparatePage]
     public class EnabledTilesConfig
     {
-        [Label("Pre Hardmode Crafting Station"), DefaultValue(true), ReloadRequired] 
+        [Label("Pre Hardmode Crafting Station"), DefaultValue(true), ReloadRequired]
         public bool PreHMCraftingStation = true;
-        
-        [Label("Hardmode Crafting Station"), DefaultValue(true), ReloadRequired] 
+
+        [Label("Hardmode Crafting Station"), DefaultValue(true), ReloadRequired]
         public bool HMCraftingStation = true;
-        
-        [Label("Specialized Crafting Station"), DefaultValue(true), ReloadRequired] 
+
+        [Label("Specialized Crafting Station"), DefaultValue(true), ReloadRequired]
         public bool SpecCraftingStation = true;
-        
-        [Label("Themed Furniture Crafting Station"), DefaultValue(true), ReloadRequired] 
+
+        [Label("Themed Furniture Crafting Station"), DefaultValue(true), ReloadRequired]
         public bool TFCraftingStation = true;
-        
-        [Label("Multi Crafting Station"), DefaultValue(true), ReloadRequired] 
+
+        [Label("Multi Crafting Station"), DefaultValue(true), ReloadRequired]
         public bool MultiCraftingStation = true;
-        
+
         public override bool Equals(object obj) {
-            if (obj is EnabledTilesConfig config)
+            if (obj is EnabledTilesConfig config) {
                 return PreHMCraftingStation == config.PreHMCraftingStation &&
                        HMCraftingStation == config.HMCraftingStation &&
                        SpecCraftingStation == config.SpecCraftingStation &&
                        TFCraftingStation == config.TFCraftingStation &&
                        MultiCraftingStation == config.MultiCraftingStation;
-            
+            }
+
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new {
+        public override int GetHashCode()
+            => new {
                 PreHMCraftingStation, HMCraftingStation, SpecCraftingStation, TFCraftingStation, MultiCraftingStation
             }.GetHashCode();
-        }
     }
-    
+
     [SeparatePage]
     public class EnabledAccessoriesConfig
     {
-        [Label("Build In Peace"), DefaultValue(true), ReloadRequired] 
+        [Label("Build In Peace"), DefaultValue(true), ReloadRequired]
         public bool BuildInPeace = true;
 
-        [Label("Building Wrench"), DefaultValue(true), ReloadRequired] 
+        [Label("Building Wrench"), DefaultValue(true), ReloadRequired]
         public bool BuildingWrench = true;
 
-        [Label("Improved Ruler"), DefaultValue(true), ReloadRequired] 
+        [Label("Improved Ruler"), DefaultValue(true), ReloadRequired]
         public bool ImprovedRuler = true;
-        
+
         public override bool Equals(object obj) {
-            if (obj is EnabledAccessoriesConfig config)
+            if (obj is EnabledAccessoriesConfig config) {
                 return BuildInPeace == config.BuildInPeace &&
                        BuildingWrench == config.BuildingWrench &&
                        ImprovedRuler == config.ImprovedRuler;
+            }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
-        }
+        public override int GetHashCode()
+            => new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
     }
 
     [SeparatePage]
     public class EnabledUpgradeModulesConfig
     {
-        [JsonIgnore] 
-        public bool[] EnabledUpgrades 
+        [JsonIgnore]
+        public bool[] EnabledUpgrades
             => new bool[] { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange };
-        
+
         [Label("Fast Placement Upgrade Module"), DefaultValue(true), ReloadRequired]
         public bool FastPlacement = true;
-        
+
         [Label("Infinite Range Upgrade Module"), DefaultValue(true), ReloadRequired]
         public bool InfiniteRange = true;
-        
+
         [Label("Infinite Placement Upgrade Module"), DefaultValue(true), ReloadRequired]
         public bool InfinitePlacement = true;
-        
+
         [Label("Infinite Pickup Range Upgrade Module"), DefaultValue(true), ReloadRequired]
         public bool InfinitePickupRange = true;
-        
+
         public override bool Equals(object obj) {
-            if (obj is EnabledUpgradeModulesConfig config)
+            if (obj is EnabledUpgradeModulesConfig config) {
                 return FastPlacement == config.FastPlacement &&
                        InfiniteRange == config.InfiniteRange &&
                        InfinitePlacement == config.InfinitePlacement &&
                        InfinitePickupRange == config.InfinitePickupRange;
+            }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange }.GetHashCode();
-        }
+        public override int GetHashCode()
+            => new { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange }.GetHashCode();
     }
 }

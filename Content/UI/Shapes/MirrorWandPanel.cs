@@ -30,20 +30,19 @@ public class MirrorWandPanel : BaseShapePanel
     public override bool CanPlaceItems() => false;
 
     public override bool SelectionHasChanged() => false;
-    
+
     public override HashSet<Vector2> VisitedPlottedPixels => null;
 
     public bool IsMouseWithinSelection() =>
         IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
         IsWithinRange(Player.tileTargetY, selStart.Y, selEnd.Y);
-    
+
     public bool IsMouseAffectedByMirrorAxis() =>
-        validMirrorPlacement &&
-        (horizontalMirror && IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
-         (Player.tileTargetY != mirStart.Y && Player.tileTargetY != mirEnd.Y)) ||
-        (!horizontalMirror && IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) &&
-         (Player.tileTargetX != mirStart.X && Player.tileTargetX != mirEnd.X));
-    
+        validMirrorPlacement && horizontalMirror && IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
+        Player.tileTargetY != mirStart.Y && Player.tileTargetY != mirEnd.Y ||
+        !horizontalMirror && IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) && Player.tileTargetX != mirStart.X &&
+        Player.tileTargetX != mirEnd.X;
+
     public bool IsMirrorAxisInsideSelection() =>
         mirStart != mirEnd &&
         IsWithinRange(mirStart.X, selStart.X, selEnd.X) &&
@@ -60,7 +59,7 @@ public class MirrorWandPanel : BaseShapePanel
     public override void PlotSelection() {
         //Selected area
         ShapeHelpers.PlotRectangle(selStart, selEnd, ShapeHelpers.Blue * 0.6f, this, 0.90f, false);
-        
+
         //Mirror
         LimitMirrorSize();
         validMirrorPlacement = IsMirrorAxisInsideSelection();
@@ -75,13 +74,13 @@ public class MirrorWandPanel : BaseShapePanel
         int dx = (int) Math.Abs(start.X - end.X);
         int dy = (int) Math.Abs(start.Y - end.Y);
         horizontalMirror = dx > dy;
-            
+
         //Limit x coords
         if (!horizontalMirror && end.X < start.X - 1)
             end.X = start.X - 1;
         else if (!horizontalMirror && end.X > start.X + 1)
             end.X = start.X + 1;
-            
+
         //Limit y coords
         if (horizontalMirror && end.Y < start.Y - 1)
             end.Y = start.Y - 1;
@@ -90,14 +89,14 @@ public class MirrorWandPanel : BaseShapePanel
 
         cs.LeftMouse.Start = new Vector2(start.X, start.Y);
         cs.LeftMouse.End = new Vector2(end.X, end.Y);
-        
-        wideMirror = end.X == start.X - 1 || end.X == start.X + 1 || 
+
+        wideMirror = end.X == start.X - 1 || end.X == start.X + 1 ||
                      end.Y == start.Y - 1 || end.Y == start.Y + 1;
     }
 
     public override void UpdateRegardlessOfVisibility() {
         bool hasItemInInventory = Main.LocalPlayer.HasItem(ModContent.ItemType<MirrorWand>());
-        if ((hasItemInInventory && !IsVisible) || (!hasItemInInventory && IsVisible))
+        if (hasItemInInventory && !IsVisible || !hasItemInInventory && IsVisible)
             ShapesUIState.TogglePanelVisibility<MirrorWandPanel>();
     }
 
@@ -106,7 +105,7 @@ public class MirrorWandPanel : BaseShapePanel
         Vector2 result = initial;
 
         if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis()) return result;
-        
+
         //Check if coords can be used by current mirror axis
         if (!IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
             !IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
@@ -114,7 +113,7 @@ public class MirrorWandPanel : BaseShapePanel
         Tile tile = Framing.GetTileSafely(result);
         //Check if not a wall
         TileObjectData data = tileType != -1 ? TileObjectData.GetTileData(tileType, style, alternate) : null;
-        
+
         bool leftOfTheMirror = result.X < Math.Min(mirStart.X, mirEnd.X);
         bool topOfTheMirror = result.Y < Math.Min(mirStart.Y, mirEnd.Y);
         Point16 tileSize = Point16.Zero;
@@ -122,8 +121,8 @@ public class MirrorWandPanel : BaseShapePanel
         Vector2 offset = Vector2.Zero;
         if (data != null) {
             Point16 tileOrigin = data.Origin;
-            tileSize = new(data.CoordinateFullWidth / 16, data.CoordinateFullHeight / 16);
-            
+            tileSize = new Point16(data.CoordinateFullWidth / 16, data.CoordinateFullHeight / 16);
+
             if (tileSize.X % 2 == 0) {
                 int middleBiasRight = (int) (tileSize.X / 2f + 0.5f);
                 offset.X = (tileOrigin.X >= middleBiasRight ? -1 : 1) * (leftOfTheMirror ? -1 : 1);
@@ -143,23 +142,23 @@ public class MirrorWandPanel : BaseShapePanel
             float distanceToMirror = Math.Min(Math.Abs(result.Y - mirStart.Y), Math.Abs(result.Y - mirEnd.Y));
             result.Y += (int) ((distanceToMirror * 2 + (wideMirror ? 1 : 0) + offset.Y) * (topOfTheMirror ? 1 : -1));
         }
-        
+
         //Check if result placement is within the selection -> for single tiles
         if (!IsWithinRange(result.X, selStart.X, selEnd.X) ||
             !IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
-        
-        if (data == null) 
+
+        if (data == null)
             return result;
 
         //Check if result placement will overlap with the mirror axis -> for multi tiles
         Point initialTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) initial.X, (int) initial.Y, tileData: data);
-        Point resultTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) result.X, (int) result.Y, isPlaced: false, tileData: data);
-        if ((!horizontalMirror && (leftOfTheMirror && (resultTopLeft.X <= (initialTopLeft.X + tileSize.X)) || 
-                                   (!leftOfTheMirror && (resultTopLeft.X + tileSize.X) >= initialTopLeft.X))) ||
-            (horizontalMirror && (topOfTheMirror && (resultTopLeft.Y <= (initialTopLeft.Y + tileSize.Y)) ||
-                                  (!topOfTheMirror && (resultTopLeft.Y + tileSize.Y) >= initialTopLeft.Y))))
+        Point resultTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) result.X, (int) result.Y, false, data);
+        if (!horizontalMirror && (leftOfTheMirror && resultTopLeft.X <= initialTopLeft.X + tileSize.X ||
+                                  !leftOfTheMirror && resultTopLeft.X + tileSize.X >= initialTopLeft.X) ||
+            horizontalMirror && (topOfTheMirror && resultTopLeft.Y <= initialTopLeft.Y + tileSize.Y ||
+                                 !topOfTheMirror && resultTopLeft.Y + tileSize.Y >= initialTopLeft.Y))
             return initial;
-        
+
         return result;
     }
 

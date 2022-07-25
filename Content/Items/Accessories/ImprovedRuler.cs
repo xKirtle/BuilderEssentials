@@ -31,15 +31,15 @@ public class ImprovedRuler : ModItem
         if (player.whoAmI != Main.myPlayer) return;
 
         player.GetModPlayer<BEPlayer>().IsImprovedRulerEquipped = true;
-        var panel = ShapesUIState.GetUIPanel<ImprovedRulerPanel>();
+        ImprovedRulerPanel panel = ShapesUIState.GetUIPanel<ImprovedRulerPanel>();
         if (!panel.IsVisible)
             ShapesUIState.TogglePanelVisibility<ImprovedRulerPanel>();
     }
-    
+
     public override void AddRecipes() {
         CreateRecipe()
-        .AddIngredient(ItemID.Ruler)
-        .AddTile(TileID.TinkerersWorkbench)
+            .AddIngredient(ItemID.Ruler)
+            .AddTile(TileID.TinkerersWorkbench)
             .Register();
     }
 }

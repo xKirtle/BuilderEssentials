@@ -53,7 +53,7 @@ public class AutoHammerPanel : BaseToggleablePanel
         for (int i = 0; i < ElementsCount; i++)
             Append(elements[i]);
     }
-    
+
     private void ElementOnClick(int index) {
         for (int i = 0; i < ElementsCount; i++)
             elements[i].SetVisibility(.75f, .4f);
@@ -66,7 +66,7 @@ public class AutoHammerPanel : BaseToggleablePanel
 
         //Assign slopeType and IsHalfBlock based on selectedIndex (and its respective UI image)
         SlopeType[] types = new[] {
-            SlopeType.SlopeDownRight, SlopeType.SlopeDownLeft, 
+            SlopeType.SlopeDownRight, SlopeType.SlopeDownLeft,
             SlopeType.SlopeUpRight, SlopeType.SlopeUpLeft, SlopeType.Solid
         };
 

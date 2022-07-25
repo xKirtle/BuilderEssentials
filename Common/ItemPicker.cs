@@ -12,8 +12,8 @@ public static class ItemPicker
         => PickItem(new MinimalTile(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile)));
 
     public static int PickItem(MinimalTile tile) {
-        List<int> itemIDs = new();
-        
+        List<int> itemIDs = new List<int>();
+
         if (tile.TileType >= 0 && tile.HasTile)
             itemIDs = BuilderEssentials.TileToItems[tile.TileType];
         else if (tile.TileType >= 0 && tile.WallType >= 0)

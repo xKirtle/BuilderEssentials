@@ -26,16 +26,16 @@ public abstract class BaseItemToggleableUI : BuilderEssentialsItem
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
         tooltips.Remove(tooltips.Find(x => x.Text.Contains($"{Item.tileBoost} range")));
     }
-    
+
     public override bool AltFunctionUse(Player player) {
-        if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server) 
+        if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
             TogglePanel();
 
         return false;
     }
 
     public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel((int) ToggleableUiType).IsVisible;
-    
+
     public void TogglePanel() {
         ToggleableItemsUIState.TogglePanelVisibility((int) ToggleableUiType);
     }

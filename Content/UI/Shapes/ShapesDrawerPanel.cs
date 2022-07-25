@@ -10,18 +10,18 @@ namespace BuilderEssentials.Content.UI;
 
 public class ShapesDrawerPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem() 
+    public override bool IsHoldingBindingItem()
         => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
 
     public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
 
     public override void PlotSelection() {
-        var menuPanel = ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>();
+        ShapesDrawerMenuPanel menuPanel = ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>();
         Shapes shape = menuPanel.SelectedShape;
         ShapeSide drawSide = menuPanel.SelectedShapeSide;
         bool isFilled = menuPanel.IsFilled;
         Color color = /* isFilled ? ShapeHelpers.Yellow : */ ShapeHelpers.Blue;
-        
+
         if (shape == Shapes.Rectangle)
             ShapeHelpers.PlotRectangle(cs.RightMouse.Start, cs.RightMouse.End, color, this, 0.9f, isFilled);
         else if (shape == Shapes.Ellipse)
@@ -38,12 +38,12 @@ public class ShapesDrawerPanel : BaseShapePanel
         return true;
     }
 
-    private HashSet<Vector2> visitedPlottedPixels = new();
+    private HashSet<Vector2> visitedPlottedPixels = new HashSet<Vector2>();
     public override HashSet<Vector2> VisitedPlottedPixels => visitedPlottedPixels;
 
     public override void UpdateRegardlessOfVisibility() {
         bool hasItemInInventory = Main.LocalPlayer.HasItem(ModContent.ItemType<ShapesDrawer>());
-        if ((hasItemInInventory && !IsVisible) || (!hasItemInInventory && IsVisible))
+        if (hasItemInInventory && !IsVisible || !hasItemInInventory && IsVisible)
             ShapesUIState.TogglePanelVisibility<ShapesDrawerPanel>();
     }
 }
