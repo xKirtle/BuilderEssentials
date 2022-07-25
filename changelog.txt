@@ -1,2 +1,1 @@
-- The range used by the Infinite Pickup Range Upgrade Module can now be specified in the mod's config
-- Upgrade Modules can now be individually be disabled in the mod's config (existing upgrades applied to a wrench won't disappear from it but they won't be toggleable while deactivated)
+- Fixed an issue where the mod prevented the additional info in the bestiary to be opened

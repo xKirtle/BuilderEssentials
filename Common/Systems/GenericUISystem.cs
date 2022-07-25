@@ -1,6 +1,8 @@
 ﻿//Adapted from https://github.com/MutantWafflez/LivingWorldMod/blob/1.4_retarget/Common/Systems/UISystem.cs
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using BuilderEssentials.Assets;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -44,7 +46,8 @@ public abstract class UISystem<T> : ModSystem where T : UIState, new()
         if (interfaceLayer != -1) {
             layers.Insert(interfaceLayer, new LegacyGameInterfaceLayer($"Builder Essentials: {InterfaceLayerName}",
                 delegate {
-                    if (lastUpdateUiGameTime != null && userInterface?.CurrentState != null)
+                    //Kirtle: Checking if the bestiary is not opened works but I should be removing the UIStates from the User Interface..
+                    if (lastUpdateUiGameTime != null && userInterface?.CurrentState != null && Main.InGameUI.CurrentState != Main.BestiaryUI)
                         userInterface.Draw(Main.spriteBatch, lastUpdateUiGameTime);
 
                     return true;

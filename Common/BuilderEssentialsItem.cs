@@ -9,6 +9,7 @@ namespace BuilderEssentials.Common;
 public abstract class BuilderEssentialsItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/" + GetType().Name;
+    // public override string Texture => $"{GetType().Namespace.Replace(".", "/").Replace("Content", "Assets")}/{GetType().Name}";
     
     public virtual int ItemRange { get; protected set; } = 8;
     
