@@ -12,9 +12,7 @@ public class SpectrePaintBrush : BasePaintBrush
     public override int ItemRange => 16;
     protected override bool CloneNewInstances => true;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledItems.SpectrePaintBrush;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.SpectrePaintBrush;
 
     public override void SetDefaults() {
         base.SetDefaults();
@@ -24,7 +22,8 @@ public class SpectrePaintBrush : BasePaintBrush
 
     public override void HoldItem(Player player) {
         base.HoldItem(player);
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         PaintBrushPanel panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
@@ -45,12 +44,10 @@ public class SpectrePaintBrush : BasePaintBrush
         }
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.SpectrePaintbrush)
-            .AddIngredient(ItemID.SpectrePaintRoller)
-            .AddIngredient(ItemID.SpectrePaintScraper)
-            .AddTile(TileID.MythrilAnvil)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.SpectrePaintbrush)
+        .AddIngredient(ItemID.SpectrePaintRoller)
+        .AddIngredient(ItemID.SpectrePaintScraper)
+        .AddTile(TileID.MythrilAnvil)
+        .Register();
 }

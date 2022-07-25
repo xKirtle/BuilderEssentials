@@ -10,9 +10,7 @@ public class PreHMCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.PreHMCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.PreHMCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Pre Hardmode Crafting Station");
@@ -34,23 +32,21 @@ public class PreHMCraftingItem : ModItem
         Item.rare = ItemRarityID.Red;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddRecipeGroup("BuilderEssentials:Chair")
-            .AddRecipeGroup("BuilderEssentials:Workbench")
-            .AddRecipeGroup("BuilderEssentials:Table")
-            .AddRecipeGroup("BuilderEssentials:Sink")
-            .AddRecipeGroup("BuilderEssentials:Pre Hardmode Anvil")
-            .AddRecipeGroup("BuilderEssentials:Pre Hardmode Furnace/Forge")
-            .AddIngredient(ItemID.AlchemyTable)
-            .AddIngredient(ItemID.Sawmill)
-            .AddIngredient(ItemID.Loom)
-            .AddRecipeGroup("BuilderEssentials:Cooking Pot")
-            .AddIngredient(ItemID.TinkerersWorkshop)
-            .AddIngredient(ItemID.ImbuingStation)
-            .AddIngredient(ItemID.DyeVat)
-            .AddIngredient(ItemID.HeavyWorkBench)
-            .AddTile(TileID.DemonAltar)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddRecipeGroup("BuilderEssentials:Chair")
+        .AddRecipeGroup("BuilderEssentials:Workbench")
+        .AddRecipeGroup("BuilderEssentials:Table")
+        .AddRecipeGroup("BuilderEssentials:Sink")
+        .AddRecipeGroup("BuilderEssentials:Pre Hardmode Anvil")
+        .AddRecipeGroup("BuilderEssentials:Pre Hardmode Furnace/Forge")
+        .AddIngredient(ItemID.AlchemyTable)
+        .AddIngredient(ItemID.Sawmill)
+        .AddIngredient(ItemID.Loom)
+        .AddRecipeGroup("BuilderEssentials:Cooking Pot")
+        .AddIngredient(ItemID.TinkerersWorkshop)
+        .AddIngredient(ItemID.ImbuingStation)
+        .AddIngredient(ItemID.DyeVat)
+        .AddIngredient(ItemID.HeavyWorkBench)
+        .AddTile(TileID.DemonAltar)
+        .Register();
 }

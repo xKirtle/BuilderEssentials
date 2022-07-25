@@ -15,10 +15,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
 {
     public override ToggleableUiType ToggleableUiType => ToggleableUiType.PaintBrush;
 
-    public override void SetStaticDefaults() {
-        Tooltip.SetDefault("Able to paint and remove paint from tiles and walls!\n" +
-                           "Right Click to open selection menu");
-    }
+    public override void SetStaticDefaults() => Tooltip.SetDefault("Able to paint and remove paint from tiles and walls!\n" +
+        "Right Click to open selection menu");
 
     public override void SetDefaults() {
         base.SetDefaults();
@@ -33,14 +31,14 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
         // ItemID.Sets.IsPaintScraper[Type] = true;
     }
 
-    public override Vector2? HoldoutOffset() {
-        return new Vector2(5, -8);
-    }
+    public override Vector2? HoldoutOffset() => new Vector2(5, -8);
 
     public override void UpdateInventory(Player player) {
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
-        if (Main.LocalPlayer.GetModPlayer<BEPlayer>().InfinitePaint) return;
+        if (Main.LocalPlayer.GetModPlayer<BEPlayer>().InfinitePaint)
+            return;
 
         PaintBrushPanel panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
         if (panel.colorIndex != -1)
@@ -48,7 +46,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
     }
 
     public override bool CanUseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer || !ItemHasRange()) return true;
+        if (player.whoAmI != Main.myPlayer || !ItemHasRange())
+            return true;
 
         PaintBrushPanel panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
         byte selectedColor = (byte) (panel.colorIndex + 1);
@@ -63,7 +62,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
             if (toolIndex == 0 && tile.TileColor == selectedColor ||
                 toolIndex == 1 && tile.WallColor == selectedColor ||
                 toolIndex == 0 && (!tile.HasTile || tile.TileType < 0) ||
-                toolIndex == 1 && tile.WallType <= 0) return true;
+                toolIndex == 1 && tile.WallType <= 0)
+                return true;
 
             PaintTileOrWall(selectedColor, toolIndex, BEPlayer.PointedTileCoords.ToPoint());
             MirrorPlacement.MirrorPlacementAction(mirroredCoords =>
@@ -87,15 +87,11 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
 
     public static Item GetFirstSelectedPaintItem(Player player, byte color) {
         for (int i = 54; i < 58; i++) {
-            if (player.inventory[i].stack > 0 && player.inventory[i].paint == color) {
-                return player.inventory[i];
-            }
+            if (player.inventory[i].stack > 0 && player.inventory[i].paint == color) { return player.inventory[i]; }
         }
 
         for (int i = 0; i < 54; i++) {
-            if (player.inventory[i].stack > 0 && player.inventory[i].paint == color) {
-                return player.inventory[i];
-            }
+            if (player.inventory[i].stack > 0 && player.inventory[i].paint == color) { return player.inventory[i]; }
         }
 
         //Should be impossible since this is called after color selection was done
@@ -127,10 +123,12 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
 
     public static void PaintTileOrWall(byte color, int selectedTool, Point coords) {
         Tile tile = Framing.GetTileSafely(coords.X, coords.Y);
-        if (color < 1 || color > 32 || selectedTool < 0 || selectedTool > 1) return;
+        if (color < 1 || color > 32 || selectedTool < 0 || selectedTool > 1)
+            return;
 
         if (selectedTool == 0 && tile.HasTile && tile.TileType >= 0 && tile.TileColor != color) {
-            if (!ConsumePaint(color)) return;
+            if (!ConsumePaint(color))
+                return;
             WorldGen.paintEffect(coords.X, coords.Y, color, tile.TileColor);
             tile.TileColor = color;
 
@@ -138,7 +136,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
                 NetMessage.SendData(MessageID.PaintTile, number: coords.X, number2: coords.Y, number3: (int) color);
         }
         else if (selectedTool == 1 && tile.WallType > 0 && tile.WallColor != color) {
-            if (!ConsumePaint(color)) return;
+            if (!ConsumePaint(color))
+                return;
             WorldGen.paintEffect(coords.X, coords.Y, color, tile.WallColor);
             tile.WallColor = color;
 
@@ -178,7 +177,8 @@ public abstract class BasePaintBrush : BaseItemToggleableUI
 
                     return true;
                 }
-                else return false;
+                else
+                    return false;
             }
         }
 

@@ -10,15 +10,11 @@ public class ImprovedRuler : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledAccessories.ImprovedRuler;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledAccessories.ImprovedRuler;
 
-    public override void SetStaticDefaults() {
-        Tooltip.SetDefault("Only works when equipped and player's empty handed." +
-                           "\nHold Right Click to draw a line." +
-                           "\nHold Left Click to curve the line.");
-    }
+    public override void SetStaticDefaults() => Tooltip.SetDefault("Only works when equipped and player's empty handed." +
+        "\nHold Right Click to draw a line." +
+        "\nHold Left Click to curve the line.");
 
     public override void SetDefaults() {
         Item.accessory = true;
@@ -29,7 +25,8 @@ public class ImprovedRuler : ModItem
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
         player.GetModPlayer<BEPlayer>().IsImprovedRulerEquipped = true;
         ImprovedRulerPanel panel = ShapesUIState.GetUIPanel<ImprovedRulerPanel>();
@@ -37,10 +34,8 @@ public class ImprovedRuler : ModItem
             ShapesUIState.TogglePanelVisibility<ImprovedRulerPanel>();
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Ruler)
-            .AddTile(TileID.TinkerersWorkbench)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.Ruler)
+        .AddTile(TileID.TinkerersWorkbench)
+        .Register();
 }

@@ -10,9 +10,7 @@ public class TFCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Themed Furniture Crafting Station");
@@ -34,20 +32,18 @@ public class TFCraftingItem : ModItem
         Item.rare = ItemRarityID.Red;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.BoneWelder)
-            .AddIngredient(ItemID.GlassKiln)
-            .AddIngredient(ItemID.HoneyDispenser)
-            .AddIngredient(ItemID.IceMachine)
-            .AddIngredient(ItemID.LivingLoom)
-            .AddIngredient(ItemID.SkyMill)
-            .AddIngredient(ItemID.Solidifier)
-            .AddIngredient(ItemID.LesionStation)
-            .AddIngredient(ItemID.FleshCloningVaat)
-            .AddIngredient(ItemID.SteampunkBoiler)
-            .AddIngredient(ItemID.LihzahrdFurnace)
-            .AddTile(TileID.MythrilAnvil)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.BoneWelder)
+        .AddIngredient(ItemID.GlassKiln)
+        .AddIngredient(ItemID.HoneyDispenser)
+        .AddIngredient(ItemID.IceMachine)
+        .AddIngredient(ItemID.LivingLoom)
+        .AddIngredient(ItemID.SkyMill)
+        .AddIngredient(ItemID.Solidifier)
+        .AddIngredient(ItemID.LesionStation)
+        .AddIngredient(ItemID.FleshCloningVaat)
+        .AddIngredient(ItemID.SteampunkBoiler)
+        .AddIngredient(ItemID.LihzahrdFurnace)
+        .AddTile(TileID.MythrilAnvil)
+        .Register();
 }

@@ -28,7 +28,8 @@ public class MouseSelection
     public void MouseUp(UIMouseEvent evt, UIElement element) {
         if (CanUpdateCoords() && !Main.LocalPlayer.mouseInterface) {
             End = new Vector2(Player.tileTargetX, Player.tileTargetY);
-            if (Main.keyState.IsKeyDown(Keys.LeftShift)) SquareCoords();
+            if (Main.keyState.IsKeyDown(Keys.LeftShift))
+                SquareCoords();
             IsDown = false;
             OnClick?.Invoke(element);
         }
@@ -37,7 +38,8 @@ public class MouseSelection
     public void UpdateCoords() {
         if (IsDown && CanUpdateCoords() && !Main.LocalPlayer.mouseInterface) {
             End = new Vector2(Player.tileTargetX, Player.tileTargetY);
-            if (Main.keyState.IsKeyDown(Keys.LeftShift)) SquareCoords();
+            if (Main.keyState.IsKeyDown(Keys.LeftShift))
+                SquareCoords();
         }
     }
 

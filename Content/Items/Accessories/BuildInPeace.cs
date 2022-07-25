@@ -15,9 +15,7 @@ public class BuildInPeace : ModItem
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildInPeace;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildInPeace;
 
     public override void SetDefaults() {
         Item.accessory = true;

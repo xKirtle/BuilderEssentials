@@ -21,14 +21,12 @@ public class AutoHammer : BaseItemToggleableUI
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledItems.AutoHammer;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.AutoHammer;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Auto Hammer");
         Tooltip.SetDefault("Better than a regular hammer!\n" +
-                           "Right Click to open selection menu");
+            "Right Click to open selection menu");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
@@ -48,19 +46,18 @@ public class AutoHammer : BaseItemToggleableUI
         Item.autoReuse = true;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Pwnhammer)
-            .AddRecipeGroup("BuilderEssentials:Wood", 200)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.Pwnhammer)
+        .AddRecipeGroup("BuilderEssentials:Wood", 200)
+        .Register();
 
     //Note: Hacky workaround so that the hammer swings even when we're changing the slope ourselves.
     //Setting Item.hammer to 0 disables vanilla hammer's logic and thus, the UseItem swing doesn't mess with our slope change.
     //Can this be done properly?
     private bool canChangeSlope;
     public override bool CanUseItem(Player player) {
-        if (player.whoAmI != Main.myPlayer || !ItemHasRange()) return true;
+        if (player.whoAmI != Main.myPlayer || !ItemHasRange())
+            return true;
 
         AutoHammerPanel panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
         if (panel.selectedIndex != -1) {
@@ -79,7 +76,7 @@ public class AutoHammer : BaseItemToggleableUI
             AutoHammerPanel panel = ToggleableItemsUIState.GetUIPanel<AutoHammerPanel>();
             //Can the selected index change between CanUseItem and UseItem at all?
             if (panel.selectedIndex != -1) {
-                Point16 coords = new Point16(Player.tileTargetX, Player.tileTargetY);
+                Point16 coords = new(Player.tileTargetX, Player.tileTargetY);
                 ChangeSlope(coords, panel.slopeType, panel.isHalfBlock);
 
                 //Add MirrorPlacement logic
@@ -102,7 +99,8 @@ public class AutoHammer : BaseItemToggleableUI
         Tile tile = Framing.GetTileSafely(coords.X, coords.Y);
         if (Main.tileSolid[tile.TileType] && tile.TileType >= 0 && tile.HasTile) {
             //Prevent unnecessary changes to the tile and MP sync
-            if (tile.Slope == slopeType && tile.IsHalfBlock == isHalfBlock) return;
+            if (tile.Slope == slopeType && tile.IsHalfBlock == isHalfBlock)
+                return;
 
             tile.IsHalfBlock = isHalfBlock;
             tile.Slope = isHalfBlock ? SlopeType.Solid : slopeType;

@@ -15,7 +15,7 @@ public class BEPlayer : ModPlayer
 {
     public static Vector2 PointedWorldCoords => Main.MouseWorld;
     public static Vector2 PointedScreenCoords => Main.MouseScreen;
-    public static Vector2 PointedTileCoords => new Vector2(Player.tileTargetX, Player.tileTargetY);
+    public static Vector2 PointedTileCoords => new(Player.tileTargetX, Player.tileTargetY);
 
     public bool InfinitePaint { get; set; }
     public bool IsImprovedRulerEquipped { get; set; }

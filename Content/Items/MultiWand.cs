@@ -18,14 +18,12 @@ public class MultiWand : BaseItemToggleableUI
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledItems.MultiWand;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.MultiWand;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Wand");
         Tooltip.SetDefault("Contains all building wands into one!\n" +
-                           "Right Click to open selection menu");
+            "Right Click to open selection menu");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
@@ -51,35 +49,28 @@ public class MultiWand : BaseItemToggleableUI
         }
     }
 
-    public override Vector2? HoldoutOffset() {
-        return new Vector2(2, -9);
-    }
+    public override Vector2? HoldoutOffset() => new Vector2(2, -9);
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.LivingWoodWand)
-            .AddIngredient(ItemID.BoneWand)
-            .AddIngredient(ItemID.LeafWand)
-            .AddIngredient(ItemID.HiveWall)
-            .AddIngredient(ItemID.LivingMahoganyWand)
-            .AddIngredient(ItemID.LivingMahoganyLeafWand)
-            .AddTile(TileID.TinkerersWorkbench)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.LivingWoodWand)
+        .AddIngredient(ItemID.BoneWand)
+        .AddIngredient(ItemID.LeafWand)
+        .AddIngredient(ItemID.HiveWall)
+        .AddIngredient(ItemID.LivingMahoganyWand)
+        .AddIngredient(ItemID.LivingMahoganyLeafWand)
+        .AddTile(TileID.TinkerersWorkbench)
+        .Register();
 
     public static readonly int[] WandTypes = {
-        ItemID.LivingWoodWand, ItemID.BoneWand, ItemID.LeafWand,
-        ItemID.HiveWand, ItemID.LivingMahoganyWand, ItemID.LivingMahoganyLeafWand
+        ItemID.LivingWoodWand, ItemID.BoneWand, ItemID.LeafWand, ItemID.HiveWand, ItemID.LivingMahoganyWand, ItemID.LivingMahoganyLeafWand
     };
 
     public static readonly int[] WandMaterials = {
-        ItemID.Wood, ItemID.Bone, ItemID.Wood,
-        ItemID.Hive, ItemID.RichMahogany, ItemID.RichMahogany
+        ItemID.Wood, ItemID.Bone, ItemID.Wood, ItemID.Hive, ItemID.RichMahogany, ItemID.RichMahogany
     };
 
     public static readonly int[] WandPlacedTiles = {
-        TileID.LivingWood, TileID.BoneBlock, TileID.LeafBlock,
-        TileID.Hive, TileID.LivingMahogany, TileID.LivingMahoganyLeaves
+        TileID.LivingWood, TileID.BoneBlock, TileID.LeafBlock, TileID.Hive, TileID.LivingMahogany, TileID.LivingMahoganyLeaves
     };
 
     public override bool? UseItem(Player player) {
@@ -90,7 +81,8 @@ public class MultiWand : BaseItemToggleableUI
     }
 
     public override void UpdateInventory(Player player) {
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
         MultiWandPanel panel = ToggleableItemsUIState.GetUIPanel<MultiWandPanel>();
         Item.tileWand = WandMaterials[panel.selectedIndex];

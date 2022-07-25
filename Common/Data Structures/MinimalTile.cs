@@ -22,9 +22,7 @@ public struct MinimalTile
         HasWall = WallType > 0;
     }
 
-    public override string ToString() {
-        return $"TileType: {TileType} WallType: {WallType} HasTile: {HasTile} IsWall: {HasWall}";
-    }
+    public override string ToString() => $"TileType: {TileType} WallType: {WallType} HasTile: {HasTile} IsWall: {HasWall}";
 }
 
 public readonly record struct MinimalTileData(int TileType, int WallType, bool HasTile, SlopeType Slope, bool IsHalfBlock, Point coord)

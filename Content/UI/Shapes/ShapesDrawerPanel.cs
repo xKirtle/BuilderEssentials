@@ -10,13 +10,9 @@ namespace BuilderEssentials.Content.UI;
 
 public class ShapesDrawerPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
 
-    public override bool CanPlaceItems() {
-        return SelectedItem.type != ItemID.None;
-    }
+    public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
 
     public override void PlotSelection() {
         ShapesDrawerMenuPanel menuPanel = ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>();
@@ -34,14 +30,15 @@ public class ShapesDrawerPanel : BaseShapePanel
     //TODO: Also check if menu options changed, since that's a valid change..
     private Vector2 oldSelStart, oldSelEnd;
     public override bool SelectionHasChanged() {
-        if (oldSelStart == cs.RightMouse.Start && oldSelEnd == cs.RightMouse.End) return false;
+        if (oldSelStart == cs.RightMouse.Start && oldSelEnd == cs.RightMouse.End)
+            return false;
 
         oldSelStart = cs.RightMouse.Start;
         oldSelEnd = cs.RightMouse.End;
         return true;
     }
 
-    private HashSet<Vector2> visitedPlottedPixels = new HashSet<Vector2>();
+    private HashSet<Vector2> visitedPlottedPixels = new();
     public override HashSet<Vector2> VisitedPlottedPixels => visitedPlottedPixels;
 
     public override void UpdateRegardlessOfVisibility() {

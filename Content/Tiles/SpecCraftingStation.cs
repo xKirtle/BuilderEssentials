@@ -15,11 +15,9 @@ namespace BuilderEssentials.Content.Tiles;
 public class SpecCraftingStation : BaseCraftingStation
 {
     public override string DisplayName => "Specialized Crafting Station";
-    public override Color MapColor => new Color(39, 137, 205);
+    public override Color MapColor => new(39, 137, 205);
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.IceTorch;
@@ -35,13 +33,9 @@ public class SpecCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() {
-        return new int[]
-            { TileID.Campfire, TileID.Kegs, TileID.Blendomatic, TileID.MeatGrinder };
-    }
+    public override int[] AdjacentTiles() => new int[] { TileID.Campfire, TileID.Kegs, TileID.Blendomatic, TileID.MeatGrinder };
 
 
-    public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ModContent.ItemType<SpecCraftingItem>());
-    }
+    public override void KillMultiTile(int i, int j, int frameX, int frameY) => Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16,
+        32, 16, ModContent.ItemType<SpecCraftingItem>());
 }

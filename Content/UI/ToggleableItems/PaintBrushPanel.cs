@@ -18,10 +18,8 @@ namespace BuilderEssentials.Content.UI;
 
 public class PaintBrushPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<PaintBrush>() ||
-               Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintBrush>();
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<PaintBrush>() ||
+        Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SpectrePaintBrush>();
 
     private const float ParentWidth = 430f, ParentHeight = 360f;
     private UIImageButton[] colorElements;
@@ -44,8 +42,10 @@ public class PaintBrushPanel : BaseToggleablePanel
         Top.Set(Main.screenHeight / 2 - ParentHeight, 0);
 
         paints = new int[31];
-        for (int i = 0; i < 27; i++) paints[i] = 1073 + i; //Basic && Deep colors type
-        for (int i = 0; i < 3; i++) paints[i + 27] = 1966 + i; //Extra Color Effects type
+        for (int i = 0; i < 27; i++)
+            paints[i] = 1073 + i; //Basic && Deep colors type
+        for (int i = 0; i < 3; i++)
+            paints[i + 27] = 1966 + i; //Extra Color Effects type
         paints[30] = 4668; //Illuminant Paint
 
         colorElements = new UIImageButton[31];
@@ -87,8 +87,8 @@ public class PaintBrushPanel : BaseToggleablePanel
             double x = offset.X - radius * Math.Cos(angle * (i + .48)) * 0.95;
             double y = offset.Y - radius * Math.Sin(angle * (i + .48)) * 1;
 
-            StyleDimension left = new StyleDimension((float) x - ColorElementSize / 4, 0);
-            StyleDimension top = new StyleDimension((float) y + 40, 0);
+            StyleDimension left = new((float) x - ColorElementSize / 4, 0);
+            StyleDimension top = new((float) y + 40, 0);
             colorElements[i].Left = left;
             colorElements[i].Top = top;
 
@@ -110,8 +110,8 @@ public class PaintBrushPanel : BaseToggleablePanel
             double x = offset.X + radius * Math.Cos(angle * (i + .48)) * 1;
             double y = offset.Y - radius * Math.Sin(-angle * (i + .48)) * 1;
 
-            StyleDimension left = new StyleDimension((float) x - ColorElementSize / 4, 0);
-            StyleDimension top = new StyleDimension((float) y + 30, 0);
+            StyleDimension left = new((float) x - ColorElementSize / 4, 0);
+            StyleDimension top = new((float) y + 30, 0);
             colorElements[i].Left = left;
             colorElements[i].Top = top;
 
@@ -134,8 +134,8 @@ public class PaintBrushPanel : BaseToggleablePanel
             double x = offset.X - radius * Math.Cos(angle * (i + .50)) * 1.10;
             double y = offset.Y + radius * Math.Sin(-angle * (i + .50)) * 1.25;
 
-            StyleDimension left = new StyleDimension((float) x - ColorElementSize / 4, 0);
-            StyleDimension top = new StyleDimension((float) y + 50, 0);
+            StyleDimension left = new((float) x - ColorElementSize / 4, 0);
+            StyleDimension top = new((float) y + 50, 0);
             colorElements[i].Left = left;
             colorElements[i].Top = top;
 
@@ -151,8 +151,8 @@ public class PaintBrushPanel : BaseToggleablePanel
 
         //Illuminant paint
         Vector2 offsetPaint = new Vector2(ParentWidth - ColorElementSize - 20, ParentHeight - ColorElementSize - 20) / 2;
-        StyleDimension leftOffset = new StyleDimension(offsetPaint.X, 0);
-        StyleDimension topOffset = new StyleDimension(offsetPaint.Y, 0);
+        StyleDimension leftOffset = new(offsetPaint.X, 0);
+        StyleDimension topOffset = new(offsetPaint.Y, 0);
         colorElements[30].Left = leftOffset;
         colorElements[30].Top = topOffset;
 
@@ -186,7 +186,8 @@ public class PaintBrushPanel : BaseToggleablePanel
     }
 
     private void ColorSelected(int index) {
-        if (!colorAvailable[index]) return;
+        if (!colorAvailable[index])
+            return;
 
         colorOverlay.Remove();
         for (int i = 0; i < colorElements.Length; i++)
@@ -202,11 +203,13 @@ public class PaintBrushPanel : BaseToggleablePanel
             selectedColorMouse = new UIImage(AssetsLoader.GetAssets($"{AssetsID.PaintBrush}/Paint{colorIndex}"));
             selectedColorMouse.ImageScale = 0.4f;
         }
-        else colorIndex = -1;
+        else
+            colorIndex = -1;
     }
 
     private void ToolSelected(int index) {
-        if (toolIndex == index) return;
+        if (toolIndex == index)
+            return;
 
         for (int i = 0; i < toolElements.Length; i++)
             toolElements[i].SetVisibility(1f, .85f);
@@ -218,7 +221,7 @@ public class PaintBrushPanel : BaseToggleablePanel
     }
 
     private void EvaluateAvailableColorsInInventory() {
-        List<int> paintInInventory = new List<int>();
+        List<int> paintInInventory = new();
         foreach (Item item in Main.LocalPlayer.inventory) {
             if (paints.Contains(item.type))
                 paintInInventory.Add(item.type);

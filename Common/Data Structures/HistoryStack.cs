@@ -7,13 +7,11 @@ namespace BuilderEssentials.Common.DataStructures;
 
 public class HistoryStack<T> where T : class
 {
-    private LinkedList<T> items = new LinkedList<T>();
+    private LinkedList<T> items = new();
     public List<T> Items => items.ToList();
     public int Count => items.Count;
     public int Capacity { get; private set; }
-    public HistoryStack(int capacity) {
-        Capacity = capacity;
-    }
+    public HistoryStack(int capacity) => Capacity = capacity;
 
     public void ChangeCapacity(int capacity) {
         //So we don't need to reload the mod in case the capacity changes
@@ -24,9 +22,7 @@ public class HistoryStack<T> where T : class
     }
 
     public void Push(T item) {
-        if (items.Count == Capacity) {
-            items.RemoveFirst();
-        }
+        if (items.Count == Capacity) { items.RemoveFirst(); }
 
         items.AddLast(item);
     }
@@ -40,11 +36,7 @@ public class HistoryStack<T> where T : class
         return ls == null ? default : ls.Value;
     }
 
-    public T Peek() {
-        return items.Last?.Value ?? null;
-    }
+    public T Peek() => items.Last?.Value ?? null;
 
-    public void AddRange(List<T> list) {
-        list.ForEach(item => Push(item));
-    }
+    public void AddRange(List<T> list) => list.ForEach(item => Push(item));
 }

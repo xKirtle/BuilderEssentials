@@ -20,9 +20,7 @@ namespace BuilderEssentials.Content.UI;
 //Kirtle: Replace this with BuilderToggles whenever those get merged :(
 public class WrenchUpgradesPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance != null;
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.GetModPlayer<BEPlayer>().EquippedWrenchInstance != null;
 
     private const float ParentWidth = 90f, ParentHeight = 40f;
     private const int ElementsCount = (int) WrenchUpgrades.Count;

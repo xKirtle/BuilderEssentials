@@ -15,17 +15,15 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class ShapesDrawer : BuilderEssentialsItem
 {
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledItems.ShapesDrawer;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.ShapesDrawer;
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Used to draw shapes" +
-                           "\nRight Click to make selection" +
-                           "\nLeft Click to place blocks in the selection" +
-                           "\nMiddle Click to select working tile" +
-                           "\n[c/FFCC00:Press LShift to make circles/squares]" +
-                           "\n[c/FFCC00:Open its menu by clicking the squirrel builder under your opened inventory (must be being held)]");
+            "\nRight Click to make selection" +
+            "\nLeft Click to place blocks in the selection" +
+            "\nMiddle Click to select working tile" +
+            "\n[c/FFCC00:Press LShift to make circles/squares]" +
+            "\n[c/FFCC00:Open its menu by clicking the squirrel builder under your opened inventory (must be being held)]");
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
@@ -54,12 +52,11 @@ public class ShapesDrawer : BuilderEssentialsItem
         }
     }
 
-    public override Vector2? HoldoutOffset() {
-        return new Vector2(-2, -9);
-    }
+    public override Vector2? HoldoutOffset() => new Vector2(-2, -9);
 
     public override void HoldItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
         ShapesDrawerPanel panel = ShapesUIState.GetUIPanel<ShapesDrawerPanel>();
 
@@ -76,7 +73,8 @@ public class ShapesDrawer : BuilderEssentialsItem
 
         player.cursorItemIconEnabled = true;
         player.cursorItemIconID = Type;
-        if (!player.cursorItemIconEnabled) return;
+        if (!player.cursorItemIconEnabled)
+            return;
         player.cursorItemIconID = panel.SelectedItem?.type ?? Type;
     }
 

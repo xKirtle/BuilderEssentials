@@ -24,9 +24,7 @@ public class MainConfig : ModConfig
     public int InfinitePickupRangeValue => (int) ((float) InfinitePickupRangeFloat / 100f * MaxPickupRange);
     private const int MaxPickupRange = 3500;
 
-    public override void OnChanged() {
-        ShapesUIState.UpdateMaxUndoNum(MaxUndoNum);
-    }
+    public override void OnChanged() => ShapesUIState.UpdateMaxUndoNum(MaxUndoNum);
 
     [OnDeserialized]
     internal void OnDeserializedMethod(StreamingContext context) {
@@ -35,16 +33,16 @@ public class MainConfig : ModConfig
     }
 
     [Header("Enable or disable content from this mod"), Label("Items"), ReloadRequired]
-    public EnabledItemsConfig EnabledItems = new EnabledItemsConfig();
+    public EnabledItemsConfig EnabledItems = new();
 
     [Label("Tiles"), ReloadRequired]
-    public EnabledTilesConfig EnabledTiles = new EnabledTilesConfig();
+    public EnabledTilesConfig EnabledTiles = new();
 
     [Label("Accessories"), ReloadRequired]
-    public EnabledAccessoriesConfig EnabledAccessories = new EnabledAccessoriesConfig();
+    public EnabledAccessoriesConfig EnabledAccessories = new();
 
     [Label("Upgrade Modules"), ReloadRequired]
-    public EnabledUpgradeModulesConfig EnabledUpgradeModules = new EnabledUpgradeModulesConfig();
+    public EnabledUpgradeModulesConfig EnabledUpgradeModules = new();
 
     [SeparatePage]
     public class EnabledItemsConfig
@@ -76,20 +74,18 @@ public class MainConfig : ModConfig
         public override bool Equals(object obj) {
             if (obj is EnabledItemsConfig config) {
                 return AutoHammer == config.AutoHammer && FillWand == config.FillWand &&
-                       InfinitePaintBucket == config.InfinitePaintBucket && PaintBrush == config.PaintBrush &&
-                       SpectrePaintBrush == config.SpectrePaintBrush && MultiWand == config.MultiWand &&
-                       MirrorWand == config.MirrorWand && ShapesDrawer == config.ShapesDrawer;
+                    InfinitePaintBucket == config.InfinitePaintBucket && PaintBrush == config.PaintBrush &&
+                    SpectrePaintBrush == config.SpectrePaintBrush && MultiWand == config.MultiWand &&
+                    MirrorWand == config.MirrorWand && ShapesDrawer == config.ShapesDrawer;
             }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new {
-                AutoHammer, FillWand, InfinitePaintBucket, PaintBrush,
-                SpectrePaintBrush, MultiWand, MirrorWand, ShapesDrawer
-            }.GetHashCode();
-        }
+        public override int GetHashCode() => new {
+            AutoHammer, FillWand, InfinitePaintBucket, PaintBrush,
+            SpectrePaintBrush, MultiWand, MirrorWand, ShapesDrawer
+        }.GetHashCode();
     }
 
     [SeparatePage]
@@ -113,20 +109,19 @@ public class MainConfig : ModConfig
         public override bool Equals(object obj) {
             if (obj is EnabledTilesConfig config) {
                 return PreHMCraftingStation == config.PreHMCraftingStation &&
-                       HMCraftingStation == config.HMCraftingStation &&
-                       SpecCraftingStation == config.SpecCraftingStation &&
-                       TFCraftingStation == config.TFCraftingStation &&
-                       MultiCraftingStation == config.MultiCraftingStation;
+                    HMCraftingStation == config.HMCraftingStation &&
+                    SpecCraftingStation == config.SpecCraftingStation &&
+                    TFCraftingStation == config.TFCraftingStation &&
+                    MultiCraftingStation == config.MultiCraftingStation;
             }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new {
-                PreHMCraftingStation, HMCraftingStation, SpecCraftingStation, TFCraftingStation, MultiCraftingStation
-            }.GetHashCode();
-        }
+        public override int GetHashCode() => new {
+            PreHMCraftingStation, HMCraftingStation, SpecCraftingStation, TFCraftingStation,
+            MultiCraftingStation
+        }.GetHashCode();
     }
 
     [SeparatePage]
@@ -144,16 +139,14 @@ public class MainConfig : ModConfig
         public override bool Equals(object obj) {
             if (obj is EnabledAccessoriesConfig config) {
                 return BuildInPeace == config.BuildInPeace &&
-                       BuildingWrench == config.BuildingWrench &&
-                       ImprovedRuler == config.ImprovedRuler;
+                    BuildingWrench == config.BuildingWrench &&
+                    ImprovedRuler == config.ImprovedRuler;
             }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
-        }
+        public override int GetHashCode() => new { BuildInPeace, BuildingWrench, ImprovedRuler }.GetHashCode();
     }
 
     [SeparatePage]
@@ -178,16 +171,14 @@ public class MainConfig : ModConfig
         public override bool Equals(object obj) {
             if (obj is EnabledUpgradeModulesConfig config) {
                 return FastPlacement == config.FastPlacement &&
-                       InfiniteRange == config.InfiniteRange &&
-                       InfinitePlacement == config.InfinitePlacement &&
-                       InfinitePickupRange == config.InfinitePickupRange;
+                    InfiniteRange == config.InfiniteRange &&
+                    InfinitePlacement == config.InfinitePlacement &&
+                    InfinitePickupRange == config.InfinitePickupRange;
             }
 
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() {
-            return new { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange }.GetHashCode();
-        }
+        public override int GetHashCode() => new { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange }.GetHashCode();
     }
 }

@@ -18,11 +18,8 @@ public class ToggleableItemsUISystem : UISystem<ToggleableItemsUIState> { }
 
 public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 {
-    public override List<Type> PanelTypes => new List<Type> {
-        typeof(AutoHammerPanel),
-        typeof(MultiWandPanel),
-        typeof(PaintBrushPanel),
-        typeof(WrenchUpgradesPanel),
+    public override List<Type> PanelTypes => new() {
+        typeof(AutoHammerPanel), typeof(MultiWandPanel), typeof(PaintBrushPanel), typeof(WrenchUpgradesPanel),
         typeof(ShapesDrawerMenuPanel)
     };
 
@@ -42,7 +39,8 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
 
     public void UpdateMouseSelectedColor_PaintBrushPanel() {
         PaintBrushPanel panel = GetUIPanel<PaintBrushPanel>();
-        if (panel.selectedColorMouse == null) return;
+        if (panel.selectedColorMouse == null)
+            return;
 
         if (!panel.IsVisible && panel.colorIndex != -1 && panel.toolIndex != 2 && panel.IsHoldingBindingItem())
             Append(panel.selectedColorMouse);
@@ -54,7 +52,8 @@ public class ToggleableItemsUIState : ManagedUIState<BaseToggleablePanel>
         base.Draw(spriteBatch);
 
         PaintBrushPanel panel = GetUIPanel<PaintBrushPanel>();
-        if (panel.selectedColorMouse == null || panel.IsVisible) return;
+        if (panel.selectedColorMouse == null || panel.IsVisible)
+            return;
 
         panel.selectedColorMouse.Left.Set(Main.mouseX - 26f, 0f);
         panel.selectedColorMouse.Top.Set(Main.mouseY + 6f, 0f);
@@ -72,9 +71,7 @@ public abstract class BaseToggleablePanel : UIElement
     public abstract bool IsHoldingBindingItem();
 
     private bool canDisplay = false;
-    public override void OnActivate() {
-        canDisplay = true;
-    }
+    public override void OnActivate() => canDisplay = true;
 
     /// <summary>
     /// Called after <see cref="Update"/> is called
@@ -91,7 +88,7 @@ public abstract class BaseToggleablePanel : UIElement
 
     public static void PreventElementOffScreen(UIElement element, Vector2 center, Vector2 size = default) {
         size = size == default ? new Vector2(element.Width.Pixels, element.Height.Pixels) : size;
-        Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
+        Vector2 screenSize = new(Main.screenWidth, Main.screenHeight);
 
         float offsetX = Utils.Clamp(center.X - size.X / 2, 0, screenSize.X - size.X);
         float offsetY = Utils.Clamp(center.Y - size.Y / 2, 0, screenSize.Y - size.Y);
@@ -102,8 +99,8 @@ public abstract class BaseToggleablePanel : UIElement
     }
 
     public static void PreventTextOffScreen(UIElement parent, UIText uiText, Vector2 center, Vector2 centerOffset) {
-        Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-        Vector2 textSize = new Vector2(uiText.GetOuterDimensions().Width, uiText.GetOuterDimensions().Height);
+        Vector2 screenSize = new(Main.screenWidth, Main.screenHeight);
+        Vector2 textSize = new(uiText.GetOuterDimensions().Width, uiText.GetOuterDimensions().Height);
 
         float offsetX = Utils.Clamp(center.X + centerOffset.X, 0, screenSize.X - textSize.X - centerOffset.X);
         offsetX -= parent.Left.Pixels;

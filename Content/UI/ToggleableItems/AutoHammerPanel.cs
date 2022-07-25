@@ -12,9 +12,7 @@ namespace BuilderEssentials.Content.UI;
 
 public class AutoHammerPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<AutoHammer>();
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<AutoHammer>();
 
     private const float ParentWidth = 160f, ParentHeight = 132f;
     private const int ElementsCount = 6;
@@ -37,8 +35,7 @@ public class AutoHammerPanel : BaseToggleablePanel
 
         //Define our shape
         Vector2[] buttonPositions = new[] {
-            new Vector2(36, 0), new Vector2(88, 0), new Vector2(36, 88),
-            new Vector2(88, 88), new Vector2(0, 44), new Vector2(124, 44)
+            new Vector2(36, 0), new Vector2(88, 0), new Vector2(36, 88), new Vector2(88, 88), new Vector2(0, 44), new Vector2(124, 44)
         };
 
         for (int i = 0; i < ElementsCount; i++) {
@@ -63,12 +60,12 @@ public class AutoHammerPanel : BaseToggleablePanel
             elements[index].SetVisibility(1f, 1f);
             selectedIndex = index;
         }
-        else selectedIndex = -1;
+        else
+            selectedIndex = -1;
 
         //Assign slopeType and IsHalfBlock based on selectedIndex (and its respective UI image)
         SlopeType[] types = new[] {
-            SlopeType.SlopeDownRight, SlopeType.SlopeDownLeft,
-            SlopeType.SlopeUpRight, SlopeType.SlopeUpLeft, SlopeType.Solid
+            SlopeType.SlopeDownRight, SlopeType.SlopeDownLeft, SlopeType.SlopeUpRight, SlopeType.SlopeUpLeft, SlopeType.Solid
         };
 
         isHalfBlock = selectedIndex == 5;

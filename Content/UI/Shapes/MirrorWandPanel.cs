@@ -24,43 +24,33 @@ public class MirrorWandPanel : BaseShapePanel
     private Vector2 mirStart => cs.LeftMouse.Start;
     private Vector2 mirEnd => cs.LeftMouse.End;
 
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MirrorWand>();
 
-    public override bool CanPlaceItems() {
-        return false;
-    }
+    public override bool CanPlaceItems() => false;
 
-    public override bool SelectionHasChanged() {
-        return false;
-    }
+    public override bool SelectionHasChanged() => false;
 
     public override HashSet<Vector2> VisitedPlottedPixels => null;
 
-    public bool IsMouseWithinSelection() {
-        return IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
-               IsWithinRange(Player.tileTargetY, selStart.Y, selEnd.Y);
-    }
+    public bool IsMouseWithinSelection() => IsWithinRange(Player.tileTargetX, selStart.X, selEnd.X) &&
+        IsWithinRange(Player.tileTargetY, selStart.Y, selEnd.Y);
 
-    public bool IsMouseAffectedByMirrorAxis() {
-        return validMirrorPlacement && horizontalMirror && IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
-               Player.tileTargetY != mirStart.Y && Player.tileTargetY != mirEnd.Y ||
-               !horizontalMirror && IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) && Player.tileTargetX != mirStart.X &&
-               Player.tileTargetX != mirEnd.X;
-    }
+    public bool IsMouseAffectedByMirrorAxis() => validMirrorPlacement && horizontalMirror &&
+        IsWithinRange(Player.tileTargetX, mirStart.X, mirEnd.X, true) &&
+        Player.tileTargetY != mirStart.Y && Player.tileTargetY != mirEnd.Y ||
+        !horizontalMirror && IsWithinRange(Player.tileTargetY, mirStart.Y, mirEnd.Y, true) && Player.tileTargetX != mirStart.X &&
+        Player.tileTargetX != mirEnd.X;
 
-    public bool IsMirrorAxisInsideSelection() {
-        return mirStart != mirEnd &&
-               IsWithinRange(mirStart.X, selStart.X, selEnd.X) &&
-               IsWithinRange(mirEnd.X, selStart.X, selEnd.X) &&
-               IsWithinRange(mirStart.Y, selStart.Y, selEnd.Y) &&
-               IsWithinRange(mirEnd.Y, selStart.Y, selEnd.Y);
-    }
+    public bool IsMirrorAxisInsideSelection() => mirStart != mirEnd &&
+        IsWithinRange(mirStart.X, selStart.X, selEnd.X) &&
+        IsWithinRange(mirEnd.X, selStart.X, selEnd.X) &&
+        IsWithinRange(mirStart.Y, selStart.Y, selEnd.Y) &&
+        IsWithinRange(mirEnd.Y, selStart.Y, selEnd.Y);
 
     //TODO: Check against wide Mirror scenarios
     public bool IsMouseLeftOrTopOfSelection() {
-        if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis()) return false;
+        if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis())
+            return false;
         return !horizontalMirror ? Player.tileTargetX < mirStart.X : Player.tileTargetY < mirStart.Y;
     }
 
@@ -99,7 +89,7 @@ public class MirrorWandPanel : BaseShapePanel
         cs.LeftMouse.End = new Vector2(end.X, end.Y);
 
         wideMirror = end.X == start.X - 1 || end.X == start.X + 1 ||
-                     end.Y == start.Y - 1 || end.Y == start.Y + 1;
+            end.Y == start.Y - 1 || end.Y == start.Y + 1;
     }
 
     public override void UpdateRegardlessOfVisibility() {
@@ -112,11 +102,13 @@ public class MirrorWandPanel : BaseShapePanel
         Vector2 initial = tileCoords == default ? new Vector2(Player.tileTargetX, Player.tileTargetY) : tileCoords;
         Vector2 result = initial;
 
-        if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis()) return result;
+        if (!validMirrorPlacement || !IsMouseWithinSelection() || !IsMouseAffectedByMirrorAxis())
+            return result;
 
         //Check if coords can be used by current mirror axis
         if (!IsWithinRange(result.X, mirStart.X, mirEnd.X, true) &&
-            !IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true)) return result;
+            !IsWithinRange(result.Y, mirStart.Y, mirEnd.Y, true))
+            return result;
 
         Tile tile = Framing.GetTileSafely(result);
         //Check if not a wall
@@ -153,7 +145,8 @@ public class MirrorWandPanel : BaseShapePanel
 
         //Check if result placement is within the selection -> for single tiles
         if (!IsWithinRange(result.X, selStart.X, selEnd.X) ||
-            !IsWithinRange(result.Y, selStart.Y, selEnd.Y)) return initial;
+            !IsWithinRange(result.Y, selStart.Y, selEnd.Y))
+            return initial;
 
         if (data == null)
             return result;
@@ -162,9 +155,9 @@ public class MirrorWandPanel : BaseShapePanel
         Point initialTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) initial.X, (int) initial.Y, tileData: data);
         Point resultTopLeft = MirrorPlacement.GetTopLeftCoordOfTile((int) result.X, (int) result.Y, false, data);
         if (!horizontalMirror && (leftOfTheMirror && resultTopLeft.X <= initialTopLeft.X + tileSize.X ||
-                                  !leftOfTheMirror && resultTopLeft.X + tileSize.X >= initialTopLeft.X) ||
+                !leftOfTheMirror && resultTopLeft.X + tileSize.X >= initialTopLeft.X) ||
             horizontalMirror && (topOfTheMirror && resultTopLeft.Y <= initialTopLeft.Y + tileSize.Y ||
-                                 !topOfTheMirror && resultTopLeft.Y + tileSize.Y >= initialTopLeft.Y))
+                !topOfTheMirror && resultTopLeft.Y + tileSize.Y >= initialTopLeft.Y))
             return initial;
 
         return result;
@@ -173,7 +166,7 @@ public class MirrorWandPanel : BaseShapePanel
     //Unused
     public void SyncSelection() {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            Vector2 center = new Vector2((Math.Max(selStart.X, selEnd.X) - Math.Min(selStart.X, selEnd.X) + 1) / 2,
+            Vector2 center = new((Math.Max(selStart.X, selEnd.X) - Math.Min(selStart.X, selEnd.X) + 1) / 2,
                 (Math.Max(selStart.Y, selEnd.Y) - Math.Min(selStart.Y, selEnd.Y) + 1) / 2);
 
             float syncSizeX = Math.Max(Math.Max(center.X, selStart.X), selEnd.X);

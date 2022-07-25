@@ -11,7 +11,7 @@ namespace BuilderEssentials.Common.Systems;
 public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIElement
 {
     private static ManagedUIState<T> instance;
-    private List<T> uiStateElements = new List<T>();
+    private List<T> uiStateElements = new();
     public abstract List<Type> PanelTypes { get; }
 
     public override void OnInitialize() {
@@ -31,33 +31,19 @@ public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIEleme
         instance = null;
     }
 
-    public static ManagedUIState<T> GetInstance() {
-        return instance;
-    }
+    public static ManagedUIState<T> GetInstance() => instance;
 
-    private static int IndexOfPanelType<U>() {
-        return GetInstance().PanelTypes.IndexOf(typeof(U));
-    }
+    private static int IndexOfPanelType<U>() => GetInstance().PanelTypes.IndexOf(typeof(U));
 
-    private static T GetElementAtIndex(int index) {
-        return (T) GetInstance().uiStateElements[index];
-    }
+    private static T GetElementAtIndex(int index) => (T) GetInstance().uiStateElements[index];
 
-    public static U GetUIPanel<U>() where U : T {
-        return (U) GetElementAtIndex(IndexOfPanelType<U>());
-    }
+    public static U GetUIPanel<U>() where U : T => (U) GetElementAtIndex(IndexOfPanelType<U>());
 
-    public static T GetUIPanel(int index) {
-        return GetElementAtIndex(index);
-    }
+    public static T GetUIPanel(int index) => GetElementAtIndex(index);
 
-    public static void TogglePanelVisibility<U>() where U : T {
-        ActuallyTogglePanelVisibility(GetUIPanel<U>());
-    }
+    public static void TogglePanelVisibility<U>() where U : T => ActuallyTogglePanelVisibility(GetUIPanel<U>());
 
-    public static void TogglePanelVisibility(int index) {
-        ActuallyTogglePanelVisibility(GetUIPanel(index));
-    }
+    public static void TogglePanelVisibility(int index) => ActuallyTogglePanelVisibility(GetUIPanel(index));
 
     private static void ActuallyTogglePanelVisibility(T panel) {
         if (panel.Parent == null) {
@@ -71,7 +57,5 @@ public abstract class ManagedUIState<T> : UIState, IDisposable where T : UIEleme
     }
 
     //ModConfig OnChanged ends up calling this, where instance might be null at that point
-    public static int GetPanelCount() {
-        return GetInstance()?.PanelTypes.Count ?? 0;
-    }
+    public static int GetPanelCount() => GetInstance()?.PanelTypes.Count ?? 0;
 }

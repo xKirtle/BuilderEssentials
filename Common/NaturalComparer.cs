@@ -6,9 +6,12 @@ namespace BuilderEssentials.Common;
 public class NaturalComparer : IComparer<string>
 {
     public int Compare(string x, string y) {
-        if (x == null && y == null) return 0;
-        if (x == null) return -1;
-        if (y == null) return 1;
+        if (x == null && y == null)
+            return 0;
+        if (x == null)
+            return -1;
+        if (y == null)
+            return 1;
 
         int lx = x.Length, ly = y.Length;
 

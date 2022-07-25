@@ -13,14 +13,13 @@ namespace BuilderEssentials.Common;
 
 public static class PlacementHelpers
 {
-    public static bool ValidTileCoordinates(int i, int j) {
-        return i >= 0 && i < Main.maxTilesX && j >= 0 && j < Main.maxTilesY;
-    }
+    public static bool ValidTileCoordinates(int i, int j) => i >= 0 && i < Main.maxTilesX && j >= 0 && j < Main.maxTilesY;
 
 
     public static bool CanReduceItemStack(int type, int amount = 1, bool reduceStack = true, bool shouldBeHeld = false) {
-        Item item = new Item(type);
-        if (!ItemLoader.ConsumeItem(item, Main.LocalPlayer)) return true;
+        Item item = new(type);
+        if (!ItemLoader.ConsumeItem(item, Main.LocalPlayer))
+            return true;
 
         if (item.tileWand >= 0) {
             int wandIndex = MultiWand.WandPlacedTiles.ToList().IndexOf(item.createTile);
@@ -47,7 +46,8 @@ public static class PlacementHelpers
     }
 
     public static TypeOfItem WhatIsThisItem(int itemType) {
-        if (itemType <= 0 || itemType >= ItemLoader.ItemCount) return TypeOfItem.Air;
+        if (itemType <= 0 || itemType >= ItemLoader.ItemCount)
+            return TypeOfItem.Air;
         return WhatIsThisItem(new Item(itemType));
     }
 
@@ -61,13 +61,12 @@ public static class PlacementHelpers
     }
 
     public static bool PlaceMultiTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true)
-    //Call PlaceTile_PlaceIt?
-    {
-    return false;
-    }
+        //Call PlaceTile_PlaceIt?
+        => false;
 
     public static bool PlaceTile(int x, int y, Item item, bool mute = false, bool forced = false, bool sync = true) {
-        if (!ValidTileCoordinates(x, y)) return false;
+        if (!ValidTileCoordinates(x, y))
+            return false;
 
         Tile tile = Framing.GetTileSafely(x, y);
         bool replaceTilesEnabled = Main.LocalPlayer.TileReplacementEnabled;
@@ -76,9 +75,7 @@ public static class PlacementHelpers
         if (typeOfItem == TypeOfItem.Tile) {
             TileObjectData data = TileObjectData.GetTileData(item.createTile, item.placeStyle);
 
-            if (data != null) {
-                return PlaceMultiTile(x, y, item, mute, forced, sync);
-            }
+            if (data != null) { return PlaceMultiTile(x, y, item, mute, forced, sync); }
         }
 
         //No need to (re)place if the tile is already the desired 
@@ -87,7 +84,8 @@ public static class PlacementHelpers
             return false;
 
         //Check if enough materials
-        if (!CanReduceItemStack(item.type)) return false;
+        if (!CanReduceItemStack(item.type))
+            return false;
 
         if (replaceTilesEnabled) {
             //Can't replace Air
@@ -123,7 +121,8 @@ public static class PlacementHelpers
 
     public static void PlaceTilesInArea(Point start, Point end, Item item, bool mute = false, bool forced = false,
         bool sync = true) {
-        if (!ValidTileCoordinates(start.X, start.Y) || !ValidTileCoordinates(end.X, end.Y)) return;
+        if (!ValidTileCoordinates(start.X, start.Y) || !ValidTileCoordinates(end.X, end.Y))
+            return;
 
         int dx = Math.Abs(start.X - end.X);
         int dy = Math.Abs(start.Y - end.Y);
@@ -145,8 +144,10 @@ public static class PlacementHelpers
     public static bool RemoveTile(int x, int y, bool removeTile = true, bool removeWall = false, bool dropItem = true,
         int itemToDrop = -1, bool sync = true, bool needPickPower = false) {
 
-        if (!ValidTileCoordinates(x, y)) return false;
-        if (needPickPower && !Main.LocalPlayer.HasEnoughPickPowerToHurtTile(x, y)) return false;
+        if (!ValidTileCoordinates(x, y))
+            return false;
+        if (needPickPower && !Main.LocalPlayer.HasEnoughPickPowerToHurtTile(x, y))
+            return false;
 
         Tile tile = Framing.GetTileSafely(x, y);
         int itemType = ItemPicker.PickItem(tile);
@@ -163,9 +164,7 @@ public static class PlacementHelpers
         if (removeWall)
             WorldGen.KillWall(x, y);
 
-        if (sync && Main.netMode == NetmodeID.MultiplayerClient) {
-            NetMessage.SendTileSquare(-1, x, y, 1);
-        }
+        if (sync && Main.netMode == NetmodeID.MultiplayerClient) { NetMessage.SendTileSquare(-1, x, y, 1); }
 
         return true;
     }

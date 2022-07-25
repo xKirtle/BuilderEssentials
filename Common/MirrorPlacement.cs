@@ -21,9 +21,8 @@ namespace BuilderEssentials.Common;
 //TODO: Lookup WorldGen.PlaceObject?
 public static class MirrorPlacement
 {
-    private static readonly List<int> PaintToolsItemTypes = new List<int> {
-        ItemID.Paintbrush, ItemID.SpectrePaintbrush,
-        ItemID.PaintRoller, ItemID.SpectrePaintRoller,
+    private static readonly List<int> PaintToolsItemTypes = new() {
+        ItemID.Paintbrush, ItemID.SpectrePaintbrush, ItemID.PaintRoller, ItemID.SpectrePaintRoller,
         ItemID.PaintScraper, ItemID.SpectrePaintScraper
     };
 
@@ -33,7 +32,7 @@ public static class MirrorPlacement
         QueuedTilePaint();
     }
 
-    internal static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new UniqueQueue<Tuple<Point, Item>>();
+    internal static UniqueQueue<Tuple<Point, Item>> tilePlacementsQueue = new();
     public static void QueuedTilePlacements() {
         while (tilePlacementsQueue.Count != 0) {
             (Point placementCoords, Item item) = tilePlacementsQueue.Dequeue();
@@ -48,17 +47,14 @@ public static class MirrorPlacement
             bool isWirePlacement = true; //TODO: Hardcode item.types? ItemCheck_UseWiringTools(item)
             bool isLiquidPlacement = true; //Also hardocde item.types like buckets? ItemCheck_UseBuckets(item)
 
-            TileObject tileObject = new TileObject() {
-                type = isTilePlacement ? item.createTile : item.createWall,
-                style = item.placeStyle
-            };
+            TileObject tileObject = new() { type = isTilePlacement ? item.createTile : item.createWall, style = item.placeStyle };
 
             TileObjectData tileData = null;
             if (isTilePlacement)
                 tileData = TileObjectData.GetTileData(tileObject.type, tileObject.style, tileObject.alternate);
 
             TileData[] placedTile = new TileData[1];
-            Point tileSize = new Point(1, 1);
+            Point tileSize = new(1, 1);
 
             if (tileData != null) {
                 tileSize = new Point(tileData.CoordinateFullWidth / 16, tileData.CoordinateFullHeight / 16);
@@ -74,7 +70,8 @@ public static class MirrorPlacement
                     placedTile[k] = new TileData(iterTile, tileCoord);
                 }
             }
-            else placedTile[0] = new TileData(tile, placementCoords);
+            else
+                placedTile[0] = new TileData(tile, placementCoords);
 
             MirrorPlacementAction(mirroredCoords => {
                 Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
@@ -84,7 +81,8 @@ public static class MirrorPlacement
                 TileObject canPlaceObject = TileObject.Empty;
                 if (isTilePlacement && (mirroredTile.HasTile || !TileObject.CanPlace(mirroredCoords.X, mirroredCoords.Y, tileObject.type,
                         tileObject.style, Main.LocalPlayer.direction, out canPlaceObject, true) && canPlaceObject.type != 0) ||
-                    isWallPlacement && mirroredTile.WallType >= WallID.Stone) return;
+                    isWallPlacement && mirroredTile.WallType >= WallID.Stone)
+                    return;
 
                 if (tileData != null) {
                     //Copying saved tiles data to mirrored coordinates
@@ -193,7 +191,7 @@ public static class MirrorPlacement
         }
     }
 
-    internal static UniqueQueue<MinimalTileData> hammerTileQueue = new UniqueQueue<MinimalTileData>();
+    internal static UniqueQueue<MinimalTileData> hammerTileQueue = new();
     public static void QueuedHammerTile() {
         while (hammerTileQueue.Count != 0) {
             MinimalTileData data = hammerTileQueue.Dequeue();
@@ -201,7 +199,8 @@ public static class MirrorPlacement
             Tile tile = Main.tile[coords.X, coords.Y];
 
             //Data is the information before the hammer was used
-            if (data.Slope == tile.Slope && data.IsHalfBlock == tile.IsHalfBlock) return;
+            if (data.Slope == tile.Slope && data.IsHalfBlock == tile.IsHalfBlock)
+                return;
 
             MirrorPlacementAction(mirroredCoords => {
                 int[] mirroredSlopes = new[] { 0, 2, 1, 4, 3 };
@@ -210,7 +209,7 @@ public static class MirrorPlacement
         }
     }
 
-    internal static UniqueQueue<Tuple<Point, Item>> paintTileQueue = new UniqueQueue<Tuple<Point, Item>>();
+    internal static UniqueQueue<Tuple<Point, Item>> paintTileQueue = new();
     public static void QueuedTilePaint() {
         while (paintTileQueue.Count != 0) {
             (Point coords, Item item) = paintTileQueue.Dequeue();
@@ -238,16 +237,18 @@ public static class MirrorPlacement
 
         On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
             orig.Invoke(player, item, multiplier, useItem);
-            if (Main.netMode == NetmodeID.Server) return;
+            if (Main.netMode == NetmodeID.Server)
+                return;
 
             MirrorWandPanel panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
             if (!panel.IsVisible || !panel.validMirrorPlacement ||
-                !panel.IsMouseWithinSelection() || !panel.IsMouseAffectedByMirrorAxis()) return;
+                !panel.IsMouseWithinSelection() || !panel.IsMouseAffectedByMirrorAxis())
+                return;
 
-            Point coord = new Point(Player.tileTargetX, Player.tileTargetY);
+            Point coord = new(Player.tileTargetX, Player.tileTargetY);
             Tile tile = Main.tile[coord.X, coord.Y];
-            MinimalTileData data = new MinimalTileData(tile, coord);
-            TileData tileData = new TileData(tile, coord);
+            MinimalTileData data = new(tile, coord);
+            TileData tileData = new(tile, coord);
 
             if (item.createTile >= TileID.Dirt || item.createWall >= WallID.Stone)
                 tilePlacementsQueue.Enqueue(new Tuple<Point, Item>(coord, item));
@@ -318,7 +319,8 @@ public static class MirrorPlacement
             if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
                 //Do nothing
             }
-            else orig.Invoke(player);
+            else
+                orig.Invoke(player);
         };
 
         //Remove vanilla behaviour that hammers walls around the tile target based on coord inside tile targetted
@@ -329,15 +331,14 @@ public static class MirrorPlacement
                 x = Player.tileTargetX;
                 y = Player.tileTargetY;
             }
-            else orig.Invoke(out x, out y);
+            else
+                orig.Invoke(out x, out y);
         };
 
         On.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
             orig.Invoke(player, item, x, y);
 
-            MirrorPlacementAction(mirroredCoords => {
-                orig.Invoke(player, item, mirroredCoords.X, mirroredCoords.Y);
-            }, new Point16(x, y));
+            MirrorPlacementAction(mirroredCoords => { orig.Invoke(player, item, mirroredCoords.X, mirroredCoords.Y); }, new Point16(x, y));
         };
 
         On.Terraria.Player.PickTile += (orig, player, x, y, power) => {
@@ -346,7 +347,8 @@ public static class MirrorPlacement
             MirrorPlacementAction(mirroredCoords => {
                 Tile mirroredTile = Main.tile[mirroredCoords.X, mirroredCoords.Y];
                 if (TileID.Sets.IsATreeTrunk[mirroredTile.TileType] ||
-                    TileID.Sets.CountsAsGemTree[mirroredTile.TileType]) return;
+                    TileID.Sets.CountsAsGemTree[mirroredTile.TileType])
+                    return;
 
                 orig.Invoke(player, mirroredCoords.X, mirroredCoords.Y, power);
             }, new Point16(x, y));
@@ -369,7 +371,8 @@ public static class MirrorPlacement
 
     public static Point16 MirrorPlacementAction(Action<Point16> action, Point16 tileCoords = default, Item item = null,
         bool shouldReduceStack = false, int amount = 1) {
-        if (Main.dedServ) return tileCoords;
+        if (Main.dedServ)
+            return tileCoords;
         item ??= Main.LocalPlayer.HeldItem;
 
         MirrorWandPanel panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
@@ -414,7 +417,8 @@ public static class MirrorPlacement
         Point16 tileCoords = pData.Coordinates;
         Texture2D tileTexture = TextureAssets.Tile[pData.Type].Value;
         TileObjectData tData = TileObjectData.GetTileData(pData.Type, pData.Style, pData.Alternate);
-        if (tData == null) return;
+        if (tData == null)
+            return;
 
         int tileWidth = 0, tileHeight = 0, styleMultiplier = 0, alternateMultiplier = 0;
         styleMultiplier = tData.CalculatePlacementStyle(pData.Style, pData.Alternate, pData.Random) + tData.DrawStyleOffset;
@@ -439,7 +443,7 @@ public static class MirrorPlacement
             int y = tileHeight;
 
             for (int j = 0; j < pData.Size.Y; j++) {
-                Point pCoord = new Point(tileCoords.X + i, tileCoords.Y + j);
+                Point pCoord = new(tileCoords.X + i, tileCoords.Y + j);
 
                 //DrawStepDown messing me with banners?
                 if (j == 0 && tData.DrawStepDown != 0 && WorldGen.SolidTile(Main.tile[pCoord.X, pCoord.Y - 1]))
@@ -465,10 +469,10 @@ public static class MirrorPlacement
                         currentCoordHeight += 2;
 
                     Vector2 position = pCoord.ToVector2() * 16 - pos +
-                                       new Vector2((tData.CoordinateWidth - 16) / 2f, 0) +
-                                       new Vector2(drawXOffset, drawYOffset);
+                        new Vector2((tData.CoordinateWidth - 16) / 2f, 0) +
+                        new Vector2(drawXOffset, drawYOffset);
 
-                    Rectangle sourceRectangle = new Rectangle(x, y, tData.CoordinateWidth, currentCoordHeight);
+                    Rectangle sourceRectangle = new(x, y, tData.CoordinateWidth, currentCoordHeight);
                     sb.Draw(tileTexture, position, sourceRectangle, drawColor, 0f, Vector2.Zero, 1f, spriteEffects, 0f);
                     y += currentCoordHeight + tData.CoordinatePadding;
                 }

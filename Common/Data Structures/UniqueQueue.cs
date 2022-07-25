@@ -20,14 +20,10 @@ public class UniqueQueue<T> : IEnumerable<T>
         queue.Clear();
     }
 
-    public bool Contains(T item) {
-        return hashSet.Contains(item);
-    }
+    public bool Contains(T item) => hashSet.Contains(item);
 
     public void Enqueue(T item) {
-        if (hashSet.Add(item)) {
-            queue.Enqueue(item);
-        }
+        if (hashSet.Add(item)) { queue.Enqueue(item); }
     }
 
     public T Dequeue() {
@@ -36,15 +32,9 @@ public class UniqueQueue<T> : IEnumerable<T>
         return item;
     }
 
-    public T Peek() {
-        return queue.Peek();
-    }
+    public T Peek() => queue.Peek();
 
-    public IEnumerator<T> GetEnumerator() {
-        return queue.GetEnumerator();
-    }
+    public IEnumerator<T> GetEnumerator() => queue.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator() {
-        return queue.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => queue.GetEnumerator();
 }

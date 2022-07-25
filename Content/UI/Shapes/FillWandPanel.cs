@@ -11,13 +11,9 @@ namespace BuilderEssentials.Content.UI;
 
 public class FillWandPanel : BaseShapePanel
 {
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>();
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>();
 
-    public override bool CanPlaceItems() {
-        return SelectedItem.type != ItemID.None;
-    }
+    public override bool CanPlaceItems() => SelectedItem.type != ItemID.None;
 
     public override HashSet<Vector2> VisitedPlottedPixels => null;
 
@@ -31,8 +27,9 @@ public class FillWandPanel : BaseShapePanel
 
     private Vector2 oldTileCoords;
     public override bool SelectionHasChanged() {
-        Vector2 newTileCoords = new Vector2(Player.tileTargetX, Player.tileTargetY);
-        if (oldTileCoords == newTileCoords) return false;
+        Vector2 newTileCoords = new(Player.tileTargetX, Player.tileTargetY);
+        if (oldTileCoords == newTileCoords)
+            return false;
 
         oldTileCoords = newTileCoords;
         return true;

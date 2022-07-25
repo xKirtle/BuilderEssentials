@@ -10,9 +10,7 @@ public class SpecCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Specialized Crafting Station");
@@ -34,14 +32,12 @@ public class SpecCraftingItem : ModItem
         Item.rare = ItemRarityID.Red;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Keg)
-            .AddIngredient(ItemID.TeaKettle)
-            .AddIngredient(ItemID.BlendOMatic)
-            .AddIngredient(ItemID.MeatGrinder)
-            .AddRecipeGroup("BuilderEssentials:Campfire")
-            .AddTile(TileID.MythrilAnvil)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.Keg)
+        .AddIngredient(ItemID.TeaKettle)
+        .AddIngredient(ItemID.BlendOMatic)
+        .AddIngredient(ItemID.MeatGrinder)
+        .AddRecipeGroup("BuilderEssentials:Campfire")
+        .AddTile(TileID.MythrilAnvil)
+        .Register();
 }

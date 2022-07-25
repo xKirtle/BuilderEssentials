@@ -20,9 +20,7 @@ public class MultiCraftingStation : BaseCraftingStation
     public override string DisplayName => "Multi Crafting Station";
     public override Color MapColor => Color.White * 0.65f;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.Sandnado;
@@ -39,9 +37,7 @@ public class MultiCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() {
-        return Enumerable.Range(0, TileLoader.TileCount).ToArray();
-    }
+    public override int[] AdjacentTiles() => Enumerable.Range(0, TileLoader.TileCount).ToArray();
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
         frameNumber = frame;
@@ -53,9 +49,7 @@ public class MultiCraftingStation : BaseCraftingStation
         }
     }
 
-    private static Color[] colors = {
-        new Color(36, 151, 64), new Color(191, 55, 64), new Color(185, 92, 31), new Color(39, 137, 205)
-    };
+    private static Color[] colors = { new(36, 151, 64), new(191, 55, 64), new(185, 92, 31), new(39, 137, 205) };
 
     private int colorCounter = 0;
     private int frameNumber = 0;
@@ -66,7 +60,7 @@ public class MultiCraftingStation : BaseCraftingStation
             float distance = Math.Min(Math.Abs(Vector2.Subtract(player, tile).Length()), 500f);
             float fluctuation = 1 - distance / 500;
 
-            Vector2 coord = new Vector2(i * 16, j * 16);
+            Vector2 coord = new(i * 16, j * 16);
             //TODO: Change dust colos based on which gem is hitting
             for (int k = 0; k < 16 * fluctuation; k++) {
                 Dust.NewDustPerfect(coord + new Vector2(k, Main.rand.Next(-8, 8)), 158,
@@ -80,7 +74,6 @@ public class MultiCraftingStation : BaseCraftingStation
         }
     }
 
-    public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ModContent.ItemType<MultiCraftingItem>());
-    }
+    public override void KillMultiTile(int i, int j, int frameX, int frameY) => Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16,
+        32, 16, ModContent.ItemType<MultiCraftingItem>());
 }

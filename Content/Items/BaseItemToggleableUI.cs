@@ -20,14 +20,10 @@ public abstract class BaseItemToggleableUI : BuilderEssentialsItem
     public virtual ToggleableUiType ToggleableUiType { get; private set; }
 
     public override void SetDefaults() //TODO: Check if updating tile range in holdItem is a better solution
-    {
-    Item.tileBoost = ItemRange - 18;
+        => Item.tileBoost = ItemRange - 18;
     //So that ItemRange is accurate per tiles
-    }
-
-    public override void ModifyTooltips(List<TooltipLine> tooltips) {
-        tooltips.Remove(tooltips.Find(x => x.Text.Contains($"{Item.tileBoost} range")));
-    }
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+        => tooltips.Remove(tooltips.Find(x => x.Text.Contains($"{Item.tileBoost} range")));
 
     public override bool AltFunctionUse(Player player) {
         if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
@@ -36,11 +32,7 @@ public abstract class BaseItemToggleableUI : BuilderEssentialsItem
         return false;
     }
 
-    public bool IsPanelVisible() {
-        return ToggleableItemsUIState.GetUIPanel((int) ToggleableUiType).IsVisible;
-    }
+    public bool IsPanelVisible() => ToggleableItemsUIState.GetUIPanel((int) ToggleableUiType).IsVisible;
 
-    public void TogglePanel() {
-        ToggleableItemsUIState.TogglePanelVisibility((int) ToggleableUiType);
-    }
+    public void TogglePanel() => ToggleableItemsUIState.TogglePanelVisibility((int) ToggleableUiType);
 }

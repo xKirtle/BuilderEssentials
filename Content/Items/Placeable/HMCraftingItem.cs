@@ -10,9 +10,7 @@ public class HMCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Hardmode Crafting Station");
@@ -34,15 +32,13 @@ public class HMCraftingItem : ModItem
         Item.rare = ItemRarityID.Red;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddRecipeGroup("BuilderEssentials:Hardmode Anvil")
-            .AddRecipeGroup("BuilderEssentials:Hardmode Forge")
-            .AddRecipeGroup("BuilderEssentials:Bookcase")
-            .AddIngredient(ItemID.CrystalBall)
-            .AddIngredient(ItemID.Autohammer)
-            .AddIngredient(ItemID.LunarCraftingStation)
-            .AddTile(TileID.DemonAltar)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddRecipeGroup("BuilderEssentials:Hardmode Anvil")
+        .AddRecipeGroup("BuilderEssentials:Hardmode Forge")
+        .AddRecipeGroup("BuilderEssentials:Bookcase")
+        .AddIngredient(ItemID.CrystalBall)
+        .AddIngredient(ItemID.Autohammer)
+        .AddIngredient(ItemID.LunarCraftingStation)
+        .AddTile(TileID.DemonAltar)
+        .Register();
 }

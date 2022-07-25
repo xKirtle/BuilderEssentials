@@ -25,9 +25,7 @@ public class BuilderEssentials : Mod
     public static Dictionary<int, List<int>> WallToItems;
 
 #if TML_2022_06
-    public override void AddRecipes() {
-        ReadAndCacheLocally();
-    }
+    public override void AddRecipes() => ReadAndCacheLocally();
 #endif
 
     public override void PostSetupContent() {
@@ -51,9 +49,9 @@ public class BuilderEssentials : Mod
     }
 
     private void CacheModTiles() {
-        Item item = new Item();
+        Item item = new();
         for (int i = TileToItems.Count; i < TileLoader.TileCount; i++) {
-            List<int> tileItems = new List<int>();
+            List<int> tileItems = new();
             for (int j = 0; j < ItemLoader.ItemCount; j++) {
                 item.SetDefaults(j);
                 if (item.createTile == i)
@@ -64,7 +62,7 @@ public class BuilderEssentials : Mod
         }
 
         for (int i = WallToItems.Count; i < WallLoader.WallCount; i++) {
-            List<int> wallItems = new List<int>();
+            List<int> wallItems = new();
             for (int j = 0; j < ItemLoader.ItemCount; j++) {
                 item.SetDefaults(j);
                 if (item.createWall == i)
@@ -80,7 +78,5 @@ public class BuilderEssentials : Mod
         AssetsLoader.LoadTextures();
     }
 
-    public override void Unload() {
-        AssetsLoader.UnloadTextures();
-    }
+    public override void Unload() => AssetsLoader.UnloadTextures();
 }

@@ -11,7 +11,7 @@ namespace BuilderEssentials.Common.Systems;
 public class RecipeSystem : ModSystem
 {
     internal static void CreateRecipeGroup(int[] items, string text) {
-        RecipeGroup recipeGroup = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + text, items);
+        RecipeGroup recipeGroup = new(() => Language.GetTextValue("LegacyMisc.37") + " " + text, items);
         RecipeGroup.RegisterGroup("BuilderEssentials:" + text, recipeGroup);
     }
 
@@ -31,12 +31,13 @@ public class RecipeSystem : ModSystem
             }
         }
 
-        List<int> woods = new List<int> {
-            TileID.WoodBlock, TileID.RichMahogany, TileID.Ebonwood, TileID.Shadewood, TileID.Pearlwood,
-            TileID.BorealWood, TileID.PalmWood, TileID.DynastyWood, TileID.SpookyWood
+        List<int> woods = new() {
+            TileID.WoodBlock, TileID.RichMahogany, TileID.Ebonwood, TileID.Shadewood,
+            TileID.Pearlwood, TileID.BorealWood, TileID.PalmWood, TileID.DynastyWood,
+            TileID.SpookyWood
         };
 
-        List<int> woodItems = new List<int>();
+        List<int> woodItems = new();
         woods.ForEach(woodType => woodItems.AddRange(tilesList[woodType]));
         CreateRecipeGroup(woodItems.ToArray(), "Wood");
         CreateRecipeGroup(tilesList[TileID.WorkBenches].ToArray(), "Workbench");

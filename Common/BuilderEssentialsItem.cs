@@ -14,7 +14,8 @@ public abstract class BuilderEssentialsItem : ModItem
     public virtual int ItemRange { get; protected set; } = 8;
 
     public override void HoldItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
         if (ItemHasRange()) {
             player.cursorItemIconEnabled = true;
@@ -30,6 +31,6 @@ public abstract class BuilderEssentialsItem : ModItem
 
         itemRangeInTiles = itemRangeInTiles == default ? ItemRange : itemRangeInTiles;
         return Math.Abs(playerCenterScreen.X - mouseCoords.X) <= itemRangeInTiles &&
-               Math.Abs(playerCenterScreen.Y - mouseCoords.Y) <= itemRangeInTiles - 2;
+            Math.Abs(playerCenterScreen.Y - mouseCoords.Y) <= itemRangeInTiles - 2;
     }
 }

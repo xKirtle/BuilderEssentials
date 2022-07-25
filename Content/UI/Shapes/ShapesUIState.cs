@@ -23,11 +23,8 @@ public class ShapesUISystem : UISystem<ShapesUIState>
 
 public class ShapesUIState : ManagedUIState<BaseShapePanel>
 {
-    public override List<Type> PanelTypes => new List<Type> {
-        typeof(FillWandPanel),
-        typeof(MirrorWandPanel),
-        typeof(ImprovedRulerPanel),
-        typeof(ShapesDrawerPanel)
+    public override List<Type> PanelTypes => new() {
+        typeof(FillWandPanel), typeof(MirrorWandPanel), typeof(ImprovedRulerPanel), typeof(ShapesDrawerPanel)
     };
 
     public override void Update(GameTime gameTime) {
@@ -90,9 +87,7 @@ public abstract class BaseShapePanel : UIElement
     /// <summary>
     /// Sets <see cref="SelectedItem"/>
     /// </summary>
-    public void SetSelectedItem(int itemType) {
-        SelectedItem.SetDefaults(itemType);
-    }
+    public void SetSelectedItem(int itemType) => SelectedItem.SetDefaults(itemType);
 
     /// <summary>
     /// Define draw behaviour here
@@ -126,10 +121,11 @@ public abstract class BaseShapePanel : UIElement
     }
 
     public void UpdateMaxUndoNum(int value) {
-        if (historyPlacements == null) return;
+        if (historyPlacements == null)
+            return;
 
         HistoryStack<List<PlacementHistory>> oldHistoryPlacements = historyPlacements;
-        HistoryStack<List<PlacementHistory>> newHistoryPlacements = new HistoryStack<List<PlacementHistory>>(value);
+        HistoryStack<List<PlacementHistory>> newHistoryPlacements = new(value);
         newHistoryPlacements.AddRange(oldHistoryPlacements.Items);
         historyPlacements = newHistoryPlacements;
     }
@@ -143,26 +139,25 @@ public abstract class BaseShapePanel : UIElement
         PlotSelection();
     }
 
-    public void QueuePlacement(Point coords) {
-        queuedPlacements.Enqueue(coords);
-    }
+    public void QueuePlacement(Point coords) => queuedPlacements.Enqueue(coords);
 
     public void DequeuePlacement() {
-        if (queuedPlacements.Count == 0) return;
+        if (queuedPlacements.Count == 0)
+            return;
 
         if (!SelectionHasChanged() && !undo) {
             queuedPlacements.Clear();
             return;
         }
 
-        List<PlacementHistory> previousPlacement = new List<PlacementHistory>(queuedPlacements.Count);
+        List<PlacementHistory> previousPlacement = new(queuedPlacements.Count);
 
         while (queuedPlacements.Count != 0) {
             Point coordinate = queuedPlacements.Dequeue();
             Tile tile = Framing.GetTileSafely(coordinate);
-            MinimalTile previousTile = new MinimalTile(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile));
+            MinimalTile previousTile = new(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile));
             bool tilePlaced = PlacementHelpers.PlaceTile(coordinate.X, coordinate.Y, SelectedItem);
-            MinimalTile placedTile = new MinimalTile(tile.TileType, tile.WallType, tile.HasTile, SelectedItem.placeStyle);
+            MinimalTile placedTile = new(tile.TileType, tile.WallType, tile.HasTile, SelectedItem.placeStyle);
             if (tilePlaced)
                 previousPlacement.Add(new PlacementHistory(coordinate, previousTile, placedTile, SelectedItem));
         }
@@ -172,7 +167,8 @@ public abstract class BaseShapePanel : UIElement
 
     public void UndoPlacement() {
         //Kirtle: Do UI that allows a specific historyPlacement to be removed rather than behaving like a Stack?
-        if (historyPlacements.Count == 0) return;
+        if (historyPlacements.Count == 0)
+            return;
 
         undo = true;
         List<PlacementHistory> lastPlacement = historyPlacements.Pop();
@@ -185,11 +181,11 @@ public abstract class BaseShapePanel : UIElement
             Item placeItem = last.SelectedItem;
 
             Tile currentTile = Main.tile[coords.X, coords.Y];
-            Item beforePlacementItem = new Item(ItemPicker.PickItem(beforePlacementTile));
+            Item beforePlacementItem = new(ItemPicker.PickItem(beforePlacementTile));
             bool canUndoTile = currentTile.HasTile && currentTile.TileType == placedTile.TileType &&
-                               (currentTile.TileType == placeItem.createTile || beforePlacementItem.IsAir);
+                (currentTile.TileType == placeItem.createTile || beforePlacementItem.IsAir);
             bool canUndoWall = placedTile.HasWall && currentTile.WallType == placedTile.WallType &&
-                               (currentTile.WallType == placeItem.createWall || beforePlacementItem.IsAir);
+                (currentTile.WallType == placeItem.createWall || beforePlacementItem.IsAir);
 
             if (canUndoTile || canUndoWall) {
                 if (PlacementHelpers.RemoveTile(coords.X, coords.Y, canUndoTile, canUndoWall, needPickPower: true) &&

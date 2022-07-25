@@ -20,9 +20,8 @@ public class WrenchItemUpgrade : ModItem
     //Can't have repeated internal names when adding content
     public override string Name => ((WrenchUpgrades) UpgradeNumber).ToString() + "Module";
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[UpgradeNumber];
-    }
+    public override bool IsLoadingEnabled(Mod mod)
+        => ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[UpgradeNumber];
 
     public override void SetDefaults() {
         Item.width = Item.height = 38;
@@ -31,9 +30,7 @@ public class WrenchItemUpgrade : ModItem
     }
 
     public WrenchItemUpgrade() { }
-    public WrenchItemUpgrade(int upgradeNumber) {
-        UpgradeNumber = upgradeNumber;
-    }
+    public WrenchItemUpgrade(int upgradeNumber) => UpgradeNumber = upgradeNumber;
 
     public override ModItem Clone(Item newEntity) {
         WrenchItemUpgrade newInstance = (WrenchItemUpgrade) base.Clone(newEntity);

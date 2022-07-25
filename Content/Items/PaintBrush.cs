@@ -14,13 +14,12 @@ public class PaintBrush : BasePaintBrush
     public override int ItemRange => 10;
     protected override bool CloneNewInstances => true;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledItems.PaintBrush;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.PaintBrush;
 
     public override void HoldItem(Player player) {
         base.HoldItem(player);
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
         Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
         PaintBrushPanel panel = ToggleableItemsUIState.GetUIPanel<PaintBrushPanel>();
@@ -41,12 +40,10 @@ public class PaintBrush : BasePaintBrush
         }
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.Paintbrush)
-            .AddIngredient(ItemID.PaintRoller)
-            .AddIngredient(ItemID.PaintScraper)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.Paintbrush)
+        .AddIngredient(ItemID.PaintRoller)
+        .AddIngredient(ItemID.PaintScraper)
+        .AddTile(TileID.Anvils)
+        .Register();
 }

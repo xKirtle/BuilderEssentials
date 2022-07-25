@@ -13,9 +13,7 @@ namespace BuilderEssentials.Content.UI;
 
 public class MultiWandPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MultiWand>();
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<MultiWand>();
 
     private const float ParentWidth = 180f, ParentHeight = 160f;
     private const int ElementsCount = 6;
@@ -39,14 +37,12 @@ public class MultiWandPanel : BaseToggleablePanel
         float offsetX = ParentWidth / 3f;
         float offsetY = (float) (Math.Sqrt(11) / 4) * ParentHeight;
 
-        Vector2 elementOffset = new Vector2(22, 22);
+        Vector2 elementOffset = new(22, 22);
         Vector2[] buttonPositions = new[] {
-            new Vector2(offsetX, offsetY) - elementOffset,
-            new Vector2(ParentWidth - offsetX, offsetY) - elementOffset,
+            new Vector2(offsetX, offsetY) - elementOffset, new Vector2(ParentWidth - offsetX, offsetY) - elementOffset,
             new Vector2(ParentWidth - 24, ParentHeight / 2) - elementOffset,
             new Vector2(ParentWidth - offsetX, ParentHeight - offsetY) - elementOffset,
-            new Vector2(offsetX, ParentHeight - offsetY) - elementOffset,
-            new Vector2(24, ParentHeight / 2) - elementOffset
+            new Vector2(offsetX, ParentHeight - offsetY) - elementOffset, new Vector2(24, ParentHeight / 2) - elementOffset
         };
 
         for (int i = 0; i < ElementsCount; i++) {
@@ -74,10 +70,8 @@ public class MultiWandPanel : BaseToggleablePanel
     }
 
     private readonly string[] text = {
-        "[i/s:9]   - Places living wood", "[i/s:154]  - Places bones",
-        "[i/s:9]   - Places leaves", "[i/s:1124]  - Places hives",
-        "[i/s:620]   - Places living rich mahogany",
-        "[i/s:620]   - Places rich mahogany leaves"
+        "[i/s:9]   - Places living wood", "[i/s:154]  - Places bones", "[i/s:9]   - Places leaves", "[i/s:1124]  - Places hives",
+        "[i/s:620]   - Places living rich mahogany", "[i/s:620]   - Places rich mahogany leaves"
     };
 
     private void ElementOnMouseOver(int index) {
@@ -96,7 +90,8 @@ public class MultiWandPanel : BaseToggleablePanel
         if (IsMouseHovering && elementHovered || hoverText?.IsMouseHovering == true) {
             Main.LocalPlayer.mouseInterface = true;
 
-            if (hoverText == null) return;
+            if (hoverText == null)
+                return;
             PreventTextOffScreen(this, hoverText, BEPlayer.PointedScreenCoords, new Vector2(11, -22));
         }
     }

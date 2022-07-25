@@ -20,7 +20,7 @@ public static class ShapeHelpers
 
 
     private static Asset<Texture2D> PixelTexture = TextureAssets.Extra[2];
-    private static Rectangle Rectangle = new Rectangle(0, 0, 16, 16);
+    private static Rectangle Rectangle = new(0, 0, 16, 16);
 
     public static void PlotPixel(int tileX, int tileY, Color color, BaseShapePanel instance, float scale = 1f) {
         Vector2 position = Main.ReverseGravitySupport(new Vector2(tileX, tileY) * 16 - Main.screenPosition);
@@ -34,12 +34,10 @@ public static class ShapeHelpers
     }
 
 #region Plot Line
-    public static void PlotLine(Vector2 start, Vector2 end, Color color, BaseShapePanel instance, float scale = 1f) {
-        PlotLine(start.X, start.Y, end.X, end.Y, color, instance, scale);
-    }
-    public static void PlotLine(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance, float scale = 1f) {
-        PlotLine((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale);
-    }
+    public static void PlotLine(Vector2 start, Vector2 end, Color color, BaseShapePanel instance, float scale = 1f)
+        => PlotLine(start.X, start.Y, end.X, end.Y, color, instance, scale);
+    public static void PlotLine(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance, float scale = 1f)
+        => PlotLine((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale);
     public static void PlotLine(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance, float scale = 1f) {
         int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
         int dy = -Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
@@ -48,13 +46,15 @@ public static class ShapeHelpers
             PlotPixel(x0, y0, color, instance, scale);
             e2 = 2 * err;
             if (e2 >= dy) {
-                if (x0 == x1) break;
+                if (x0 == x1)
+                    break;
                 err += dy;
                 x0 += sx;
             }
 
             if (e2 <= dx) {
-                if (y0 == y1) break;
+                if (y0 == y1)
+                    break;
                 err += dx;
                 y0 += sy;
             }
@@ -64,14 +64,12 @@ public static class ShapeHelpers
 
 #region Plot Rectangle
     public static void PlotRectangle(Vector2 start, Vector2 end, Color color, BaseShapePanel instance,
-        float scale = 1f, bool isFill = false, bool displaySize = true) {
-        PlotRectangle(start.X, start.Y, end.X, end.Y, color, instance, scale, isFill, displaySize);
-    }
+        float scale = 1f, bool isFill = false, bool displaySize = true)
+        => PlotRectangle(start.X, start.Y, end.X, end.Y, color, instance, scale, isFill, displaySize);
 
     public static void PlotRectangle(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance,
-        float scale = 1f, bool isFill = false, bool displaySize = true) {
-        PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale, isFill, displaySize);
-    }
+        float scale = 1f, bool isFill = false, bool displaySize = true)
+        => PlotRectangle((int) x0, (int) y0, (int) x1, (int) y1, color, instance, scale, isFill, displaySize);
 
     public static void PlotRectangle(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance,
         float scale = 1f, bool isFill = false, bool displaySize = true) {
@@ -80,7 +78,8 @@ public static class ShapeHelpers
         int minX = Math.Min(x0, x1), maxX = Math.Max(x0, x1);
         int minY = Math.Min(y0, y1), maxY = Math.Max(y0, y1);
 
-        if (dx == 0 && dy == 0) return;
+        if (dx == 0 && dy == 0)
+            return;
 
         if (dx == 0 && dy != 0 || dx != 0 && dy == 0) {
             PlotLine(x0, y0, x1, y1, color, instance, scale);
@@ -131,7 +130,7 @@ public static class ShapeHelpers
 #region Quadratic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint,
         Color color, BaseShapePanel instance, float scale = 1f) {
-        List<Vector2> points = new List<Vector2>();
+        List<Vector2> points = new();
         for (float t = 0.0f; t < 1.0f; t += dt)
             points.Add(TraverseBezier(startPoint, controlPoint, endPoint, t));
 
@@ -141,13 +140,11 @@ public static class ShapeHelpers
             PlotLine(points[i], points[i + 1], color, instance, scale);
     }
 
-    private static float X(float t, float x0, float x1, float x2) {
-        return (float) (x0 * Math.Pow(1 - t, 2) + x1 * 2 * t * (1 - t) + x2 * Math.Pow(t, 2));
-    }
+    private static float X(float t, float x0, float x1, float x2)
+        => (float) (x0 * Math.Pow(1 - t, 2) + x1 * 2 * t * (1 - t) + x2 * Math.Pow(t, 2));
 
-    private static float Y(float t, float y0, float y1, float y2) {
-        return (float) (y0 * Math.Pow(1 - t, 2) + y1 * 2 * t * (1 - t) + y2 * Math.Pow(t, 2));
-    }
+    private static float Y(float t, float y0, float y1, float y2)
+        => (float) (y0 * Math.Pow(1 - t, 2) + y1 * 2 * t * (1 - t) + y2 * Math.Pow(t, 2));
 
     private static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint, Vector2 endPoint, float t) {
         Vector2 newControlPoint = GetControlPointOfTheoricalControlPoint(startPoint, controlPoint, endPoint);
@@ -169,7 +166,7 @@ public static class ShapeHelpers
 #region Cubic Bezier
     public static void PlotBezier(float dt, Vector2 startPoint, Vector2 controlPoint, Vector2 controlPoint2,
         Vector2 endPoint, Color color, BaseShapePanel instance, float scale = 1f) {
-        List<Vector2> points = new List<Vector2>();
+        List<Vector2> points = new();
         for (float t = 0.0f; t < 1.0f; t += dt)
             points.Add(TraverseBezier(startPoint, controlPoint, controlPoint2, endPoint, t));
 
@@ -179,15 +176,13 @@ public static class ShapeHelpers
             PlotLine(points[i], points[i + 1], color, instance, scale);
     }
 
-    private static float X(float t, float x0, float x1, float x2, float x3) {
-        return (float) (x0 * Math.Pow(1 - t, 3) + x1 * 3 * t * Math.Pow(1 - t, 2) +
-                        x2 * 3 * Math.Pow(t, 2) * (1 - t) + x3 * Math.Pow(t, 3));
-    }
+    private static float X(float t, float x0, float x1, float x2, float x3) => (float) (x0 * Math.Pow(1 - t, 3) +
+        x1 * 3 * t * Math.Pow(1 - t, 2) +
+        x2 * 3 * Math.Pow(t, 2) * (1 - t) + x3 * Math.Pow(t, 3));
 
-    private static float Y(float t, float y0, float y1, float y2, float y3) {
-        return (float) (y0 * Math.Pow(1 - t, 3) + y1 * 3 * t * Math.Pow(1 - t, 2) +
-                        y2 * 3 * Math.Pow(t, 2) * (1 - t) + y3 * Math.Pow(t, 3));
-    }
+    private static float Y(float t, float y0, float y1, float y2, float y3) => (float) (y0 * Math.Pow(1 - t, 3) +
+        y1 * 3 * t * Math.Pow(1 - t, 2) +
+        y2 * 3 * Math.Pow(t, 2) * (1 - t) + y3 * Math.Pow(t, 3));
 
     private static Vector2 TraverseBezier(Vector2 startPoint, Vector2 controlPoint,
         Vector2 controlPoint2, Vector2 endPoint, float t) {
@@ -199,14 +194,12 @@ public static class ShapeHelpers
 
 #region Plot Ellipse
     public static void PlotEllipse(Vector2 start, Vector2 end, Color color, BaseShapePanel instance,
-        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
-        PlotEllipse(start.X, start.Y, end.X, end.Y, color, instance, shape, scale, isFill);
-    }
+        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
+        => PlotEllipse(start.X, start.Y, end.X, end.Y, color, instance, shape, scale, isFill);
 
     public static void PlotEllipse(float x0, float y0, float x1, float y1, Color color, BaseShapePanel instance,
-        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
-        PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, instance, shape, scale, isFill);
-    }
+        ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false)
+        => PlotEllipse((int) x0, (int) y0, (int) x1, (int) y1, color, instance, shape, scale, isFill);
 
     public static void PlotEllipse(int x0, int y0, int x1, int y1, Color color, BaseShapePanel instance,
         ShapeSide shape = ShapeSide.All, float scale = 1f, bool isFill = false) {
@@ -216,7 +209,8 @@ public static class ShapeHelpers
         FixHalfShapesOffset(ref x0, ref y0, ref x1, ref y1, shape);
         int width = Math.Abs(x0 - x1);
         int height = Math.Abs(y0 - y1);
-        if (width == 0 && height == 0) return;
+        if (width == 0 && height == 0)
+            return;
 
         // Console.WriteLine($"All: {((shape & ShapeSide.All) != 0)} | Top: {((shape & ShapeSide.Top) != 0)} | " +
         //                   $"Right: {((shape & ShapeSide.Right) != 0)} | Bottom: {((shape & ShapeSide.Bottom) != 0)} | " +
@@ -241,7 +235,8 @@ public static class ShapeHelpers
             x0 = x1;
             x1 += a;
         }
-        if (y0 > y1) y0 = y1;
+        if (y0 > y1)
+            y0 = y1;
         y0 += (b + 1) / 2;
         y1 = y0 - b1;
         a *= 8 * a;

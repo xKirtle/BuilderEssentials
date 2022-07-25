@@ -19,18 +19,14 @@ public class FillWand : BuilderEssentialsItem
 
     protected override bool CloneNewInstances => true;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
 
     public override void SetStaticDefaults() {
-        Tooltip.SetDefault(
-            "Fills or creates holes!" +
+        Tooltip.SetDefault("Fills or creates holes!" +
             "\nLeft Click to place" +
             "\nMiddle Click to select working tile" +
             "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]" +
-            "\n[c/FF0000:Does not support multi tiles]"
-        );
+            "\n[c/FF0000:Does not support multi tiles]");
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
@@ -59,12 +55,11 @@ public class FillWand : BuilderEssentialsItem
         }
     }
 
-    public override Vector2? HoldoutOffset() {
-        return new Vector2(-2, -7);
-    }
+    public override Vector2? HoldoutOffset() => new Vector2(-2, -7);
 
     public override void HoldItem(Player player) {
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
 
         FillWandPanel panel = ShapesUIState.GetUIPanel<FillWandPanel>();
 
@@ -81,15 +76,14 @@ public class FillWand : BuilderEssentialsItem
 
         player.cursorItemIconEnabled = true;
         player.cursorItemIconID = Type;
-        if (!player.cursorItemIconEnabled) return;
+        if (!player.cursorItemIconEnabled)
+            return;
         player.cursorItemIconID = panel.SelectedItem?.type ?? Type;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient(ItemID.MoltenHamaxe)
-            .AddIngredient(ItemID.DirtRod)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.MoltenHamaxe)
+        .AddIngredient(ItemID.DirtRod)
+        .AddTile(TileID.Anvils)
+        .Register();
 }

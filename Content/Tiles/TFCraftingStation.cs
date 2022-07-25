@@ -15,11 +15,9 @@ namespace BuilderEssentials.Content.Tiles;
 public class TFCraftingStation : BaseCraftingStation
 {
     public override string DisplayName => "Themed Furniture Crafting Station";
-    public override Color MapColor => new Color(185, 92, 31);
+    public override Color MapColor => new(185, 92, 31);
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.YellowTorch;
@@ -35,17 +33,13 @@ public class TFCraftingStation : BaseCraftingStation
         TileObjectData.addTile(Type);
     }
 
-    public override int[] AdjacentTiles() {
-        return new int[] {
-            TileID.BoneWelder, TileID.GlassKiln, TileID.HoneyDispenser,
-            TileID.IceMachine, TileID.LivingLoom, TileID.SkyMill, TileID.Solidifier, TileID.FleshCloningVat,
-            TileID.SteampunkBoiler, TileID.LihzahrdFurnace, TileID.WaterDrip, TileID.Waterfall, TileID.LavaDrip,
-            TileID.Lavafall, TileID.HoneyDrip, TileID.Honeyfall, TileID.SnowCloud
-        };
-    }
+    public override int[] AdjacentTiles() => new int[] {
+        TileID.BoneWelder, TileID.GlassKiln, TileID.HoneyDispenser, TileID.IceMachine, TileID.LivingLoom, TileID.SkyMill, TileID.Solidifier,
+        TileID.FleshCloningVat, TileID.SteampunkBoiler, TileID.LihzahrdFurnace, TileID.WaterDrip, TileID.Waterfall, TileID.LavaDrip,
+        TileID.Lavafall, TileID.HoneyDrip, TileID.Honeyfall, TileID.SnowCloud
+    };
 
 
-    public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 16, ModContent.ItemType<TFCraftingItem>());
-    }
+    public override void KillMultiTile(int i, int j, int frameX, int frameY) => Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16,
+        32, 16, ModContent.ItemType<TFCraftingItem>());
 }

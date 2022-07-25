@@ -12,14 +12,15 @@ namespace BuilderEssentials.Assets;
 public static class AssetsLoader
 {
     private const string AssetsPath = "BuilderEssentials/Assets/";
-    private static Dictionary<string, Asset<Texture2D>> texturesDictionary = new Dictionary<string, Asset<Texture2D>>();
+    private static Dictionary<string, Asset<Texture2D>> texturesDictionary = new();
     internal static void LoadTextures() {
         List<string> paths = ModContent.GetInstance<BuilderEssentials>().GetFileNames()
             .FindAll(x => x.Contains("Assets/UI/"));
         paths.Sort(new NaturalComparer());
 
         paths.ForEach(path => {
-            if (path.Contains(".ase")) return;
+            if (path.Contains(".ase"))
+                return;
 
             path = path.Replace(".rawimg", "");
             string key = path.Replace("Assets/", "");
@@ -28,11 +29,7 @@ public static class AssetsLoader
         });
     }
 
-    public static Asset<Texture2D> GetAssets(string key) {
-        return texturesDictionary[key];
-    }
+    public static Asset<Texture2D> GetAssets(string key) => texturesDictionary[key];
 
-    internal static void UnloadTextures() {
-        texturesDictionary = null;
-    }
+    internal static void UnloadTextures() => texturesDictionary = null;
 }

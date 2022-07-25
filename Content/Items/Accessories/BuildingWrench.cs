@@ -21,9 +21,7 @@ public class BuildingWrench : ModItem
     public int[] unlockedUpgrades;
     private MainConfig.EnabledUpgradeModulesConfig upgradesConfig => ModContent.GetInstance<MainConfig>().EnabledUpgradeModules;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
 
     public override void SetDefaults() {
         Item.accessory = true;
@@ -32,7 +30,8 @@ public class BuildingWrench : ModItem
         Item.value = Item.sellPrice(silver: 20);
         Item.rare = ItemRarityID.Red;
 
-        if (unlockedUpgrades == null) unlockedUpgrades = Enumerable.Repeat((int) UpgradeState.Locked, (int) WrenchUpgrades.Count).ToArray();
+        if (unlockedUpgrades == null)
+            unlockedUpgrades = Enumerable.Repeat((int) UpgradeState.Locked, (int) WrenchUpgrades.Count).ToArray();
     }
 
     public override void Load() {
@@ -50,7 +49,8 @@ public class BuildingWrench : ModItem
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
         tooltips.Remove(tooltips.Find(x => x.Name == "Material"));
 
-        if (unlockedUpgrades == null) return;
+        if (unlockedUpgrades == null)
+            return;
 
         if (unlockedUpgrades.All(x => x == 0)) {
             tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:NoUpgradesAdded", "Just a simple wrench. What did you expect it to do?"));
@@ -67,7 +67,8 @@ public class BuildingWrench : ModItem
         }
 
         for (int i = 0; i < (int) WrenchUpgrades.Count; i++) {
-            if (!upgradesConfig.EnabledUpgrades[i]) continue;
+            if (!upgradesConfig.EnabledUpgrades[i])
+                continue;
 
             if (unlockedUpgrades[i] != 0) {
                 string upgradeType = ((WrenchUpgrades) i).ToString();
@@ -77,20 +78,18 @@ public class BuildingWrench : ModItem
         }
     }
 
-    public override void SaveData(TagCompound tag) {
-        tag[nameof(unlockedUpgrades)] = unlockedUpgrades.ToList();
-    }
-    public override void LoadData(TagCompound tag) {
-        unlockedUpgrades = tag.Get<List<int>>(nameof(unlockedUpgrades)).ToArray();
-    }
+    public override void SaveData(TagCompound tag) => tag[nameof(unlockedUpgrades)] = unlockedUpgrades.ToList();
+    public override void LoadData(TagCompound tag) => unlockedUpgrades = tag.Get<List<int>>(nameof(unlockedUpgrades)).ToArray();
 
     public void UnlockUpgrade(WrenchUpgrades upgrade) {
-        if (upgrade == WrenchUpgrades.Count) return;
+        if (upgrade == WrenchUpgrades.Count)
+            return;
         unlockedUpgrades[(int) upgrade] = (int) UpgradeState.Unlocked;
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        if (player.whoAmI != Main.myPlayer) return;
+        if (player.whoAmI != Main.myPlayer)
+            return;
         BEPlayer mp = Main.LocalPlayer.GetModPlayer<BEPlayer>();
         mp.EquippedWrenchInstance = this;
 
@@ -101,7 +100,7 @@ public class BuildingWrench : ModItem
         mp.InfinitePickupRange = panel.enabledUpgrades[3] && upgradesConfig.InfinitePickupRange;
     }
 
-    public static List<Recipe> upgradeRecipes = new List<Recipe>((int) WrenchUpgrades.Count);
+    public static List<Recipe> upgradeRecipes = new((int) WrenchUpgrades.Count);
 
     public override void AddRecipes() {
         CreateRecipe()
@@ -115,7 +114,8 @@ public class BuildingWrench : ModItem
             .Register();
 
         for (int i = 0; i < (int) WrenchUpgrades.Count; i++) {
-            if (!upgradesConfig.EnabledUpgrades[i]) continue;
+            if (!upgradesConfig.EnabledUpgrades[i])
+                continue;
 
             int index = i;
             Recipe recipe = CreateRecipe()
@@ -123,7 +123,8 @@ public class BuildingWrench : ModItem
                 .AddIngredient(Mod, ((WrenchUpgrades) index).ToString() + "Module")
                 .AddTile(TileID.TinkerersWorkbench)
                 .AddConsumeItemCallback((Recipe recipe, int type, ref int amount) => {
-                    if (type != Item.type) return;
+                    if (type != Item.type)
+                        return;
 
                     for (int j = 0; j < Main.LocalPlayer.inventory.Length; j++) {
                         Item item = Main.LocalPlayer.inventory[j];
@@ -189,7 +190,7 @@ public class BuildingWrench : ModItem
         }
     }
 
-    public static UniqueQueue<Tuple<int[], WrenchUpgrades>> queuedRecipeChanges = new UniqueQueue<Tuple<int[], WrenchUpgrades>>();
+    public static UniqueQueue<Tuple<int[], WrenchUpgrades>> queuedRecipeChanges = new();
     public static void DequeueRecipeChanges() {
         while (queuedRecipeChanges.Count != 0) {
             (int[] previousUpgrades, WrenchUpgrades upgrade) = queuedRecipeChanges.Dequeue();
@@ -202,7 +203,8 @@ public class BuildingWrench : ModItem
         //Scan inventory for the first wrench it finds, if any
         //Disable/Enable recipes depending on which upgrades it has
         Item wrench = Main.LocalPlayer.inventory.SkipLast(1).FirstOrDefault(x => x.type == ModContent.ItemType<BuildingWrench>());
-        if (wrench == null) return;
+        if (wrench == null)
+            return;
 
         int[] upgrades = (int[]) (wrench.ModItem as BuildingWrench).unlockedUpgrades.Clone();
 
@@ -215,7 +217,7 @@ public class BuildingWrench : ModItem
                 upgradeRecipes[i].RemoveCondition(FalseCondition);
 
                 upgradeRecipes[i].requiredItem[0] = wrench;
-                Item resultItem = new Item(wrench.type);
+                Item resultItem = new(wrench.type);
                 (resultItem.ModItem as BuildingWrench).unlockedUpgrades = (int[]) upgrades.Clone();
                 (resultItem.ModItem as BuildingWrench).UnlockUpgrade((WrenchUpgrades) i);
                 upgradeRecipes[i].createItem = resultItem;
@@ -225,5 +227,5 @@ public class BuildingWrench : ModItem
         }
     }
 
-    private static Recipe.Condition FalseCondition = new Recipe.Condition(NetworkText.Empty, recipe => false);
+    private static Recipe.Condition FalseCondition = new(NetworkText.Empty, recipe => false);
 }

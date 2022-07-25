@@ -19,9 +19,7 @@ namespace BuilderEssentials.Content.UI;
 //This might be one of the worst pieces of code I ever wrote
 public class ShapesDrawerMenuPanel : BaseToggleablePanel
 {
-    public override bool IsHoldingBindingItem() {
-        return Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
-    }
+    public override bool IsHoldingBindingItem() => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<ShapesDrawer>();
 
     private const float ParentWidth = 230f, ParentHeight = 120f;
     private UIImage builderSquirrel;
@@ -199,7 +197,8 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
-        if (!Main.playerInventory) return;
+        if (!Main.playerInventory)
+            return;
         base.Draw(spriteBatch);
 
         if (elementHovered) {
@@ -230,9 +229,7 @@ public class ShapesMenuOption : UIImage
         SetPadding(0);
 
         actualOption = new UIImage(AssetsLoader.GetAssets($"{AssetsID.ShapesMenu}/Shape{OptionIndex}")) {
-            Width = Height = new StyleDimension(52f, 0),
-            IgnoresMouseInteraction = true,
-            RemoveFloatingPointsFromDrawPosition = true,
+            Width = Height = new StyleDimension(52f, 0), IgnoresMouseInteraction = true, RemoveFloatingPointsFromDrawPosition = true,
             ImageScale = .75f
         };
 
@@ -259,10 +256,8 @@ public class ShapesMenuOption : UIImage
         UpdateTexture();
     }
 
-    public void UpdateTexture() {
-        actualOption.SetImage(AssetsLoader.GetAssets(
-            $"{AssetsID.ShapesMenu}/{(IsFilled ? "Filled" : "")}{(IsSelected ? "Selected" : "")}Shape{OptionIndex}"));
-    }
+    public void UpdateTexture() => actualOption.SetImage(AssetsLoader.GetAssets(
+        $"{AssetsID.ShapesMenu}/{(IsFilled ? "Filled" : "")}{(IsSelected ? "Selected" : "")}Shape{OptionIndex}"));
 
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);

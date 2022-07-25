@@ -10,9 +10,7 @@ public class MultiCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) {
-        return ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
-    }
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Crafting Station");
@@ -34,13 +32,11 @@ public class MultiCraftingItem : ModItem
         Item.rare = ItemRarityID.Red;
     }
 
-    public override void AddRecipes() {
-        CreateRecipe()
-            .AddIngredient<PreHMCraftingItem>()
-            .AddIngredient<HMCraftingItem>()
-            .AddIngredient<SpecCraftingItem>()
-            .AddIngredient<TFCraftingItem>()
-            .AddTile(TileID.TinkerersWorkbench)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient<PreHMCraftingItem>()
+        .AddIngredient<HMCraftingItem>()
+        .AddIngredient<SpecCraftingItem>()
+        .AddIngredient<TFCraftingItem>()
+        .AddTile(TileID.TinkerersWorkbench)
+        .Register();
 }
