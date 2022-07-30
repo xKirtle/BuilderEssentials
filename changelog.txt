@@ -1,1 +1,2 @@
-- Fixed an issue where the mod prevented the additional info in the bestiary to be opened
+- Fixed a performance issue with the building wrench on the inventory
+- Fixed wrong tooltips

@@ -22,7 +22,7 @@ public class FillWand : BuilderEssentialsItem
     public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
 
     public override void SetStaticDefaults() {
-        Tooltip.SetDefault("Fills or creates holes!" +
+        Tooltip.SetDefault("Great for filling holes!" +
             "\nLeft Click to place" +
             "\nMiddle Click to select working tile" +
             "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]" +

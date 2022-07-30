@@ -192,6 +192,8 @@ public class BuildingWrench : ModItem
 
     public static UniqueQueue<Tuple<int[], WrenchUpgrades>> queuedRecipeChanges = new();
     public static void DequeueRecipeChanges() {
+        if (queuedRecipeChanges.Count == 0) return;
+        
         while (queuedRecipeChanges.Count != 0) {
             (int[] previousUpgrades, WrenchUpgrades upgrade) = queuedRecipeChanges.Dequeue();
 
