@@ -1,5 +1,6 @@
 ﻿using System;
 using BuilderEssentials.Assets;
+using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Common.Enums;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
@@ -28,15 +29,15 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
     private string text = "";
     private bool isMenuOpen = false;
     private ShapesMenuOption[] menuOptions;
+    private bool isMenuInitialized = false;
     public Shapes SelectedShape { get; private set; }
     public ShapeSide SelectedShapeSide { get; private set; }
     public bool IsFilled { get; private set; }
 
     public override void OnInitialize() {
+        isMenuInitialized = true;
         Width.Set(ParentWidth, 0);
         Height.Set(ParentHeight, 0);
-        Left.Set(Main.GameMode == GameModeID.Creative ? 75f : 32f, 0);
-        Top.Set(260f, 0);
         SetPadding(0);
 
         builderSquirrel = new UIImage(AssetsLoader.GetAssets($"{AssetsID.ShapesMenu}/SquirrelToggle"));
@@ -87,14 +88,6 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         menuOptions = new ShapesMenuOption[7];
         for (int i = 0; i < menuOptions.Length; i++)
             menuOptions[i] = new ShapesMenuOption(i);
-
-        for (int i = 0; i < 3; i++)
-            menuOptions[i].Left.Set(50f + 43f * i + 4f, 0);
-
-        for (int i = 3; i < menuOptions.Length; i++) {
-            menuOptions[i].Top.Set(43f, 0);
-            menuOptions[i].Left.Set(50f + 43f * (i - 3) + 4f, 0);
-        }
 
         void ClearAllSelections(int startIndex = 0) {
             for (int i = startIndex; i < menuOptions.Length; i++) {
@@ -178,6 +171,49 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         menuOptions[1].ToggleSelection();
         SelectedShape = Shapes.Rectangle;
         SelectedShapeSide = ShapeSide.All;
+        
+        SetPositioningFromConfig();
+    }
+
+    public void SetPositioningFromConfig(bool update = false) {
+        if (!isMenuInitialized)
+            return;
+            
+        int position = ModContent.GetInstance<ServerConfig>()?.SquirrelBuilderPositionIndex ?? 0;
+        Vector2 offset = Vector2.Zero;
+
+        Console.WriteLine(position);
+        switch (position) {
+            case 0:
+                //Under Inventory
+                Left.Set(Main.GameMode == GameModeID.Creative ? 75f : 32f, 0);
+                Top.Set(290f, 0);
+                PaddingTop = 30f;
+
+                offset = new Vector2(50f, 43f);
+                break;
+            case 1:
+                //Bottom Left Corner
+                Left.Set(150f, 0);
+                Top.Set(-60f, 1f);
+                PaddingTop = 60f;
+
+                offset = new Vector2(50f, -43f);
+                break;
+            default:
+                goto case 0;
+        }
+
+        if (update)
+            return;
+        
+        for (int i = 0; i < 3; i++)
+            menuOptions[i].Left.Set(offset.X + 43f * i + 4f, 0);
+
+        for (int i = 3; i < menuOptions.Length; i++) {
+            menuOptions[i].Top.Set(offset.Y, 0);
+            menuOptions[i].Left.Set(offset.X + 43f * (i - 3) + 4f, 0);
+        }
     }
 
     public override void UpdateRegardlessOfVisibility() {
@@ -190,7 +226,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
     public override void Update(GameTime gameTime) {
         base.Update(gameTime);
 
-        Left.Set(Main.GameMode == GameModeID.Creative ? 75f : 32f, 0);
+        SetPositioningFromConfig(update: true);
 
         if (IsMouseHovering || elementHovered)
             Main.LocalPlayer.mouseInterface = true;
