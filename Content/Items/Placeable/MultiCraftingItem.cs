@@ -10,7 +10,7 @@ public class MultiCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.MultiCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.MultiCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Crafting Station");

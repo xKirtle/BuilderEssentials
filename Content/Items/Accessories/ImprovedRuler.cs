@@ -10,7 +10,7 @@ public class ImprovedRuler : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledAccessories.ImprovedRuler;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledAccessories.ImprovedRuler;
 
     public override void SetStaticDefaults() => Tooltip.SetDefault("Only works when equipped and player's empty handed." +
         "\nHold Right Click to draw a line." +

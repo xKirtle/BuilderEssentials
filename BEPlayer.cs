@@ -68,6 +68,6 @@ public class BEPlayer : ModPlayer
         }
 
         if (InfinitePickupRange)
-            Player.defaultItemGrabRange += ModContent.GetInstance<MainConfig>().InfinitePickupRangeValue;
+            Player.defaultItemGrabRange += ModContent.GetInstance<ServerConfig>().InfinitePickupRangeValue;
     }
 }

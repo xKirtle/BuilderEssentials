@@ -17,7 +17,7 @@ public class HMCraftingStation : BaseCraftingStation
     public override string DisplayName => "Hardmode Crafting Station";
     public override Color MapColor => new(191, 55, 64);
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.HMCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.RedTorch;

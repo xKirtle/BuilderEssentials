@@ -17,7 +17,7 @@ public class PreHMCraftingStation : BaseCraftingStation
     public override string DisplayName => "Pre Hardmode Crafting Station";
     public override Color MapColor => new(36, 151, 64);
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.PreHMCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.PreHMCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.CursedTorch;

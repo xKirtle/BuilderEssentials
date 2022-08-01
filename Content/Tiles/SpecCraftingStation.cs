@@ -17,7 +17,7 @@ public class SpecCraftingStation : BaseCraftingStation
     public override string DisplayName => "Specialized Crafting Station";
     public override Color MapColor => new(39, 137, 205);
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.SpecCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.SpecCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.IceTorch;

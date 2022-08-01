@@ -14,7 +14,7 @@ public class PaintBrush : BasePaintBrush
     public override int ItemRange => 10;
     protected override bool CloneNewInstances => true;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.PaintBrush;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.PaintBrush;
 
     public override void HoldItem(Player player) {
         base.HoldItem(player);

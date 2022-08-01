@@ -10,7 +10,7 @@ public class PreHMCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.PreHMCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.PreHMCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Pre Hardmode Crafting Station");

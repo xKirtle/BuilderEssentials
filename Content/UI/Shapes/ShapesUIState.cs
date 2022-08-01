@@ -109,7 +109,7 @@ public abstract class BaseShapePanel : UIElement
     public override void OnInitialize() {
         SelectedItem = new Item(ItemID.None);
         cs = new CoordSelection(ShapesUIState.GetInstance(), () => IsHoldingBindingItem());
-        historyPlacements = new HistoryStack<List<PlacementHistory>>(ModContent.GetInstance<MainConfig>().MaxUndoNum);
+        historyPlacements = new HistoryStack<List<PlacementHistory>>(ModContent.GetInstance<ServerConfig>().MaxUndoNum);
         queuedPlacements = new UniqueQueue<Point>();
 
         cs.LeftMouse.OnClick += _ => {

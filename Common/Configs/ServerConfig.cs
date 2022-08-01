@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using BuilderEssentials.Content.UI;
@@ -8,7 +9,7 @@ using Terraria.ModLoader.Config;
 
 namespace BuilderEssentials.Common.Configs;
 
-public class MainConfig : ModConfig
+public class ServerConfig : ModConfig
 {
     public override ConfigScope Mode => ConfigScope.ServerSide;
 
@@ -23,8 +24,21 @@ public class MainConfig : ModConfig
     [JsonIgnore]
     public int InfinitePickupRangeValue => (int) ((float) InfinitePickupRangeFloat / 100f * MaxPickupRange);
     private const int MaxPickupRange = 3500;
+    
+    [Label("Squirrel Builder Position"), Tooltip("Positioning of the squirrel builder menu from the Shapes Drawer")]
+    [OptionStrings(new string[] { "Under Inventory", "Bottom Left Corner"})]
+    [DrawTicks, DefaultValue("Under Inventory")]
+    public string SquirrelBuilderPosition;
 
-    public override void OnChanged() => ShapesUIState.UpdateMaxUndoNum(MaxUndoNum);
+    [JsonIgnore]
+    public int SquirrelBuilderPositionIndex => (new List<string> { "Under Inventory", "Bottom Left Corner" }).IndexOf(SquirrelBuilderPosition);
+
+    public override void OnChanged() {
+        ShapesUIState.UpdateMaxUndoNum(MaxUndoNum);
+        
+        if (ToggleableItemsUIState.GetInstance() != null)
+            ToggleableItemsUIState.GetUIPanel<ShapesDrawerMenuPanel>().SetPositioningFromConfig();
+    }
 
     [OnDeserialized]
     internal void OnDeserializedMethod(StreamingContext context) {

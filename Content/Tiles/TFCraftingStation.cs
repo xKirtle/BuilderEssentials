@@ -17,7 +17,7 @@ public class TFCraftingStation : BaseCraftingStation
     public override string DisplayName => "Themed Furniture Crafting Station";
     public override Color MapColor => new(185, 92, 31);
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.TFCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.TFCraftingStation;
 
     public override void SetTileObjectData() {
         DustType = DustID.YellowTorch;

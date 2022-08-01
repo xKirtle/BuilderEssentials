@@ -19,9 +19,9 @@ public class BuildingWrench : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
     public int[] unlockedUpgrades;
-    private MainConfig.EnabledUpgradeModulesConfig upgradesConfig => ModContent.GetInstance<MainConfig>().EnabledUpgradeModules;
+    private ServerConfig.EnabledUpgradeModulesConfig upgradesConfig => ModContent.GetInstance<ServerConfig>().EnabledUpgradeModules;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledAccessories.BuildingWrench;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledAccessories.BuildingWrench;
 
     public override void SetDefaults() {
         Item.accessory = true;

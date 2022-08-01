@@ -49,7 +49,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
                 string upgradeType = ((WrenchUpgrades) index).ToString();
                 text = string.Concat(upgradeType.Select(c => char.IsUpper(c) ? $" {c}" : $"{c}")).TrimStart(' ');
 
-                if (!ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
+                if (!ModContent.GetInstance<ServerConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
                     text += "[c/FF0000: [Disabled by config][c/FF0000:]]";
             };
 
@@ -59,7 +59,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
             };
 
             elements[i].OnClick += (__, _) => {
-                if (ModContent.GetInstance<MainConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
+                if (ModContent.GetInstance<ServerConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
                     ToggleUpgrade(index);
             };
 

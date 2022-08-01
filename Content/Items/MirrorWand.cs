@@ -11,7 +11,7 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class MirrorWand : BuilderEssentialsItem
 {
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.MirrorWand;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.MirrorWand;
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Mirrors everything!" +

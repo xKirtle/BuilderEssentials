@@ -10,7 +10,7 @@ public class HMCraftingItem : ModItem
 {
     public override string Texture => "BuilderEssentials/Assets/Items/Placeable/" + GetType().Name;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledTiles.HMCraftingStation;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.HMCraftingStation;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Hardmode Crafting Station");

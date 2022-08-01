@@ -18,7 +18,7 @@ public class MultiWand : BaseItemToggleableUI
     protected override bool CloneNewInstances => true;
     public override int ItemRange => 10;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.MultiWand;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.MultiWand;
 
     public override void SetStaticDefaults() {
         DisplayName.SetDefault("Multi Wand");
