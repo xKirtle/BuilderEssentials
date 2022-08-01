@@ -182,7 +182,6 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         int position = ModContent.GetInstance<ServerConfig>()?.SquirrelBuilderPositionIndex ?? 0;
         Vector2 offset = Vector2.Zero;
 
-        Console.WriteLine(position);
         switch (position) {
             case 0:
                 //Under Inventory
