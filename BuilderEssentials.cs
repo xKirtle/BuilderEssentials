@@ -24,14 +24,8 @@ public class BuilderEssentials : Mod
     public static Dictionary<int, List<int>> TileToItems;
     public static Dictionary<int, List<int>> WallToItems;
 
-#if TML_2022_06
-    public override void AddRecipes() => ReadAndCacheLocally();
-#endif
-
     public override void PostSetupContent() {
-#if !TML_2022_06
-			ReadAndCacheLocally();
-#endif
+        ReadAndCacheLocally();
 
         FWIncrease = KeybindLoader.RegisterKeybind(this, "Increase Fill Wand selection size", "I");
         FWDecrease = KeybindLoader.RegisterKeybind(this, "Decrease Fill Wand selection size", "O");
