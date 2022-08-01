@@ -1,2 +1,2 @@
-- Fixed a performance issue with the building wrench on the inventory
-- Fixed wrong tooltips
+- Fixed tooltips not displaying in certain conditions
+- Added configurable positions to the squirrel builder menu for better mod compatibility
