@@ -15,7 +15,7 @@ namespace BuilderEssentials.Content.Items;
 [Autoload(true)]
 public class ShapesDrawer : BuilderEssentialsItem
 {
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.ShapesDrawer;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.ShapesDrawer;
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Used to draw shapes" +
@@ -44,7 +44,7 @@ public class ShapesDrawer : BuilderEssentialsItem
 
         if (insertIndex == -1) {
             tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:FillWand",
-                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
+                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0] ?? "NO BIND FOUND"} to undo placements"));
         }
         else {
             tooltips.Insert(insertIndex + 1, new TooltipLine(Mod, "BuilderEssentials:FillWand",

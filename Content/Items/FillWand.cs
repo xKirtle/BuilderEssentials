@@ -19,7 +19,7 @@ public class FillWand : BuilderEssentialsItem
 
     protected override bool CloneNewInstances => true;
 
-    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<MainConfig>().EnabledItems.FillWand;
+    public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.FillWand;
 
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Great for filling holes!" +
@@ -47,7 +47,7 @@ public class FillWand : BuilderEssentialsItem
 
         if (insertIndex == -1) {
             tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:FillWand",
-                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
+                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0] ?? "NO BIND FOUND"} to undo placements"));
         }
         else {
             tooltips.Insert(insertIndex + 1, new TooltipLine(Mod, "BuilderEssentials:FillWand",
