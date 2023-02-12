@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BuilderEssentials.Common;
 using BuilderEssentials.Common.Configs;
 using BuilderEssentials.Content.UI;
@@ -44,14 +45,14 @@ public class FillWand : BuilderEssentialsItem
 
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
         int insertIndex = tooltips.FindIndex(x => x.Text.Contains("Middle Click to select working tile"));
-
+        var assignedKeys = BuilderEssentials.UndoPlacement?.GetAssignedKeys();
+        string hotKey = assignedKeys == null || !assignedKeys.Any() ? "[NO HOTKEY ASSIGNED]" : assignedKeys[0];
+        
         if (insertIndex == -1) {
-            tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:FillWand",
-                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0] ?? "NO BIND FOUND"} to undo placements"));
+            tooltips.Add(new TooltipLine(Mod, "BuilderEssentials:FillWand", $"Press {hotKey} to undo placements"));
         }
         else {
-            tooltips.Insert(insertIndex + 1, new TooltipLine(Mod, "BuilderEssentials:FillWand",
-                $"Press {BuilderEssentials.UndoPlacement?.GetAssignedKeys()[0]} to undo placements"));
+            tooltips.Insert(insertIndex + 1, new TooltipLine(Mod, "BuilderEssentials:FillWand", $"Press {hotKey} to undo placements"));
         }
     }
 
