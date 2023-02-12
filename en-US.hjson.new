@@ -1,0 +1,138 @@
+
+Mods: {
+	BuilderEssentials: {
+		Items: {
+			FastPlacementModule.DisplayName: Fast Placement Module
+			InfiniteRangeModule.DisplayName: Infinite Range Module
+			InfinitePlacementModule.DisplayName: Infinite Placement Module
+			InfinitePickupRangeModule.DisplayName: Infinite Pickup Range Module
+			BuildingWrench.DisplayName: Building Wrench
+
+			BuildInPeace: {
+				DisplayName: Build In Peace
+				Tooltip: Disables all events in the game and enemy spawns. Also sets the clock to noon
+			}
+
+			ImprovedRuler: {
+				DisplayName: Improved Ruler
+				Tooltip:
+					'''
+					Only works when equipped and player's empty handed.
+					Hold Right Click to draw a line.
+					Hold Left Click to curve the line.
+					'''
+			}
+
+			AutoHammer: {
+				DisplayName: Auto Hammer
+				Tooltip:
+					'''
+					Better than a regular hammer!
+					Right Click to open selection menu
+					'''
+			}
+
+			FillWand: {
+				DisplayName: Fill Wand
+				Tooltip:
+					'''
+					Great for filling holes!
+					Left Click to place
+					Middle Click to select working tile
+					[c/FFCC00:Use hotkeys to increase/decrease selection size]
+					[c/FF0000:Does not support multi tiles]
+					'''
+			}
+
+			InfinitePaintBucket: {
+				DisplayName: Infinite Paint Bucket
+				Tooltip: Allows infinite painting while in the inventory!
+			}
+
+			MirrorWand: {
+				DisplayName: Mirror Wand
+				Tooltip:
+					'''
+					Mirrors everything!
+					Mirror Click to make a selection area
+					Left Click to make a mirror axis
+					[c/FFCC00:Press LShift to make circles/squares]
+					[c/FF0000:Multiplayer usage can be bug prone!]
+					'''
+			}
+
+			MultiWand: {
+				DisplayName: Multi Wand
+				Tooltip:
+					'''
+					Contains all building wands into one!
+					Right Click to open selection menu
+					'''
+			}
+
+			PaintBrush: {
+				DisplayName: Paint Brush
+				Tooltip:
+					'''
+					Able to paint and remove paint from tiles and walls!
+					Right Click to open selection menu
+					'''
+			}
+
+			HMCraftingItem: {
+				DisplayName: Hardmode Crafting Station
+				Tooltip: Used to craft Hardmode items
+			}
+
+			MultiCraftingItem: {
+				DisplayName: Multi Crafting Station
+				Tooltip: Used to craft all items in the game
+			}
+
+			PreHMCraftingItem: {
+				DisplayName: Pre Hardmode Crafting Station
+				Tooltip: Used to craft Pre Hardmode items
+			}
+
+			SpecCraftingItem: {
+				DisplayName: Specialized Crafting Station
+				Tooltip: Used to craft Specialized items
+			}
+
+			TFCraftingItem: {
+				DisplayName: Themed Furniture Crafting Station
+				Tooltip: Used to craft Themed Furniture items
+			}
+
+			ShapesDrawer: {
+				DisplayName: Shapes Drawer
+				Tooltip:
+					'''
+					Used to draw shapes
+					Right Click to make selection
+					Left Click to place blocks in the selection
+					Middle Click to select working tile
+					[c/FFCC00:Press LShift to make circles/squares]
+					[c/FFCC00:Open its menu by clicking the squirrel builder under your opened inventory (must be being held)]
+					'''
+			}
+
+			SpectrePaintBrush: {
+				DisplayName: Spectre Paint Brush
+				Tooltip:
+					'''
+					Able to paint and remove paint from tiles and walls!
+					Right Click to open selection menu
+					'''
+			}
+		}
+
+		Tiles: {
+			HMCraftingStation.MapEntry: Hardmode Crafting Station
+			MultiCraftingStation.MapEntry: Multi Crafting Station
+			PreHMCraftingStation.MapEntry: Pre Hardmode Crafting Station
+			SpecCraftingStation.MapEntry: Specialized Crafting Station
+			TFCraftingStation.MapEntry: Themed Furniture Crafting Station
+		}
+	}
+}
