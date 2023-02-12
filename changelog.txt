@@ -1,1 +1,2 @@
 - Fixed loading times in the "Finalizing Content" stage
+- Fixed issue with missing item descriptions on unassigned hotkeys
