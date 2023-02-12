@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using BuilderEssentials.Assets;
 using BuilderEssentials.Common;
 using BuilderEssentials.Content.Items;
@@ -39,14 +40,17 @@ public class BuilderEssentials : Mod
         string walls = Encoding.UTF8.GetString(GetFileBytes("CachedWalls.json"));
         WallToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(walls);
         
-        // Find a way to do this async so that it doesn't block loading?
-        // CacheModTiles();
+        // Cache things async
+        Task.Factory.StartNew(() => CacheModTiles(), TaskCreationOptions.LongRunning);
     }
-
-    [Obsolete("Removed due to big load times on huge amounts of loaded items and weak hardware", true)]
-    private void CacheModTiles() {
-        Item item = new();
-        for (int i = TileToItems.Count; i < TileLoader.TileCount; i++) {
+    
+    private async void CacheModTiles() {
+        Parallel.For(TileToItems.Count, TileLoader.TileCount, i => {
+            // In case it was requested and cached before this step got to it
+            if (TileToItems.ContainsKey(i))
+                return; // same as continue in a parallel for loop
+            
+            Item item = new();
             List<int> tileItems = new();
             for (int j = 0; j < ItemLoader.ItemCount; j++) {
                 item.SetDefaults(j);
@@ -55,9 +59,14 @@ public class BuilderEssentials : Mod
             }
 
             TileToItems.Add(i, tileItems);
-        }
-
-        for (int i = WallToItems.Count; i < WallLoader.WallCount; i++) {
+        });
+        
+        Parallel.For(WallToItems.Count, WallLoader.WallCount, i => {
+            // In case it was requested and cached before this step got to it
+            if (TileToItems.ContainsKey(i))
+                return; // same as continue in a parallel for loop
+            
+            Item item = new();
             List<int> wallItems = new();
             for (int j = 0; j < ItemLoader.ItemCount; j++) {
                 item.SetDefaults(j);
@@ -66,7 +75,7 @@ public class BuilderEssentials : Mod
             }
 
             WallToItems.Add(i, wallItems);
-        }
+        });
     }
 
     public override void Load() {
