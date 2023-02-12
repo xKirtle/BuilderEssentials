@@ -38,10 +38,12 @@ public class BuilderEssentials : Mod
 
         string walls = Encoding.UTF8.GetString(GetFileBytes("CachedWalls.json"));
         WallToItems = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(walls);
-
-        CacheModTiles();
+        
+        // Find a way to do this async so that it doesn't block loading?
+        // CacheModTiles();
     }
 
+    [Obsolete("Removed due to big load times on huge amounts of loaded items and weak hardware", true)]
     private void CacheModTiles() {
         Item item = new();
         for (int i = TileToItems.Count; i < TileLoader.TileCount; i++) {

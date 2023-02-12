@@ -1,2 +1,1 @@
-- Fixed tooltips not displaying in certain conditions
-- Added configurable positions to the squirrel builder menu for better mod compatibility
+- Fixed loading times in the "Finalizing Content" stage
