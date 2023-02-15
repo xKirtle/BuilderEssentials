@@ -186,7 +186,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
             case 0:
                 //Under Inventory
                 Left.Set(Main.GameMode == GameModeID.Creative ? 75f : 32f, 0);
-                Top.Set(290f, 0);
+                Top.Set(230f, 0);
                 PaddingTop = 30f;
 
                 offset = new Vector2(50f, 43f);
@@ -194,7 +194,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
             case 1:
                 //Bottom Left Corner
                 Left.Set(150f, 0);
-                Top.Set(-60f, 1f);
+                Top.Set(-120f, 1f);
                 PaddingTop = 60f;
 
                 offset = new Vector2(50f, -43f);
