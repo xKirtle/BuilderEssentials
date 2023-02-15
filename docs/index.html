@@ -1,661 +1,997 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:image:src" content="Builder Essentials">
-  <meta property="og:image" content="">
-  <meta name="twitter:title" content="Builder Essentials">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-  <link rel="shortcut icon" href="assets/images/icon-big.png" type="image/x-icon">
-  <meta name="description" content="A mod designed to improve the Terraria building experience!">
-  
-  <script>
-    function preventDefault(e) { e.preventDefault(); }
-    window.addEventListener(WheelEvent, preventDefault, false);
-  </script>
-  <title>Builder Essentials</title>
-  <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="assets/socicon/css/styles.css">
-  <link rel="stylesheet" href="assets/theme/css/style.css">
-  <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
-  <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css">
-  <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
-  
-  <style>
-    table {border-collapse:collapse;border: #ccc;border-spacing:0;}
-    th {background-color:#f0f0f0;border-width:1px;color:#333;font-size: 1.2rem;font-weight:bold;overflow:hidden;padding:10px 20px;text-align:left;vertical-align:middle;word-break:normal}
-    td {background-color: #fff;border-width:1px;color:#333;font-size: 1.15rem;overflow:hidden;padding:10px 20px;text-align:left;vertical-align:middle;word-break:normal}
-    img {width: 32px; display: inline;}
-    img.craftingIngredient {max-width: 48px; max-height: 48px; min-width: 32px; min-height: 32px; width: auto; height: auto; margin: 8px 0px; display: inline;}
-    hr {margin-top: -25px;}
-  </style>
-  
-  
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="Builder Essentials">
+    <meta property="og:image" content="">
+    <meta name="twitter:title" content="Builder Essentials">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="assets/images/icon-big.png" type="image/x-icon">
+    <meta name="description" content="A mod designed to improve the Terraria building experience!">
+
+    <script>
+        function preventDefault(e) {
+            e.preventDefault();
+        }
+        window.addEventListener(WheelEvent, preventDefault, false);
+    </script>
+    <title>Builder Essentials</title>
+    <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="assets/socicon/css/styles.css">
+    <link rel="stylesheet" href="assets/theme/css/style.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
+    <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css">
+    <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+
+    <style>
+        table {
+            border-collapse: collapse;
+            border: #ccc;
+            border-spacing: 0;
+        }
+        
+        th {
+            background-color: #f0f0f0;
+            border-width: 1px;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: bold;
+            overflow: hidden;
+            padding: 10px 20px;
+            text-align: left;
+            vertical-align: middle;
+            word-break: normal
+        }
+        
+        td {
+            background-color: #fff;
+            border-width: 1px;
+            color: #333;
+            font-size: 1.15rem;
+            overflow: hidden;
+            padding: 10px 20px;
+            text-align: left;
+            vertical-align: middle;
+            word-break: normal
+        }
+        
+        img {
+            width: 32px;
+            display: inline;
+        }
+        
+        img.craftingIngredient {
+            max-width: 48px;
+            max-height: 48px;
+            min-width: 32px;
+            min-height: 32px;
+            width: auto;
+            height: auto;
+            margin: 8px 0px;
+            display: inline;
+        }
+        
+        hr {
+            margin-top: -25px;
+        }
+    </style>
+
+
 </head>
+
 <body>
-  <section data-bs-version="5.1" class="header11 cid-tauSJ7zWz8" id="header11-3">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-4 image-wrapper">
-                <img class="w-100" src="assets/images/icon-big.png">
-            </div>
-            <div class="col-12 col-md">
-                <div class="text-wrapper text-center">
-                    <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1">
-                        <strong>Builder Essentials</strong>
-                    </h1>
-                    <p class="mbr-text mbr-fonts-style display-7">
-                        A mod designed to improve the Terraria building experience!
-                    </p>
-                    <div class="mbr-section-btn mt-3">
-                        <a class="btn btn-white display-7" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2837989894" target="_blank"><span class="socicon socicon-steam mbr-iconfont mbr-iconfont-btn"></span>Steam workshop</a>
-                        <a class="btn btn-white display-7" href="https://discord.gg/wQYMbQq" target="_blank"><span class="socicon socicon-discord mbr-iconfont mbr-iconfont-btn"></span>Discord</a>
-                        <a class="btn btn-white display-7" href="https://github.com/xKirtle/BuilderEssentials" target="_blank"><span class="socicon socicon-github mbr-iconfont mbr-iconfont-btn"></span>GitHub</a>
+    <section data-bs-version="5.1" class="header11 cid-tauSJ7zWz8" id="header11-3">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-4 image-wrapper">
+                    <img class="w-100" src="assets/images/icon-big.png">
+                </div>
+                <div class="col-12 col-md">
+                    <div class="text-wrapper text-center">
+                        <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1">
+                            <strong>Builder Essentials</strong>
+                        </h1>
+                        <p class="mbr-text mbr-fonts-style display-7">
+                            A mod designed to improve the Terraria building experience!
+                        </p>
+                        <div class="mbr-section-btn mt-3">
+                            <a class="btn btn-white display-7" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2837989894" target="_blank"><span class="socicon socicon-steam mbr-iconfont mbr-iconfont-btn"></span>Steam workshop</a>
+                            <a class="btn btn-white display-7" href="https://discord.gg/wQYMbQq" target="_blank"><span class="socicon socicon-discord mbr-iconfont mbr-iconfont-btn"></span>Discord</a>
+                            <a class="btn btn-white display-7" href="https://github.com/xKirtle/BuilderEssentials" target="_blank"><span class="socicon socicon-github mbr-iconfont mbr-iconfont-btn"></span>GitHub</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section data-bs-version="5.1" class="tabs content18 cid-tayWcv8Eg1" id="tabs1-d">
-    <div class="container">
-        <div class="row justify-content-center mt-4">
-            <div class="col-12 col-md-12">
-                <ul class="nav nav-tabs mb-4" role="tablist">
-                    <li class="nav-item first mbr-fonts-style"><a class="nav-link mbr-fonts-style show active display-7" role="tab" data-toggle="tab" data-bs-toggle="tab" href="#tabs1-d_tab0" aria-selected="true"><strong>Items</strong></a></li>
-                    <li class="nav-item"><a class="nav-link mbr-fonts-style active display-7" role="tab" data-toggle="tab" data-bs-toggle="tab" href="#tabs1-d_tab1" aria-selected="true"><strong>Tiles</strong></a></li>
-                    <li class="nav-item"><a class="nav-link mbr-fonts-style active display-7" role="tab" data-toggle="tab" data-bs-toggle="tab" href="#tabs1-d_tab2" aria-selected="true"><strong>Accessories</strong></a></li>
-                </ul>
-                <div class="tab-content">
-                    <div id="tab1" class="tab-pane in active" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="mbr-text mbr-fonts-style display-7">
-                                    <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="AutoHammer">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/AutoHammer.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Auto Hammer</strong></h5><hr>
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177054469-59ea37ab-fece-4aca-961d-d991be110ba1.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody><tr><td>Left</td><td>Hammer tiles</td></tr><tr><td>Right</td><td>Open slope selection menu</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">Allows the user to select a custom slope instead of cycling through them all. It'll behave like a vanilla hammer if no custom slope is selected.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Pwnhammer" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/de/Pwnhammer.png"/> + 200x <img title="Wood" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/df/Wood.png" style="width: 24px;"/></td>
-                                                                    <td><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png"/> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+    <section data-bs-version="5.1" class="tabs content18 cid-tayWcv8Eg1" id="tabs1-d">
+        <div class="container">
+            <div class="row justify-content-center mt-4">
+                <div class="col-12 col-md-12">
+                    <ul class="nav nav-tabs mb-4" role="tablist">
+                        <li class="nav-item first mbr-fonts-style"><a class="nav-link mbr-fonts-style show active display-7" role="tab" data-toggle="tab" data-bs-toggle="tab" href="#tabs1-d_tab0" aria-selected="true"><strong>Items</strong></a></li>
+                        <li class="nav-item"><a class="nav-link mbr-fonts-style active display-7" role="tab" data-toggle="tab" data-bs-toggle="tab" href="#tabs1-d_tab1" aria-selected="true"><strong>Tiles</strong></a></li>
+                        <li class="nav-item"><a class="nav-link mbr-fonts-style active display-7" role="tab" data-toggle="tab" data-bs-toggle="tab" href="#tabs1-d_tab2" aria-selected="true"><strong>Accessories</strong></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab1" class="tab-pane in active" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="mbr-text mbr-fonts-style display-7">
+                                        <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="AutoHammer">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/AutoHammer.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Auto Hammer</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177054469-59ea37ab-fece-4aca-961d-d991be110ba1.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="FillWand">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/FillWand.png" style="width: 46px; height: 46px; margin-bottom: 20px;"/> Fill Wand</strong></h5><hr>
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055099-69e54ba1-ba19-449b-a517-a94274ad52cc.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody><tr><td>Middle</td><td>Click on a tile to select it as the working type of tile</td></tr><tr><td>Left</td><td>Tile placement in selected region</td></tr><tr><td>Assigned Keybind</td><td>Undo last placement</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">Great to fill huge holes.<br>The selection region range must be increased/decreased with the use of a hotkey that is <strong>DISABLED </strong>by default in tModLoader.<br>You need to have a powerful enough pickaxe in your inventory to undo your last placements!</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Molten Hamaxe" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/d8/Molten_Hamaxe.png"/> + 1x <img title="Dirt Rod" src="https://gamepedia.cursecdn.com/terraria_gamepedia/4/4a/Dirt_Rod.png"/></td>
-                                                                    <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                      
-                                    <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="InfinitePaintBucket">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/InfinitePaintBucket.png" style="width: 36px; height: 32px; margin-bottom: 20px;"/> Infinite Paint Bucket</strong></h5><hr>
-                                            <div class="row align-items-center">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055271-2ddadfd3-5ad0-496c-87ff-8d2b2a5c601f.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <p class="mbr-text mbr-fonts-style display-7">If present in the inventory, will provide infinite paint to the user.<br>To be used with vanilla painting tools, you still need to make the paint you want to use the first one in your inventory.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>999x <img title="Deep Red Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/da/Deep_Red_Paint.png" style="width: 22px;"/> + 999x <img title="Deep Green Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/e/eb/Deep_Green_Paint.png" style="width: 22px;"/> + 999x <img title="Deep Blue Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/6/65/Deep_Blue_Paint.png" style="width: 22px;"/> + 999x <img title="Negative Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/1/18/Negative_Paint.png" style="width: 22px;"/></td>
-                                                                    <td><img title="Dye Vat" src="https://gamepedia.cursecdn.com/terraria_gamepedia/8/8f/Dye_Vat_%28placed%29.gif" style="width: 48px;"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <br><br><br><br>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>  
-                                    
-                                    <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="PaintBrush">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/PaintBrush.png" style="width: 40px; height: 40px; margin-bottom: 20px;"/> Paint Brush</strong></h5><hr>
-                                            <div class="row align-items-sm-start">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055466-eedee0d5-0568-4ab4-9299-a9e7af58e6c2.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody><tr><td>Left</td><td>Paint tiles</td></tr><tr><td>Right</td><td>Open paint selection menu</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">Combines all Paint Tools.<br>Can be used with either Vanilla Paint or the Infinite Paint Bucket.</p>
-                                                        <br>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Paintbrush" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/c/c4/Paintbrush.png" style="width: 30px;"/> + 1x <img title="Paint Roller" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/7/75/Paint_Roller.png" style="width: 30px;"/> + 1x <img title="Paint Scraper" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/3d/Paint_Scraper.png" style="width: 30px;"/></td>
-                                                                    <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                    
-                                    <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="Spectre Paint Brush">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/SpectrePaintBrush.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Spectre Paint Brush</strong></h5><hr>
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055493-40eccd3c-3db6-47d7-949f-a2a2d086276d.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody><tr><td>Left</td><td>Paint tiles</td></tr><tr><td>Right</td><td>Open paint selection menu</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">Combines all Spectre Paint Tools.<br>Can be used with either Vanilla Paint or the Infinite Paint Bucket.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Spectre Paintbrush" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c0/Spectre_Paintbrush.png" style="width: 30px;"/> + 1x <img title="Spectre Paint Roller" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/37/Spectre_Paint_Roller.png" style="width: 30px;"/> + 1x <img title="Spectre Paint Scraper" src="https://gamepedia.cursecdn.com/terraria_gamepedia/7/79/Spectre_Paint_Scraper.png" style="width: 30px;"/></td>
-                                                                    <td><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png"/> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                    
-                                    <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="MultiWand">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/MultiWand.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Multi Wand</strong></h5><hr>
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055749-16e85844-1987-49da-937c-12b5618574ff.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody><tr><td>Left</td><td>Place tiles</td></tr><tr><td>Right</td><td>Open wand selection menu</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">Combines all building wands in the game.<br>Requires the selected wand specific blocks to use.</p>
-                                                        <br>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Living Wood Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/f/f6/Living_Wood_Wand.png"/> + 1x <img title="Bone Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/8/82/Bone_Wand.png"/> + 1x <img title="Leaf Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c4/Leaf_Wand.png"/> + <br>1x <img title="Hive Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/0/07/Hive_Wand.png"/> + 1x <img title="Living Mahogany Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/39/Living_Mahogany_Wand.png"/> + 1x <img title="Rich Mahogany Leaf Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/2/29/Rich_Mahogany_Leaf_Wand.png"/></td>
-                                                                    <td><img title="Tinkerer's Workshop" src="https://gamepedia.cursecdn.com/terraria_gamepedia/0/03/Tinkerer%27s_Workshop_%28placed%29.png" style="width: 48px;"></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                    
-                                    <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="MirrorWand">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/MirrorWand.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Mirror Wand</strong></h5><hr>
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177057422-e1003f1e-e4ca-4daa-9aff-6cce8d8ddf1c.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                    <p class="mbr-description pt-2 mbr-fonts-style display-4">Selection/Mirror axis</p>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody><tr><td>Left</td><td>Places the mirror axis</td></tr><tr><td>Right</td><td>Places the selection rectangle</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">The Mirror Axis will turn Red if not valid (needs to be fully inside a selection) and Yellow if valid. Mirror Axis can be 1 or 2 wide in all 4 directions.<br><br>Note: Pressing LShift will square your selection rectangle</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Any Magic Mirror" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/1/1d/Magic_Mirror.png" style="width: 24px;"/> + 25x <img title="Soul of Light" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/3d/Soul_of_Light.gif" style="width: 22px;"/> + 25x <img title="Soul of Night" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/0/02/Soul_of_Night.gif" style="width: 22px;"/></td>
-                                                                    <td><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png"/> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6 video-block">
-                                                    <div class="video-wrapper"><iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177057252-be416e16-ddde-4127-85d5-3b307a57bc7a.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe></div>
-                                                    <p class="mbr-description pt-2 mbr-fonts-style display-4">Tile and wall placements</p>
-                                                </div>
-                                                <div class="col-12 col-lg-6 video-block">
-                                                    <div class="video-wrapper"><iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177057369-f008b787-9fdc-4d6e-8ef2-886056431ec5.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe></div>
-                                                    <p class="mbr-description pt-2 mbr-fonts-style display-4">Painting, hammering and breaking tiles</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="ShapesDrawer">
-                                        <div class="container">
-                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/ShapesDrawer.png" style="width: 46px; height: 46px; margin-bottom: 20px;"/> Shapes Drawer</strong></h5><hr>
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
-                                                    <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/180065239-d8dcefaf-ee38-4e66-9bcb-e66a0d1a41d5.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody>
-                                                                <tr><td>Middle</td><td>Clikc on a tile to select it as the working type of tile</td></tr>
-                                                                <tr><td>Left</td><td>Tile placement in selected region</td></tr>
-                                                                <tr><td>Right</td><td>Places the selection</td></tr>
-                                                                <tr><td>Assigned Keybind</td><td>Undo last placement</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">Used to place blocks in shape-like forms! You need to have a powerful enough pickaxe in your inventory to undo your last placements!<br><br>Note: Pressing LShift will square your selection</p>
-                                                        <br>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Copper Pickaxe" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/d/d7/Copper_Pickaxe.png" style="width: 32px; height: 32px;"/> + 1x <img title="Copper Axe" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/2/21/Copper_Axe.png" style="width: 32px; height: 28px;"/> + 1x <img title="Copper Hammer" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/4/4a/Copper_Hammer.png" style="width: 32px; height: 32px;"/></td>
-                                                                    <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>1x <img title="Tin Pickaxe" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/39/Tin_Pickaxe.png" style="width: 32px; height: 32px;"/> + 1x <img title="Tin Axe" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/7/7a/Tin_Axe.png" style="width: 32px; height: 28px;"/> + 1x <img title="Tin Hammer" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/f/fc/Tin_Hammer.png" style="width: 32px; height: 32px;"/></td>
-                                                                    <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab2" class="tab-pane" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="mbr-text mbr-fonts-style display-7">
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="PreHardmodeCraftingStation">
-                                        <div class="container">
-                                            <div class="row align-items-center">
-                                                <div class="col-12 col-lg-4">
-                                                    <div class="image-wrapper"><img title="Pre Hardmode Crafting Station" src="assets/images/Tiles/PreHardmodeCraftingStation.png" style="width: 288px; height: 225px;"></div>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Pre Hardmode Crafting Station</strong></h5><hr style="margin-top: -15px;">
-                                                        <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <img title="Any Chair" src="https://terraria.wiki.gg/images/3/3d/Any_Chair.gif" style="width: 16px; height: 38px;"/> +
-                                                                        <img title="Any Workbench" src="https://terraria.wiki.gg/images/d/d5/Any_Work_Bench.gif" style="width: 32px; height: 18px;"/> +
-                                                                        <img title="Any Table" src="https://terraria.wiki.gg/images/0/00/Any_Table.gif" style="width: 32px; height: 28px;"/> +
-                                                                        <img title="Any Sink" src="https://terraria.wiki.gg/images/4/4d/Metal_Sink_%28placed%29.png" style="width: 30px; height: 34px;"/> +
-                                                                        <img title="Any Pre Hardmode Anvil" src="https://terraria.wiki.gg/images/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;"/> +
-                                                                        <img title="Any Pre Hardmode Furnace" src="https://terraria.wiki.gg/images/3/32/Furnace_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Alchemy Table" src="https://terraria.wiki.gg/images/8/8e/Alchemy_Table_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Sawmill" src="https://terraria.wiki.gg/images/0/00/Sawmill_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Loom" src="https://terraria.wiki.gg/images/9/9d/Loom_%28placed%29.png" class="craftingIngredient"/> +
-                                                                        <img title="Any Cauldron" src="https://terraria.wiki.gg/images/9/9d/Cooking_Pot_%28placed%29.png" style="width: 28px; height: 29px;"/> +
-                                                                        <img title="Tinkerer's Workshop" src="https://terraria.wiki.gg/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" class="craftingIngredient"/> +
-                                                                        <img title="Imbuing Station" src="https://terraria.wiki.gg/images/0/03/Imbuing_Station_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Dye Vat" src="https://terraria.wiki.gg/images/8/8f/Dye_Vat_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Heavy Work Bench" src="https://terraria.wiki.gg/images/1/17/Heavy_Work_Bench_%28placed%29.png" class="craftingIngredient"/>
-                                                                    </td>
-                                                                    <td style="white-space: nowrap;"><img title="Demon Altar" src="https://terraria.wiki.gg/images/f/f8/Demon_Altar.png" class="craftingIngredient"/> <img title="Crimson Altar" src="https://terraria.wiki.gg/images/7/70/Crimson_Altar.png" class="craftingIngredient"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="HardmodeCraftingStation">
-                                        <div class="container">
-                                            <div class="row align-items-center">
-                                                <div class="col-12 col-lg-4">
-                                                    <div class="image-wrapper"><img title="Hardmode Crafting Station" src="assets/images/Tiles/HardmodeCraftingStation.png" style="width: 288px; height: 288px;"></div>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Hardmode Crafting Station</strong></h5><hr style="margin-top: -15px;">
-                                                        <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <img title="Any Hardmode Anvil" src="https://terraria.wiki.gg/images/2/23/Mythril_Anvil_%28placed%29.png" style="width: 30px; height: 18px;"/> +
-                                                                        <img title="Any Hardmode Forge" src="https://terraria.wiki.gg/images/2/27/Adamantite_Forge_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Any Bookcase" src="https://terraria.wiki.gg/images/b/bd/Bookcase_%28placed%29.png" class="craftingIngredient"/> +
-                                                                        <img title="Crystal Ball" src="https://terraria.wiki.gg/images/6/6f/Crystal_Ball_%28placed%29.png" class="craftingIngredient"/> +
-                                                                        <img title="Autohammer" src="https://terraria.wiki.gg/images/2/2f/Autohammer_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Ancient Manipulator" src="https://terraria.wiki.gg/images/f/f3/Ancient_Manipulator_%28placed%29.gif" class="craftingIngredient"/>
-                                                                    </td>
-                                                                    <td style="white-space: nowrap;"><img title="Demon Altar" src="https://terraria.wiki.gg/images/f/f8/Demon_Altar.png" class="craftingIngredient"/> <img title="Crimson Altar" src="https://terraria.wiki.gg/images/7/70/Crimson_Altar.png" class="craftingIngredient"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="SpecializedCraftingStation">
-                                        <div class="container">
-                                            <div class="row align-items-center">
-                                                <div class="col-12 col-lg-4">
-                                                    <div class="image-wrapper"><img title="Specialized Crafting Station" src="assets/images/Tiles/SpecializedCraftingStation.png" style="width: 288px; height: 225px;"></div>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Specialized Crafting Station</strong></h5><hr style="margin-top: -15px;">
-                                                        <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <img title="Keg" src="https://terraria.wiki.gg/images/a/a1/Keg_%28placed%29.png" class="craftingIngredient"/> +
-                                                                        <img title="Teapot" src="https://terraria.wiki.gg/images/8/81/Teapot.png" class="craftingIngredient"/> +
-                                                                        <img title="Blend-O-Matic" src="https://terraria.wiki.gg/images/7/79/Blend-O-Matic_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Meat Grinder" src="https://terraria.wiki.gg/images/a/ac/Meat_Grinder_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Any Campfire" src="https://terraria.wiki.gg/images/4/49/Campfire_%28placed%29.gif" class="craftingIngredient"/>
-                                                                    </td>
-                                                                    <td style="white-space: nowrap;"><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png" style="width: 30px; height: 18px;"/> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png" style="width: 30px; height: 18px;"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="ThemedFurnitureCraftingStation">
-                                        <div class="container">
-                                            <div class="row align-items-center">
-                                                <div class="col-12 col-lg-4">
-                                                    <div class="image-wrapper"><img title="Themed Furniture Crafting Station" src="assets/images/Tiles/ThemedFurnitureCraftingStation.png" style="width: 288px; height: 288px;"></div>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Themed Furniture Crafting Station</strong></h5><hr style="margin-top: -15px;">
-                                                        <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <img title="Bone Welder" src="https://terraria.wiki.gg/images/b/b3/Bone_Welder_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Glass Kiln" src="https://terraria.wiki.gg/images/3/3c/Glass_Kiln_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Honey Dispenser" src="https://terraria.wiki.gg/images/3/32/Honey_Dispenser_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Ice Machine" src="https://terraria.wiki.gg/images/c/c5/Ice_Machine_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Living Loom" src="https://terraria.wiki.gg/images/b/b4/Living_Loom_%28placed%29.png" class="craftingIngredient"/> +
-                                                                        <img title="Sky Mill" src="https://terraria.wiki.gg/images/4/4c/Sky_Mill_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Solidifier" src="https://terraria.wiki.gg/images/c/cf/Solidifier_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Decay Chamber" src="https://terraria.wiki.gg/images/8/81/Decay_Chamber_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Flesh Cloning Vat" src="https://terraria.wiki.gg/images/9/95/Flesh_Cloning_Vat_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Steampunk Boiler" src="https://terraria.wiki.gg/images/6/69/Steampunk_Boiler_%28placed%29.gif" class="craftingIngredient"/> +
-                                                                        <img title="Lihzahrd Furnace" src="https://terraria.wiki.gg/images/1/1d/Lihzahrd_Furnace_%28placed%29.gif" class="craftingIngredient"/>
-                                                                    </td>
-                                                                    <td style="white-space: nowrap;"><img title="Demon Altar" src="https://terraria.wiki.gg/images/f/f8/Demon_Altar.png" class="craftingIngredient"/> <img title="Crimson Altar" src="https://terraria.wiki.gg/images/7/70/Crimson_Altar.png" class="craftingIngredient"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="MultiCraftingStation">
-                                        <div class="container">
-                                            <div class="row align-items-center">
-                                                <div class="col-12 col-lg-4">
-                                                    <div class="image-wrapper"><img title="Multi Crafting Station" src="assets/images/Tiles/MultiCraftingStation.gif" style="width: 288px; height: 288px;"></div>
-                                                </div>
-                                                <div class="col-12 col-lg">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Multi Crafting Station</strong></h5><hr style="margin-top: -15px;">
-                                                        <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all items in the game.</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <img title="Pre Hardmode Crafting Station" src="assets/images/Tiles/PreHardmodeCraftingStation.png" class="craftingIngredient" style="margin-top: 4px;"/> +
-                                                                        <img title="Hardmode Crafting Station" src="assets/images/Tiles/HardmodeCraftingStation.png" class="craftingIngredient" style="margin-bottom: 22px;"/> +
-                                                                        <img title="Specialized Crafting Station" src="assets/images/Tiles/SpecializedCraftingStation.png" class="craftingIngredient" style="margin-top: 4px;"/> +
-                                                                        <img title="Themed Furniture Crafting Station" src="assets/images/Tiles/ThemedFurnitureCraftingStation.png" class="craftingIngredient" style="margin-bottom: 22px;"/>
-                                                                    </td>
-                                                                    <td style="white-space: nowrap;"><img title="Tinkerer's Workshop" src="https://terraria.wiki.gg/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" class="craftingIngredient"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab3" class="tab-pane" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="mbr-text mbr-fonts-style display-7">
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
-                                        <div class="container">
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-6" id="BuildInPeace">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/BuildInPeace.png" alt="Build In Peace" style="width: 42px; height: 42px; margin-top: 6px; margin-bottom: 20px;"><strong> Build In Peace</strong></h5><hr>
-                                                        <p class="mbr-text mbr-fonts-style display-7">Disables all hostile events, invasions, bosses, NPCs (except for Town NPCs) and keeps the time fixed at 12pm.</p>
-                                                        <table>
-                                                            <thead><tr><th>How to obtain</th></tr></thead>
-                                                            <tbody><tr><td>Has a 100% chance to be dropped by the Moon Lord.</td></tr></tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-lg-6" id="BuildingWrench">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/BuildingWrench.png" alt="Building Wrench" style="width: 48px; height: 48px; margin-bottom: 20px;"><strong> Building Wrench</strong></h5><hr>
-                                                        <p class="mbr-text mbr-fonts-style display-7">An accessory that does nothing by itself but it allows upgrades to be added.Upgrades can be toggled from the UI that's located in the bottom left corner.
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
                                                             <table>
-                                                                <thead><tr><th>Materials</th><th>Station</th></tr></thead>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td>6x <img title="Iron Bar" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/6/6c/Iron_Bar.png" style="width: 30px; height: 24px;"> or 6x <img title="Lead Bar" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/1/10/Lead_Bar.png" style="width: 30px; height: 24px;"></td>
-                                                                        <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png" style="width: 32px; height: 16px;"/></td>
+                                                                        <td>Left</td>
+                                                                        <td>Hammer tiles</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td>1x <img title="Building Wrench" src="assets/images/Accessories/BuildingWrench.png" style="width: 32px; height: 32px;"/> + 1x <img title="Any Upgrade Module" src="assets/images/Accessories/WrenchUpgrades/Upgrades.gif" style="width: 38px; height: 38px;"/></td>
-                                                                        <td><img title="Tinkerer's Workshop" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" style="width: 48px; height: 38px;"/></td>
+                                                                        <td>Right</td>
+                                                                        <td>Open slope selection menu</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
-                                                        </p>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Allows the user to select a custom slope instead of cycling through them all. It'll behave like a vanilla hammer if no custom slope is selected.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Pwnhammer" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/de/Pwnhammer.png" /> + 200x <img title="Wood" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/df/Wood.png"
+                                                                                style="width: 24px;" /></td>
+                                                                        <td><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png" /> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png"
+                                                                            /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </section>
-                                    
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
-                                        <div class="container">
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-8" id="UpgradeModules">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/WrenchUpgrades/Upgrades.gif" alt="Wrench Upgrade Modules" style="width: 38px; height: 38px; margin-bottom: 20px;"><strong> Wrench Upgrade Modules</strong></h5><hr>
-                                                        <p class="mbr-text mbr-fonts-style display-7">Modules that can be attached to a Building Wrench [<img title="Building Wrench" src="assets/images/Accessories/BuildingWrench.png" style="width: 24px; height: 24px; margin: 0px 4px;" class="titleItem"/>].<br>Each module is crafted differently and unlocks a different upgrade.</p>
-                                                        <table>
-                                                            <thead><tr><th>Module</th><th>Upgrade</th><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td style="text-align: center;"><img title="Fast Placement" src="assets/images/Accessories/WrenchUpgrades/Upgrade0.png" style="width: 38px; height: 38px;"/></td>
-                                                                    <td>Fast Placement</td>
-                                                                    <td>1x <img title="Brick Layer" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/d/da/Brick_Layer.png" style="width: 34px; height: 30px;"/> + 1x <img title="Portable Cementer Mixer" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/c/c9/Portable_Cement_Mixer.png" style="width: 34px; height: 30px;"/> +5x <img title="Sapphire" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/f/f7/Sapphire.png" style="width: 18px; height: 18px;"/></td>
-                                                                    <td style="white-space: nowrap;"><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png" style="width: 32px; height: 16px;"/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="text-align: center;"><img title="Infinite Range" src="assets/images/Accessories/WrenchUpgrades/Upgrade1.png" style="width: 38px; height: 38px;"/></td>
-                                                                    <td>Infinite Range</td>
-                                                                    <td>1x <img title="Extendo Grip" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/b/b7/Extendo_Grip.png" style="width: 34px; height: 34px;"/> + 1x <img title="Toolbelt" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/e/e2/Toolbelt.png" style="width: 30px; height: 24px;"/> + 5x <img title="Ruby" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/a9/Ruby.png" style="width: 14px; height: 18px;"/></td>
-                                                                    <td style="white-space: nowrap;"><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png" style="width: 32px; height: 16px;"/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="text-align: center;"><img title="Infinite Placement" src="assets/images/Accessories/WrenchUpgrades/Upgrade2.png" style="width: 38px; height: 38px;"/></td>
-                                                                    <td>Infinite Placement</td>
-                                                                    <td>3x <img title="Temple Key" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/2/29/Temple_Key.png" style="width: 32px; height: 18px;"/> + 5x <img title="Lihzahrd Power Cell" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/9/9d/Lihzahrd_Power_Cell.png" style="width: 24px; height: 12px;"/> + 5x <img title="Emerald" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/6/6a/Emerald.png" style="width: 14px; height: 18px;"/></td>
-                                                                    <td style="white-space: nowrap;"><img title="Adamantite Forge" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/2/27/Adamantite_Forge_%28placed%29.gif" style="width: 48px; height: 34px;"/> <img title="Titanium Forge" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/36/Titanium_Forge_%28placed%29.gif" style="width: 48px; height: 34px;"/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="text-align: center;"><img title="Infinite Pickup Range" src="assets/images/Accessories/WrenchUpgrades/Upgrade3.png" style="width: 38px; height: 38px;"/></td>
-                                                                    <td>Infinite Pickup Range</td>
-                                                                    <td>20x <img title="Demonite Ore" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/a8/Demonite_Ore.png" style="width: 16px; height: 16px;"/> or 20x <img title="Crimtane Ore" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/c/c5/Crimtane_Ore.png" style="width: 16px; height: 16px;"/> + 5x <img title="Topaz" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/a5/Topaz.png" style="width: 18px; height: 14px;"/></td>
-                                                                    <td style="white-space: nowrap;"><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;"/> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png" style="width: 32px; height: 16px;"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
+                                        </section>
 
-                                    <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
-                                        <div class="container">
-                                            <div class="row align-items-start">
-                                                <div class="col-12 col-lg-12" id="ImprovedRuler">
-                                                    <div class="text-wrapper">
-                                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/ImprovedRuler.png" alt="Improved Ruler" style="width: 42px; height: 42px; margin-bottom: 20px;"><strong> Improved Ruler</strong></h5><hr>
-                                                        <table>
-                                                            <thead><tr><th>Mouse Button</th><th>Description</th></tr></thead>
-                                                            <tbody><tr><td>Right</td><td>Place the ruler line</td></tr><tr><td>Left</td><td>Bend the ruler line</td></tr></tbody>
-                                                        </table>
-                                                        <br><p class="mbr-text mbr-fonts-style display-7">A neat ruler that can be bent to get the perfect round corners!</p>
-                                                        <table>
-                                                            <thead><tr><th>Materials</th><th>Station</th></tr></thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1x <img title="Ruler" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/aa/Ruler.png" style="width: 12px; height: 28px;"/></td>
-                                                                    <td><img title="Tinkerer's Workshop" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" style="width: 48px; height: 38px;"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                        <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="FillWand">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/FillWand.png" style="width: 46px; height: 46px; margin-bottom: 20px;"/> Fill Wand</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055099-69e54ba1-ba19-449b-a517-a94274ad52cc.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
                                                     </div>
-                                                    <div class="image-wrapper" style="margin-top: 40px;"><img src="https://media.giphy.com/media/B1H71deTQMCQEFEEdi/giphy.gif" style="width: 640px; height: 320px;"></div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Middle</td>
+                                                                        <td>Click on a tile to select it as the working type of tile</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Left</td>
+                                                                        <td>Tile placement in selected region</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Right</td>
+                                                                        <td>Tile removal in selected region. Only removes the working type of tile selected unless air is selected</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Assigned Keybind</td>
+                                                                        <td>Undo last placement</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Great to fill huge holes.<br>The selection region range must be increased/decreased with the use of a hotkey that is <strong>DISABLED </strong>by default in tModLoader.<br>You need to have a
+                                                                powerful enough pickaxe in your inventory to undo your last placements!</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Molten Hamaxe" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/d8/Molten_Hamaxe.png" /> + 1x <img title="Dirt Rod" src="https://gamepedia.cursecdn.com/terraria_gamepedia/4/4a/Dirt_Rod.png"
+                                                                            /></td>
+                                                                        <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                            /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </section>
-                                </p>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="InfinitePaintBucket">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/InfinitePaintBucket.png" style="width: 36px; height: 32px; margin-bottom: 20px;"/> Infinite Paint Bucket</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-center">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055271-2ddadfd3-5ad0-496c-87ff-8d2b2a5c601f.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <p class="mbr-text mbr-fonts-style display-7">If present in the inventory, will provide infinite paint to the user.<br>To be used with vanilla painting tools, you still need to make the paint you want to use the first one in your inventory.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>999x <img title="Deep Red Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/da/Deep_Red_Paint.png" style="width: 22px;" /> + 999x <img title="Deep Green Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/e/eb/Deep_Green_Paint.png"
+                                                                                style="width: 22px;" /> + 999x <img title="Deep Blue Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/6/65/Deep_Blue_Paint.png" style="width: 22px;" /> + 999x <img
+                                                                                title="Negative Paint" src="https://gamepedia.cursecdn.com/terraria_gamepedia/1/18/Negative_Paint.png" style="width: 22px;" /></td>
+                                                                        <td><img title="Dye Vat" src="https://gamepedia.cursecdn.com/terraria_gamepedia/8/8f/Dye_Vat_%28placed%29.gif" style="width: 48px;" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br><br><br><br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="PaintBrush">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/PaintBrush.png" style="width: 40px; height: 40px; margin-bottom: 20px;"/> Paint Brush</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-sm-start">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055466-eedee0d5-0568-4ab4-9299-a9e7af58e6c2.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Left</td>
+                                                                        <td>Paint tiles</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Right</td>
+                                                                        <td>Open paint selection menu</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Combines all Paint Tools.<br>Can be used with either Vanilla Paint or the Infinite Paint Bucket.</p>
+                                                            <br>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Paintbrush" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/c/c4/Paintbrush.png" style="width: 30px;" /> + 1x <img title="Paint Roller" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/7/75/Paint_Roller.png"
+                                                                                style="width: 30px;" /> + 1x <img title="Paint Scraper" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/3d/Paint_Scraper.png" style="width: 30px;" /></td>
+                                                                        <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                            /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="Spectre Paint Brush">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/SpectrePaintBrush.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Spectre Paint Brush</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055493-40eccd3c-3db6-47d7-949f-a2a2d086276d.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Left</td>
+                                                                        <td>Paint tiles</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Right</td>
+                                                                        <td>Open paint selection menu</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Combines all Spectre Paint Tools.<br>Can be used with either Vanilla Paint or the Infinite Paint Bucket.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Spectre Paintbrush" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c0/Spectre_Paintbrush.png" style="width: 30px;" /> + 1x <img title="Spectre Paint Roller"
+                                                                                src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/37/Spectre_Paint_Roller.png" style="width: 30px;" /> + 1x <img title="Spectre Paint Scraper" src="https://gamepedia.cursecdn.com/terraria_gamepedia/7/79/Spectre_Paint_Scraper.png"
+                                                                                style="width: 30px;" /></td>
+                                                                        <td><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png" /> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png"
+                                                                            /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="MultiWand">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/MultiWand.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Multi Wand</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177055749-16e85844-1987-49da-937c-12b5618574ff.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Left</td>
+                                                                        <td>Place tiles</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Right</td>
+                                                                        <td>Open wand selection menu</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Combines all building wands in the game.<br>Requires the selected wand specific blocks to use.</p>
+                                                            <br>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Living Wood Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/f/f6/Living_Wood_Wand.png" /> + 1x <img title="Bone Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/8/82/Bone_Wand.png"
+                                                                            /> + 1x <img title="Leaf Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c4/Leaf_Wand.png" /> + <br>1x <img title="Hive Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/0/07/Hive_Wand.png"
+                                                                            /> + 1x <img title="Living Mahogany Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/39/Living_Mahogany_Wand.png" /> + 1x <img title="Rich Mahogany Leaf Wand" src="https://gamepedia.cursecdn.com/terraria_gamepedia/2/29/Rich_Mahogany_Leaf_Wand.png"
+                                                                            /></td>
+                                                                        <td><img title="Tinkerer's Workshop" src="https://gamepedia.cursecdn.com/terraria_gamepedia/0/03/Tinkerer%27s_Workshop_%28placed%29.png" style="width: 48px;"></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="video4 cid-tauVg9ZFxa" id="MirrorWand">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/MirrorWand.png" style="width: 44px; height: 44px; margin-bottom: 20px;"/> Mirror Wand</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177057422-e1003f1e-e4ca-4daa-9aff-6cce8d8ddf1c.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
+                                                        <p class="mbr-description pt-2 mbr-fonts-style display-4">Selection/Mirror axis</p>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Left</td>
+                                                                        <td>Places the mirror axis</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Right</td>
+                                                                        <td>Places the selection rectangle</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">The Mirror Axis will turn Red if not valid (needs to be fully inside a selection) and Yellow if valid. Mirror Axis can be 1 or 2 wide in all 4 directions.<br><br>Note: Pressing LShift will square
+                                                                your selection rectangle</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Any Magic Mirror" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/1/1d/Magic_Mirror.png" style="width: 24px;" /> + 25x <img title="Soul of Light" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/3d/Soul_of_Light.gif"
+                                                                                style="width: 22px;" /> + 25x <img title="Soul of Night" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/0/02/Soul_of_Night.gif" style="width: 22px;" /></td>
+                                                                        <td><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png" /> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png"
+                                                                            /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6 video-block">
+                                                        <div class="video-wrapper"><iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177057252-be416e16-ddde-4127-85d5-3b307a57bc7a.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe></div>
+                                                        <p class="mbr-description pt-2 mbr-fonts-style display-4">Tile and wall placements</p>
+                                                    </div>
+                                                    <div class="col-12 col-lg-6 video-block">
+                                                        <div class="video-wrapper"><iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/177057369-f008b787-9fdc-4d6e-8ef2-886056431ec5.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe></div>
+                                                        <p class="mbr-description pt-2 mbr-fonts-style display-4">Painting, hammering and breaking tiles</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="video5 cid-tauVgoN9GX" id="ShapesDrawer">
+                                            <div class="container">
+                                                <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong><img src="assets/images/Items/ShapesDrawer.png" style="width: 46px; height: 46px; margin-bottom: 20px;"/> Shapes Drawer</strong></h5>
+                                                <hr>
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6 video-block video-wrapper" style="margin: 30px 0;">
+                                                        <iframe class="mbr-embedded-video" src="https://user-images.githubusercontent.com/30240961/180065239-d8dcefaf-ee38-4e66-9bcb-e66a0d1a41d5.mp4" width="1280" height="720" frameborder="0" allowfullscreen></iframe>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Middle</td>
+                                                                        <td>Clikc on a tile to select it as the working type of tile</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Left</td>
+                                                                        <td>Tile placement in selected region</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Right</td>
+                                                                        <td>Places the selection</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Assigned Keybind</td>
+                                                                        <td>Undo last placement</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Used to place blocks in shape-like forms! You need to have a powerful enough pickaxe in your inventory to undo your last placements!<br><br>Note: Pressing LShift will square your selection</p>
+                                                            <br>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Copper Pickaxe" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/d/d7/Copper_Pickaxe.png" style="width: 32px; height: 32px;" /> + 1x <img title="Copper Axe"
+                                                                                src="https://static.wikia.nocookie.net/terraria_gamepedia/images/2/21/Copper_Axe.png" style="width: 32px; height: 28px;" /> + 1x <img title="Copper Hammer" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/4/4a/Copper_Hammer.png"
+                                                                                style="width: 32px; height: 32px;" /></td>
+                                                                        <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                            /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>1x <img title="Tin Pickaxe" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/39/Tin_Pickaxe.png" style="width: 32px; height: 32px;" /> + 1x <img title="Tin Axe"
+                                                                                src="https://static.wikia.nocookie.net/terraria_gamepedia/images/7/7a/Tin_Axe.png" style="width: 32px; height: 28px;" /> + 1x <img title="Tin Hammer" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/f/fc/Tin_Hammer.png"
+                                                                                style="width: 32px; height: 32px;" /></td>
+                                                                        <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                            /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab2" class="tab-pane" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="mbr-text mbr-fonts-style display-7">
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="PreHardmodeCraftingStation">
+                                            <div class="container">
+                                                <div class="row align-items-center">
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="image-wrapper"><img title="Pre Hardmode Crafting Station" src="assets/images/Tiles/PreHardmodeCraftingStation.png" style="width: 288px; height: 225px;"></div>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Pre Hardmode Crafting Station</strong></h5>
+                                                            <hr style="margin-top: -15px;">
+                                                            <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img title="Any Chair" src="https://terraria.wiki.gg/images/3/3d/Any_Chair.gif" style="width: 16px; height: 38px;" /> +
+                                                                            <img title="Any Workbench" src="https://terraria.wiki.gg/images/d/d5/Any_Work_Bench.gif" style="width: 32px; height: 18px;" /> +
+                                                                            <img title="Any Table" src="https://terraria.wiki.gg/images/0/00/Any_Table.gif" style="width: 32px; height: 28px;" /> +
+                                                                            <img title="Any Sink" src="https://terraria.wiki.gg/images/4/4d/Metal_Sink_%28placed%29.png" style="width: 30px; height: 34px;" /> +
+                                                                            <img title="Any Pre Hardmode Anvil" src="https://terraria.wiki.gg/images/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;" /> +
+                                                                            <img title="Any Pre Hardmode Furnace" src="https://terraria.wiki.gg/images/3/32/Furnace_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Alchemy Table" src="https://terraria.wiki.gg/images/8/8e/Alchemy_Table_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Sawmill" src="https://terraria.wiki.gg/images/0/00/Sawmill_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Loom" src="https://terraria.wiki.gg/images/9/9d/Loom_%28placed%29.png" class="craftingIngredient" /> +
+                                                                            <img title="Any Cauldron" src="https://terraria.wiki.gg/images/9/9d/Cooking_Pot_%28placed%29.png" style="width: 28px; height: 29px;" /> +
+                                                                            <img title="Tinkerer's Workshop" src="https://terraria.wiki.gg/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" class="craftingIngredient" /> +
+                                                                            <img title="Imbuing Station" src="https://terraria.wiki.gg/images/0/03/Imbuing_Station_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Dye Vat" src="https://terraria.wiki.gg/images/8/8f/Dye_Vat_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Heavy Work Bench" src="https://terraria.wiki.gg/images/1/17/Heavy_Work_Bench_%28placed%29.png" class="craftingIngredient" />
+                                                                        </td>
+                                                                        <td style="white-space: nowrap;"><img title="Demon Altar" src="https://terraria.wiki.gg/images/f/f8/Demon_Altar.png" class="craftingIngredient" /> <img title="Crimson Altar" src="https://terraria.wiki.gg/images/7/70/Crimson_Altar.png"
+                                                                                class="craftingIngredient" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="HardmodeCraftingStation">
+                                            <div class="container">
+                                                <div class="row align-items-center">
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="image-wrapper"><img title="Hardmode Crafting Station" src="assets/images/Tiles/HardmodeCraftingStation.png" style="width: 288px; height: 288px;"></div>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Hardmode Crafting Station</strong></h5>
+                                                            <hr style="margin-top: -15px;">
+                                                            <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img title="Any Hardmode Anvil" src="https://terraria.wiki.gg/images/2/23/Mythril_Anvil_%28placed%29.png" style="width: 30px; height: 18px;" /> +
+                                                                            <img title="Any Hardmode Forge" src="https://terraria.wiki.gg/images/2/27/Adamantite_Forge_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Any Bookcase" src="https://terraria.wiki.gg/images/b/bd/Bookcase_%28placed%29.png" class="craftingIngredient" /> +
+                                                                            <img title="Crystal Ball" src="https://terraria.wiki.gg/images/6/6f/Crystal_Ball_%28placed%29.png" class="craftingIngredient" /> +
+                                                                            <img title="Autohammer" src="https://terraria.wiki.gg/images/2/2f/Autohammer_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Ancient Manipulator" src="https://terraria.wiki.gg/images/f/f3/Ancient_Manipulator_%28placed%29.gif" class="craftingIngredient" />
+                                                                        </td>
+                                                                        <td style="white-space: nowrap;"><img title="Demon Altar" src="https://terraria.wiki.gg/images/f/f8/Demon_Altar.png" class="craftingIngredient" /> <img title="Crimson Altar" src="https://terraria.wiki.gg/images/7/70/Crimson_Altar.png"
+                                                                                class="craftingIngredient" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="SpecializedCraftingStation">
+                                            <div class="container">
+                                                <div class="row align-items-center">
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="image-wrapper"><img title="Specialized Crafting Station" src="assets/images/Tiles/SpecializedCraftingStation.png" style="width: 288px; height: 225px;"></div>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Specialized Crafting Station</strong></h5>
+                                                            <hr style="margin-top: -15px;">
+                                                            <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img title="Keg" src="https://terraria.wiki.gg/images/a/a1/Keg_%28placed%29.png" class="craftingIngredient" /> +
+                                                                            <img title="Teapot" src="https://terraria.wiki.gg/images/8/81/Teapot.png" class="craftingIngredient" /> +
+                                                                            <img title="Blend-O-Matic" src="https://terraria.wiki.gg/images/7/79/Blend-O-Matic_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Meat Grinder" src="https://terraria.wiki.gg/images/a/ac/Meat_Grinder_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Any Campfire" src="https://terraria.wiki.gg/images/4/49/Campfire_%28placed%29.gif" class="craftingIngredient" />
+                                                                        </td>
+                                                                        <td style="white-space: nowrap;"><img title="Mythril Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/3d/Mythril_Anvil.png" style="width: 30px; height: 18px;" /> <img title="Orichalcum Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/d/dc/Orichalcum_Anvil.png"
+                                                                                style="width: 30px; height: 18px;" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="ThemedFurnitureCraftingStation">
+                                            <div class="container">
+                                                <div class="row align-items-center">
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="image-wrapper"><img title="Themed Furniture Crafting Station" src="assets/images/Tiles/ThemedFurnitureCraftingStation.png" style="width: 288px; height: 288px;"></div>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Themed Furniture Crafting Station</strong></h5>
+                                                            <hr style="margin-top: -15px;">
+                                                            <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all the items required by its crafting materials.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img title="Bone Welder" src="https://terraria.wiki.gg/images/b/b3/Bone_Welder_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Glass Kiln" src="https://terraria.wiki.gg/images/3/3c/Glass_Kiln_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Honey Dispenser" src="https://terraria.wiki.gg/images/3/32/Honey_Dispenser_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Ice Machine" src="https://terraria.wiki.gg/images/c/c5/Ice_Machine_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Living Loom" src="https://terraria.wiki.gg/images/b/b4/Living_Loom_%28placed%29.png" class="craftingIngredient" /> +
+                                                                            <img title="Sky Mill" src="https://terraria.wiki.gg/images/4/4c/Sky_Mill_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Solidifier" src="https://terraria.wiki.gg/images/c/cf/Solidifier_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Decay Chamber" src="https://terraria.wiki.gg/images/8/81/Decay_Chamber_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Flesh Cloning Vat" src="https://terraria.wiki.gg/images/9/95/Flesh_Cloning_Vat_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Steampunk Boiler" src="https://terraria.wiki.gg/images/6/69/Steampunk_Boiler_%28placed%29.gif" class="craftingIngredient" /> +
+                                                                            <img title="Lihzahrd Furnace" src="https://terraria.wiki.gg/images/1/1d/Lihzahrd_Furnace_%28placed%29.gif" class="craftingIngredient" />
+                                                                        </td>
+                                                                        <td style="white-space: nowrap;"><img title="Demon Altar" src="https://terraria.wiki.gg/images/f/f8/Demon_Altar.png" class="craftingIngredient" /> <img title="Crimson Altar" src="https://terraria.wiki.gg/images/7/70/Crimson_Altar.png"
+                                                                                class="craftingIngredient" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF" id="MultiCraftingStation">
+                                            <div class="container">
+                                                <div class="row align-items-center">
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="image-wrapper"><img title="Multi Crafting Station" src="assets/images/Tiles/MultiCraftingStation.gif" style="width: 288px; height: 288px;"></div>
+                                                    </div>
+                                                    <div class="col-12 col-lg">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><strong>Multi Crafting Station</strong></h5>
+                                                            <hr style="margin-top: -15px;">
+                                                            <p class="mbr-text mbr-fonts-style display-7">Can be used to craft all items in the game.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img title="Pre Hardmode Crafting Station" src="assets/images/Tiles/PreHardmodeCraftingStation.png" class="craftingIngredient" style="margin-top: 4px;" /> +
+                                                                            <img title="Hardmode Crafting Station" src="assets/images/Tiles/HardmodeCraftingStation.png" class="craftingIngredient" style="margin-bottom: 22px;" /> +
+                                                                            <img title="Specialized Crafting Station" src="assets/images/Tiles/SpecializedCraftingStation.png" class="craftingIngredient" style="margin-top: 4px;" /> +
+                                                                            <img title="Themed Furniture Crafting Station" src="assets/images/Tiles/ThemedFurnitureCraftingStation.png" class="craftingIngredient" style="margin-bottom: 22px;" />
+                                                                        </td>
+                                                                        <td style="white-space: nowrap;"><img title="Tinkerer's Workshop" src="https://terraria.wiki.gg/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" class="craftingIngredient" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab3" class="tab-pane" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="mbr-text mbr-fonts-style display-7">
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                            <div class="container">
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-6" id="BuildInPeace">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/BuildInPeace.png" alt="Build In Peace" style="width: 42px; height: 42px; margin-top: 6px; margin-bottom: 20px;"><strong> Build In Peace</strong></h5>
+                                                            <hr>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Disables all hostile events, invasions, bosses, NPCs (except for Town NPCs) and keeps the time fixed at 12pm.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>How to obtain</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Has a 100% chance to be dropped by the Moon Lord.</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-6" id="BuildingWrench">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/BuildingWrench.png" alt="Building Wrench" style="width: 48px; height: 48px; margin-bottom: 20px;"><strong> Building Wrench</strong></h5>
+                                                            <hr>
+                                                            <p class="mbr-text mbr-fonts-style display-7">An accessory that does nothing by itself but it allows upgrades to be added.Upgrades can be toggled from the UI that's located in the bottom left corner.
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Materials</th>
+                                                                            <th>Station</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>6x <img title="Iron Bar" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/6/6c/Iron_Bar.png" style="width: 30px; height: 24px;"> or 6x <img title="Lead Bar" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/1/10/Lead_Bar.png"
+                                                                                    style="width: 30px; height: 24px;"></td>
+                                                                            <td><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                                    style="width: 32px; height: 16px;" /></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>1x <img title="Building Wrench" src="assets/images/Accessories/BuildingWrench.png" style="width: 32px; height: 32px;" /> + 1x <img title="Any Upgrade Module" src="assets/images/Accessories/WrenchUpgrades/Upgrades.gif"
+                                                                                    style="width: 38px; height: 38px;" /></td>
+                                                                            <td><img title="Tinkerer's Workshop" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" style="width: 48px; height: 38px;"
+                                                                                /></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                            <div class="container">
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-8" id="UpgradeModules">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/WrenchUpgrades/Upgrades.gif" alt="Wrench Upgrade Modules" style="width: 38px; height: 38px; margin-bottom: 20px;"><strong> Wrench Upgrade Modules</strong></h5>
+                                                            <hr>
+                                                            <p class="mbr-text mbr-fonts-style display-7">Modules that can be attached to a Building Wrench [<img title="Building Wrench" src="assets/images/Accessories/BuildingWrench.png" style="width: 24px; height: 24px; margin: 0px 4px;" class="titleItem"
+                                                                />].<br>Each module is crafted differently and unlocks a different upgrade.</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Module</th>
+                                                                        <th>Upgrade</th>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td style="text-align: center;"><img title="Fast Placement" src="assets/images/Accessories/WrenchUpgrades/Upgrade0.png" style="width: 38px; height: 38px;" /></td>
+                                                                        <td>Fast Placement</td>
+                                                                        <td>1x <img title="Brick Layer" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/d/da/Brick_Layer.png" style="width: 34px; height: 30px;" /> + 1x <img title="Portable Cementer Mixer"
+                                                                                src="https://static.wikia.nocookie.net/terraria_gamepedia/images/c/c9/Portable_Cement_Mixer.png" style="width: 34px; height: 30px;" /> +5x <img title="Sapphire" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/f/f7/Sapphire.png"
+                                                                                style="width: 18px; height: 18px;" /></td>
+                                                                        <td style="white-space: nowrap;"><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                                style="width: 32px; height: 16px;" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="text-align: center;"><img title="Infinite Range" src="assets/images/Accessories/WrenchUpgrades/Upgrade1.png" style="width: 38px; height: 38px;" /></td>
+                                                                        <td>Infinite Range</td>
+                                                                        <td>1x <img title="Extendo Grip" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/b/b7/Extendo_Grip.png" style="width: 34px; height: 34px;" /> + 1x <img title="Toolbelt"
+                                                                                src="https://static.wikia.nocookie.net/terraria_gamepedia/images/e/e2/Toolbelt.png" style="width: 30px; height: 24px;" /> + 5x <img title="Ruby" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/a9/Ruby.png"
+                                                                                style="width: 14px; height: 18px;" /></td>
+                                                                        <td style="white-space: nowrap;"><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                                style="width: 32px; height: 16px;" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="text-align: center;"><img title="Infinite Placement" src="assets/images/Accessories/WrenchUpgrades/Upgrade2.png" style="width: 38px; height: 38px;" /></td>
+                                                                        <td>Infinite Placement</td>
+                                                                        <td>3x <img title="Temple Key" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/2/29/Temple_Key.png" style="width: 32px; height: 18px;" /> + 5x <img title="Lihzahrd Power Cell"
+                                                                                src="https://static.wikia.nocookie.net/terraria_gamepedia/images/9/9d/Lihzahrd_Power_Cell.png" style="width: 24px; height: 12px;" /> + 5x <img title="Emerald" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/6/6a/Emerald.png"
+                                                                                style="width: 14px; height: 18px;" /></td>
+                                                                        <td style="white-space: nowrap;"><img title="Adamantite Forge" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/2/27/Adamantite_Forge_%28placed%29.gif" style="width: 48px; height: 34px;" /> <img title="Titanium Forge"
+                                                                                src="https://static.wikia.nocookie.net/terraria_gamepedia/images/3/36/Titanium_Forge_%28placed%29.gif" style="width: 48px; height: 34px;" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="text-align: center;"><img title="Infinite Pickup Range" src="assets/images/Accessories/WrenchUpgrades/Upgrade3.png" style="width: 38px; height: 38px;" /></td>
+                                                                        <td>Infinite Pickup Range</td>
+                                                                        <td>20x <img title="Demonite Ore" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/a8/Demonite_Ore.png" style="width: 16px; height: 16px;" /> or 20x <img title="Crimtane Ore"
+                                                                                src="https://static.wikia.nocookie.net/terraria_gamepedia/images/c/c5/Crimtane_Ore.png" style="width: 16px; height: 16px;" /> + 5x <img title="Topaz" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/a5/Topaz.png"
+                                                                                style="width: 18px; height: 14px;" /></td>
+                                                                        <td style="white-space: nowrap;"><img title="Iron Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/c/c3/Iron_Anvil.png" style="width: 32px; height: 16px;" /> <img title="Lead Anvil" src="https://gamepedia.cursecdn.com/terraria_gamepedia/3/32/Lead_Anvil.png"
+                                                                                style="width: 32px; height: 16px;" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <section data-bs-version="5.1" class="image1 cid-taA9FtRyWF">
+                                            <div class="container">
+                                                <div class="row align-items-start">
+                                                    <div class="col-12 col-lg-12" id="ImprovedRuler">
+                                                        <div class="text-wrapper">
+                                                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5"><img src="assets/images/Accessories/ImprovedRuler.png" alt="Improved Ruler" style="width: 42px; height: 42px; margin-bottom: 20px;"><strong> Improved Ruler</strong></h5>
+                                                            <hr>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mouse Button</th>
+                                                                        <th>Description</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Right</td>
+                                                                        <td>Place the ruler line</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Left</td>
+                                                                        <td>Bend the ruler line</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <p class="mbr-text mbr-fonts-style display-7">A neat ruler that can be bent to get the perfect round corners!</p>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Materials</th>
+                                                                        <th>Station</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1x <img title="Ruler" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/a/aa/Ruler.png" style="width: 12px; height: 28px;" /></td>
+                                                                        <td><img title="Tinkerer's Workshop" src="https://static.wikia.nocookie.net/terraria_gamepedia/images/0/03/Tinkerer%27s_Workshop_%28placed%29.png" style="width: 48px; height: 38px;" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="image-wrapper" style="margin-top: 40px;"><img src="https://media.giphy.com/media/B1H71deTQMCQEFEEdi/giphy.gif" style="width: 640px; height: 320px;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section data-bs-version="5.1" class="footer7 cid-taO6F302Ca" once="footers" style="padding-top: 10px; padding-bottom: 10px; color: #ffffff; background-color: #40b0bf; overflow: hidden;">
-    <div class="container">
-        <div class="media-container-row align-center">
-            <div class="col-12">
-                <p class="mbr-text mb-0 mbr-fonts-style display-7">
-                    Made with <span class="mobi-mbri mobi-mbri-hearth mbr-iconfont mbr-iconfont-btn" style="font-size: 18px;"></span> by Kirtle and Strunter!
-                </p>
+    <section data-bs-version="5.1" class="footer7 cid-taO6F302Ca" once="footers" style="padding-top: 10px; padding-bottom: 10px; color: #ffffff; background-color: #40b0bf; overflow: hidden;">
+        <div class="container">
+            <div class="media-container-row align-center">
+                <div class="col-12">
+                    <p class="mbr-text mb-0 mbr-fonts-style display-7">
+                        Made with <span class="mobi-mbri mobi-mbri-hearth mbr-iconfont mbr-iconfont-btn" style="font-size: 18px;"></span> by Kirtle and Strunter!
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<div id="scrollToTop" class="scrollToTop mbr-arrow-up"><a style="text-align: center;"><i class="mbr-arrow-up-icon mbr-arrow-up-icon-cm cm-icon cm-icon-smallarrow-up"></i></a></div>
+    <div id="scrollToTop" class="scrollToTop mbr-arrow-up"><a style="text-align: center;"><i class="mbr-arrow-up-icon mbr-arrow-up-icon-cm cm-icon cm-icon-smallarrow-up"></i></a></div>
 
-<section id="footer" class="display-7" style="padding: 0;align-items: center;justify-content: center;flex-wrap: wrap;align-content: center;display: flex;position: relative;height: 4rem;">
-    <a href="https://mobiri.se/" style="flex: 1 1;height: 4rem;position: absolute;width: 100%;z-index: 1;">
-        <img alt="" style="height: 4rem;" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==">
-    </a>
-    <p style="margin: 0;text-align: center;" class="display-7">Made with Mobirise &#8204;</p>
-    <a style="z-index:1" href="https://mobirise.com/html-builder.html">Free HTML5 Site Generator</a>
-</section>
-<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/smoothscroll/smooth-scroll.js"></script>
-<script src="assets/ytplayer/index.js"></script>
-<script src="assets/mbr-tabs/mbr-tabs.js"></script>
-<script src="assets/mbr-tabs/script.js"></script>
-<script src="assets/playervimeo/vimeo_player.js"></script>
-<script src="assets/theme/js/script.js"></script>
-<script>window.onload = () => ["footer", "top-1", "top-2"].forEach(x => document.getElementById(x).remove());document.scripts[document.scripts.length-1].remove();</script>
+    <section id="footer" class="display-7" style="padding: 0;align-items: center;justify-content: center;flex-wrap: wrap;align-content: center;display: flex;position: relative;height: 4rem;">
+        <a href="https://mobiri.se/" style="flex: 1 1;height: 4rem;position: absolute;width: 100%;z-index: 1;">
+            <img alt="" style="height: 4rem;" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==">
+        </a>
+        <p style="margin: 0;text-align: center;" class="display-7">Made with Mobirise &#8204;</p>
+        <a style="z-index:1" href="https://mobirise.com/html-builder.html">Free HTML5 Site Generator</a>
+    </section>
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/smoothscroll/smooth-scroll.js"></script>
+    <script src="assets/ytplayer/index.js"></script>
+    <script src="assets/mbr-tabs/mbr-tabs.js"></script>
+    <script src="assets/mbr-tabs/script.js"></script>
+    <script src="assets/playervimeo/vimeo_player.js"></script>
+    <script src="assets/theme/js/script.js"></script>
+    <script>
+        window.onload = () => ["footer", "top-1", "top-2"].forEach(x => document.getElementById(x).remove());
+        document.scripts[document.scripts.length - 1].remove();
+    </script>
 </body>
+
 </html>
