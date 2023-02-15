@@ -118,6 +118,12 @@ public abstract class BaseShapePanel : UIElement
                 undo = false;
             }
         };
+
+        cs.RightMouse.OnClick += _ => {
+            if (!Main.LocalPlayer.mouseInterface && Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FillWand>()) {
+                DequeuePlacement(destroyTiles: true);
+            }
+        };
     }
 
     public void UpdateMaxUndoNum(int value) {
@@ -141,7 +147,7 @@ public abstract class BaseShapePanel : UIElement
 
     public void QueuePlacement(Point coords) => queuedPlacements.Enqueue(coords);
 
-    public void DequeuePlacement() {
+    public void DequeuePlacement(bool destroyTiles = false) {
         if (queuedPlacements.Count == 0)
             return;
 
@@ -156,13 +162,20 @@ public abstract class BaseShapePanel : UIElement
             Point coordinate = queuedPlacements.Dequeue();
             Tile tile = Framing.GetTileSafely(coordinate);
             MinimalTile previousTile = new(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile));
-            bool tilePlaced = PlacementHelpers.PlaceTile(coordinate.X, coordinate.Y, SelectedItem);
-            MinimalTile placedTile = new(tile.TileType, tile.WallType, tile.HasTile, SelectedItem.placeStyle);
-            if (tilePlaced)
-                previousPlacement.Add(new PlacementHistory(coordinate, previousTile, placedTile, SelectedItem));
+
+            if (!destroyTiles) {
+                bool tilePlaced = PlacementHelpers.PlaceTile(coordinate.X, coordinate.Y, SelectedItem);
+                MinimalTile placedTile = new(tile.TileType, tile.WallType, tile.HasTile, SelectedItem.placeStyle);
+                if (tilePlaced)
+                    previousPlacement.Add(new PlacementHistory(coordinate, previousTile, placedTile, SelectedItem));
+            }
+            else {
+                PlacementHelpers.RemoveTileWithMask(coordinate.X, coordinate.Y, SelectedItem.type, needPickPower: true);
+            }
         }
 
-        historyPlacements.Push(previousPlacement);
+        if (!destroyTiles)
+            historyPlacements.Push(previousPlacement);
     }
 
     public void UndoPlacement() {

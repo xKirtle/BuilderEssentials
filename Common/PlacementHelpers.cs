@@ -133,7 +133,7 @@ public static class PlacementHelpers
         for (int x = minX; x < minX + dx; x++)
             PlaceTile(x, y, item, mute, forced, false);
 
-        //Keeping syncSize an odd number since SendTileSquare as a bias towards up and left for even-numbers sizes
+        //Keeping syncSize an odd number since SendTileSquare has a bias towards up and left for even-numbers sizes
         int syncSize = Math.Max(dx, dy);
         syncSize += 1 + syncSize % 2;
 
@@ -142,7 +142,7 @@ public static class PlacementHelpers
     }
 
     public static bool RemoveTile(int x, int y, bool removeTile = true, bool removeWall = false, bool dropItem = true,
-        int itemToDrop = -1, bool sync = true, bool needPickPower = false) {
+        bool sync = true, bool needPickPower = false) {
 
         if (!ValidTileCoordinates(x, y))
             return false;
@@ -167,5 +167,23 @@ public static class PlacementHelpers
         if (sync && Main.netMode == NetmodeID.MultiplayerClient) { NetMessage.SendTileSquare(-1, x, y, 1); }
 
         return true;
+    }
+
+    public static bool RemoveTileWithMask(int x, int y, int maskItemType, bool dropItem = true, bool sync = true, bool needPickPower = false) {
+        Item item = new Item(maskItemType);
+        TypeOfItem typeOfItem = WhatIsThisItem(item);
+        Tile tile = Main.tile[x, y];
+
+        bool canRemoveItem = ((tile.HasTile && tile.TileType == item.createTile) ||
+            (!tile.HasTile && tile.WallType == item.createWall) ||
+            (typeOfItem == TypeOfItem.Air));
+
+        if (!canRemoveItem)
+            return false;
+
+        bool removeTile = typeOfItem == TypeOfItem.Tile || typeOfItem == TypeOfItem.Air;
+        bool removeWall = typeOfItem == TypeOfItem.Wall || typeOfItem == TypeOfItem.Air;
+        
+        return RemoveTile(x, y, removeTile, removeWall, dropItem, sync, needPickPower);
     }
 }
