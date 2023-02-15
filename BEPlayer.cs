@@ -33,13 +33,13 @@ public class BEPlayer : ModPlayer
     }
 
     public override void ProcessTriggers(TriggersSet triggersSet) {
-        if (BuilderEssentials.FWIncrease.JustPressed && FillWand.FillSelectionSize < 6)
+        if (BuilderEssentials.GetInstance().FWIncrease.JustPressed && FillWand.FillSelectionSize < 6)
             FillWand.FillSelectionSize++;
 
-        if (BuilderEssentials.FWDecrease.JustPressed && FillWand.FillSelectionSize > 1)
+        if (BuilderEssentials.GetInstance().FWDecrease.JustPressed && FillWand.FillSelectionSize > 1)
             FillWand.FillSelectionSize--;
 
-        if (BuilderEssentials.UndoPlacement.JustPressed) {
+        if (BuilderEssentials.GetInstance().UndoPlacement.JustPressed) {
             Item heldItem = Main.LocalPlayer.HeldItem;
 
             //Hardcoded.. get a way to bind keybind to an item that's not being held..?

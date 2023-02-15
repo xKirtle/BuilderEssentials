@@ -42,7 +42,7 @@ public class ShapesDrawer : BuilderEssentialsItem
 
     public override void ModifyTooltips(List<TooltipLine> tooltips) {
         int insertIndex = tooltips.FindIndex(x => x.Text.Contains("Middle Click to select working tile"));
-        var assignedKeys = BuilderEssentials.UndoPlacement?.GetAssignedKeys();
+        var assignedKeys = BuilderEssentials.GetInstance().UndoPlacement?.GetAssignedKeys();
         string hotKey = assignedKeys == null || !assignedKeys.Any() ? "[NO HOTKEY ASSIGNED]" : assignedKeys[0];
         
         if (insertIndex == -1) {

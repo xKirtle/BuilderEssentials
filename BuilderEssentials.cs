@@ -19,12 +19,14 @@ namespace BuilderEssentials;
 
 public class BuilderEssentials : Mod
 {
-    internal static ModKeybind FWIncrease;
-    internal static ModKeybind FWDecrease;
-    internal static ModKeybind UndoPlacement;
-    public static Dictionary<int, List<int>> TileToItems;
-    public static Dictionary<int, List<int>> WallToItems;
+    internal ModKeybind FWIncrease;
+    internal ModKeybind FWDecrease;
+    internal ModKeybind UndoPlacement;
+    internal Dictionary<int, List<int>> TileToItems;
+    internal Dictionary<int, List<int>> WallToItems;
 
+    public static BuilderEssentials GetInstance() => ModContent.GetInstance<BuilderEssentials>();
+    
     public override void PostSetupContent() {
         ReadAndCacheLocally();
 
@@ -44,7 +46,7 @@ public class BuilderEssentials : Mod
         Task.Factory.StartNew(() => CacheModTiles(), TaskCreationOptions.LongRunning);
     }
     
-    private async void CacheModTiles() {
+    private async Task CacheModTiles() {
         Parallel.For(TileToItems.Count, TileLoader.TileCount, i => {
             // In case it was requested and cached before this step got to it
             if (TileToItems.ContainsKey(i))

@@ -9,8 +9,8 @@ namespace BuilderEssentials.Common;
 
 public static class ItemPicker
 {
-    private static Dictionary<int, List<int>> TileToItems => BuilderEssentials.TileToItems;
-    private static Dictionary<int, List<int>> WallToItems => BuilderEssentials.WallToItems;
+    private static Dictionary<int, List<int>> TileToItems => BuilderEssentials.GetInstance().TileToItems;
+    private static Dictionary<int, List<int>> WallToItems => BuilderEssentials.GetInstance().WallToItems;
 
     public static int PickItem(Tile tile)
         => PickItem(new MinimalTile(tile.TileType, tile.WallType, tile.HasTile, TileObjectData.GetTileStyle(tile)));
