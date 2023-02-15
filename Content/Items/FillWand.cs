@@ -25,6 +25,7 @@ public class FillWand : BuilderEssentialsItem
     public override void SetStaticDefaults() {
         Tooltip.SetDefault("Great for filling holes!" +
             "\nLeft Click to place" +
+            "\nRight Click to remove selected working tiles (select air for all)" +
             "\nMiddle Click to select working tile" +
             "\n[c/FFCC00:Use hotkeys to increase/decrease selection size]" +
             "\n[c/FF0000:Does not support multi tiles]");
