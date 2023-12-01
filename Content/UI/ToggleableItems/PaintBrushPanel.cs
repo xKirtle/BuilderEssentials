@@ -7,7 +7,6 @@ using BuilderEssentials.Common.Systems;
 using BuilderEssentials.Content.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using On.Terraria.GameContent;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -93,7 +92,7 @@ public class PaintBrushPanel : BaseToggleablePanel
             colorElements[i].Top = top;
 
             colorElements[i].SetVisibility(1f, 0.85f);
-            colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
+            colorElements[i].OnLeftMouseDown += (__, _) => ColorSelected(index);
             colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
             colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
             noPaintOverlay[i].OnMouseOver += (__, _) => elementHovered = true;
@@ -116,7 +115,7 @@ public class PaintBrushPanel : BaseToggleablePanel
             colorElements[i].Top = top;
 
             colorElements[i].SetVisibility(1f, 0.85f);
-            colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
+            colorElements[i].OnLeftMouseDown += (__, _) => ColorSelected(index);
             colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
             colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
             noPaintOverlay[i].OnMouseOver += (__, _) => elementHovered = true;
@@ -140,7 +139,7 @@ public class PaintBrushPanel : BaseToggleablePanel
             colorElements[i].Top = top;
 
             colorElements[i].SetVisibility(1f, 0.85f);
-            colorElements[i].OnMouseDown += (__, _) => ColorSelected(index);
+            colorElements[i].OnLeftMouseDown += (__, _) => ColorSelected(index);
             colorElements[i].OnMouseOver += (__, _) => elementHovered = true;
             colorElements[i].OnMouseOut += (__, _) => elementHovered = false;
             noPaintOverlay[i].OnMouseOver += (__, _) => elementHovered = true;
@@ -157,7 +156,7 @@ public class PaintBrushPanel : BaseToggleablePanel
         colorElements[30].Top = topOffset;
 
         colorElements[30].SetVisibility(1f, 0.85f);
-        colorElements[30].OnMouseDown += (__, _) => ColorSelected(30);
+        colorElements[30].OnLeftMouseDown += (__, _) => ColorSelected(30);
         colorElements[30].OnMouseOver += (__, _) => elementHovered = true;
         colorElements[30].OnMouseOut += (__, _) => elementHovered = false;
 
@@ -172,7 +171,7 @@ public class PaintBrushPanel : BaseToggleablePanel
             toolElements[i].Top.Set((float) y, 0);
 
             toolElements[i].SetVisibility(1f, .8f);
-            toolElements[i].OnMouseDown += (__, _) => ToolSelected(index);
+            toolElements[i].OnLeftMouseDown += (__, _) => ToolSelected(index);
             toolElements[i].OnMouseOver += (__, _) => elementHovered = true;
             toolElements[i].OnMouseOut += (__, _) => elementHovered = false;
 

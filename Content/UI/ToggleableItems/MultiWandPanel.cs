@@ -49,7 +49,7 @@ public class MultiWandPanel : BaseToggleablePanel
             int index = i;
             elements[i].Left.Set(buttonPositions[i].X, 0f);
             elements[i].Top.Set(buttonPositions[i].Y, 0f);
-            elements[i].OnClick += (__, _) => ElementOnClick(index);
+            elements[i].OnLeftClick += (__, _) => ElementOnClick(index);
             elements[i].OnMouseOver += (__, _) => ElementOnMouseOver(index);
             elements[i].OnMouseOut += (__, _) => ElementOnMouseOut();
         }

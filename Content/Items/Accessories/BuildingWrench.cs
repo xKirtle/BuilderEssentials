@@ -229,5 +229,5 @@ public class BuildingWrench : ModItem
         }
     }
 
-    private static Recipe.Condition FalseCondition = new(NetworkText.Empty, recipe => false);
+    private static Condition FalseCondition = new(LocalizedText.Empty, () => false);
 }

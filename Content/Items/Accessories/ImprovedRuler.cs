@@ -12,9 +12,10 @@ public class ImprovedRuler : ModItem
 
     public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledAccessories.ImprovedRuler;
 
-    public override void SetStaticDefaults() => Tooltip.SetDefault("Only works when equipped and player's empty handed." +
-        "\nHold Right Click to draw a line." +
-        "\nHold Left Click to curve the line.");
+    // TOOLTIP
+    // public override void SetStaticDefaults() => Tooltip.SetDefault("Only works when equipped and player's empty handed." +
+    //     "\nHold Right Click to draw a line." +
+    //     "\nHold Left Click to curve the line.");
 
     public override void SetDefaults() {
         Item.accessory = true;

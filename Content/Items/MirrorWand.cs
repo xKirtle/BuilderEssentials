@@ -14,11 +14,12 @@ public class MirrorWand : BuilderEssentialsItem
     public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.MirrorWand;
 
     public override void SetStaticDefaults() {
-        Tooltip.SetDefault("Mirrors everything!" +
-            "\nMirror Click to make a selection area" +
-            "\nLeft Click to make a mirror axis" +
-            "\n[c/FFCC00:Press LShift to make circles/squares]" +
-            "\n[c/FF0000:Multiplayer usage can be bug prone!]");
+        // TOOLTIP
+        // Tooltip.SetDefault("Mirrors everything!" +
+        //     "\nMirror Click to make a selection area" +
+        //     "\nLeft Click to make a mirror axis" +
+        //     "\n[c/FFCC00:Press LShift to make circles/squares]" +
+        //     "\n[c/FF0000:Multiplayer usage can be bug prone!]");
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }

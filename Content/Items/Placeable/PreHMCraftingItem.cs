@@ -13,8 +13,9 @@ public class PreHMCraftingItem : ModItem
     public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.PreHMCraftingStation;
 
     public override void SetStaticDefaults() {
-        DisplayName.SetDefault("Pre Hardmode Crafting Station");
-        Tooltip.SetDefault("Used to craft Pre Hardmode items");
+        // TOOLTIP
+        // DisplayName.SetDefault("Pre Hardmode Crafting Station");
+        // Tooltip.SetDefault("Used to craft Pre Hardmode items");
     }
 
     public override void SetDefaults() {

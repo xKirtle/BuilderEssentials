@@ -83,8 +83,8 @@ public class CoordSelection
         RightMouse = new MouseSelection();
         MiddleMouse = new MouseSelection();
 
-        instance.OnMouseDown += LeftMouse.MouseDown;
-        instance.OnMouseUp += LeftMouse.MouseUp;
+        instance.OnLeftMouseDown += LeftMouse.MouseDown;
+        instance.OnLeftMouseUp += LeftMouse.MouseUp;
         instance.OnRightMouseDown += RightMouse.MouseDown;
         instance.OnRightMouseUp += RightMouse.MouseUp;
         instance.OnMiddleMouseDown += MiddleMouse.MouseDown;

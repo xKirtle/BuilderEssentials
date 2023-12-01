@@ -1,0 +1,480 @@
+Items: {
+	FastPlacementModule: {
+		DisplayName: Fast Placement Module
+		Tooltip: ""
+	}
+
+	InfiniteRangeModule: {
+		DisplayName: Infinite Range Module
+		Tooltip: ""
+	}
+
+	InfinitePlacementModule: {
+		DisplayName: Infinite Placement Module
+		Tooltip: ""
+	}
+
+	InfinitePickupRangeModule: {
+		DisplayName: Infinite Pickup Range Module
+		Tooltip: ""
+	}
+
+	BuildingWrench: {
+		DisplayName: Building Wrench
+		Tooltip: ""
+	}
+
+	BuildInPeace: {
+		DisplayName: Build In Peace
+		Tooltip: Disables all events in the game and enemy spawns. Also sets the clock to noon
+	}
+
+	ImprovedRuler: {
+		DisplayName: Improved Ruler
+		Tooltip:
+			'''
+			Only works when equipped and player's empty handed.
+			Hold Right Click to draw a line.
+			Hold Left Click to curve the line.
+			'''
+	}
+
+	AutoHammer: {
+		DisplayName: Auto Hammer
+		Tooltip:
+			'''
+			Better than a regular hammer!
+			Right Click to open selection menu
+			'''
+	}
+
+	FillWand: {
+		DisplayName: Fill Wand
+		Tooltip:
+			'''
+			Great for filling holes!
+			Left Click to place
+			Middle Click to select working tile
+			[c/FFCC00:Use hotkeys to increase/decrease selection size]
+			[c/FF0000:Does not support multi tiles]
+			'''
+	}
+
+	InfinitePaintBucket: {
+		DisplayName: Infinite Paint Bucket
+		Tooltip: Allows infinite painting while in the inventory!
+	}
+
+	MirrorWand: {
+		DisplayName: Mirror Wand
+		Tooltip:
+			'''
+			Mirrors everything!
+			Mirror Click to make a selection area
+			Left Click to make a mirror axis
+			[c/FFCC00:Press LShift to make circles/squares]
+			[c/FF0000:Multiplayer usage can be bug prone!]
+			'''
+	}
+
+	MultiWand: {
+		DisplayName: Multi Wand
+		Tooltip:
+			'''
+			Contains all building wands into one!
+			Right Click to open selection menu
+			'''
+	}
+
+	PaintBrush: {
+		DisplayName: Paint Brush
+		Tooltip:
+			'''
+			Able to paint and remove paint from tiles and walls!
+			Right Click to open selection menu
+			'''
+	}
+
+	HMCraftingItem: {
+		DisplayName: Hardmode Crafting Station
+		Tooltip: Used to craft Hardmode items
+	}
+
+	MultiCraftingItem: {
+		DisplayName: Multi Crafting Station
+		Tooltip: Used to craft all items in the game
+	}
+
+	PreHMCraftingItem: {
+		DisplayName: Pre Hardmode Crafting Station
+		Tooltip: Used to craft Pre Hardmode items
+	}
+
+	SpecCraftingItem: {
+		DisplayName: Specialized Crafting Station
+		Tooltip: Used to craft Specialized items
+	}
+
+	TFCraftingItem: {
+		DisplayName: Themed Furniture Crafting Station
+		Tooltip: Used to craft Themed Furniture items
+	}
+
+	ShapesDrawer: {
+		DisplayName: Shapes Drawer
+		Tooltip:
+			'''
+			Used to draw shapes
+			Right Click to make selection
+			Left Click to place blocks in the selection
+			Middle Click to select working tile
+			[c/FFCC00:Press LShift to make circles/squares]
+			[c/FFCC00:Open its menu by clicking the squirrel builder under your opened inventory (must be being held)]
+			'''
+	}
+
+	SpectrePaintBrush: {
+		DisplayName: Spectre Paint Brush
+		Tooltip:
+			'''
+			Able to paint and remove paint from tiles and walls!
+			Right Click to open selection menu
+			'''
+	}
+}
+
+Tiles: {
+	HMCraftingStation.MapEntry: Hardmode Crafting Station
+	MultiCraftingStation.MapEntry: Multi Crafting Station
+	PreHMCraftingStation.MapEntry: Pre Hardmode Crafting Station
+	SpecCraftingStation.MapEntry: Specialized Crafting Station
+	TFCraftingStation.MapEntry: Themed Furniture Crafting Station
+}
+
+ServerConfig: {
+	DisplayName: Server Config
+
+	MaxUndoNum: {
+		Label: Max Undo Times
+		Tooltip: The maximum amount of placements the game will remember and be able to undo
+	}
+
+	InfinitePickupRangeFloat: {
+		Label: Range % of the Inf. Pickup Range Upgrade Module
+		Tooltip: Anything above 20% will start picking up items offscreen
+	}
+
+	SquirrelBuilderPosition: {
+		Label: Squirrel Builder Position
+		Tooltip: Positioning of the squirrel builder menu from the Shapes Drawer
+	}
+
+	ToggleContentHeader: {
+		Label: Enable or disable content from this mod
+		Tooltip: ""
+	}
+
+	EnabledItems: {
+		Label: Items
+		Tooltip: ""
+	}
+
+	EnabledTiles: {
+		Label: Tiles
+		Tooltip: ""
+	}
+
+	EnabledAccessories: {
+		Label: Accessories
+		Tooltip: ""
+	}
+
+	EnabledUpgradeModules: {
+		Label: Upgrade Modules
+		Tooltip: ""
+	}
+
+	EnabledItemsConfig: {
+		Tooltip: ""
+
+		AutoHammer: {
+			Label: Auto Hammer
+			Tooltip: ""
+		}
+
+		FillWand: {
+			Label: Fill Wand
+			Tooltip: ""
+		}
+
+		InfinitePaintBucket: {
+			Label: Infinite Paint Bucket
+			Tooltip: ""
+		}
+
+		PaintBrush: {
+			Label: Paint Brush
+			Tooltip: ""
+		}
+
+		SpectrePaintBrush: {
+			Label: Spectre Paint Brush
+			Tooltip: ""
+		}
+
+		MultiWand: {
+			Label: Multi Wand
+			Tooltip: ""
+		}
+
+		MirrorWand: {
+			Label: Mirror Wand
+			Tooltip: ""
+		}
+
+		ShapesDrawer: {
+			Label: Shapes Drawer
+			Tooltip: ""
+		}
+	}
+
+	EnabledTilesConfig: {
+		Tooltip: ""
+
+		PreHMCraftingStation: {
+			Label: Pre Hardmode Crafting Station
+			Tooltip: ""
+		}
+
+		HMCraftingStation: {
+			Label: Hardmode Crafting Station
+			Tooltip: ""
+		}
+
+		SpecCraftingStation: {
+			Label: Specialized Crafting Station
+			Tooltip: ""
+		}
+
+		TFCraftingStation: {
+			Label: Themed Furniture Crafting Station
+			Tooltip: ""
+		}
+
+		MultiCraftingStation: {
+			Label: Multi Crafting Station
+			Tooltip: ""
+		}
+	}
+
+	EnabledAccessoriesConfig: {
+		Tooltip: ""
+
+		BuildInPeace: {
+			Label: Build In Peace
+			Tooltip: ""
+		}
+
+		BuildingWrench: {
+			Label: Building Wrench
+			Tooltip: ""
+		}
+
+		ImprovedRuler: {
+			Label: Improved Ruler
+			Tooltip: ""
+		}
+	}
+
+	EnabledUpgradeModulesConfig: {
+		Tooltip: ""
+
+		FastPlacement: {
+			Label: Fast Placement Module
+			Tooltip: ""
+		}
+
+		InfiniteRange: {
+			Label: Infinite Range Module
+			Tooltip: ""
+		}
+
+		InfinitePlacement: {
+			Label: Infinite Placement Module
+			Tooltip: ""
+		}
+
+		InfinitePickupRange: {
+			Label: Infinite Pickup Range Module
+			Tooltip: ""
+		}
+	}
+}
+
+Keybinds: {
+	"Increase Fill Wand selection size.DisplayName": Increase  Fill  Wand selection size
+	"Decrease Fill Wand selection size.DisplayName": Decrease  Fill  Wand selection size
+	"Undo last placement with a tool that supports it.DisplayName": Undo last placement with a tool that supports it
+}
+
+Configs: {
+	ServerConfig: {
+		DisplayName: Server Config
+
+		MaxUndoNum: {
+			Label: Max Undo Num
+			Tooltip: ""
+		}
+
+		InfinitePickupRangeFloat: {
+			Label: Infinite Pickup Range Float
+			Tooltip: ""
+		}
+
+		SquirrelBuilderPosition: {
+			Label: Squirrel Builder Position
+			Tooltip: ""
+		}
+
+		Headers: {
+			ToggleContent: Toggle Content Header
+			ToggleContentHeader: Toggle Content Header Header
+		}
+
+		EnabledItems: {
+			Label: Enabled Items
+			Tooltip: ""
+		}
+
+		EnabledTiles: {
+			Label: Enabled Tiles
+			Tooltip: ""
+		}
+
+		EnabledAccessories: {
+			Label: Enabled Accessories
+			Tooltip: ""
+		}
+
+		EnabledUpgradeModules: {
+			Label: Enabled Upgrade Modules
+			Tooltip: ""
+		}
+	}
+
+	EnabledItemsConfig: {
+		Tooltip: ""
+
+		AutoHammer: {
+			Label: Auto Hammer
+			Tooltip: ""
+		}
+
+		FillWand: {
+			Label: Fill Wand
+			Tooltip: ""
+		}
+
+		InfinitePaintBucket: {
+			Label: Infinite Paint Bucket
+			Tooltip: ""
+		}
+
+		PaintBrush: {
+			Label: Paint Brush
+			Tooltip: ""
+		}
+
+		SpectrePaintBrush: {
+			Label: Spectre Paint Brush
+			Tooltip: ""
+		}
+
+		MultiWand: {
+			Label: Multi Wand
+			Tooltip: ""
+		}
+
+		MirrorWand: {
+			Label: Mirror Wand
+			Tooltip: ""
+		}
+
+		ShapesDrawer: {
+			Label: Shapes Drawer
+			Tooltip: ""
+		}
+	}
+
+	EnabledTilesConfig: {
+		Tooltip: ""
+
+		PreHMCraftingStation: {
+			Label: Pre Hardmode Crafting Station
+			Tooltip: ""
+		}
+
+		HMCraftingStation: {
+			Label: Hardmode Crafting Station
+			Tooltip: ""
+		}
+
+		SpecCraftingStation: {
+			Label: Specialized Crafting Station
+			Tooltip: ""
+		}
+
+		TFCraftingStation: {
+			Label: Themed Furniture Crafting Station
+			Tooltip: ""
+		}
+
+		MultiCraftingStation: {
+			Label: Multi Crafting Station
+			Tooltip: ""
+		}
+	}
+
+	EnabledAccessoriesConfig: {
+		Tooltip: ""
+
+		BuildInPeace: {
+			Label: Build In Peace
+			Tooltip: ""
+		}
+
+		BuildingWrench: {
+			Label: Building Wrench
+			Tooltip: ""
+		}
+
+		ImprovedRuler: {
+			Label: Improved Ruler
+			Tooltip: ""
+		}
+	}
+
+	EnabledUpgradeModulesConfig: {
+		Tooltip: ""
+
+		FastPlacement: {
+			Label: Fast Placement Upgrade Module
+			Tooltip: ""
+		}
+
+		InfiniteRange: {
+			Label: Infinite Range Upgrade Module
+			Tooltip: ""
+		}
+
+		InfinitePlacement: {
+			Label: Infinite Placement Upgrade Module
+			Tooltip: ""
+		}
+
+		InfinitePickupRange: {
+			Label: Infinite Pickup Range Upgrade Module
+			Tooltip: ""
+		}
+	}
+}

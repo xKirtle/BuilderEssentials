@@ -13,19 +13,16 @@ public class ServerConfig : ModConfig
 {
     public override ConfigScope Mode => ConfigScope.ServerSide;
 
-    [Label("Max Undo Times"), Tooltip("The maximum amount of placements the game will remember and be able to undo"), Range(0, 100),
-     DefaultValue(20)]
+    [Range(0, 100), DefaultValue(20)]
     public int MaxUndoNum = 20;
 
-    [Label("Range % of the Inf. Pickup Range Upgrade Module"), Tooltip("Anything above 20% will start picking up items offscreen"),
-     Range(1, 100), DefaultValue(20)]
+    [Range(1, 100), DefaultValue(20)]
     public int InfinitePickupRangeFloat = 20;
 
     [JsonIgnore]
     public int InfinitePickupRangeValue => (int) ((float) InfinitePickupRangeFloat / 100f * MaxPickupRange);
     private const int MaxPickupRange = 3500;
     
-    [Label("Squirrel Builder Position"), Tooltip("Positioning of the squirrel builder menu from the Shapes Drawer")]
     [OptionStrings(new string[] { "Under Inventory", "Bottom Left Corner"})]
     [DrawTicks, DefaultValue("Under Inventory")]
     public string SquirrelBuilderPosition;
@@ -46,43 +43,45 @@ public class ServerConfig : ModConfig
         InfinitePickupRangeFloat = Utils.Clamp(InfinitePickupRangeFloat, 0, 100);
     }
 
-    [Header("Enable or disable content from this mod"), Label("Items"), ReloadRequired]
+    [Header("ToggleContentHeader")]
+    
+    [ReloadRequired]
     public EnabledItemsConfig EnabledItems = new();
 
-    [Label("Tiles"), ReloadRequired]
+    [ReloadRequired]
     public EnabledTilesConfig EnabledTiles = new();
 
-    [Label("Accessories"), ReloadRequired]
+    [ReloadRequired]
     public EnabledAccessoriesConfig EnabledAccessories = new();
 
-    [Label("Upgrade Modules"), ReloadRequired]
+    [ReloadRequired]
     public EnabledUpgradeModulesConfig EnabledUpgradeModules = new();
 
     [SeparatePage]
     public class EnabledItemsConfig
     {
-        [Label("Auto Hammer"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool AutoHammer = true;
 
-        [Label("Fill Wand"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool FillWand = true;
 
-        [Label("Infinite Paint Bucket"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool InfinitePaintBucket = true;
 
-        [Label("Paint Brush"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool PaintBrush = true;
 
-        [Label("Spectre Paint Brush"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool SpectrePaintBrush = true;
 
-        [Label("Multi Wand"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool MultiWand = true;
 
-        [Label("Mirror Wand"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool MirrorWand = true;
 
-        [Label("Shapes Drawer"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool ShapesDrawer = true;
 
         public override bool Equals(object obj) {
@@ -105,19 +104,19 @@ public class ServerConfig : ModConfig
     [SeparatePage]
     public class EnabledTilesConfig
     {
-        [Label("Pre Hardmode Crafting Station"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool PreHMCraftingStation = true;
 
-        [Label("Hardmode Crafting Station"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool HMCraftingStation = true;
 
-        [Label("Specialized Crafting Station"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool SpecCraftingStation = true;
 
-        [Label("Themed Furniture Crafting Station"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool TFCraftingStation = true;
 
-        [Label("Multi Crafting Station"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool MultiCraftingStation = true;
 
         public override bool Equals(object obj) {
@@ -141,13 +140,13 @@ public class ServerConfig : ModConfig
     [SeparatePage]
     public class EnabledAccessoriesConfig
     {
-        [Label("Build In Peace"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool BuildInPeace = true;
 
-        [Label("Building Wrench"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool BuildingWrench = true;
 
-        [Label("Improved Ruler"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool ImprovedRuler = true;
 
         public override bool Equals(object obj) {
@@ -170,16 +169,16 @@ public class ServerConfig : ModConfig
         public bool[] EnabledUpgrades
             => new bool[] { FastPlacement, InfiniteRange, InfinitePlacement, InfinitePickupRange };
 
-        [Label("Fast Placement Upgrade Module"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool FastPlacement = true;
 
-        [Label("Infinite Range Upgrade Module"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool InfiniteRange = true;
 
-        [Label("Infinite Placement Upgrade Module"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool InfinitePlacement = true;
 
-        [Label("Infinite Pickup Range Upgrade Module"), DefaultValue(true), ReloadRequired]
+        [DefaultValue(true), ReloadRequired]
         public bool InfinitePickupRange = true;
 
         public override bool Equals(object obj) {

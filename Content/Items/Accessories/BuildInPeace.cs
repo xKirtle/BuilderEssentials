@@ -11,7 +11,8 @@ public class BuildInPeace : ModItem
     public override string Texture => "BuilderEssentials/Assets/Items/Accessories/" + GetType().Name;
 
     public override void SetStaticDefaults() {
-        Tooltip.SetDefault("Disables all events in the game and enemy spawns. Also sets the clock to noon");
+        // TOOLTIP
+        // Tooltip.SetDefault("Disables all events in the game and enemy spawns. Also sets the clock to noon");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
@@ -36,7 +37,8 @@ public class BuildInPeace : ModItem
         Main.invasionSize = 0;
         Main.dayTime = true;
         Main.time = 27000; //mid day
-        Main.fastForwardTime = false;
+        Main.fastForwardTimeToDawn = false;
+        Main.fastForwardTimeToDusk = false;
 
         foreach (NPC npc in Main.npc) {
             //Don't want to remove town NPC's

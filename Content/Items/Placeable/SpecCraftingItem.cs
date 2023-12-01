@@ -13,8 +13,9 @@ public class SpecCraftingItem : ModItem
     public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledTiles.SpecCraftingStation;
 
     public override void SetStaticDefaults() {
-        DisplayName.SetDefault("Specialized Crafting Station");
-        Tooltip.SetDefault("Used to craft Specialized items");
+        // TOOLTIP
+        // DisplayName.SetDefault("Specialized Crafting Station");
+        // Tooltip.SetDefault("Used to craft Specialized items");
     }
 
     public override void SetDefaults() {

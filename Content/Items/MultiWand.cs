@@ -21,9 +21,10 @@ public class MultiWand : BaseItemToggleableUI
     public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.MultiWand;
 
     public override void SetStaticDefaults() {
-        DisplayName.SetDefault("Multi Wand");
-        Tooltip.SetDefault("Contains all building wands into one!\n" +
-            "Right Click to open selection menu");
+        // TOOLTIP
+        // DisplayName.SetDefault("Multi Wand");
+        // Tooltip.SetDefault("Contains all building wands into one!\n" +
+        //     "Right Click to open selection menu");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 

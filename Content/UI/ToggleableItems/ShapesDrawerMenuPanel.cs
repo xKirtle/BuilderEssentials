@@ -60,7 +60,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
             elementHovered = false;
         };
 
-        builderSquirrelHover.OnClick += (__, _) => {
+        builderSquirrelHover.OnLeftClick += (__, _) => {
             isMenuOpen = !isMenuOpen;
 
             if (isMenuOpen) {
@@ -73,12 +73,12 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
             }
         };
 
-        builderSquirrelHover.OnMouseDown += (__, _) => {
+        builderSquirrelHover.OnLeftMouseDown += (__, _) => {
             builderSquirrel.Top.Set(builderSquirrel.Top.Pixels + 1f, 0);
             builderSquirrelHover.Top.Set(builderSquirrelHover.Top.Pixels + 1f, 0);
         };
 
-        builderSquirrelHover.OnMouseUp += (__, _) => {
+        builderSquirrelHover.OnLeftMouseUp += (__, _) => {
             builderSquirrel.Top.Set(builderSquirrel.Top.Pixels - 1f, 0);
             builderSquirrelHover.Top.Set(builderSquirrelHover.Top.Pixels - 1f, 0);
         };
@@ -106,7 +106,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         }
 
         //Ellipse
-        menuOptions[0].OnClick += (__, _) => {
+        menuOptions[0].OnLeftClick += (__, _) => {
             ClearAllSelections();
             menuOptions[0].ToggleSelection();
             SelectedShape = Shapes.Ellipse;
@@ -115,7 +115,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         };
 
         //Rectangle
-        menuOptions[1].OnClick += (__, _) => {
+        menuOptions[1].OnLeftClick += (__, _) => {
             ClearAllSelections();
             menuOptions[1].ToggleSelection();
             SelectedShape = Shapes.Rectangle;
@@ -124,7 +124,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         };
 
         //Fill
-        menuOptions[2].OnClick += (__, _) => {
+        menuOptions[2].OnLeftClick += (__, _) => {
             for (int i = 0; i < menuOptions.Length; i++) {
                 if (i != 2)
                     menuOptions[i].ToggleFill();
@@ -137,7 +137,7 @@ public class ShapesDrawerMenuPanel : BaseToggleablePanel
         //Half Ellipses
         for (int i = 3; i < menuOptions.Length; i++) {
             int index = i;
-            menuOptions[i].OnClick += (__, _) => {
+            menuOptions[i].OnLeftClick += (__, _) => {
                 if (menuOptions[index].IsSelected) {
                     menuOptions[index].ToggleSelection();
                     SelectedShapeSide = ShapeSide.All;

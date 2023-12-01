@@ -170,7 +170,7 @@ public static class MirrorPlacement
                     //TODO: Check pylons. Should it be added to map as well?
 
                     if (Main.netMode == NetmodeID.MultiplayerClient) {
-                        NetMessage.SendObjectPlacment(-1, mirroredCoords.X, mirroredCoords.Y,
+                        NetMessage.SendObjectPlacement(-1, mirroredCoords.X, mirroredCoords.Y,
                             tileObject.type, tileObject.style, tileObject.alternate, tileObject.random,
                             Main.LocalPlayer.direction * -1);
                     }
@@ -234,8 +234,8 @@ public static class MirrorPlacement
         // 	orig.Invoke(player, item);
         // 	Console.WriteLine("Apply Item Animation");
         // };
-
-        On.Terraria.Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
+        
+        Terraria.On_Player.ApplyItemTime += (orig, player, item, multiplier, useItem) => {
             orig.Invoke(player, item, multiplier, useItem);
             if (Main.netMode == NetmodeID.Server)
                 return;
@@ -261,7 +261,7 @@ public static class MirrorPlacement
                 paintTileQueue.Enqueue(new Tuple<Point, Item>(coord, item));
         };
 
-        On.Terraria.WorldGen.ReplaceTile += (orig, x, y, type, style) => {
+        Terraria.On_WorldGen.ReplaceTile += (orig, x, y, type, style) => {
             //Getting tile info before the replacement
             Tile tile = Main.tile[x, y];
             int itemType = ItemPicker.PickItem(tile);
@@ -288,7 +288,7 @@ public static class MirrorPlacement
             return baseReturn;
         };
 
-        On.Terraria.WorldGen.ReplaceWall += (orig, x, y, type) => {
+        Terraria.On_WorldGen.ReplaceWall += (orig, x, y, type) => {
             //Getting tile info before the replacement
             Tile tile = Main.tile[x, y];
             int itemType = ItemPicker.PickItem(tile);
@@ -314,7 +314,7 @@ public static class MirrorPlacement
         };
 
         //Remove vanilla behaviour that auto places walls (if available) to fill 3x1 spaces
-        On.Terraria.Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
+        Terraria.On_Player.PlaceThing_Walls_FillEmptySpace += (orig, player) => {
             MirrorWandPanel panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
             if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
                 //Do nothing
@@ -324,8 +324,8 @@ public static class MirrorPlacement
         };
 
         //Remove vanilla behaviour that hammers walls around the tile target based on coord inside tile targetted
-        On.Terraria.Player.ItemCheck_UseMiningTools_TryFindingWallToHammer += (
-            On.Terraria.Player.orig_ItemCheck_UseMiningTools_TryFindingWallToHammer orig, out int x, out int y) => {
+        Terraria.On_Player.ItemCheck_UseMiningTools_TryFindingWallToHammer += (
+            Terraria.On_Player.orig_ItemCheck_UseMiningTools_TryFindingWallToHammer orig, out int x, out int y) => {
             MirrorWandPanel panel = ShapesUIState.GetUIPanel<MirrorWandPanel>();
             if (panel.IsVisible && panel.validMirrorPlacement && panel.IsMouseWithinSelection() && panel.IsMouseAffectedByMirrorAxis()) {
                 x = Player.tileTargetX;
@@ -335,13 +335,13 @@ public static class MirrorPlacement
                 orig.Invoke(out x, out y);
         };
 
-        On.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
+        Terraria.On_Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) => {
             orig.Invoke(player, item, x, y);
 
             MirrorPlacementAction(mirroredCoords => { orig.Invoke(player, item, mirroredCoords.X, mirroredCoords.Y); }, new Point16(x, y));
         };
 
-        On.Terraria.Player.PickTile += (orig, player, x, y, power) => {
+        Terraria.On_Player.PickTile += (orig, player, x, y, power) => {
             orig.Invoke(player, x, y, power);
 
             MirrorPlacementAction(mirroredCoords => {
@@ -354,7 +354,7 @@ public static class MirrorPlacement
             }, new Point16(x, y));
         };
 
-        On.Terraria.TileObject.DrawPreview += (orig, spriteBatch, pData, position) => {
+        Terraria.On_TileObject.DrawPreview += (orig, spriteBatch, pData, position) => {
             DrawPreview(spriteBatch, pData, position);
 
             MirrorPlacementAction(mirroredCoords => {

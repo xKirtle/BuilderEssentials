@@ -36,8 +36,9 @@ public abstract class BaseCraftingStation : ModTile
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-        ModTranslation translation = CreateMapEntryName();
-        translation.SetDefault(DisplayName);
+        var translation = CreateMapEntryName();
+        // TOOLTIP
+        // translation.SetDefault(DisplayName);
         AddMapEntry(MapColor, translation);
 
         AdjTiles = AdjacentTiles();

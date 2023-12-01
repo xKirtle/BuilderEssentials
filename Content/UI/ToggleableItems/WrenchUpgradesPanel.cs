@@ -58,7 +58,7 @@ public class WrenchUpgradesPanel : BaseToggleablePanel
                 text = "";
             };
 
-            elements[i].OnClick += (__, _) => {
+            elements[i].OnLeftClick += (__, _) => {
                 if (ModContent.GetInstance<ServerConfig>().EnabledUpgradeModules.EnabledUpgrades[index])
                     ToggleUpgrade(index);
             };

@@ -24,9 +24,10 @@ public class AutoHammer : BaseItemToggleableUI
     public override bool IsLoadingEnabled(Mod mod) => ModContent.GetInstance<ServerConfig>().EnabledItems.AutoHammer;
 
     public override void SetStaticDefaults() {
-        DisplayName.SetDefault("Auto Hammer");
-        Tooltip.SetDefault("Better than a regular hammer!\n" +
-            "Right Click to open selection menu");
+        // TOOLTIP
+        // DisplayName.SetDefault("Auto Hammer");
+        // Tooltip.SetDefault("Better than a regular hammer!\n" +
+        //     "Right Click to open selection menu");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
